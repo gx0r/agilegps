@@ -1,0 +1,7 @@
+{
+	"asi": true,
+	"node": true,
+	"browser": true,
+	"eqnull": true,
+	"laxbreak": true
+}

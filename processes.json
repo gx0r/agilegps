@@ -1,0 +1,19 @@
+{
+	"apps": [{
+		"name": "web",
+		"script": "server.js",
+		"cwd": "build/server",
+		"args": [],
+		"watch": true,
+		"node_args": "",
+		"merge_logs": true
+	}, {
+		"name": "listener",
+		"cwd": "build/listen",
+		"script": "listen.js",
+		"args": [],
+		"watch": true,
+		"node_args": "--nouse-idle-notification --expose-gc --max-old-space-size=8192",
+		"merge_logs": true		
+	}]
+}

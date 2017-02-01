@@ -1,0 +1,336 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    min-height: 100%;
+    font-size: 1.2em;
+    background: #D2D2D2;
+    min-width: 300px;
+    position: relative;
+    font-family: Helvetica, Arial, Sans-Serif;
+}
+
+.sizing-box {
+  height: 30px;
+  width: 60px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.center {
+    text-align: center;
+}
+
+nav {
+    z-index: 1 !important;
+}
+
+.navbar {
+    font-size: 14px;
+    position: relative;
+    min-height: 25px;
+    margin-bottom: 10px;
+}
+
+.nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 9px;
+    line-height: 14px;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color: #2D5682;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 9px;
+}
+
+.active > a {
+    /*background-color: #337ab7 !important;*/
+    /*border-radius: 0px;*/
+    /*color: white !important;*/
+}
+
+.business-table {
+    padding-top: 1.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 1.5em;
+    /*background-color: #EEEEEE;*/
+    /*background-color: white;*/
+    box-shadow: 6px 6px 3px #888888;
+    background-color: rgb(238, 238, 238);
+}
+
+.list-group-item:first-child {
+    border-radius: 0;
+}
+
+.list-group-item:last-child {
+    border-radius: 0;
+}
+.list-group-item {
+    background-color: rgb(238, 238, 238);
+    border: none;
+    font-size: 12px;
+}
+
+.list-group-item:hover {
+    border: 1px darkgrey;
+    font-size: 12px;
+}
+
+.list-group-item.active {
+    background-color: #B9D5FF;
+    color: black;
+}
+
+.list-group-item.active:hover {
+    background-color: #B9D5FF;
+    border: 1px darkgrey;
+    color: black;
+}
+
+.shadow {
+    box-shadow: 6px 6px 3px #888888;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.middle {
+    vertical-align: middle;
+}
+
+thead {
+    /*background-color: rgb(103, 140, 198);*/
+    background-color: #337ab7;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.map {
+    margin-bottom: 10px;
+}
+
+.maplabel {
+    background: white;
+    padding-left: 2px;
+    padding-right: 2px;
+    border: thin solid black;
+}
+
+.buttons-right {
+    float:right;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    font-size: 12px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.table td {
+    padding-bottom: 1px !important;
+    padding-left: 10px !important;
+    padding-right: 5px !important;
+    padding-top: 1px !important;
+    vertical-align: middle;
+    border-right: 1px solid #3D6895 !important;
+    border-color: #3D6895 !important;
+}
+
+.table-bordered {
+    font-size: 12px !important;
+    border-collapse: collapse;
+    border: 1px solid #3D6895;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: white;
+}
+
+.huge {
+    font-size: 64pt;
+}
+
+.huge:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.list-group-item {
+    padding: 4px 4px;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
+.verticalcenter {
+    /*float:none;*/
+    display:inline-block;
+    vertical-align:middle;
+    margin-right:-4px;
+}
+
+.company-name {
+    color: #fff;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #345578;
+}
+
+.nav :hover {
+    text-decoration: none;
+}
+
+.highlight-igniton {
+    background-color: rgb(154, 205, 50) !important;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.padrt {
+    margin-right: 1em;
+}
+
+.btn-primary {
+    color: #ffffff;
+    background-color: #36618F;
+    border-color: #36618F;
+    font-size: 1em;
+    border-radius: 0;
+}
+
+.updated-border {
+    border: 1px solid #ccc;
+    padding: 7px;
+}
+
+.btn-pad {
+    padding: 3px 3px;
+}
+
+input[type=range] {
+    /*removes default webkit styles*/
+    -webkit-appearance: none;
+
+    /*fix for FF unable to apply focus style bug */
+    border: 1px solid white;
+
+    /*required for proper track sizing in FF*/
+    width: 300px;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+    margin-top: -4px;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type=range]::-moz-range-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+}
+
+/*hide the outline behind the border*/
+input[type=range]:-moz-focusring{
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+
+input[type=range]::-ms-track {
+    width: 300px;
+    height: 5px;
+
+    /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+    background: transparent;
+
+    /*leave room for the larger thumb to overflow with a transparent border */
+    border-color: transparent;
+    border-width: 6px 0;
+
+    /*remove default tick marks*/
+    color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+    background: #777;
+    border-radius: 10px;
+}
+input[type=range]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 10px;
+}
+input[type=range]::-ms-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+}
+input[type=range]:focus::-ms-fill-lower {
+    background: #888;
+}
+input[type=range]:focus::-ms-fill-upper {
+    background: #ccc;
+}
+
+.fleet-all-link {
+    background: #B9D5FF;
+    color: #2D5682;
+    cursor: pointer !Important;
+    font-weight: bold;
+}
+
+.group {
+    background-color: #ffffcc;
+    text-align: left!important;
+    font-weight: bold!important;
+}
