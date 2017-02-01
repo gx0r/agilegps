@@ -1,5 +1,25 @@
 # Agile GPS: Open Source Fleet Tracking
 
+![screenshot](https://raw.githubusercontent.com/llambda/agilegps/master/public/images/screen1.png?token=AGc1MoMRLFILb287jsksqBY-hvOtCRakks5Ym6-uwA%3D%3D)
+
+## Features
+
+1. Compatible with Queclink GV300 and GV500 trackers.
+1. UDP data transmission from trackers with server acknowledgement (lower cellular data usage than TCP)
+1. Customers, fleets, devices, and users
+1. Site admins and org admins
+1. Multi tenant. Multiple organizations (customers) per instance
+1. Displays vehicles and fleets on Google Maps in real time
+1. Display per-vehicle daily history on Google Maps
+1. Node.js back end for high performance and concurrency
+1. Stateless architecture, load balance across unlimited app nodes
+1. Stateless authentication via JWT
+1. RethinkDB enables atomic, realtime changefeeds. Clients efficiently receive changes in real-time, as they happen. Easy scaling, sharding and replication.
+1. Fleet and vehicle reports: Start/stop, Ignition-based trips, Idling, Mileage by state, Odometer by state, Speed, Vehicle summary, OBD-II diagnostics (GV 500 only), OBD-II engine summaries (GV 500 only)
+1. Localization: English and Russian language translations. English and metric units (per-user preference)
+1. Free reverse geocoding (closest city) or via Google Reverse Geocoding API for obtaining addresses from latitude / longitude coordinates sent by the trackers.
+1. Fast single page web interface via Mithril (component based like React). Responsive design on desktop and mobile browsers.
+
 ## Installation Guide
 
 ### Environment Setup
