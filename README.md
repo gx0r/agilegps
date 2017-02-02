@@ -28,7 +28,7 @@ Agile GPS is donation-encouraged open source! A lot of work went into programmin
 
 ## Need help?
 
-Need help with setup, install, or general questions about GPS fleet tracking? Contact gene909@gmail.com for consulting at reasonable rates!
+Need help with setup, install, feature development, or just want to talk about GPS fleet tracking in general? Contact [Gene Michtchenko](gene909@gmail.com) for consulting at reasonable rates!
 
 ## Installation Guide
 
