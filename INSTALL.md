@@ -36,7 +36,8 @@ It will creates its working files in the current directory.
 
 1. Run ```babel-node schema.js``` to create the DB, tables, and indexes. It’s safe to run this multiple times because it does not drop any DB objects. Verify that the tables exist in the RethinkDB admin console. It should only take a few seconds to run.
 
-1. Run ```babel-node createAnAdmin.js admin thePassw0rd``` to create an Admin user with password "thePassw0rd".
+1. Run ```babel-node 
+.js admin thePassw0rd``` to create an Admin user with password "thePassw0rd".
 
 ## Building the Front End
 1. ```npm run watch``` from the root of the project will run webpack in watch mode, continually rebuilding the front end as changes are made.
@@ -65,9 +66,11 @@ The message listener (also known as the message gateway or just gateway) receive
 
 ## Deploying to Production
 
-The *processes.json* file is pre-configured for PM2 which is a convenient way to run the app in production. PM2 can be installed to automatically run the app at system startup, log process output, etc.
+The *processes.json* file is pre-configured for [PM2](http://pm2.keymetrics.io/) which is a convenient way to run the app in production. PM2 can be installed to automatically run the app at system startup, log process output, etc.
 
-1. Put your Google Maps API key in ```config/geocoding.js```
+1. (Optional) Put your Google Maps API key in ```config/geocoding.js``` if using Google Reverse Geocoding
+
+1. Configure *agilegps/config/listener.js*
 
 1. Configure *agilegps/config/web.json*
    1. isReverseProxied - if you are behind a reverse proxy, set this to true
@@ -75,6 +78,11 @@ The *processes.json* file is pre-configured for PM2 which is a convenient way to
    1. jwtSecret - you should generate a random long string here. This string is used to sign the JWT tokens.
    1. cookieKeys - you should generate an array of two strings. These are used to sign the session cookies. The array allows you to rotate in new keys.
 
-1. Configure *agilegps/config/listener.js*
-
 1. ```pm2 start processes.json```  
+
+## Tools
+
+1. [location generator](https://github.com/llambda/agilegps/blob/master/src/tools/locgenerator.js) - generate random GPS data for an IMEI
+1. [faker](https://github.com/llambda/agilegps/blob/master/src/tools/faker.js) - Load event data from a file and send as if it came from GPS units.
+1. [Create an Admin](https://github.com/llambda/agilegps/blob/master/src/tools/createAnAdmin.js)
+1. [base64 encoder and decoder](https://decodotron.com/)
