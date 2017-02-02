@@ -24,7 +24,11 @@ It will creates its working files in the current directory.
 
 1. In the cloned *agilegps* folder, run ```npm install``` to install the dependencies from package.json.
 
-2. Run ```npm run webpack```. This builds the front end based on the package.json scripts section which is using webpack.
+1. Run ```npm run webpack```. This builds the front end based on the package.json scripts section which is using webpack.
+
+1. Place your Google Maps key in *agilegps/public/app/index.html* on the appropriate script tag.
+
+1. (Optional) replace the Google Analytics code with your Google Analytics in *agilegps/public/app/index.html*
 
 ## Schema Setup
 
@@ -32,7 +36,7 @@ It will creates its working files in the current directory.
 
 1. Run ```babel-node schema.js``` to create the DB, tables, and indexes. It’s safe to run this multiple times because it does not drop any DB objects. Verify that the tables exist in the RethinkDB admin console. It should only take a few seconds to run.
 
-1. Run ```babel-node createAnAdmin.js admin password``` to create an Admin user.
+1. Run ```babel-node createAnAdmin.js admin thePassw0rd``` to create an Admin user with password "thePassw0rd".
 
 ## Building the Front End
 1. ```npm run watch``` from the root of the project will run webpack in watch mode, continually rebuilding the front end as changes are made.
