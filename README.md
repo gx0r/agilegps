@@ -1,4 +1,4 @@
-# Agile GPS: Open Source Fleet Tracking
+# AgileGPS: Open Source Fleet Tracking
 
 ![screenshot](https://raw.githubusercontent.com/llambda/agilegps/master/public/images/screen1.png?token=AGc1MoMRLFILb287jsksqBY-hvOtCRakks5Ym6-uwA%3D%3D)
 
