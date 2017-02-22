@@ -85,4 +85,4 @@ The *processes.json* file is pre-configured for [PM2](http://pm2.keymetrics.io/)
 1. [location generator](https://github.com/llambda/agilegps/blob/master/src/tools/locgenerator.js) - generate random GPS data for an IMEI
 1. [faker](https://github.com/llambda/agilegps/blob/master/src/tools/faker.js) - Load event data from a file and send as if it came from GPS units.
 1. [Create an Admin](https://github.com/llambda/agilegps/blob/master/src/tools/createAnAdmin.js)
-1. [base64 encoder and decoder](https://decodotron.com/)
+1. [base64 encoder and decoder](https//decodotron.com/)
