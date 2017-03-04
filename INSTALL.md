@@ -2,11 +2,13 @@
 # Installation Guide
 
 ### Environment Setup
-1. You need at a minimum Node.js 4.0.
+1. Red Hat® Enterprise Linux® / RHEL or [CentOS](https://www.centos.org/) is recommended for your server's operating system.
+
+1. [Install Node.js](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora) The minimum version that will work is 4.0, but the latest version is recommended.
 
 1. Install the babel-cli: ```npm i -g babel-cli```
 
-1. Install RethinkDB.
+1. [Install RethinkDB](https://rethinkdb.com/docs/install/centos/)
 
 1. Start a RethinkDB instance. To start a rethinkdb instance, run the command:
 
@@ -85,4 +87,4 @@ The *processes.json* file is pre-configured for [PM2](http://pm2.keymetrics.io/)
 1. [location generator](https://github.com/llambda/agilegps/blob/master/src/tools/locgenerator.js) - generate random GPS data for an IMEI
 1. [faker](https://github.com/llambda/agilegps/blob/master/src/tools/faker.js) - Load event data from a file and send as if it came from GPS units.
 1. [Create an Admin](https://github.com/llambda/agilegps/blob/master/src/tools/createAnAdmin.js)
-1. [base64 encoder and decoder](https//decodotron.com/)
+1. [base64 encoder and decoder](https://decodotron.com/)
