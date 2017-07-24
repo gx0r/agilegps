@@ -1,3 +1,5 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WTGZ7P8E8D9JE)
+
 # AgileGPS: Open Source Fleet Tracking
 
 ![screenshot](https://raw.githubusercontent.com/llambda/agilegps/master/public/images/screen1.png?token=AGc1MoMRLFILb287jsksqBY-hvOtCRakks5Ym6-uwA%3D%3D)
@@ -20,11 +22,6 @@
 1. Localization: English and Russian language translations. English and metric units (per-user preference)
 1. Free reverse geocoding (closest city) or via Google Reverse Geocoding API for obtaining addresses from latitude / longitude coordinates sent by the trackers.
 1. Fast single page web interface via Mithril (component based like React). Responsive design on desktop and mobile browsers.
-
-## Tips 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WTGZ7P8E8D9JE)
-
-Agile GPS is donation-encouraged open source! A lot of work went into programming Agile GPS, and if you find Agile GPS useful, please consider tipping via a donation!
 
 ## Need help?
 
