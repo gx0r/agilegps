@@ -2,7 +2,7 @@
 # Installation Guide
 
 ### Environment Setup
-1. Red Hat® Enterprise Linux® / RHEL or [CentOS](https://www.centos.org/) is recommended for your server's operating system.
+1. [Red Hat® Enterprise Linux® / RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux) or [CentOS](https://www.centos.org/) is recommended for your server's operating system.
 
 1. [Install Node.js](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora) The minimum version that will work is 4.0, but the latest version is recommended.
 
