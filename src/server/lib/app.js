@@ -14,7 +14,6 @@ const Compress = require('koa-compress');
 const helmet = require('koa-helmet');
 const Morgan = require('koa-morgan');
 const proxy = require('koa-proxy');
-const KoaJwt = require('koa-jwt');
 const Conditional = require('koa-conditional-get');
 const Etag = require('koa-etag');
 const ResponseTime = require('koa-response-time');
@@ -22,37 +21,37 @@ const BodyParser = require('koa-bodyparser');
 const ServeStatic = require('koa-static');
 
 if (config.proxy) {
-	app.use(adapt(proxy({
+	app.use(proxy({
 		host: config.proxy,
 		match: /^(?!\/api)(?!\/app)/ // ...everything except /api and /app
-	})));
+	}));
 }
 
-app.use(adapt(ResponseTime()));
-app.use(adapt(Conditional()));
-app.use(adapt(Etag()));
+app.use(ResponseTime());
+app.use(Conditional());
+app.use(Etag());
 // app.use(Morgan('combined'));
 
 const koaBunyanLogger = require('koa-bunyan-logger');
-app.use(adapt(koaBunyanLogger()));
-app.use(adapt(koaBunyanLogger.requestIdContext()));
-app.use(adapt(koaBunyanLogger.requestLogger()));
+app.use(koaBunyanLogger());
+app.use(koaBunyanLogger.requestIdContext());
+app.use(koaBunyanLogger.requestLogger());
 
 
 app.use(helmet.frameguard());
 app.use(helmet.xssFilter());
 app.use(helmet.ieNoOpen());
 
-app.use(adapt(Compress()));
+app.use(Compress());
 
 app.keys = config.cookieKeys;
 
 // Signed-cookies session support
-// app.use(adapt(session({
+// app.use(session({
 // 	maxage: null
-// }, app)));
+// }, app));
 
-app.use(adapt(BodyParser()));
+app.use(BodyParser());
 
 // turn errors into a JSON structure
 app.use(async (ctx, next) => {
@@ -90,4 +89,4 @@ import {router} from './routes/router';
 
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.use(adapt(ServeStatic('../../public')));
+app.use(ServeStatic('../../public'));
