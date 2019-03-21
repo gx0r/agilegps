@@ -7,7 +7,7 @@ nodemon({
 	script: 'server.js',
 	ext: 'js json',
 	"execMap": {
-		"js": "babel-node"
+		"js": "node"
 	},
 	"ignore": [
 		".git",

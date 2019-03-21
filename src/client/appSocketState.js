@@ -11,7 +11,7 @@ const io = require('socket.io-client')
 const helpers = require('../common/helpers');
 const Cookies = require('cookies-js');
 const moment = require('moment');
-const createLogger = require('redux-logger');
+const createLogger = require('redux-logger').createLogger;
 const appState = require('./appState');
 
 /*
