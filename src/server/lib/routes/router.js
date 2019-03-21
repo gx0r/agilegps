@@ -10,7 +10,7 @@ const Router = require('koa-router');
 const r = require('../../../common/db');
 const vehiclestatus = require('./vehiclestatus');
 const vehiclehistory = require('./vehiclehistory');
-const KoaJwt = require('koa-jwt');
+const jwt = require('koa-jwt');
 const config = require('../../../../config/web.js');
 const jwtSignDefault = require('../jwthelper').jwtSignDefault;
 const jwtCookie = require('../jwthelper').jwtCookie;
@@ -24,11 +24,11 @@ const dao = require('../dao');
 const router = module.exports.router = new Router();
 const adapt = require('koa-adapter-bluebird'); // uses bluebird-co for performance
 
-const jwtrequired = adapt(new KoaJwt({
+const jwtrequired = adapt(jwt({
 	secret: config.jwtSecret,
 }));
 
-const jwtoptional = adapt(new KoaJwt({
+const jwtoptional = adapt(jwt({
 	secret: config.jwtSecret,
 	passthrough: true
 }));

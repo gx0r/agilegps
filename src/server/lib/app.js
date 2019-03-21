@@ -82,6 +82,7 @@ app.use(async (ctx, next) => {
 			})
 			// ctx.app.emit('error', new Error('null or undefined error'), ctx);
 		}
+		throw err;
 	}
 });
 
