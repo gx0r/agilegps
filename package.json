@@ -110,5 +110,8 @@
     "tape": "^4.6.3",
     "url-loader": "^1.1.2",
     "webpack": "3"
+  },
+  "toolchain": {
+    "node": "10.15.3"
   }
 }
