@@ -12,7 +12,6 @@ let isStop = Status.isStop;
 let isTow = Status.isTow;
 
 
-module.exports = milesField;
 function milesField(item, isKilometers) {
 	if (item.igd != null )
 		return tohhmmss(item.igd);
@@ -40,3 +39,4 @@ function milesField(item, isKilometers) {
 		return '';
 	}
 }
+module.exports = milesField;

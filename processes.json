@@ -2,14 +2,14 @@
 	"apps": [{
 		"name": "web",
 		"script": "server.js",
-		"cwd": "build/server",
+		"cwd": "src/server",
 		"args": [],
 		"watch": true,
 		"node_args": "",
 		"merge_logs": true
 	}, {
 		"name": "listener",
-		"cwd": "build/listen",
+		"cwd": "src/listen",
 		"script": "listen.js",
 		"args": [],
 		"watch": true,
