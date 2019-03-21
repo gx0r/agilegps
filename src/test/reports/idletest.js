@@ -1,8 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import _ from 'lodash';
-import idleReport from '../../server/lib/reports/idle';
+const test = require('tape');
+const _ = require('lodash');
+const idleReport = require('../../server/lib/reports/idle');
 
 test('', function (t) {
 	t.plan(6);

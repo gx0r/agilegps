@@ -1,33 +1,9 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import friendlyCommands from '../helper/friendlycommands.js';
-import moment from 'moment';
+const friendlyCommands = require('../helper/friendlycommands.js');
+const moment = require('moment');
 
-export function isIdle(item) {
-	return item != null && getStatus(item) === 'Idling';
-}
-export function isPark(item) {
-	return item != null && getStatus(item) === 'Parked';
-}
-export function isStop(item) {
-	return item != null && (item.statusOverride === 'Stopped' || getStatus(item) === 'Stopped');
-}
-export function isStart(item) {
-	return item != null && (item.statusOverride === 'Start' || getStatus(item) === 'Start');
-}
-export function isTow(item) {
-	return item != null && getStatus(item) === 'Towing';
-}
-export function isMoving(item) {
-	return item != null && getStatus(item) === 'Moving';
-}
-export function isSpeeding(item) {
-	return item != null && getStatus(item) === 'Speeding';
-}
-export function isHarsh(item) {
-	return item != null && item.cmd === 'HBM';
-}
-export function getStatus(item, ignoreOverride) {
+function getStatus(item, ignoreOverride) {
 	if (!item) {
 		return '';
 	}
@@ -147,13 +123,56 @@ export function getStatus(item, ignoreOverride) {
 	}
 
 }
+module.exports.getStatus = getStatus;
 
-export function isStationaryStatus(item) {
+
+function isIdle(item) {
+	return item != null && getStatus(item) === 'Idling';
+}
+module.exports.isIdle = isIdle;
+
+function isPark(item) {
+	return item != null && getStatus(item) === 'Parked';
+}
+module.exports.isPark = isPark;
+
+function isStop(item) {
+	return item != null && (item.statusOverride === 'Stopped' || getStatus(item) === 'Stopped');
+}
+module.exports.isStop = isStop;
+
+function isStart(item) {
+	return item != null && (item.statusOverride === 'Start' || getStatus(item) === 'Start');
+}
+module.exports.isStart = isStart;
+
+function isTow(item) {
+	return item != null && getStatus(item) === 'Towing';
+}
+module.exports.isTow = isTow;
+
+function isMoving(item) {
+	return item != null && getStatus(item) === 'Moving';
+}
+module.exports.isMoving = isMoving;
+
+function isSpeeding(item) {
+	return item != null && getStatus(item) === 'Speeding';
+}
+module.exports.isSpeeding = isSpeeding;
+
+function isHarsh(item) {
+	return item != null && item.cmd === 'HBM';
+}
+module.exports.isHarsh = isHarsh;
+
+function isStationaryStatus(item) {
 	let s = getStatus(item);
 	return s.indexOf('Idling') > -1 || s.indexOf('Parked') > -1;
 }
+module.exports.isStationaryStatus = isStationaryStatus;
 
-export function getStatusColor(item) {
+function getStatusColor(item) {
 	let status = getStatus(item);
 
 	if (isTow(item)) {
@@ -174,8 +193,9 @@ export function getStatusColor(item) {
 	}
 	return '';
 }
+module.exports.getStatusColor = getStatusColor;
 
-export function getMarkerIconFleetView(item) {
+function getMarkerIconFleetView(item) {
 	if (isStop(item)) {
 		return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
 	}
@@ -199,8 +219,9 @@ export function getMarkerIconFleetView(item) {
 
 	return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
 }
+module.exports.getMarkerIconFleetView = getMarkerIconFleetView;
 
-export function getMarkerIconIndividualHistory(item) {
+function getMarkerIconIndividualHistory(item) {
 	if (isStop(item)) {
 		return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
 	}
@@ -226,3 +247,4 @@ export function getMarkerIconIndividualHistory(item) {
 	// return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
 	return null;
 }
+module.exports.getMarkerIconIndividualHistory = getMarkerIconIndividualHistory;

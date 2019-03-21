@@ -1,19 +1,32 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import _ from 'lodash';
-import {get} from 'lodash';
-import bunyan from 'bunyan';
-import Promise from 'bluebird';
-import moment from 'moment';
-import {cleanData, getAccuracy, nullToBlank, onlyVisibleHistory, addStartStop, rollup, ignitionMileage, mileageChange, startStopMileage} from '../../../common/helpers';
-import {getStatus, isIdle, isPark, isStop, isStart, isTow} from '../../../common/status';
+const _ = require('lodash');
+const get = require('lodash').get;
+const bunyan = require('bunyan');
+const Promise = require('bluebird');
+const moment = require('moment');
+const cleanData = require('../../../common/helpers').cleanData;
+const getAccuracy = require('../../../common/helpers').getAccuracy;
+const nullToBlank = require('../../../common/helpers').nullToBlank;
+const onlyVisibleHistory = require('../../../common/helpers').onlyVisibleHistory;
+const addStartStop = require('../../../common/helpers').addStartStop;
+const rollup = require('../../../common/helpers').rollup;
+const ignitionMileage = require('../../../common/helpers').ignitionMileage;
+const mileageChange = require('../../../common/helpers').mileageChange;
+const startStopMileage = require('../../../common/helpers').startStopMileage;
+const getStatus = require('../../../common/status').getStatus;
+const isIdle = require('../../../common/status').isIdle;
+const isPark = require('../../../common/status').isPark;
+const isStop = require('../../../common/status').isStop;
+const isStart = require('../../../common/status').isStart;
+const isTow = require('../../../common/status').isTow;
 
 const log = bunyan.createLogger({
 	name: 'reports',
 	// level: 'debug'
 });
 
-export default (history) => {
+module.exports = (history) => {
 	history = cleanData(history);
 	history = onlyVisibleHistory(history);
 	history = mileageChange(history);

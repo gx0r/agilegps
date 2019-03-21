@@ -1,12 +1,13 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import Promise from 'bluebird';
-import _ from 'lodash';
-import path from 'path';
-import r from '../../common/db';
-import {isHashed, hash} from './password';
+const Promise = require('bluebird');
+const _ = require('lodash');
+const path = require('path');
+const r = require('../../common/db');
+const isHashed = require('./password').isHashed;
+const hash = require('./password').hash;
 
-export async function getUserByID (id) {
+module.exports.getUserByID = async function getUserByID (id) {
 	return await r.table('users')
 	.get(id)
 }
@@ -15,26 +16,26 @@ export async function getUserByID (id) {
  * organizations
  */
 
-export async function getOrganizations () {
+module.exports.getOrganizations = async function getOrganizations () {
 	return await r.table('organizations').orderBy('name');
 };
 
-export async function getOrganization (id) {
+module.exports.getOrganization =  async function getOrganization (id) {
 	return await r.table('organizations').get(id);
 }
 
-export async function updateOrganization (id, body) {
+module.exports.updateOrganization =  async function updateOrganization (id, body) {
 	let x = await r.table('organizations').get(id).update(body, {returnChanges: 'always'});
 	return x.changes[0].new_val;
 }
 
-export async function newOrganization (body) {
+module.exports.newOrganization =  async function newOrganization (body) {
 	delete body.id;
 	let x = await r.table('organizations').insert(body, {returnChanges: 'always'});
 	return x.changes[0].new_val;
 }
 
-export async function deleteOrganization (id) {
+module.exports.deleteOrganization =  async function deleteOrganization (id) {
 	let org = await r.table('organizations').get(id);
 
 	let vehicles = await getVehicles(id);
@@ -57,7 +58,7 @@ export async function deleteOrganization (id) {
  * Users
  */
 
-export async function getUsers (orgid) {
+module.exports.getUsers = async function getUsers (orgid) {
 	let query = r.table('users').orderBy('username');
 	if (orgid != null) {
 		query = query.filter({
@@ -67,7 +68,7 @@ export async function getUsers (orgid) {
 	return await query;
 }
 
-export async function getUserByOrgId (orgid, id) {
+module.exports.getUserByOrgId = async function getUserByOrgId (orgid, id) {
 	const user = await r.table('users').get(id);
 	if (user.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -75,16 +76,16 @@ export async function getUserByOrgId (orgid, id) {
 		return user;
 	}
 }
-export async function getUser (id) {
+module.exports.getUser = async function getUser (id) {
 	return await r.table('users').get(id);
 }
 
-export async function deleteUser (id) {
+module.exports.deleteUser = async function deleteUser (id) {
 	await r.table('users').get(id).delete();
 	return {};
 }
 
-export async function saveUser (id, body) {
+module.exports.saveUser = async function saveUser (id, body) {
 	const user = await r.table('users').get(id);
 
 	if (!isHashed(body.password)) {
@@ -102,7 +103,7 @@ export async function saveUser (id, body) {
 	return x.changes[0].new_val;
 }
 
-export async function updateUserByOrgId (orgid, id, body) {
+module.exports.updateUserByOrgId = async function updateUserByOrgId (orgid, id, body) {
 	const user = await r.table('users').get(id);
 	if (user.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -118,7 +119,7 @@ export async function updateUserByOrgId (orgid, id, body) {
 	}
 }
 
-export async function getUserByUsername (username, withPassword) {
+module.exports.getUserByUsername =  async function getUserByUsername (username, withPassword) {
 	if (withPassword) {
 		let user = await r.table('users').filter({username: username});
 		return user[0];
@@ -133,7 +134,7 @@ export async function getUserByUsername (username, withPassword) {
  * Devices
  */
 
-export async function getDevices (orgid) {
+module.exports.getDevices = async function getDevices (orgid) {
 	let query = r.table('devices').orderBy('id');
 	if (orgid != null) {
 		query = query.filter({
@@ -143,7 +144,7 @@ export async function getDevices (orgid) {
 	return await query;
 }
 
-export async function getDevice (id, isAdmin, orgid) {
+module.exports.getDevice =  async function getDevice (id, isAdmin, orgid) {
 	const device = await r.table('devices').get(id);
 	if (!isAdmin && device.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -152,7 +153,7 @@ export async function getDevice (id, isAdmin, orgid) {
 	}
 }
 
-export async function deleteDevice (id, isAdmin, orgid) {
+module.exports.deleteDevice =  async function deleteDevice (id, isAdmin, orgid) {
 	const device = await r.table('devices').get(id);
 	if (!isAdmin && device.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -166,7 +167,7 @@ export async function deleteDevice (id, isAdmin, orgid) {
 	return {};
 }
 
-export async function saveDevice (body, id) {
+module.exports.saveDevice =  async function saveDevice (body, id) {
 	const device = await r.table('devices').get(id);
 
 	let x;
@@ -178,7 +179,7 @@ export async function saveDevice (body, id) {
 	return x.changes[0].new_val;
 }
 
-export async function saveDeviceByOrgID (body, id, isAdmin, orgid) {
+module.exports.saveDeviceByOrgID =  async function saveDeviceByOrgID (body, id, isAdmin, orgid) {
 	const device = await r.table('devices').get(id);
 	if (!isAdmin && device.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -187,7 +188,7 @@ export async function saveDeviceByOrgID (body, id, isAdmin, orgid) {
 	}
 }
 
-// export async function newDevice (body, orgid) {
+// module.exports.newDevice = async function newDevice (body, orgid) {
 // 	if (orgid != null && orgid !== body.orgid) {
 // 		throw new Error('orgid mismatch; expected ' + orgid + ', got ' + body.orgid);
 // 	}
@@ -201,7 +202,7 @@ export async function saveDeviceByOrgID (body, id, isAdmin, orgid) {
  * Fleets
  */
 
-export async function getFleets (orgid) {
+module.exports.getFleets = async function getFleets (orgid) {
 	let query = r.table('fleets').orderBy('name');
 	if (orgid != null) {
 		query = query.filter({
@@ -211,7 +212,7 @@ export async function getFleets (orgid) {
 	return await query;
 }
 
-export async function getFleet (id, isAdmin, orgid) {
+module.exports.getFleet = async function getFleet (id, isAdmin, orgid) {
 	const fleet = await r.table('fleets').get(id);
 	if (!isAdmin && device.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -220,7 +221,7 @@ export async function getFleet (id, isAdmin, orgid) {
 	}
 }
 
-export async function newFleet (body, orgid) {
+module.exports.newFleet = async function newFleet (body, orgid) {
 	delete body.id;
 	if (orgid != null && orgid !== body.orgid) {
 		throw new Error('orgid mismatch; expected ' + orgid + ', got ' + body.orgid);
@@ -229,7 +230,7 @@ export async function newFleet (body, orgid) {
 	return x.changes[0].new_val;
 }
 
-export async function updateFleet (body, id, isAdmin, orgid) {
+module.exports.updateFleet = async function updateFleet (body, id, isAdmin, orgid) {
 	const fleet = await r.table('fleets').get(id);
 	if (!isAdmin && fleet.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -239,7 +240,7 @@ export async function updateFleet (body, id, isAdmin, orgid) {
 	}
 }
 
-export async function deleteFleet (id, isAdmin, orgid) {
+module.exports.deleteFleet = async function deleteFleet (id, isAdmin, orgid) {
 	const fleet = await r.table('fleets').get(id);
 	if (!isAdmin && fleet.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -253,15 +254,16 @@ export async function deleteFleet (id, isAdmin, orgid) {
  * Vehicles
  */
 
-export async function getVehicles (orgid) {
+const getVehicles = async function getVehicles (orgid) {
 	let query = r.table('vehicles').orderBy('name');
 	if (orgid != null) {
 		query = query.filter({orgid: orgid});
 	}
 	return await query;
 }
+module.exports.getVehicles = getVehicles;
 
-export async function getVehicle (orgid, id, isAdmin) {
+async function getVehicle (orgid, id, isAdmin) {
 	const vehicle = await r.table('vehicles').get(id);
 	if (!isAdmin && vehicle.orgid !== orgid) {
 		throw new Error('orgid mismatch; expected ' + vehicle.orgid + ', got ' + orgid);
@@ -269,8 +271,9 @@ export async function getVehicle (orgid, id, isAdmin) {
 		return vehicle;
 	}
 }
+module.exports.getVehicle = getVehicle;
 
-export async function deleteVehicle (orgid, id, isAdmin) {
+module.exports.deleteVehicle = async function deleteVehicle (orgid, id, isAdmin) {
 	const vehicle = await r.table('vehicles').get(id);
 	if (!isAdmin && vehicle.orgid !== orgid) {
 		throw new Error('orgid mismatch; expected ' + vehicle.orgid + ', got ' + orgid);
@@ -306,7 +309,7 @@ const throwIfIMEIUsed = async function (imei, id) {
 	}
 }
 
-export async function updateVehicle (orgid, id, body, isAdmin) {
+module.exports.updateVehicle = async function updateVehicle (orgid, id, body, isAdmin) {
 	const vehicle = await r.table('vehicles').get(id);
 	await throwIfIMEIUsed(body.device, id);
 	if (body.imei == null) body.imei = '';
@@ -319,7 +322,7 @@ export async function updateVehicle (orgid, id, body, isAdmin) {
 	}
 }
 
-export async function newVehicle (orgid, body) {
+module.exports.newVehicle = async function newVehicle (orgid, body) {
 	delete body.id;
 	await throwIfIMEIUsed(body.device);
 	if (body.imei == null) body.imei = '';
@@ -331,7 +334,7 @@ export async function newVehicle (orgid, body) {
 	return x.changes[0].new_val;
 }
 
-export async function getVehicleHistory (orgid, id, startDate, endDate) {
+async function getVehicleHistory (orgid, id, startDate, endDate) {
 	const vehicle = await getVehicle(orgid, id);
 	if (vehicle.orgid !== orgid) {
 		throw new Error('orgid mismatch');
@@ -345,6 +348,7 @@ export async function getVehicleHistory (orgid, id, startDate, endDate) {
 
 	return history;
 }
+module.exports.getVehicleHistory = getVehicleHistory;
 
 /*
 ---

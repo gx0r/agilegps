@@ -1,7 +1,7 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import {isMotion} from '../common/helpers';
+const test = require('tape');
+const isMotion = require('../common/helpers').isMotion;
 
 test('towing is not considered motion', function(t) {
 	t.plan(1);

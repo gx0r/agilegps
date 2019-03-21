@@ -1,8 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import reversegeo from '../helper/reversegeo';
-import Promise from 'bluebird';
+const test = require('tape');
+const reversegeo = require('../helper/reversegeo');
+const Promise = require('bluebird');
 
 test('reverse geocode', function(t) {
 	t.plan(3);

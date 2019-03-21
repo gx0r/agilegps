@@ -1,20 +1,20 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import Promise from 'bluebird';
+const config = require('../../config/web.js');
+const Promise = require('bluebird');
 Promise.config({
 	longStackTraces: config.longStackTraces
 });
 global.Promise = Promise;
-import bunyan from 'bunyan';
-import config from '../../config/web.js';
-import cluster from 'cluster';
-import fs from 'fs';
-import net from 'net';
-import app from './lib/app';
-import http from 'http';
-import spdy from 'spdy';
-import sticky from 'socketio-sticky-session';
-import sockets from './lib/sockets';
+const bunyan = require('bunyan');
+const cluster = require('cluster');
+const fs = require('fs');
+const net = require('net');
+const app = require('./lib/app');
+const http = require('http');
+const spdy = require('spdy');
+const sticky = require('socketio-sticky-session');
+const sockets = require('./lib/sockets');
 
 const port = config.port;
 const log = bunyan.createLogger({

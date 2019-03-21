@@ -1,21 +1,29 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import _ from 'lodash';
-// import dao from '../dao';
+const _ = require('lodash');
 const dao = require('../dao');
-import moment from 'moment';
+const moment = require('moment');
 
-import nodeExcel from 'excel-export';
-import KilometersToMiles from "kilometers-to-miles";
-import {getStatus} from '../../../common/status';
-import {cleanData, getAccuracy, nullToBlank, onlyVisibleHistory, addStartStop, rollup, ignitionMileage, startStopMileage} from '../../../common/helpers';
-import todir from '../../../common/todir';
-import tomiles from '../../../common/tomiles';
-import reports from '../reports';
-import {street, city, state} from '../../../common/addressdisplay';
-import milesfield from '../../../common/milesfield';
+const nodeExcel = require('excel-export');
+const KilometersToMiles = require("kilometers-to-miles");
+const getStatus = require('../../../common/status').getStatus;
+const cleanData = require('../../../common/helpers').cleanData;
+const getAccuracy = require('../../../common/helpers').getAccuracy;
+const nullToBlank = require('../../../common/helpers').nullToBlank;
+const onlyVisibleHistory = require('../../../common/helpers').onlyVisibleHistory;
+const addStartStop = require('../../../common/helpers').addStartStop;
+const rollup = require('../../../common/helpers').rollup;
+const ignitionMileage = require('../../../common/helpers').ignitionMileage;
+const startStopMileage = require('../../../common/helpers').startStopMileage;
+const todir = require('../../../common/todir');
+const tomiles = require('../../../common/tomiles');
+const reports = require('../reports');
+const street = require('../../../common/addressdisplay').street;
+const city = require('../../../common/addressdisplay').city;
+const state = require('../../../common/addressdisplay').state;
+const milesfield = require('../../../common/milesfield');
 
-export default async (ctx, next) => {
+module.exports = async (ctx, next) => {
 	const showLatLong = ctx.query.latlong === 'true';
 	const tzOffset = ctx.query.tzOffset ? Number.parseInt(ctx.query.tzOffset) : 0;
 	const verbose = ctx.query.verbose === 'true';

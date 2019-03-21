@@ -1,19 +1,20 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import _ from 'lodash';
-import {get} from 'lodash';
-import bunyan from 'bunyan';
-import Promise from 'bluebird';
-import moment from 'moment';
-import {cleanData, rollup} from '../../../common/helpers';
-import {isIdle} from '../../../common/status';
+const _ = require('lodash');
+const get = require('lodash').get;
+const bunyan = require('bunyan');
+const Promise = require('bluebird');
+const moment = require('moment');
+const cleanData = require('../../../common/helpers').cleanData;
+const rollup = require('../../../common/helpers').rollup;
+const isIdle = require('../../../common/status').isIdle;
 
 const log = bunyan.createLogger({
 	name: 'reports',
 	level: 'debug'
 });
 
-export default (history) => {
+module.exports = (history) => {
 	let result = Object.create(null);
 	history = cleanData(history);
 	history = history.filter(item => item.cmd === 'FRI' || item.cmd === 'IGN' || item.cmd === 'IGF');

@@ -1,7 +1,7 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import decimalToHex from '../listen/decimaltohex';
+const test = require('tape');
+const decimalToHex = require('../listen/decimaltohex');
 
 test('test', function (t) {
     t.plan(1);

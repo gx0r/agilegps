@@ -1,17 +1,18 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import {get} from 'lodash';
-import bunyan from 'bunyan';
-import moment from 'moment';
-import {cleanData, mileageChange} from '../../../common/helpers';
-import {getStatus} from '../../../common/status';
+const get = require('lodash').get;
+const bunyan = require('bunyan');
+const moment = require('moment');
+const cleanData = require('../../../common/helpers').cleanData;
+const mileageChange = require('../../../common/helpers').mileageChange;
+const getStatus = require('../../../common/status').getStatus;
 
 const log = bunyan.createLogger({
 	name: 'reports',
 	// level: 'debug'
 });
 
-export default (history, tzOffset) => {
+module.exports = (history, tzOffset) => {
 	let currentDay, firstIgnOn, lastIgnOff, beginOdometer, endOdometer;
 	function resetDay() {
 		currentDay = null;

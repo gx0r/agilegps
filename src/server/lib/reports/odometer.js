@@ -1,20 +1,27 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import {isFinite} from 'lodash';
-import {get} from 'lodash';
-import bunyan from 'bunyan';
-import Promise from 'bluebird';
-import moment from 'moment';
-import {cleanData, mileageChange, ignitionMileage} from '../../../common/helpers';
-import {getStatus, isIdle, isPark, isStop, isStart, isTow} from '../../../common/status';
-import {state as displayState} from '../../../common/addressdisplay';
+const isFinite = require('lodash').isFinite;
+const get = require('lodash').get;
+const bunyan = require('bunyan');
+const Promise = require('bluebird');
+const moment = require('moment');
+const cleanData = require('../../../common/helpers').cleanData;
+const mileageChange = require('../../../common/helpers').mileageChange;
+const ignitionMileage = require('../../../common/helpers').ignitionMileage;
+const getStatus = require('../../../common/status').getStatus;
+const isIdle = require('../../../common/status').isIdle;
+const isPark = require('../../../common/status').isPark;
+const isStop = require('../../../common/status').isStop;
+const isStart = require('../../../common/status').isStart;
+const isTow = require('../../../common/status').isTow;
+const  displayState = require('../../../common/addressdisplay').state;
 
 const log = bunyan.createLogger({
 	name: 'reports',
 	// level: 'debug'
 });
 
-export default (history) => {
+module.exports = (history) => {
 	history = history.filter(function (item) {
 		return item.la != null && item.lo != null
 	})

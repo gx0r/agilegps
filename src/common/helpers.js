@@ -1,10 +1,14 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import _ from 'lodash';
-import moment from 'moment';
-import {getStatus, isIdle, isPark, isStop, isTow} from './status';
+const _ = require('lodash');
+const moment = require('moment');
+const getStatus = require('./status').getStatus;
+const isIdle = require('./status').isIdle;
+const isPark = require('./status').isPark;
+const isStop = require('./status').isStop;
+const isTow = require('./status').isTow;
 
-export function getAccuracy(i) {
+function getAccuracy(i) {
     // https://en.wikipedia.org/wiki/Dilution_of_precision_(GPS)
     if (!_.isNumber(i)) {
         return null;
@@ -26,8 +30,9 @@ export function getAccuracy(i) {
         return 'Poor';
     }
 }
+module.exports.getAccuracy = getAccuracy;
 
-export function getAccuracyAsStars (i) {
+function getAccuracyAsStars (i) {
     i = Number(i);
     if (i === 0) {
         return ''
@@ -42,7 +47,7 @@ export function getAccuracyAsStars (i) {
     } else return '☆';
 }
 
-export function getAccuracyAsImg (i) {
+module.exports.getAccuracyAsImg = function getAccuracyAsImg (i) {
     if (!_.isNumber(i)) {
         return null;
     }
@@ -77,15 +82,16 @@ export function getAccuracyAsImg (i) {
         })
     }
 }
+module.exports.getAccuracyAsStars = getAccuracyAsStars;
 
-export function toGoogle(history) {
+module.exports.toGoogle = function toGoogle(history) {
     return {
         lat: history.l.coordinates[1],
         lng: history.l.coordinates[0]
     }
 }
 
-export function cleanItem(item) {
+function cleanItem(item) {
     if (item.cmd === 'TOW') {
         item.ig = false;
         item.mo = true;
@@ -104,8 +110,9 @@ export function cleanItem(item) {
     // }
     return item;
 }
+module.exports.cleanItem = cleanItem;
 
-export function cleanData(history) {
+function cleanData(history) {
     if (!history) {
         return [];
     }
@@ -119,11 +126,12 @@ export function cleanData(history) {
         }
     })
 }
+module.exports.cleanData = cleanData;
 
 /**
 Non verbose status, e.g. we want to display it on the org view.
 */
-export function isNotVerbose(item) {
+function isNotVerbose(item) {
     // return ['BPL', 'BTC', 'CRA', 'EMG', 'EPS', 'FLA',
     // 'FRI', 'GIN', 'GOT', 'GSS', 'HBM', 'IDN', 'IDL', 'IGF', 'IGN',
     // 'JDC', 'JDS', 'LSP', 'MPF', 'MPN', 'PFA', 'PNA', 'SOS', 'SPD',
@@ -169,26 +177,29 @@ export function isNotVerbose(item) {
         // , 'RTO'
     ].indexOf(item.cmd) > -1;
 }
+module.exports.isNotVerbose = isNotVerbose;
 
-export function onlyVisibleHistory(history) {
+function onlyVisibleHistory(history) {
     if (!history) {
         return [];
     } else {
         return history.filter(isNotVerbose);
     }
 }
+module.exports.onlyVisibleHistory = onlyVisibleHistory;
 
-export function containsMotionInformation(item) {
+function containsMotionInformation(item) {
     if (['FRI', 'TOW', 'SPD', 'MPF', 'MPN', 'PFA', 'PNA', 'IGN', 'IGF', 'HBM', 'RTL'].indexOf(item.cmd) > -1) {
         return true;
     } else {
         return false;
     }
 }
+module.exports.containsMotionInformation = containsMotionInformation;
 
 // is item a motion event
 // towing is not considered
-export function isMotion(item) {
+function isMotion(item) {
     if (!containsMotionInformation(item)) {
         throw new Error("Item does not contain motion information");
     }
@@ -224,8 +235,9 @@ export function isMotion(item) {
     //  && !isPark(item) && !isIdle(item) && !isTow(item)
     // return ismotion;
 }
+module.exports.isMotion = isMotion;
 
-export function mileageChange(history) {
+function mileageChange(history) {
     // compute mileage between events and mileage for every event, since some don't report it.
     let i;
     if (!history) {
@@ -284,7 +296,7 @@ export function mileageChange(history) {
     }, [])
 }
 
-export function ignitionMileage(history) {
+module.exports.ignitionMileage = function ignitionMileage(history) {
     // mileage between ignitions
     if (!history) {
         return []
@@ -302,8 +314,9 @@ export function ignitionMileage(history) {
         return output;
     }, [])
 }
+module.exports.mileageChange = mileageChange;
 
-export function startStopMileage(history) {
+function startStopMileage(history) {
     // mileage between starts/stops
     if (!history) {
         return []
@@ -326,8 +339,9 @@ export function startStopMileage(history) {
         return output;
     }, []);
 }
+module.exports.startStopMileage = startStopMileage;
 
-export function addStartStop(history) {
+function addStartStop(history) {
     // this operates on an array in time-ascending order
     let started = false;
 
@@ -420,8 +434,9 @@ export function addStartStop(history) {
         return output;
     }, []);
 }
+module.exports.addStartStop = addStartStop;
 
-export function rollup(history) {
+function rollup(history) {
 
     let idleStart, parkedStart;
 
@@ -471,11 +486,13 @@ export function rollup(history) {
         return output.concat(current);
     }, [])
 }
+module.exports.rollup = rollup;
 
-export function nullToBlank (x) {
+function nullToBlank (x) {
     if (x == null || _.isNaN(x)) {
         return '';
     } else {
         return x;
     }
 }
+module.exports.nullToBlank = nullToBlank;

@@ -1,13 +1,13 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import {get} from 'lodash';
+const get = require('lodash').get;
 
-export function full(item) {
+module.exports.full = function full(item) {
 	if (item.ad) {
 		return item.ad.formattedAddress;
 	}
 }
-export function street(item) {
+module.exports.street = function street(item) {
 	if (item.ad) {
 		let ad = item.ad;
 
@@ -24,7 +24,7 @@ export function street(item) {
 		// }
 	}
 }
-export function city(item) {
+module.exports.city = function city(item) {
 	if (item.ad) {
 		if (item.ad.city) { // Google
 			return get(item, 'ad.city');
@@ -34,7 +34,7 @@ export function city(item) {
 
 	}
 }
-export function state(item) {
+module.exports.state = function state(item) {
 	if (item.ad) {
 		if (get(item, 'ad.administrativeLevels.level1long')) {
 			return get(item, 'ad.administrativeLevels.level1long');

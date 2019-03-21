@@ -1,10 +1,9 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import _ from 'lodash';
-import parse from '../helper/eventreportparser';
-import decimalToHex from '../listen/decimaltohex';
-
+const test = require('tape');
+const _ = require('lodash');
+const parse = require('../helper/eventreportparser');
+const decimalToHex = require('../listen/decimaltohex');
 
 test('OSM message, no failure codes', function (t) {
     const x = '+RESP:GTOSM,360100,864251020143727,,gv500,3,0,78FFFF,WVGZZZ1TZCW092623,1,14402,983A81C0,1605,37,86,13.8,3087,0,0,0,,15,22,,21,0,40.7,299,136.2,37.579901,48.720192,20160324142307,,,,,,0.0,20160324142309,0A98$'
