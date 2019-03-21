@@ -56,6 +56,7 @@ It will creates its working files in the current directory.
 1. ```babel-node debug server``` runs the server in the debugger.
 2. Node 6.3.0 and later has V8 Inspector integration which allows attaching Chrome DevTools to Node.js instances for debugging and profiling: https://nodejs.org/api/debugger.html#debugger_v8_inspector_integration_for_node_js 
 1. You should be able to access and login to the app at http://localhost:3000
+1. After running ```npm run build```, you can run ```cd agilegps/build/server``` and then run ```node server``` to run the built version (e.g., without `babel-node`)
 
 ## Running the Message Listener
 
