@@ -84,12 +84,13 @@ module.exports.getAccuracyAsImg = function getAccuracyAsImg (i) {
 }
 module.exports.getAccuracyAsStars = getAccuracyAsStars;
 
-module.exports.toGoogle = function toGoogle(history) {
+function toGoogle(history) {
     return {
         lat: history.l.coordinates[1],
         lng: history.l.coordinates[0]
     }
 }
+module.exports.toGoogle = toGoogle;
 
 function cleanItem(item) {
     if (item.cmd === 'TOW') {
@@ -295,6 +296,8 @@ function mileageChange(history) {
         return output;
     }, [])
 }
+module.exports.mileageChange = mileageChange;
+
 
 module.exports.ignitionMileage = function ignitionMileage(history) {
     // mileage between ignitions

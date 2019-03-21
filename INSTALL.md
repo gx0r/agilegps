@@ -6,8 +6,6 @@
 
 1. Install node.js. The latest Node.js LTS version (10.15.3 at the time of writing) is recommended. Suggested to install via first installing [notion](https://www.notionjs.com/), then run ```notion install node 10```
 
-1. Install the babel-cli: ```npm i -g babel-cli```
-
 1. [Install RethinkDB](https://rethinkdb.com/docs/install/centos/)
 
 1. Start a RethinkDB instance. To start a rethinkdb instance, run the command:
@@ -36,35 +34,32 @@ It will creates its working files in the current directory.
 
 1. ```cd agilegps/src/tools```
 
-1. Run ```babel-node schema.js``` to create the DB, tables, and indexes. It’s safe to run this multiple times because it does not drop any DB objects. Verify that the tables exist in the RethinkDB admin console. It should only take a few seconds to run.
+1. Run ```node schema.js``` to create the DB, tables, and indexes. It’s safe to run this multiple times because it does not drop any DB objects. Verify that the tables exist in the RethinkDB admin console. It should only take a few seconds to run.
 
-1. Run ```babel-node createAnAdmin.js admin password``` to create an Admin user with password "password".
+1. Run ```node createAnAdmin.js admin password``` to create an Admin user with password "password".
 
 ## Building the Front End
-1. ```npm run watch``` from the root of the project will run webpack in watch mode, continually rebuilding the front end as changes are made.
+1. ```npm run watch``` from the root of the project will run webpack in watch mode, continually rebuilding the front end as changes are made, as well as restarting the backend and listener when their files change.
+
 1. ```npm run webpack``` from the root of the project runs webpack once, to rebuild the front end a single time.
 
-
-## Building the Back End
-1. ```npm run build``` from the root of the project will run babel. The built version is used by processes.json for production usage since it uses less memory than *node-babel*.
 
 ## Running the Application
 
 1. ```cd agilegps/src/server```
-1. ```node runner``` starts the web server, listening for file system code changes and automatically restarting the web server process on change, for easier development.
-1. ```babel-node server``` starts the server without listening for file system changes.
-1. ```babel-node debug server``` runs the server in the debugger.
+1. ```node server-watch``` starts the web server, listening for file system code changes and automatically restarting the web server process on change, for easier development.
+1. ```node server``` starts the server without listening for file system changes.
+1. ```node debug server``` runs the server in the debugger.
 2. Node 6.3.0 and later has V8 Inspector integration which allows attaching Chrome DevTools to Node.js instances for debugging and profiling: https://nodejs.org/api/debugger.html#debugger_v8_inspector_integration_for_node_js 
 1. You should be able to access and login to the app at http://localhost:3000
-1. After running ```npm run build```, you can run ```cd agilegps/build/server``` and then run ```node server``` to run the built version (e.g., without `babel-node`)
 
 ## Running the Message Listener
 
 The message listener (also known as the message gateway or just gateway) receives messages from tracker devices and inserts into the database. The message listener can be started and stopped independently of the web server.
 
 1. ```cd agilegps/src/listener```
-1. Run: ```babel-node listen.js```
-1. To debug, ```babel-node debug listen.js```
+1. Run: ```node listen.js```
+1. To debug, ```node debug listen.js```
 
 ## Deploying to Production
 
