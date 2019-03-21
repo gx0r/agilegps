@@ -4,7 +4,7 @@
 ### Environment Setup
 1. [Red Hat® Enterprise Linux® / RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux) or [CentOS](https://www.centos.org/) is recommended for your server's operating system.
 
-1. [Install Node.js](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora) The minimum version that will work is 4.0, but the latest version is recommended.
+1. [Install Node.js](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora) The minimum version that will work is 4.0, but the latest LTS version (10) is recommended.
 
 1. Install the babel-cli: ```npm i -g babel-cli```
 
@@ -38,8 +38,7 @@ It will creates its working files in the current directory.
 
 1. Run ```babel-node schema.js``` to create the DB, tables, and indexes. It’s safe to run this multiple times because it does not drop any DB objects. Verify that the tables exist in the RethinkDB admin console. It should only take a few seconds to run.
 
-1. Run ```babel-node 
-.js admin thePassw0rd``` to create an Admin user with password "thePassw0rd".
+1. Run ```babel-node createAnAdmin.js admin password``` to create an Admin user with password "password".
 
 ## Building the Front End
 1. ```npm run watch``` from the root of the project will run webpack in watch mode, continually rebuilding the front end as changes are made.

@@ -1,7 +1,7 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
 import Promise from 'bluebird';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 Promise.promisifyAll(bcrypt);
 const rounds = 10;
 const hashmatch = /^\$2[ayb]\$.{56}$/
