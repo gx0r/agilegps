@@ -4,7 +4,7 @@
 ### Environment Setup
 1. [Red Hat® Enterprise Linux® / RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux) or [CentOS](https://www.centos.org/) is recommended for your server's operating system.
 
-1. [Install Node.js](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora) The minimum version that will work is 4.0, but the latest LTS version (10) is recommended.
+1. Install node.js. The latest Node.js LTS version (10.15.3 at the time of writing) is recommended. Suggested to install via first installing [notion](https://www.notionjs.com/), then run ```notion install node 10```
 
 1. Install the babel-cli: ```npm i -g babel-cli```
 
