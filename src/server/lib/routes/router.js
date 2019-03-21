@@ -12,7 +12,7 @@ import {jwtSignDefault, jwtCookie} from '../jwthelper';
 import moment from 'moment';
 import reports from '../reports';
 // import reverseGeo from '../../../helper/reversegeo';
-const bcrypt = Promise.promisifyAll(require('bcrypt'));
+const bcrypt = Promise.promisifyAll(require('bcryptjs'));
 
 const dao = require('../dao');
 

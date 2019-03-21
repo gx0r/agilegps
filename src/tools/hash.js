@@ -3,7 +3,7 @@
 'use strict';
 
 const Promise = require('bluebird');
-const bcrypt = Promise.promisifyAll(require('bcrypt'));
+const bcrypt = Promise.promisifyAll(require('bcryptjs'));
 
 Promise.coroutine(function* (username) {
 	let rounds = 10;
