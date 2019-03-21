@@ -1,19 +1,19 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import Promise from 'bluebird';
-import assert from 'assert';
-import JWT from 'jsonwebtoken';
+const Promise = require('bluebird');
+const assert = require('assert');
+const JWT = require('jsonwebtoken');
 Promise.promisifyAll(JWT);
-import unless from 'koa-unless';
-import {jwtSecret} from '../../../config/web.js';
+const unless = require('koa-unless');
+const jwtSecret = require('../../../config/web.js').jwtSecret;
 
-export function jwtSignDefault (obj, options) {
+module.exports.jwtSignDefault = function jwtSignDefault (obj, options) {
     options || {};
     // options.expiresInMinutes = 60;
     return JWT.sign(obj, jwtSecret, options);
 }
 
-export function jwtCookie(opts) {
+module.exports.jwtCookie = function jwtCookie(opts) {
 	opts = opts || {};
 	opts.key = opts.key || 'user';
 	assert(opts.secret, '"secret" option is required');

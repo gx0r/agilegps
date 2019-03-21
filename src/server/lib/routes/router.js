@@ -1,22 +1,27 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import Promise from 'bluebird';
-import {mustBeAdmin, mustBeAdminOrOrgAdmin, onlyAdminCanSetAdmin, mustBeAdminOrOrgMember, mustBeObjectOwnerOrAdminOrOrgAdmin} from '../security';
-import Router from 'koa-router';
-import r from '../../../common/db';
-import vehiclestatus from './vehiclestatus';
-import vehiclehistory from './vehiclehistory';
-import KoaJwt from 'koa-jwt';
-import config from '../../../../config/web.js';
-import {jwtSignDefault, jwtCookie} from '../jwthelper';
-import moment from 'moment';
-import reports from '../reports';
-// import reverseGeo from '../../../helper/reversegeo';
+const Promise = require('bluebird');
+const mustBeAdmin = require('../security').mustBeAdmin;
+const mustBeAdminOrOrgAdmin = require('../security').mustBeAdminOrOrgAdmin;
+const onlyAdminCanSetAdmin = require('../security').onlyAdminCanSetAdmin;
+const mustBeAdminOrOrgMember = require('../security').mustBeAdminOrOrgMember;
+const mustBeObjectOwnerOrAdminOrOrgAdmin = require('../security').mustBeObjectOwnerOrAdminOrOrgAdmin;
+const Router = require('koa-router');
+const r = require('../../../common/db');
+const vehiclestatus = require('./vehiclestatus');
+const vehiclehistory = require('./vehiclehistory');
+const KoaJwt = require('koa-jwt');
+const config = require('../../../../config/web.js');
+const jwtSignDefault = require('../jwthelper').jwtSignDefault;
+const jwtCookie = require('../jwthelper').jwtCookie;
+const moment = require('moment');
+const reports = require('../reports');
+//const reverseGeo = require('../../../helper/reversegeo');
 const bcrypt = Promise.promisifyAll(require('bcryptjs'));
 
 const dao = require('../dao');
 
-export const router = new Router();
+const router = module.exports.router = new Router();
 const adapt = require('koa-adapter-bluebird'); // uses bluebird-co for performance
 
 const jwtrequired = adapt(new KoaJwt({

@@ -1,25 +1,27 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import Promise from 'bluebird';
-import _ from 'lodash';
-import r from '../../common/db';
-import {get} from 'lodash';
-import bunyan from 'bunyan';
-import moment from 'moment';
-import helpers from '../../common/helpers';
-import {isIdle, isPark, isStop, isTow} from '../../common/status';
-import addressdisplay from'../../common/addressdisplay';
-
-import idleReport from './reports/idle';
-import dailyReport from './reports/daily';
-import mileageReport from './reports/mileage';
-import odometerReport from './reports/odometer';
-import startReport from './reports/start';
-import ignitionReport from './reports/ignition';
-import speedReport from './reports/speed';
-import summaryReport from './reports/summary';
-import obdReport from './reports/obd';
-import jesReport from './reports/jes';
+const Promise = require('bluebird');
+const _ = require('lodash');
+const r = require('../../common/db');
+const get = require('lodash').get;
+const bunyan = require('bunyan');
+const moment = require('moment');
+const helpers = require('../../common/helpers');
+const isIdle = require('../../common/status').isIdle;
+const isPark = require('../../common/status').isPark;
+const isStop = require('../../common/status').isStop;
+const isTow = require('../../common/status').isTow;
+const addressdisplay = require('../../common/addressdisplay');
+const idleReport = require('./reports/idle');
+const dailyReport = require('./reports/daily');
+const mileageReport = require('./reports/mileage');
+const odometerReport = require('./reports/odometer');
+const startReport = require('./reports/start');
+const ignitionReport = require('./reports/ignition');
+const speedReport = require('./reports/speed');
+const summaryReport = require('./reports/summary');
+const obdReport = require('./reports/obd');
+const jesReport = require('./reports/jes');
 
 const log = bunyan.createLogger({
 	name: 'reports',

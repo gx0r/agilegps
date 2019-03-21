@@ -1,13 +1,13 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
 // holds socketio objects since we have one for http and https
-import Promise from 'bluebird';
-import _ from 'lodash';
-import r from '../../common/db';
-import {jwtSecret} from '../../../config/web.js';
-import JWT from 'jsonwebtoken'; Promise.promisifyAll(JWT);
-import {getVehicles} from './dao';
-import {EventEmitter} from 'events';
+const Promise = require('bluebird');
+const _ = require('lodash');
+const r = require('../../common/db');
+const jwtSecret = require('../../../config/web.js').jwtSecret;
+const JWT = require('jsonwebtoken');
+const getVehicles = require('./dao').getVehicles;
+const EventEmitter = require('events').EventEmitter;
 
 const ee = new EventEmitter();
 ee.setMaxListeners(Infinity);

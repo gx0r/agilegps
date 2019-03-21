@@ -1,19 +1,20 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import {isFinite} from 'lodash';
-import {get} from 'lodash';
-import bunyan from 'bunyan';
-import Promise from 'bluebird';
-import moment from 'moment';
-import {cleanData, mileageChange} from '../../../common/helpers';
-import {state as displayState} from '../../../common/addressdisplay';
+const isFinite = require('lodash').isFinite;
+const get = require('lodash').get;
+const bunyan = require('bunyan');
+const Promise = require('bluebird');
+const moment = require('moment');
+const cleanData = require('../../../common/helpers').cleanData;
+const mileageChange = require('../../../common/helpers').mileageChange;
+const displayState = require('../../../common/addressdisplay').state;
 
 const log = bunyan.createLogger({
 	name: 'reports',
 	// level: 'debug'
 });
 
-export default (history, totals) => {
+module.exports = (history, totals) => {
 	history = history.filter(item => item.la != null && item.lo != null);
 
 	history = cleanData(history);

@@ -1,11 +1,12 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import Promise from 'bluebird';
-import fetch from 'node-fetch';
-import querystring from 'querystring';
-import {GOOGLE_API_KEY, PROVIDER} from '../../config/geocoding';
-import LRU from 'lru-cache';
-import VError from 'verror';
+const Promise = require('bluebird');
+const fetch = require('node-fetch');
+const querystring = require('querystring');
+const GOOGLE_API_KEY = require('../../config/geocoding').GOOGLE_API_KEY;
+const PROVIDER = require('../../config/geocoding').PROVIDER;
+const LRU = require('lru-cache');
+const VError = require('verror');
 
 const geoCache = LRU({
 	max: 10000,
@@ -31,7 +32,7 @@ const Geocoder = (async function () {
 	}
 })();
 
-export default async function reverseGeo (lat, lng, timeout, force) {
+module.exports = async function reverseGeo (lat, lng, timeout, force) {
 	const geocoder = await Geocoder;
 	if (PROVIDER === 'local') {
 		const result = (await geocoder.lookUpAsync({

@@ -1,9 +1,9 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import _ from 'lodash';
-import parse from '../helper/eventreportparser';
-import decimalToHex from '../listen/decimaltohex';
+const test = require('tape');
+const _ = require('lodash');
+const parse = require('../helper/eventreportparser');
+const decimalToHex = require('../listen/decimaltohex');
 
 test('Tractor OBD', function (t) {
 	// const x = '+RESP:GTOBD,360100,864251020143040,3LNHL2GC4BR773283,g5,0,79FFFF,3LNHL2GC4BR773283,1,14312,981B81E0,1333,0,8,,65535,0,0,0,,17,49,58,6,40976,0,0.0,0,288.9,-93.399623,44.940529,20160327232242,0310,0260,74B1,9D83,00,278.8,20160327232512,0731$';

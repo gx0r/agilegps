@@ -1,10 +1,9 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import _ from 'lodash';
-import parse from '../helper/eventreportparser';
-import decimalToHex from '../listen/decimaltohex';
-
+const test = require('tape');
+const _ = require('lodash');
+const parse = require('../helper/eventreportparser');
+const decimalToHex = require('../listen/decimaltohex');
 
 test('OBD, 0 malfunctions, 1996 Jeep Grand Cherokee', function (t) {
     const x = '+RESP:GTOBD,360100,864251020143040,,g5,0,79FFFF,,1,12510,983A8000,,,,,,,,,,,,,3,0,0,0.0,82,275.8,-93.295822,44.901657,20160323230656,0310,0260,74AF,AC5A,00,82.6,20160323230658,03EB$';

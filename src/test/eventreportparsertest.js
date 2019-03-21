@@ -1,8 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import parse from '../helper/eventreportparser';
-import decimalToHex from '../listen/decimaltohex';
+const test = require('tape');
+const parse = require('../helper/eventreportparser');
+const decimalToHex = require('../listen/decimaltohex');
 
 // https://lodash.com/docs
 const _ = require('lodash')

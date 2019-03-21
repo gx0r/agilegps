@@ -1,8 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import {Readable} from 'stream';
+const Readable = require('stream').Readable;
 // https://github.com/koajs/koa/blob/v2.x/docs/api/index.md
-import Promise from 'bluebird';
+const Promise = require('bluebird');
 const adapt = require('koa-adapter-bluebird'); // uses bluebird-co for performance
 // const adapt = require('koa-adapter');
 const Koa = require('koa');
@@ -85,7 +85,7 @@ app.use(async (ctx, next) => {
 	}
 });
 
-import {router} from './routes/router';
+const router = require('./routes/router').router;
 
 app.use(router.routes());
 app.use(router.allowedMethods());

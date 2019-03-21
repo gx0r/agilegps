@@ -1,20 +1,35 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import {isNaN, isFinite} from 'lodash';
-import {get} from 'lodash';
-import bunyan from 'bunyan';
+const isNaN = require('lodash').isNaN;
+const isFinite = require('lodash').isFinite;
+const get = require('lodash').get;
+const bunyan = require('bunyan');
 
-import {containsMotionInformation, cleanData, getAccuracy, nullToBlank, onlyVisibleHistory, addStartStop, rollup, ignitionMileage, mileageChange, startStopMileage, isMotion}
-	from '../../../common/helpers';
+const containsMotionInformation = require('../../../common/helpers').containsMotionInformation;
+const cleanData = require('../../../common/helpers').cleanData;
+const getAccuracy = require('../../../common/helpers').getAccuracy;
+const nullToBlank = require('../../../common/helpers').nullToBlank;
+const onlyVisibleHistory = require('../../../common/helpers').onlyVisibleHistory;
+const addStartStop = require('../../../common/helpers').addStartStop;
+const rollup = require('../../../common/helpers').rollup;
+const ignitionMileage = require('../../../common/helpers').ignitionMileage;
+const mileageChange = require('../../../common/helpers').mileageChange;
+const startStopMileage = require('../../../common/helpers').startStopMileage;
+const isMotion = require('../../../common/helpers').isMotion;
 
-import {getStatus, isIdle, isPark, isStop, isStart, isTow} from '../../../common/status';
+const getStatus = require('../../../common/status').getStatus;
+const isIdle = require('../../../common/status').isIdle;
+const isPark = require('../../../common/status').isPark;
+const isStop = require('../../../common/status').isStop;
+const isStart = require('../../../common/status').isStart;
+const isTow = require('../../../common/status').isTow;
 
 const log = bunyan.createLogger({
 	name: 'reports',
 	// level: 'debug'
 });
 
-export default (history) => {
+module.exports = (history) => {
 	let result = Object.create(null);
 
 	history = cleanData(history);

@@ -1,11 +1,10 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import Promise from 'bluebird';
-import {getUser} from './dao';
-import {get} from 'lodash';
-const adapt = require('koa-adapter-bluebird'); // uses bluebird-co for performance
+const Promise = require('bluebird');
+const getUser = require('./dao').getUser;
+const get = require('lodash').get;
 
-export async function mustBeAdmin (ctx, next) {
+module.exports.mustBeAdmin = async function mustBeAdmin (ctx, next) {
 	if (ctx.state.user.isAdmin !== true) {
 		ctx.status = 403;
 		ctx.body = { success: 'false', message: 'Must be admin'};
@@ -14,7 +13,7 @@ export async function mustBeAdmin (ctx, next) {
 	}
 }
 
-export async function mustBeAdminOrOrgAdmin (ctx, next) {
+module.exports.mustBeAdminOrOrgAdmin = async function mustBeAdminOrOrgAdmin (ctx, next) {
 	if ( get(ctx, 'state.user.isAdmin') === true ||
 	 ( get(ctx, 'state.user.isOrgAdmin') === true && get(ctx, 'state.user.orgid') === get(ctx, 'params.orgid'))) {
 		await next();
@@ -24,7 +23,7 @@ export async function mustBeAdminOrOrgAdmin (ctx, next) {
 	}
 }
 
-export async function mustBeObjectOwnerOrAdminOrOrgAdmin (ctx, next) {
+module.exports.mustBeObjectOwnerOrAdminOrOrgAdmin = async function mustBeObjectOwnerOrAdminOrOrgAdmin (ctx, next) {
 	function fail() {
 		ctx.status = 403;
 		ctx.body = { success: 'false', message: 'Access denied'};
@@ -55,7 +54,7 @@ export async function mustBeObjectOwnerOrAdminOrOrgAdmin (ctx, next) {
 	}
 }
 
-export async function onlyAdminCanSetAdmin (ctx, next) {
+module.exports.onlyAdminCanSetAdmin = async function onlyAdminCanSetAdmin (ctx, next) {
 	if (get(ctx, 'state.user.isAdmin') === true) {
 		await next();
 	} else if (get(ctx, 'state.user.isOrgAdmin') === true) {
@@ -68,7 +67,7 @@ export async function onlyAdminCanSetAdmin (ctx, next) {
 	}
 }
 
-export async function mustBeAdminOrOrgMember (ctx, next) {
+module.exports.mustBeAdminOrOrgMember = async function mustBeAdminOrOrgMember (ctx, next) {
 	if (get(ctx, 'state.user.isAdmin') === true
 	|| get(ctx, 'state.user.orgid') === get(ctx, 'params.orgid')) {
 		await next();

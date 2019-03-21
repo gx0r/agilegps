@@ -1,8 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-import test from 'tape';
-import _ from 'lodash';
-import {toDate} from '../helper/datehelper';
+const test = require('tape');
+const _ = require('lodash');
+const toDate = require('../helper/datehelper').toDate;
 
 test('August date', function (t) {
     t.plan(2); // Tell tape how many assertions we plan to test.
