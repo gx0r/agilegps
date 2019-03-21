@@ -25,7 +25,7 @@ const decimalToHex = require('./decimaltohex');
 const verror = require('verror');
 
 const socket = dgram.createSocket('udp4');
-const vehicleCache = LRU();
+const vehicleCache = new LRU();
 const log = bunyan.createLogger({
 	name: 'listen',
 	// level: 'debug'

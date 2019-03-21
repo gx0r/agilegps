@@ -8,7 +8,7 @@ const PROVIDER = require('../../config/geocoding').PROVIDER;
 const LRU = require('lru-cache');
 const VError = require('verror');
 
-const geoCache = LRU({
+const geoCache = new LRU({
 	max: 10000,
     maxAge: 1000 * 60 * 60 * 24 * 30 /* in ms */
 });
