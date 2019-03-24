@@ -3,7 +3,7 @@
 import {translate as t} from './i18n';
 import m from 'mithril';
 import appState from './appState';const Device = require('../common/models/Device');const catchhandler = require('./catchhandler');
-const timezones = require('json-loader!timezones.json/timezones.json');
+const timezones = require('timezones.json');
 const User = require('../common/models/User');
 const _ = require('lodash');
 const orgselector = require('./orgselector');
