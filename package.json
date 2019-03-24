@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "concurrently \"cd src/listen && node listen-watch\" \"cd src/server && node server-watch\" \"webpack --watch\" ",
+    "watch": "concurrently \"cd src/listen && node listen-watch | bunyan\" \"cd src/server && node server-watch | bunyan\" \"webpack --watch\" ",
     "watch-backend": "cd src/server && node server-watch",
     "watch-frontend": "webpack --watch",
     "watch-listener": "cd src/listen && node listen-watch",
@@ -33,7 +33,6 @@
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
     "bootstrap": "^3.4.1",
-    "bunyan": "^1.8.12",
     "cookies-js": "^1.2.3",
     "deep-freeze": "0.0.1",
     "es6-object-assign": "^1.1.0",
@@ -94,6 +93,7 @@
   },
   "devDependencies": {
     "base64-font-loader": "^0.0.4",
+    "bunyan": "^1.8.12",
     "concurrently": "^4.1.0",
     "css-loader": "^2.1.1",
     "exports-loader": "^0.7.0",
