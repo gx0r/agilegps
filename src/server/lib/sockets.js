@@ -1,7 +1,6 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
 // holds socketio objects since we have one for http and https
-const Promise = require('bluebird');
 const _ = require('lodash');
 const r = require('../../common/db');
 const jwtSecret = require('../../../config/web.js').jwtSecret;

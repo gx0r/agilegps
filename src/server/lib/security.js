@@ -1,6 +1,5 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
-const Promise = require('bluebird');
 const getUser = require('./dao').getUser;
 const get = require('lodash').get;
 

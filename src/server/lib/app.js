@@ -2,12 +2,8 @@
 'use strict';
 const Readable = require('stream').Readable;
 // https://github.com/koajs/koa/blob/v2.x/docs/api/index.md
-const Promise = require('bluebird');
-const adapt = require('koa-adapter-bluebird'); // uses bluebird-co for performance
-// const adapt = require('koa-adapter');
 const Koa = require('koa');
 const app = module.exports = new Koa();
-const fs = Promise.promisifyAll(require('fs'));
 const config = require('../../../config/web.js');
 const session = require('koa-session');
 const Compress = require('koa-compress');
