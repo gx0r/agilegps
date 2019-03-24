@@ -32,7 +32,7 @@
     "babel-register": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "bunyan": "^1.8.12",
     "cookies-js": "^1.2.3",
     "deep-freeze": "0.0.1",
