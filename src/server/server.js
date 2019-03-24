@@ -1,11 +1,11 @@
 /* Copyright (c) 2016 Grant Miner */
 'use strict';
 const config = require('../../config/web.js');
-const Promise = require('bluebird');
-Promise.config({
-	longStackTraces: config.longStackTraces
-});
-global.Promise = Promise;
+// const Promise = require('bluebird');
+// Promise.config({
+// 	longStackTraces: config.longStackTraces
+// });
+// global.Promise = Promise;
 const bunyan = require('bunyan');
 const cluster = require('cluster');
 const fs = require('fs');
