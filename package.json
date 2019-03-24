@@ -5,12 +5,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "concurrently \"cd src/listen && node listen-watch | bunyan\" \"cd src/server && node server-watch | bunyan\" \"webpack --watch\" ",
-    "watch-backend": "cd src/server && node server-watch",
+    "watch": "concurrently \"npm:watch-backend\" \"npm:watch-listener\" \"npm:watch-frontend\" ",
+    "watch-backend": "cd src/server && node server-watch | bunyan",
     "watch-frontend": "webpack --watch",
-    "watch-listener": "cd src/listen && node listen-watch",
+    "watch-listener": "cd src/listen && node listen-watch | bunyan",
     "webpack": "webpack",
-    "test": "tap src/test"
+    "test": "tap src/test | faucet"
   },
   "repository": {
     "type": "git",
@@ -97,6 +97,7 @@
     "concurrently": "^4.1.0",
     "css-loader": "^2.1.1",
     "exports-loader": "^0.7.0",
+    "faucet": "0.0.1",
     "file-loader": "^3.0.1",
     "jshint": "^2.10.2",
     "jshint-loader": "^0.8.4",

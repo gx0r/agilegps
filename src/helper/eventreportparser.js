@@ -33,7 +33,7 @@ function getGpsDate(dateInput) {
     try {
         return datehelper.toDate(dateInput);
     } catch (e) {
-        console.error('bad GPS date ' + dateInput);
+        // console.error('bad GPS date ' + dateInput);
         return NaN;
     }
 }
