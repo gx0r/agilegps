@@ -61,30 +61,32 @@ window.onpopstate = function (ev) {
 
 function auth() {
     return {
-        'headers': {
-            'authorization': 'Bearer ' + Cookies.get('jwt'),
-            'content-type': 'application/json; charset=UTF-8'
-        },
+        'headers': headers(),
         // 'credentials': 'include' // include JWT cookie
     };
 }
 
 function authWithCookies() {
     return {
-        'headers': {
-            'authorization': 'Bearer ' + Cookies.get('jwt'),
-            'content-type': 'application/json; charset=UTF-8'
-        },
+        'headers': headers(),
         'credentials': 'include' // include JWT cookie
     };
 }
 
+function headers() {
+	const headers = {
+		'content-type': 'application/json; charset=UTF-8'
+	}
+	if (Cookies.get('jwt')) {
+		headers['authorization'] = 'Bearer ' + Cookies.get('jwt');
+	}
+	return headers;
+}
+
+
 function authJson() {
     return {
-        'headers': {
-            'authorization': 'Bearer ' + Cookies.get('jwt'),
-            'content-type': 'application/json; charset=UTF-8'
-        }
+        'headers': headers()
     }
 }
 
@@ -276,17 +278,13 @@ function viewLogin() {
 module.exports.viewLogin = viewLogin;
 
 function login (data) { // data is an object {username, password}
-    NProgress.inc();
+	NProgress.inc();
+	
     let initial;
     if (data) {
         initial = Promise.resolve(fetch('/api/session/', postWithCookies(data)))
     } else {
-        initial = Promise.resolve(fetch('/api/session/', {
-            headers: {
-                'authorization': 'Bearer ' + Cookies.get('jwt'),
-                'content-type': 'application/json; charset=UTF-8'
-            }
-        }))
+        initial = Promise.resolve(fetch('/api/session/', { headers: headers() }))
     }
 
     return initial.then(function (response) {
