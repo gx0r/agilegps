@@ -70,15 +70,15 @@ app.use(async (ctx, next) => {
 			// centralized still functions correctly.
 			ctx.app.emit('error', err, ctx);
 		} else {
+			nullOrUndefined = err === null ? 'null' : 'undefined';
 			ctx.status = 500;
 			ctx.type = 'application/json';
 			ctx.body = JSON.stringify({
 				success: false,
-				message: 'null error'
+				message: `${nullOrUndefined} error`
 			})
-			// ctx.app.emit('error', new Error('null or undefined error'), ctx);
+			ctx.app.emit('error', new Error(`${nullOrUndefined} error`), ctx);
 		}
-		throw err;
 	}
 });
 
