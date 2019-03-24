@@ -41,12 +41,16 @@ module.exports.controller = function(args, extras) {
     }
 
     function geocode (id, force) {
+		const headers = {
+			'content-type': 'application/json; charset=UTF-8'
+		}
+		if (Cookies.get('jwt')) {
+			headers['authorization'] = 'Bearer ' + Cookies.get('jwt');
+		}
+
         return fetch('/api/vehiclehistory/' + id + '/geocode' + (force ? '?force=true' : ''), {
             method: 'POST',
-            headers: {
-                'authorization': 'Bearer ' + Cookies.get('jwt'),
-                'content-type': 'application/json; charset=UTF-8'
-            }
+            headers
         })
     }
 
