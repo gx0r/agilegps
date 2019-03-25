@@ -106,7 +106,7 @@ appState.getStore().subscribe(function () {
             });
         });
 
-        socket.on('vehiclehistory', Promise.method(handleChange));
+        socket.on('vehiclehistory', handleChange);
         let tables = ['users', 'devices', 'vehicles', 'errors'];
         tables.forEach(function (table) {
             socket.on(table, function (ev) {

@@ -14,6 +14,8 @@ module.exports = function reducer (state, action) {
         return defaultState;
     }
 
+	var newState = {};
+
     switch(action.type) {
         case 'SOCKET_CONNECT':
             return Object.assign({}, state, { realTimeUpdates : true });
@@ -41,7 +43,7 @@ module.exports = function reducer (state, action) {
              });
 
         case 'SELECT_FLEET':
-            var newState = {};
+            newState = {};
             newState.impliedSelectedVehicles = [];
             newState.selectedFleets = [action.fleet];
             newState.selectedAllFleets = false;
@@ -59,7 +61,7 @@ module.exports = function reducer (state, action) {
             return Object.assign({}, state, newState);
 
         case 'SELECT_FLEET_ALL':
-            var newState = {};
+            newState = {};
             newState.selectedFleets = _.cloneDeep(_.toArray(state.fleetsByID));
             newState.impliedSelectedVehicles = [];
             newState.selectedAllFleets = true;
