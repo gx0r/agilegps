@@ -62,7 +62,7 @@
     "koa-static": "^5.0.0",
     "koa-unless": "^1.0.7",
     "local-reverse-geocoder": "^0.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "lru-cache": "^5.1.1",
     "lucidlocation": "0.0.1",
     "mithril": "0.2",
