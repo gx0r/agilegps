@@ -1,9 +1,9 @@
 /* Copyright (c) 2016 Grant Miner */
-'use strict';
-const test = require('tape');
-const _ = require('lodash');
-const parse = require('../helper/eventreportparser');
-const decimalToHex = require('../listen/decimaltohex');
+"use strict";
+const test = require("tape");
+const _ = require("lodash");
+const parse = require("../helper/eventreportparser");
+const decimalToHex = require("../listen/decimaltohex");
 
 // test('JES (engine status)', function (t) {
 //     const x = '+RESP:GTJES,360303,864251020142968,,gv500,70007F,,1810,1172,27,20,74,41,0,0.0,117,128.4,37.578034,48.719447,20160818170736,,,,,,103.0,20160818170737,00DD$';

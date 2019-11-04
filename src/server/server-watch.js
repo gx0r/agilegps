@@ -1,17 +1,13 @@
 /* Copyright (c) 2016 Grant Miner */
-'use strict';
+"use strict";
 // Run this to auto-reload the server on file changes.
-const nodemon = require('nodemon');
+const nodemon = require("nodemon");
 
 nodemon({
-	script: 'server.js',
-	ext: 'js json',
-	"execMap": {
-		"js": "node"
-	},
-	"ignore": [
-		".git",
-		"client/**",
-		"**/*.spec.js"
-	]
+  script: "server.js",
+  ext: "js json",
+  execMap: {
+    js: "node"
+  },
+  ignore: [".git", "client/**", "**/*.spec.js"]
 });
