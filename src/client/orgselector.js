@@ -1,31 +1,45 @@
 /* Copyright (c) 2016 Grant Miner */
-'use strict';
-const m = require('mithril');
-const key = 'orgid';
-const _ = require('lodash');
+"use strict";
+const m = require("mithril");
+const key = "orgid";
+const _ = require("lodash");
 
-const appState = require('./appState');
+const appState = require("./appState");
 
-module.exports = function (obj, col1, col2) {
-	const state = appState.getState();
+module.exports = function(obj, col1, col2) {
+  const state = appState.getState();
 
-	if (!obj.orgid) {
-		obj.orgid = state.selectedOrg.id;
-	}
+  if (!obj.orgid) {
+    obj.orgid = state.selectedOrg.id;
+  }
 
-    col1 = col1 || 2;
-    col2 = col2 || 10;
+  col1 = col1 || 2;
+  col2 = col2 || 10;
 
-    if (state.user.isAdmin) {
-        return m('div.form-group', [m('label.col-md-'+col1+' control-label', 'Organization:'), m('div.col-md-'+col2, m('select.form-control', {
-            onchange: function (ev) {
-				obj[key] = ev.target.value;
-			},
+  if (state.user.isAdmin) {
+    return m("div.form-group", [
+      m("label.col-md-" + col1 + " control-label", "Organization:"),
+      m(
+        "div.col-md-" + col2,
+        m(
+          "select.form-control",
+          {
+            onchange: function(ev) {
+              obj[key] = ev.target.value;
+            },
             value: obj[key] || state.selectedOrg.id
-        }, _.union([{id:' '}], _.toArray(state.orgsByID)).map(function (org) {
-            return m('option', {
+          },
+          _.union([{ id: " " }], _.toArray(state.orgsByID)).map(function(org) {
+            return m(
+              "option",
+              {
                 value: org.id
-            }, org.name);
-        })))])
-    }
-}
+              },
+              org.name
+            );
+          })
+        )
+      )
+    ]);
+  }
+};
