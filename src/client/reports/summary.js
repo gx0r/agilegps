@@ -9,7 +9,7 @@ const _ = require("lodash");
 const isUserMetric = require("../isUserMetric");
 
 module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result() && args.result().vehicles && args.result().results)) {
+  if (!(args.result && args.result.vehicles && args.result.results)) {
     return m("div");
   }
 
@@ -33,19 +33,19 @@ module.exports.view = function(ctrl, args, extras) {
         ]),
         m(
           "tbody",
-          _.map(Object.keys(args.result().vehicles), function(vid) {
+          _.map(Object.keys(args.result.vehicles), function(vid) {
             return m("tr", [
-              m("td", args.result().vehicles[vid].name),
-              m("td", tohms(args.result().results[vid].totalTransit)),
-              m("td", tomiles(args.result().results[vid].distance)),
-              m("td", tohms(args.result().results[vid].totalPark)),
-              m("td", args.result().results[vid].parks),
-              m("td", tohms(args.result().results[vid].avgPark)),
-              m("td", tohms(args.result().results[vid].totalIdle)),
-              m("td", args.result().results[vid].idles),
-              m("td", tohms(args.result().results[vid].avgIdle)),
-              m("td", tomiles(args.result().results[vid].beginOdometer)),
-              m("td", tomiles(args.result().results[vid].endOdometer))
+              m("td", args.result.vehicles[vid].name),
+              m("td", tohms(args.result.results[vid].totalTransit)),
+              m("td", tomiles(args.result.results[vid].distance)),
+              m("td", tohms(args.result.results[vid].totalPark)),
+              m("td", args.result.results[vid].parks),
+              m("td", tohms(args.result.results[vid].avgPark)),
+              m("td", tohms(args.result.results[vid].totalIdle)),
+              m("td", args.result.results[vid].idles),
+              m("td", tohms(args.result.results[vid].avgIdle)),
+              m("td", tomiles(args.result.results[vid].beginOdometer)),
+              m("td", tomiles(args.result.results[vid].endOdometer))
             ]);
           })
         )

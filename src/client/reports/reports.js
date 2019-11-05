@@ -163,7 +163,7 @@ module.exports.controller = function(args, extras) {
   };
 
   ctrl.run = function() {
-    ctrl.result({});
+    ctrl.result = {};
     ctrl.executing = true;
     ctrl.error = null;
     m.redraw();
@@ -183,10 +183,10 @@ module.exports.controller = function(args, extras) {
         "?vehicles=" +
         encodeURIComponent(JSON.stringify(IDs)) +
         "&startDate=" +
-        encodeURIComponent(ctrl.startDate().toISOString()) +
+        encodeURIComponent(ctrl.startDate.toISOString()) +
         "&endDate=" +
         encodeURIComponent(
-          moment(ctrl.endDate())
+          moment(ctrl.endDate)
             .add(1, "day")
             .toISOString()
         ) +
@@ -198,7 +198,7 @@ module.exports.controller = function(args, extras) {
       config: withAuth
     })
       .then(function(results) {
-        ctrl.result(results);
+        ctrl.result = results;
         ctrl.executing = false;
       })
       .catch(function(err) {
@@ -324,7 +324,7 @@ module.exports.view = function(ctrl, args, extras) {
                 el.appendChild(input);
 
                 ctrl.startDatePicker = new pikaday({
-                  defaultDate: ctrl.startDate(),
+                  defaultDate: ctrl.startDate,
                   setDefaultDate: true,
                   field: input,
                   onSelect: function() {
@@ -342,11 +342,11 @@ module.exports.view = function(ctrl, args, extras) {
                 el.appendChild(input);
 
                 ctrl.endDatePicker = new pikaday({
-                  defaultDate: ctrl.endDate(),
+                  defaultDate: ctrl.endDate,
                   setDefaultDate: true,
                   field: input,
                   onSelect: function() {
-                    ctrl.endDate(this.getDate());
+                    ctrl.endDate = this.getDate();
                     m.redraw();
                   }
                 });
