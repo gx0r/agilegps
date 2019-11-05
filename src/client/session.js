@@ -16,7 +16,7 @@ module.exports.oninit = function(vnode) {
 
   const store = require("./appState").getStore();
 
-  this.loginClick = function() {
+  this.loginClick = () => {
     this.loggingIn = true;
     this.error = "";
     m.redraw();
@@ -27,7 +27,7 @@ module.exports.oninit = function(vnode) {
         password: this.password,
         rememberMe: this.rememberMe
       })
-      .then(function() {
+      .then(() => {
         this.loggingIn = false;
         m.redraw();
 
@@ -39,7 +39,7 @@ module.exports.oninit = function(vnode) {
           return appState.viewOrganizations();
         }
       })
-      .catch(function(err) {
+      .catch(err => {
         this.loggingIn = false;
         this.error = err.message;
         m.redraw();
@@ -55,11 +55,11 @@ module.exports.oninit = function(vnode) {
 
     appState
       .logOut()
-      .then(function() {
+      .then(() => {
         this.loggingIn = false;
         m.redraw();
       })
-      .catch(function(err) {
+      .catch(err => {
         this.loggingIn = false;
         this.error = err.message;
       });
@@ -69,7 +69,7 @@ module.exports.oninit = function(vnode) {
 module.exports.view = function(vnode) {
   const state = appState.getState();
 
-  function buttonText() {
+  const buttonText = () => {
     if (this.loggingIn) {
       return t("Authorizing...");
     } else {
@@ -77,9 +77,10 @@ module.exports.view = function(vnode) {
     }
   }
 
-  function getLogo() {
+  const logo = () => {
     return m("img[src=images/logo2.png]");
   }
+
   return m("div", [
     m(
       ".row center-block",
@@ -96,10 +97,10 @@ module.exports.view = function(vnode) {
           ? m("input.form-control", {
               placeholder: t("Username"),
               autofocus: true,
-              oninput: function(ev) {
+              oninput: ev => {
                 this.username = ev.target.value;
               },
-              onkeyup: function(ev) {
+              onkeyup: ev => {
                 if (ev.keyCode === 13) {
                   this.loginClick();
                 }
@@ -111,10 +112,10 @@ module.exports.view = function(vnode) {
           ? m("input.form-control", {
               placeholder: t("Password"),
               type: "password",
-              oninput: function(ev) {
+              oninput: ev => {
                 this.password = ev.target.value;
               },
-              onkeyup: function(ev) {
+              onkeyup: ev => {
                 if (ev.keyCode === 13) {
                   this.loginClick();
                 } else {
