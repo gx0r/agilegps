@@ -110,7 +110,7 @@ module.exports.view = function(ctrl, args, extras) {
     ctrl.mapVisible(false);
     ctrl.reportComponent = null;
     ctrl.sidebarComponent = null;
-    ctrl.mainComponent = m.component(events);
+    ctrl.mainComponent = m(events);
   } else if (subview === ALL) {
     if (view === ORG) {
       ctrl.mapVisible(false);
@@ -193,7 +193,7 @@ module.exports.view = function(ctrl, args, extras) {
   }
 
   return m("div", [
-    m("nav.navbar navbar-static-top navbar-inverse", [m.component(navbar)]),
+    m("nav.navbar navbar-static-top navbar-inverse", [m(navbar)]),
     m(
       "div.container-fluid",
       m(".row", [

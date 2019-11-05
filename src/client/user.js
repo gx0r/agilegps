@@ -3,7 +3,6 @@
 let m = require("mithril");
 
 module.exports.controller = function(args, extras) {
-  // this.user = m.prop();
   // this.orgid = m.route.param('orgid');
   // let id = m.route.param('id');
   // if (!id) id = '';

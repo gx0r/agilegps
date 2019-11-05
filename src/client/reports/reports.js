@@ -31,25 +31,21 @@ module.exports.controller = function(args, extras) {
   ctrl.executing = false;
   ctrl.error = null;
 
-  ctrl.result = m.prop({
+  ctrl.result = {
     query: {
       vehicles: []
     },
     results: {},
     totals: {}
-  });
+  };
 
-  ctrl.reportName = m.prop("idle");
-  ctrl.startDate = m.prop(
-    moment()
+  ctrl.reportName = "idle";
+  ctrl.startDate = moment()
       .startOf("day")
-      .toDate()
-  );
-  ctrl.endDate = m.prop(
-    moment()
+      .toDate();
+  ctrl.endDate = moment()
       .startOf("day")
-      .toDate()
-  );
+      .toDate();
 
   ctrl.dateRangeChange = function(ev) {
     if (ev === "Today") {
@@ -183,7 +179,7 @@ module.exports.controller = function(args, extras) {
         "/api/organizations/" +
         state.selectedOrg.id +
         "/reports/" +
-        encodeURIComponent(ctrl.reportName()) +
+        encodeURIComponent(ctrl.reportName) +
         "?vehicles=" +
         encodeURIComponent(JSON.stringify(IDs)) +
         "&startDate=" +
@@ -364,14 +360,16 @@ module.exports.view = function(ctrl, args, extras) {
             "select.form-control",
             {
               size: Object.keys(types).length,
-              onchange: m.withAttr("value", ctrl.reportName)
+              onchange: function(ev) {
+                ctrl.reportName = ev.target.value;
+              }
             },
             Object.keys(types).map(function(key) {
               return m(
                 "option",
                 {
                   value: key,
-                  selected: key === ctrl.reportName()
+                  selected: key === ctrl.reportName
                 },
                 t(types[key])
               );
@@ -392,67 +390,67 @@ module.exports.view = function(ctrl, args, extras) {
         ),
 
         m(".row.col-md-12", [
-          ctrl.result().query && ctrl.result().query.reportid === "idle"
-            ? m.component(idle, {
+          ctrl.result.query && ctrl.result.query.reportid === "idle"
+            ? m(idle, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "daily"
-            ? m.component(daily, {
+          ctrl.result.query && ctrl.result.query.reportid === "daily"
+            ? m(daily, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "mileage"
-            ? m.component(mileage, {
+          ctrl.result.query && ctrl.result.query.reportid === "mileage"
+            ? m(mileage, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "odometer"
-            ? m.component(odometer, {
+          ctrl.result.query && ctrl.result.query.reportid === "odometer"
+            ? m(odometer, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "speed"
-            ? m.component(speed, {
+          ctrl.result.query && ctrl.result.query.reportid === "speed"
+            ? m(speed, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "ignition"
-            ? m.component(ignition, {
+          ctrl.result.query && ctrl.result.query.reportid === "ignition"
+            ? m(ignition, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "start"
-            ? m.component(start, {
+          ctrl.result.query && ctrl.result.query.reportid === "start"
+            ? m(start, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "summary"
-            ? m.component(summary, {
+          ctrl.result.query && ctrl.result.query.reportid === "summary"
+            ? m(summary, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "obd"
-            ? m.component(obd, {
+          ctrl.result.query && ctrl.result.query.reportid === "obd"
+            ? m(obd, {
                 result: ctrl.result
               })
             : "",
 
-          ctrl.result().query && ctrl.result().query.reportid === "jes"
-            ? m.component(jes, {
+          ctrl.result.query && ctrl.result.query.reportid === "jes"
+            ? m(jes, {
                 result: ctrl.result
               })
             : "",
           // ,m('div.business-table', [
-          // 	m('pre', JSON.stringify(ctrl.result(), undefined, 4))
+          // 	m('pre', JSON.stringify(ctrl.result, undefined, 4))
           // ])
 
           ctrl.error
