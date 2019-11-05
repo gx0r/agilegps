@@ -56,140 +56,139 @@ module.exports.getMapElement = function() {
 
 let mapElement = null;
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.controller = function(vnode) {
 
-  ctrl.mapVisible = function(visible, tall) {
+  this.mapVisible = function(visible, tall) {
     TheMap.setVisible(visible, tall);
   };
 
-  ctrl.mapInitialized = false;
+  this.mapInitialized = false;
 
   this.mapElement = function(el, isInitialized) {
     if (!isInitialized) {
-      ctrl.mapInitialized = true;
+      this.mapInitialized = true;
       TheMap.mount(el);
       mapElement = el;
     }
   };
 };
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function(vnode) {
   const state = appState.getState();
   const view = state.view;
   const subview = state.subview;
 
   if (view === HELP) {
-    ctrl.mapVisible(false);
-    ctrl.reportComponent = null;
-    ctrl.sidebarComponent = null;
-    ctrl.mainComponent = help;
+    this.mapVisible(false);
+    this.reportComponent = null;
+    this.sidebarComponent = null;
+    this.mainComponent = help;
   } else if (view === SESSION) {
-    ctrl.mapVisible(false);
-    ctrl.reportComponent = null;
-    ctrl.sidebarComponent = null;
-    ctrl.mainComponent = session;
+    this.mapVisible(false);
+    this.reportComponent = null;
+    this.sidebarComponent = null;
+    this.mainComponent = session;
   } else if (subview === ORG) {
     if (view === USER) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = users;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = users;
     } else if (view === FLEET) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = fleets;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = fleets;
     } else if (view === VEHICLE) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = vehicles;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = vehicles;
     }
   } else if (view === EVENTS || view === RAWEVENTS || view === EXCEPTIONS) {
-    ctrl.mapVisible(false);
-    ctrl.reportComponent = null;
-    ctrl.sidebarComponent = null;
-    ctrl.mainComponent = m(events);
+    this.mapVisible(false);
+    this.reportComponent = null;
+    this.sidebarComponent = null;
+    this.mainComponent = m(events);
   } else if (subview === ALL) {
     if (view === ORG) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = organizations;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = organizations;
     }
 
     if (view === USER) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = users;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = users;
     }
 
     if (view === DEVICE) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = devices;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = devices;
     }
   } else if (view === ORG) {
-    ctrl.mapVisible(true, false);
+    this.mapVisible(true, false);
 
     if (subview === REPORT) {
-      ctrl.reportComponent = reports;
-      ctrl.mapVisible(false);
+      this.reportComponent = reports;
+      this.mapVisible(false);
     } else {
       if (state.selectedVehicle) {
-        ctrl.reportComponent = vehicle;
+        this.reportComponent = vehicle;
       } else {
-        ctrl.reportComponent = organization;
+        this.reportComponent = organization;
       }
     }
 
     if (subview === MAP) {
-      ctrl.mapVisible(true, true);
+      this.mapVisible(true, true);
     }
 
     if (subview === SPLIT) {
-      ctrl.mapVisible(true, false);
+      this.mapVisible(true, false);
     }
-    ctrl.sidebarComponent = sidebar;
-    ctrl.mainComponent = null;
+    this.sidebarComponent = sidebar;
+    this.mainComponent = null;
 
     if (subview === EDIT) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = neworganization;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = neworganization;
     }
 
     if (subview === NEW) {
-      ctrl.mapVisible(false);
-      ctrl.reportComponent = null;
-      ctrl.sidebarComponent = null;
-      ctrl.mainComponent = neworganization;
+      this.mapVisible(false);
+      this.reportComponent = null;
+      this.sidebarComponent = null;
+      this.mainComponent = neworganization;
     }
   } else if (view === DEVICE) {
-    ctrl.mapVisible(false);
+    this.mapVisible(false);
 
-    ctrl.reportComponent = null;
-    ctrl.sidebarComponent = null;
-    ctrl.mainComponent = newdevice;
+    this.reportComponent = null;
+    this.sidebarComponent = null;
+    this.mainComponent = newdevice;
   } else if (view === USER) {
-    ctrl.mapVisible(false);
+    this.mapVisible(false);
 
-    ctrl.reportComponent = null;
-    ctrl.sidebarComponent = null;
-    ctrl.mainComponent = newuser;
+    this.reportComponent = null;
+    this.sidebarComponent = null;
+    this.mainComponent = newuser;
   } else if (view === VEHICLE) {
-    ctrl.mapVisible(false);
+    this.mapVisible(false);
 
-    ctrl.reportComponent = null;
-    ctrl.sidebarComponent = null;
-    ctrl.mainComponent = newvehicle;
+    this.reportComponent = null;
+    this.sidebarComponent = null;
+    this.mainComponent = newvehicle;
   } else {
-    ctrl.mapVisible(false);
-    ctrl.mainComponent = session;
+    this.mapVisible(false);
+    this.mainComponent = session;
   }
 
   return m("div", [
@@ -197,9 +196,9 @@ module.exports.view = function(ctrl, args, extras) {
     m(
       "div.container-fluid",
       m(".row", [
-        m("div#sidebar.col-sm-2", [ctrl.sidebarComponent]),
+        m("div#sidebar.col-sm-2", [this.sidebarComponent]),
         m(".col-sm-10", [
-          ctrl.mapInitialized
+          this.mapInitialized
             ? {
                 subtree: "retain"
               }
@@ -207,13 +206,13 @@ module.exports.view = function(ctrl, args, extras) {
                 style: {
                   // visibility: 'hidden'
                 },
-                config: ctrl.mapElement
+                config: this.mapElement
               }),
           // report
-          ctrl.reportComponent
+          this.reportComponent
         ])
       ])
     ),
-    m(".container-fluid", [m(".row", [ctrl.mainComponent])])
+    m(".container-fluid", [m(".row", [this.mainComponent])])
   ]);
 };
