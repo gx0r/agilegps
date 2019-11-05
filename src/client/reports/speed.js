@@ -26,12 +26,12 @@ function renderLocation(item) {
 }
 
 module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result() && args.result().vehicles && args.result().results)) {
+  if (!(args.result && args.result.vehicles && args.result.results)) {
     return "";
   }
 
   return m("div", [
-    args.result() && args.result().vehicles
+    args.result && args.result.vehicles
       ? m("div", [
           m("table.table-condensed table-bordered table-striped dataTable", [
             m("thead", [
@@ -40,11 +40,11 @@ module.exports.view = function(ctrl, args, extras) {
             ]),
             m(
               "tbody",
-              _.map(Object.keys(args.result().vehicles), function(vid) {
-                if (_.isFinite(tomiles(args.result().totals[vid]))) {
+              _.map(Object.keys(args.result.vehicles), function(vid) {
+                if (_.isFinite(tomiles(args.result.totals[vid]))) {
                   return m("tr", [
-                    m("td", args.result().vehicles[vid].name),
-                    m("td", tomiles(args.result().totals[vid]))
+                    m("td", args.result.vehicles[vid].name),
+                    m("td", tomiles(args.result.totals[vid]))
                   ]);
                 }
               })
@@ -65,13 +65,13 @@ module.exports.view = function(ctrl, args, extras) {
         ]),
         m(
           "tbody",
-          _.map(Object.keys(args.result().vehicles), function(vid) {
+          _.map(Object.keys(args.result.vehicles), function(vid) {
             return [
               m(
                 "tr",
-                m("td[colspan=7].group", args.result().vehicles[vid].name)
+                m("td[colspan=7].group", args.result.vehicles[vid].name)
               ),
-              args.result().results[vid].map(function(item) {
+              args.result.results[vid].map(function(item) {
                 return m("tr", [
                   m("td", renderLocation(item)),
                   m("td", formatDate(item.d)),

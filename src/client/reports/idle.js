@@ -14,21 +14,21 @@ const formatDate = require("../formatDate");
 // need location, city, state, idleStart, idleEnd, duration
 //total: vehicle, idling total
 module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result() && args.result().vehicles && args.result().results)) {
+  if (!(args.result && args.result.vehicles && args.result.results)) {
     return "";
   }
   return m("div", [
-    args.result() && args.result().vehicles
+    args.result && args.result.vehicles
       ? m("div", [
           // m('h3', 'Totals'),
           m("table.table-condensed table-bordered table-striped dataTable", [
             m("thead", [m("td", t("Vehicle")), m("td", t("Idling Total"))]),
             m(
               "tbody",
-              _.map(Object.keys(args.result().vehicles), function(vid) {
+              _.map(Object.keys(args.result.vehicles), function(vid) {
                 return m("tr", [
-                  m("td", args.result().vehicles[vid].name),
-                  m("td", tohms(args.result().totals[vid] / 1000))
+                  m("td", args.result.vehicles[vid].name),
+                  m("td", tohms(args.result.totals[vid] / 1000))
                 ]);
               })
             )
@@ -50,14 +50,14 @@ module.exports.view = function(ctrl, args, extras) {
         ]),
         m(
           "tbody",
-          _.map(Object.keys(args.result().vehicles), function(vid) {
-            return args.result().results[vid].length > 0
+          _.map(Object.keys(args.result.vehicles), function(vid) {
+            return args.result.results[vid].length > 0
               ? [
                   m(
                     "tr",
-                    m("td[colspan=6].group", args.result().vehicles[vid].name)
+                    m("td[colspan=6].group", args.result.vehicles[vid].name)
                   ),
-                  _.map(args.result().results[vid], function(result) {
+                  _.map(args.result.results[vid], function(result) {
                     return m("tr", [
                       m("td", street(result)),
                       m("td", city(result)),
