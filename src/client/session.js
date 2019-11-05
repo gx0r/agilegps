@@ -9,24 +9,24 @@ module.exports.controller = function(args, extras) {
   const ctrl = this;
   const state = appState.getState();
 
-  ctrl.username = m.prop(state.user.username ? state.user.username : "");
-  ctrl.password = m.prop("");
+  ctrl.username = state.user.username ? state.user.username : "";
+  ctrl.password = "";
   ctrl.loggingIn = false;
-  ctrl.rememberMe = m.prop(false);
-  ctrl.error = m.prop("");
+  ctrl.rememberMe = false;
+  ctrl.error = "";
 
   const store = require("./appState").getStore();
 
   ctrl.loginClick = function() {
     ctrl.loggingIn = true;
-    ctrl.error("");
+    ctrl.error = "";
     m.redraw();
 
     appState
       .login({
-        username: ctrl.username().trim(),
-        password: ctrl.password(),
-        rememberMe: ctrl.rememberMe()
+        username: ctrl.username.trim(),
+        password: ctrl.password,
+        rememberMe: ctrl.rememberMe
       })
       .then(function() {
         ctrl.loggingIn = false;
@@ -42,7 +42,7 @@ module.exports.controller = function(args, extras) {
       })
       .catch(function(err) {
         ctrl.loggingIn = false;
-        ctrl.error(err.message);
+        ctrl.error = err.message;
         m.redraw();
       });
   };
@@ -51,7 +51,7 @@ module.exports.controller = function(args, extras) {
     let wantsToLogout = window.confirm(t("Are you sure you wish to logout?"));
     if (!wantsToLogout) return;
     ctrl.loggingIn = true;
-    ctrl.error("");
+    ctrl.error = "";
     m.redraw();
 
     appState
@@ -62,7 +62,7 @@ module.exports.controller = function(args, extras) {
       })
       .catch(function(err) {
         ctrl.loggingIn = false;
-        ctrl.error(err.message);
+        ctrl.error = err.message;
       });
   };
 };
@@ -97,28 +97,35 @@ module.exports.view = function(ctrl) {
           ? m("input.form-control", {
               placeholder: t("Username"),
               autofocus: true,
-              oninput: m.withAttr("value", ctrl.username),
+              oninput: function(ev) {
+                ctrl.username = ev.target.value;
+              },
               onkeyup: function(ev) {
                 if (ev.keyCode === 13) {
                   ctrl.loginClick();
                 }
               },
-              value: ctrl.username()
+              value: ctrl.username
             })
           : null,
         !state.user.username
           ? m("input.form-control", {
               placeholder: t("Password"),
               type: "password",
-              oninput: m.withAttr("value", ctrl.password),
+              oninput: function(ev) {
+                ctrl.password = ev.target.value;
+              },
               onkeyup: function(ev) {
                 if (ev.keyCode === 13) {
                   ctrl.loginClick();
                 } else {
-                  m.redraw.strategy("none");
+                  console.warn("m.redraw.strategy() does not exist in mithril 1.0");
+                  if(m.redraw.strategy) {
+                    m.redraw.strategy("none");
+                  }
                 }
               },
-              value: ctrl.password()
+              value: ctrl.password
             })
           : null,
 
@@ -126,7 +133,7 @@ module.exports.view = function(ctrl) {
           ? m(
               "label",
               m("input[type=checkbox]", {
-                checked: ctrl.rememberMe(),
+                checked: ctrl.rememberMe,
                 onclick: function() {
                   ctrl.rememberMe(this.checked);
                 }
@@ -173,7 +180,7 @@ module.exports.view = function(ctrl) {
           ]
         ),
         m("br"),
-        m("div.text-danger", ctrl.error() ? "Error: " + ctrl.error() : "")
+        m("div.text-danger", ctrl.error? "Error: " + ctrl.error : "")
       ]
     ),
     m(

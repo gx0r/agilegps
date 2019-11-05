@@ -7,9 +7,9 @@ const appState = require("./appState");
 
 module.exports.controller = function(args, extras) {
   const ctrl = this;
-  ctrl.searchInput = m.prop("");
+  ctrl.searchInput = "";
   ctrl.searchInputChange = function(ev) {
-    ctrl.searchInput(ev.target.value);
+    ctrl.searchInput = ev.target.value;
   };
 };
 
@@ -71,7 +71,7 @@ module.exports.view = function(ctrl, args, extras) {
     m("from.form-search", [
       m("input.input-search.fullwidth", {
         onkeyup: ctrl.searchInputChange,
-        value: ctrl.searchInput()
+        value: ctrl.searchInput
       }),
       m("span.middle glyphicon glyphicon-search", {
         style: {
@@ -80,7 +80,7 @@ module.exports.view = function(ctrl, args, extras) {
           top: "24px"
         },
         onclick: function() {
-          ctrl.searchInput("");
+          ctrl.searchInput = "";
         }
       })
     ]),
@@ -123,10 +123,10 @@ module.exports.view = function(ctrl, args, extras) {
             .filter(function(vid) {
               const vehicle = state.vehiclesByID[vid];
               return (
-                ctrl.searchInput() === "" ||
+                ctrl.searchInput === "" ||
                 vehicle.name
                   .toUpperCase()
-                  .indexOf(ctrl.searchInput().toUpperCase()) > -1
+                  .indexOf(ctrl.searchInput.toUpperCase()) > -1
               );
             })
             .map(function(vid) {
