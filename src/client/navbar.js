@@ -10,17 +10,17 @@ const isUserMetric = require("./isUserMetric");
 module.exports.controller = function() {
   const ctrl = this;
 
-  ctrl.manageOpen = m.prop(false);
+  ctrl.manageOpen = false;
   ctrl.toggleManageOpen = function() {
-    ctrl.manageOpen(!ctrl.manageOpen());
+    ctrl.manageOpen = !ctrl.manageOpen;
   };
 
-  ctrl.adminToolsOpen = m.prop(false);
+  ctrl.adminToolsOpen = false;
   ctrl.adminDropDownConfig = function(el, intialized) {
     ctrl.adminDropDownConfigEl = el;
   };
   ctrl.toggleAdminToolsOpen = function() {
-    ctrl.adminToolsOpen(!ctrl.adminToolsOpen());
+    ctrl.adminToolsOpen = !ctrl.adminToolsOpen;
   };
   // const anywhereClick = function (e) {
   //     // todo
@@ -291,7 +291,7 @@ module.exports.view = function(ctrl, args, extras) {
         ? m(
             "li.dropdown.pointer",
             {
-              class: ctrl.adminToolsOpen() ? "open" : "",
+              class: ctrl.adminToolsOpen ? "open" : "",
               onclick: ctrl.toggleAdminToolsOpen,
               config: ctrl.adminDropDownConfig
             },
@@ -367,7 +367,7 @@ module.exports.view = function(ctrl, args, extras) {
         : m(
             "li.dropdown.pointer",
             {
-              class: ctrl.manageOpen() ? "open" : "",
+              class: ctrl.manageOpen ? "open" : "",
               onclick: ctrl.toggleManageOpen
             },
             [

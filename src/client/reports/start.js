@@ -12,7 +12,7 @@ const isUserMetric = require("../isUserMetric");
 const formatDate = require("../formatDate");
 
 module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result() && args.result().vehicles && args.result().results)) {
+  if (!(args.result && args.result.vehicles && args.result.results)) {
     return "";
   }
 
@@ -31,13 +31,13 @@ module.exports.view = function(ctrl, args, extras) {
         ]),
         m(
           "tbody",
-          _.map(Object.keys(args.result().vehicles), function(vid) {
+          _.map(Object.keys(args.result.vehicles), function(vid) {
             return [
               m(
                 "tr",
-                m("td[colspan=8].group", args.result().vehicles[vid].name)
+                m("td[colspan=8].group", args.result.vehicles[vid].name)
               ),
-              args.result().results[vid].map(function(item) {
+              args.result.results[vid].map(function(item) {
                 return m("tr", [
                   m("td", item.startTime ? formatDate(item.startTime) : ""),
                   m("td", formatDate(item.d)),

@@ -4,31 +4,30 @@ const t = require("./i18n").translate;
 const m = require("mithril");
 const appState = require("./appState");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.oninit = function(vnode) {
   const state = appState.getState();
 
-  ctrl.username = m.prop(state.user.username ? state.user.username : "");
-  ctrl.password = m.prop("");
-  ctrl.loggingIn = false;
-  ctrl.rememberMe = m.prop(false);
-  ctrl.error = m.prop("");
+  this.username = state.user.username ? state.user.username : "";
+  this.password = "";
+  this.loggingIn = false;
+  this.rememberMe = false;
+  this.error = "";
 
   const store = require("./appState").getStore();
 
-  ctrl.loginClick = function() {
-    ctrl.loggingIn = true;
-    ctrl.error("");
+  this.loginClick = () => {
+    this.loggingIn = true;
+    this.error = "";
     m.redraw();
 
     appState
       .login({
-        username: ctrl.username().trim(),
-        password: ctrl.password(),
-        rememberMe: ctrl.rememberMe()
+        username: this.username.trim(),
+        password: this.password,
+        rememberMe: this.rememberMe
       })
-      .then(function() {
-        ctrl.loggingIn = false;
+      .then(() => {
+        this.loggingIn = false;
         m.redraw();
 
         const state = appState.getState();
@@ -39,47 +38,48 @@ module.exports.controller = function(args, extras) {
           return appState.viewOrganizations();
         }
       })
-      .catch(function(err) {
-        ctrl.loggingIn = false;
-        ctrl.error(err.message);
+      .catch(err => {
+        this.loggingIn = false;
+        this.error = err.message;
         m.redraw();
       });
   };
 
-  ctrl.logoutClick = function() {
+  this.logoutClick = function() {
     let wantsToLogout = window.confirm(t("Are you sure you wish to logout?"));
     if (!wantsToLogout) return;
-    ctrl.loggingIn = true;
-    ctrl.error("");
+    this.loggingIn = true;
+    this.error = "";
     m.redraw();
 
     appState
       .logOut()
-      .then(function() {
-        ctrl.loggingIn = false;
+      .then(() => {
+        this.loggingIn = false;
         m.redraw();
       })
-      .catch(function(err) {
-        ctrl.loggingIn = false;
-        ctrl.error(err.message);
+      .catch(err => {
+        this.loggingIn = false;
+        this.error = err.message;
       });
   };
 };
 
-module.exports.view = function(ctrl) {
+module.exports.view = function(vnode) {
   const state = appState.getState();
 
-  function buttonText() {
-    if (ctrl.loggingIn) {
+  const buttonText = () => {
+    if (this.loggingIn) {
       return t("Authorizing...");
     } else {
       return t("Log In");
     }
   }
 
-  function getLogo() {
+  const logo = () => {
     return m("img[src=images/logo2.png]");
   }
+
   return m("div", [
     m(
       ".row center-block",
@@ -96,28 +96,35 @@ module.exports.view = function(ctrl) {
           ? m("input.form-control", {
               placeholder: t("Username"),
               autofocus: true,
-              oninput: m.withAttr("value", ctrl.username),
-              onkeyup: function(ev) {
+              oninput: ev => {
+                this.username = ev.target.value;
+              },
+              onkeyup: ev => {
                 if (ev.keyCode === 13) {
-                  ctrl.loginClick();
+                  this.loginClick();
                 }
               },
-              value: ctrl.username()
+              value: this.username
             })
           : null,
         !state.user.username
           ? m("input.form-control", {
               placeholder: t("Password"),
               type: "password",
-              oninput: m.withAttr("value", ctrl.password),
-              onkeyup: function(ev) {
+              oninput: ev => {
+                this.password = ev.target.value;
+              },
+              onkeyup: ev => {
                 if (ev.keyCode === 13) {
-                  ctrl.loginClick();
+                  this.loginClick();
                 } else {
-                  m.redraw.strategy("none");
+                  console.warn("m.redraw.strategy() does not exist in mithril 1.0");
+                  if(m.redraw.strategy) {
+                    m.redraw.strategy("none");
+                  }
                 }
               },
-              value: ctrl.password()
+              value: this.password
             })
           : null,
 
@@ -125,9 +132,9 @@ module.exports.view = function(ctrl) {
           ? m(
               "label",
               m("input[type=checkbox]", {
-                checked: ctrl.rememberMe(),
+                checked: this.rememberMe,
                 onclick: function() {
-                  ctrl.rememberMe(this.checked);
+                  this.rememberMe(this.checked);
                 }
               }),
               t("Remember Me")
@@ -147,12 +154,12 @@ module.exports.view = function(ctrl) {
               ? m(
                   "button.btn btn-default",
                   {
-                    class: ctrl.loggingIn ? "" : "btn-default",
+                    class: this.loggingIn ? "" : "btn-default",
                     style: {
                       float: "left"
                     },
-                    onclick: ctrl.logoutClick,
-                    disabled: ctrl.loggingIn
+                    onclick: this.logoutClick,
+                    disabled: this.loggingIn
                   },
                   t("Log Out") + " " + state.user.username
                 )
@@ -162,9 +169,9 @@ module.exports.view = function(ctrl) {
               ? m(
                   "button.btn btn-default",
                   {
-                    class: ctrl.loggingIn ? "" : "btn-success",
-                    onclick: ctrl.loginClick,
-                    disabled: ctrl.loggingIn
+                    class: this.loggingIn ? "" : "btn-success",
+                    onclick: this.loginClick,
+                    disabled: this.loggingIn
                   },
                   buttonText()
                 )
@@ -172,7 +179,7 @@ module.exports.view = function(ctrl) {
           ]
         ),
         m("br"),
-        m("div.text-danger", ctrl.error() ? "Error: " + ctrl.error() : "")
+        m("div.text-danger", this.error? "Error: " + this.error : "")
       ]
     ),
     m(
