@@ -76,9 +76,7 @@ module.exports.view = function(vnode) {
     }
   }
 
-  const logo = () => {
-    return m("img[src=images/logo2.png]");
-  }
+  const logo = m("img[src=images/logo2.png]");
 
   return m("div", [
     m(
@@ -192,7 +190,7 @@ module.exports.view = function(vnode) {
             "text-align": "center"
           }
         },
-        getLogo()
+        logo
       )
     )
   ]);
