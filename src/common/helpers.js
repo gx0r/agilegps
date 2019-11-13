@@ -1,7 +1,6 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
 const _ = require("lodash");
-const m = require("mithril");
 const moment = require("moment");
 const getStatus = require("./status").getStatus;
 const isIdle = require("./status").isIdle;
@@ -54,35 +53,22 @@ module.exports.getAccuracyAsImg = function getAccuracyAsImg(i) {
   }
   i = Number(i);
   if (i === 0) {
-    return m("img", {
-      src: "images/signal0.png"
-    });
+    return "images/signal0.png";
   } else if (i <= 1 && i > 0) {
-    return m("img", {
-      src: "images/signal5.png"
-    });
+    return "images/signal5.png";
   } else if (i <= 2) {
-    return m("img", {
-      src: "images/signal4.png"
-    });
+    return "images/signal4.png";
   } else if (i <= 5) {
-    return m("img", {
-      src: "images/signal3.png"
-    });
+    return "images/signal3.png";
   } else if (i <= 10) {
-    return m("img", {
-      src: "images/signal2.png"
-    });
+    return "images/signal2.png";
   } else if (i <= 20) {
-    return m("img", {
-      src: "images/signal1.png"
-    });
+    return "images/signal1.png";
   } else {
-    return m("img", {
-      src: "images/signal0.png"
-    });
+    return "images/signal0.png";
   }
 };
+
 module.exports.getAccuracyAsStars = getAccuracyAsStars;
 
 function toGoogle(history) {

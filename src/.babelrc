@@ -5,6 +5,6 @@
 		// 	"module": "bluebird",
 		// 	"method": "coroutine"
 		// }],
-		// "mithril-objectify"
+		// "module:mithril-objectify" // does this work on mithril 2.0?
 	]
 }

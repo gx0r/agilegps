@@ -630,7 +630,9 @@ module.exports.view = function(ctrl, args, extras) {
                           ? m("td", item.b ? t("Buffered") : t("Yes"))
                           : "",
                         state.verbose ? m("td", item.bp) : "",
-                        m("td", helpers.getAccuracyAsImg(item.g)),
+                        m("td", m("img", {
+                          src: helpers.getAccuracyAsImg(item.g)
+                        })),
                         ctrl.rawData
                           ? m(
                               "td",

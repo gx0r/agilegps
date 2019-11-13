@@ -249,7 +249,9 @@ module.exports.view = function(vnode) {
                 !state.verbose
                   ? ""
                   : m("td.nowrap", lastStatus.bp ? lastStatus.bp + "%" : ""),
-                m("td.nowrap", helpers.getAccuracyAsImg(lastStatus.g))
+                m("td.nowrap", m("img", {
+                  src: helpers.getAccuracyAsImg(lastStatus.g)
+                }))
               ]
             );
           })
