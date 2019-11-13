@@ -7,10 +7,8 @@ const navbar = require("./navbar");
 const catchhandler = require("./catchhandler");
 const withAuth = require("./withAuth");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
-
-  ctrl.delete = function(org) {
+module.exports.oninit = function() {
+  this.delete = function(org) {
     let result = window.confirm(
       "Are you sure you want to delete organization " + org.name + "?"
     );
@@ -21,7 +19,7 @@ module.exports.controller = function(args, extras) {
   };
 };
 
-module.exports.view = function(ctrl) {
+module.exports.view = function(vnode) {
   const state = appState.getState();
   const isAdmin = state.user.isAdmin;
 
@@ -96,7 +94,7 @@ module.exports.view = function(ctrl) {
                     {
                       onclick: function(ev) {
                         ev.preventDefault();
-                        ctrl.delete(org);
+                        vnode.delete(org);
                       }
                     },
                     m("span.middle glyphicon glyphicon-trash"),

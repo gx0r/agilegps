@@ -56,7 +56,7 @@ module.exports.getMapElement = function() {
 
 let mapElement = null;
 
-module.exports.controller = function(vnode) {
+module.exports.oninit = function(vnode) {
 
   this.mapVisible = function(visible, tall) {
     TheMap.setVisible(visible, tall);
@@ -82,28 +82,28 @@ module.exports.view = function(vnode) {
     this.mapVisible(false);
     this.reportComponent = null;
     this.sidebarComponent = null;
-    this.mainComponent = help;
+    this.mainComponent = m(help);
   } else if (view === SESSION) {
     this.mapVisible(false);
     this.reportComponent = null;
     this.sidebarComponent = null;
-    this.mainComponent = session;
+    this.mainComponent = m(session);
   } else if (subview === ORG) {
     if (view === USER) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = users;
+      this.mainComponent = m(users);
     } else if (view === FLEET) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = fleets;
+      this.mainComponent = m(fleets);
     } else if (view === VEHICLE) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = vehicles;
+      this.mainComponent = m(vehicles);
     }
   } else if (view === EVENTS || view === RAWEVENTS || view === EXCEPTIONS) {
     this.mapVisible(false);
@@ -115,33 +115,33 @@ module.exports.view = function(vnode) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = organizations;
+      this.mainComponent = m(organizations);
     }
 
     if (view === USER) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = users;
+      this.mainComponent = m(users);
     }
 
     if (view === DEVICE) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = devices;
+      this.mainComponent = m(devices);
     }
   } else if (view === ORG) {
     this.mapVisible(true, false);
 
     if (subview === REPORT) {
-      this.reportComponent = reports;
+      this.reportComponent = m(reports);
       this.mapVisible(false);
     } else {
       if (state.selectedVehicle) {
-        this.reportComponent = vehicle;
+        this.reportComponent = m(vehicle);
       } else {
-        this.reportComponent = organization;
+        this.reportComponent = m(organization);
       }
     }
 
@@ -152,43 +152,43 @@ module.exports.view = function(vnode) {
     if (subview === SPLIT) {
       this.mapVisible(true, false);
     }
-    this.sidebarComponent = sidebar;
+    this.sidebarComponent = m(sidebar);
     this.mainComponent = null;
 
     if (subview === EDIT) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = neworganization;
+      this.mainComponent = m(neworganization);
     }
 
     if (subview === NEW) {
       this.mapVisible(false);
       this.reportComponent = null;
       this.sidebarComponent = null;
-      this.mainComponent = neworganization;
+      this.mainComponent = m(neworganization);
     }
   } else if (view === DEVICE) {
     this.mapVisible(false);
 
     this.reportComponent = null;
     this.sidebarComponent = null;
-    this.mainComponent = newdevice;
+    this.mainComponent = m(newdevice);
   } else if (view === USER) {
     this.mapVisible(false);
 
     this.reportComponent = null;
     this.sidebarComponent = null;
-    this.mainComponent = newuser;
+    this.mainComponent = m(newuser);
   } else if (view === VEHICLE) {
     this.mapVisible(false);
 
     this.reportComponent = null;
     this.sidebarComponent = null;
-    this.mainComponent = newvehicle;
+    this.mainComponent = m(newvehicle);
   } else {
     this.mapVisible(false);
-    this.mainComponent = session;
+    this.mainComponent = m(session);
   }
 
   return m("div", [
