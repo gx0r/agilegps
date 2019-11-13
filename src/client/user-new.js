@@ -1,8 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import { translate as t } from "./i18n";
-import m from "mithril";
-import appState from "./appState";
+const t = require("./i18n").translate;
+const m = require("mithril");
+const appState = require("./appState");
 const Device = require("../common/models/Device");
 const catchhandler = require("./catchhandler");
 const timezones = require("timezones.json");

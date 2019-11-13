@@ -1,6 +1,6 @@
 "use strict";
-import translatejs from "translate.js";
-import appState from "./appState";
+const translatejs = require("translate.js").default;
+const appState = require("./appState");
 
 const messages = {
   "en-US": {

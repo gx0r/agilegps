@@ -1,9 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import { translate as t } from "./i18n";
+const t = require("./i18n").translate;
 const m = require("mithril");
 const appState = require("./appState");
-const catchhandler = require("./catchhandler");
 
 module.exports.controller = function(args, extras) {
   const ctrl = this;

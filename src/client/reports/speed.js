@@ -1,6 +1,6 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import { translate as t } from "../i18n";
+const t = require("../i18n").translate;
 const m = require("mithril");
 const tomiles = require("../tomiles");
 const todir = require("../../common/todir");
