@@ -1,8 +1,8 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import { translate as t } from "./i18n";
-import m from "mithril";
-import appState from "./appState";
+const t = require("./i18n").translate;
+const m = require("mithril");
+const appState = require("./appState");
 const sorts = require("./sorts");
 const catchhandler = require("./catchhandler");
 const _ = require("lodash");

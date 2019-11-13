@@ -1,6 +1,7 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
 const _ = require("lodash");
+const m = require("mithril");
 const moment = require("moment");
 const getStatus = require("./status").getStatus;
 const isIdle = require("./status").isIdle;
