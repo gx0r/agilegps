@@ -8,6 +8,17 @@ module.exports = {
     path: path.join(__dirname, '/public/app'),
     filename: 'bundle.js'
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
   mode: 'development',
   module: {
     // preLoaders: [
