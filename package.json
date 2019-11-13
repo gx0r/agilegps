@@ -5,6 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "webpack --config webpack.config.js",
     "watch": "concurrently \"npm:watch-backend\" \"npm:watch-listener\" \"npm:watch-frontend\" ",
     "watch-backend": "cd src/server && node server-watch | bunyan",
     "watch-frontend": "webpack --watch",
