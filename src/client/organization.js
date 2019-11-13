@@ -24,23 +24,25 @@ const ClickListenerFactory = require("./markers/clicklistenerfactory");
 const formatDate = require("./formatDate");
 const isUserMetric = require("./isUserMetric");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
-  ctrl.selectedItem = {};
+module.exports.oninit = function(vnode) {
+  // vnode.state.selectedItem = {};
+};
 
-  ctrl.clickItem = function(item) {
-    if (ctrl.selectedItem === item) {
-      ctrl.selectedItem = {};
+module.exports.view = function(vnode) {
+  const state = appState.getState();
+  if (!vnode.selectedItem) {
+    vnode.selectedItem = {};
+  }
+
+  function clickItem(item) {
+    if (vnode.selectedItem === item) {
+      vnode.selectedItem = {};
       ClickListenerFactory.closeInfoWindow();
     } else {
-      ctrl.selectedItem = item;
+      vnode.selectedItem = item;
       OrgMarkers.clickMarkerByVehicleID(item.id);
     }
   };
-};
-
-module.exports.view = function(ctrl, args, extras) {
-  const state = appState.getState();
 
   const advancedUI = state.user.advancedMode;
 
@@ -204,14 +206,14 @@ module.exports.view = function(ctrl, args, extras) {
                 id: vehicle.id,
                 key: vehicle.id,
                 onclick: function(ev) {
-                  ctrl.clickItem(vehicle);
+                  clickItem(vehicle);
                 },
                 style: {
                   transition: wasRecentlyUpdated(lastStatus.d)
                     ? "background-color 1s ease-in-out"
                     : "none",
                   "background-color":
-                    vehicle.id === ctrl.selectedItem.id
+                    vehicle.id === vnode.selectedItem.id
                       ? "#FEE0C6"
                       : wasRecentlyUpdated(lastStatus.d)
                       ? "yellow"

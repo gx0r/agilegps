@@ -5,73 +5,75 @@ const m = require("mithril");
 const _ = require("lodash");
 const appState = require("./appState");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
-  ctrl.searchInput = "";
-  ctrl.searchInputChange = function(ev) {
-    ctrl.searchInput = ev.target.value;
-  };
+function formatVehicle(vehicle) {
+  if (!vehicle) return "";
+  let str = "";
+  str += vehicle.name;
+
+  // quick testing
+  // vehicle.obd = {
+  //     malfunction: true,
+  //     diagnosticTroubleCodesCount: 1,
+  //     temp: 95,
+  //     fuelLevelInput: 97,
+  // }
+  // vehicle.deviceBatteryPercent = 23;
+
+  if (vehicle.obd) {
+    const obd = vehicle.obd;
+    var prev = false;
+    if (obd.malfunction) {
+      str += " ";
+      if (
+        _.isFinite(obd.diagnosticTroubleCodesCount) &&
+        obd.diagnosticTroubleCodesCount > 1
+      ) {
+        str += obd.diagnosticTroubleCodesCount;
+      }
+      str += "⚠";
+      prev = true;
+    }
+
+    // if (obd.temp) {
+    //     if (prev) str += " |";
+    //     str += ' ' + obd.temp + '℃';
+    //     prev = true;
+    // }
+
+    if (obd.fuelLevelInput) {
+      if (prev) str += " |";
+      if (_.isFinite(obd.fuelLevelInput)) {
+        str += " " + obd.fuelLevelInput + "%⛽";
+      }
+      prev = true;
+    }
+  }
+
+  // if (_.isFinite(vehicle.deviceBatteryPercent)) {
+  //     str += ' ' + vehicle.deviceBatteryPercent + '%🔋';
+  // }
+  return str;
+}
+
+module.exports.oninit = function(vnode) {
+  vnode.state.searchInput = "";
 };
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function(vnode) {
   const state = appState.getState();
   const fleets = _.toArray(state.fleetsByID);
 
-  function formatVehicle(vehicle) {
-    if (!vehicle) return "";
-    let str = "";
-    str += vehicle.name;
-
-    // quick testing
-    // vehicle.obd = {
-    //     malfunction: true,
-    //     diagnosticTroubleCodesCount: 1,
-    //     temp: 95,
-    //     fuelLevelInput: 97,
-    // }
-    // vehicle.deviceBatteryPercent = 23;
-
-    if (vehicle.obd) {
-      const obd = vehicle.obd;
-      var prev = false;
-      if (obd.malfunction) {
-        str += " ";
-        if (
-          _.isFinite(obd.diagnosticTroubleCodesCount) &&
-          obd.diagnosticTroubleCodesCount > 1
-        ) {
-          str += obd.diagnosticTroubleCodesCount;
-        }
-        str += "⚠";
-        prev = true;
-      }
-
-      // if (obd.temp) {
-      //     if (prev) str += " |";
-      //     str += ' ' + obd.temp + '℃';
-      //     prev = true;
-      // }
-
-      if (obd.fuelLevelInput) {
-        if (prev) str += " |";
-        if (_.isFinite(obd.fuelLevelInput)) {
-          str += " " + obd.fuelLevelInput + "%⛽";
-        }
-        prev = true;
-      }
-    }
-
-    // if (_.isFinite(vehicle.deviceBatteryPercent)) {
-    //     str += ' ' + vehicle.deviceBatteryPercent + '%🔋';
-    // }
-    return str;
+  if (!vnode.searchInput) {
+    vnode.searchInput = "";
   }
 
   return m("div.business-table.fullwidth", [
     m("from.form-search", [
       m("input.input-search.fullwidth", {
-        onkeyup: ctrl.searchInputChange,
-        value: ctrl.searchInput
+        onkeyup: ev => {
+          vnode.searchInput = ev.target.value || "";
+        },
+        value: vnode.searchInput
       }),
       m("span.middle glyphicon glyphicon-search", {
         style: {
@@ -80,7 +82,7 @@ module.exports.view = function(ctrl, args, extras) {
           top: "24px"
         },
         onclick: function() {
-          ctrl.searchInput = "";
+          vnode.searchInput = "";
         }
       })
     ]),
@@ -123,10 +125,10 @@ module.exports.view = function(ctrl, args, extras) {
             .filter(function(vid) {
               const vehicle = state.vehiclesByID[vid];
               return (
-                ctrl.searchInput === "" ||
+                vnode.searchInput === "" ||
                 vehicle.name
                   .toUpperCase()
-                  .indexOf(ctrl.searchInput.toUpperCase()) > -1
+                  .indexOf(vnode.searchInput.toUpperCase()) > -1
               );
             })
             .map(function(vid) {

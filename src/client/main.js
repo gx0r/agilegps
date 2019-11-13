@@ -20,7 +20,7 @@ const m = require("mithril");
 
 const appState = require("./appState");
 
-m.mount(document.getElementById("root"), require("./session"));
+m.mount(document.getElementById("root"), require("./root"));
 
 require("./markers/OrgMarkers");
 require("./appSocketState");
