@@ -1,26 +1,67 @@
-// webpack.config.js
+'use strict';
+var webpack = require('webpack');
+var NODE_ENV = process.env.NODE_ENV || null;
 
-const path = require('path');
+var plugins = [];
+plugins.push(new webpack.ProvidePlugin({
+	'Promise': 'bluebird'
+}));
+
+
+if (NODE_ENV === 'production') {
+	plugins.push(new webpack.optimize.UglifyJsPlugin());
+	plugins.push(new webpack.DefinePlugin({
+		'process.env.NODE_ENV': '"production"'
+	}))
+}
+
+plugins.push(new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }));
 
 module.exports = {
-  entry: './src/client/main.js',
-  output: {
-		path: path.join(__dirname, '/public/app'),
+	context: __dirname + '/src/client',
+	node: {
+		fs: "empty",
+		tls: "empty",
+	},
+	entry: {
+		app: './main.js',
+		vendors: [
+			'bluebird',
+			'bootstrap/less/bootstrap.less',
+			'cookies-js',
+			'events',
+			'j2c',
+			'lodash',
+			'mithril',
+			'moment',
+			'nprogress',
+			'pikaday2',
+			'raf',
+			'redux',
+			'redux-logger',
+			'setimmediate',
+			'socket.io-client',
+			'validator',
+			'velocity-animate',
+			'windrose',
+		]
+	},
+	output: {
+		path: __dirname + '/public/app',
 		filename: 'bundle.js'
-  },
-  mode: 'development',
-  module: {
+	},
+	module: {
 		// preLoaders: [
 		//     {test: /\.js$/, exclude: /node_modules/, loader: 'jshint-loader'}
 		// ],
 		rules: [
 			{
-        test: /\.m?js$/,
-        exclude: /node_modules/,
+				test: /\.js$/,
+				exclude: /node_modules/,
 				loader: "babel-loader",
-				options: {
-          presets: ['@babel/preset-env']
-        }
+				query: {
+					presets: ['es2015']
+				}
 			},
 			{
 				test: /bootstrap\/js\//,
@@ -84,4 +125,5 @@ module.exports = {
 			}
 		]
 	},
+	plugins: plugins
 };
