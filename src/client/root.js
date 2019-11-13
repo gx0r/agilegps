@@ -64,8 +64,8 @@ module.exports.oninit = function(vnode) {
 
   this.mapInitialized = false;
 
-  this.mapElement = function(el, isInitialized) {
-    if (!isInitialized) {
+  this.setMapElement = function(el) {
+    if (!this.isInitialized) {
       this.mapInitialized = true;
       TheMap.mount(el);
       mapElement = el;
@@ -198,16 +198,27 @@ module.exports.view = function(vnode) {
       m(".row", [
         m("div#sidebar.col-sm-2", [this.sidebarComponent]),
         m(".col-sm-10", [
-          this.mapInitialized
-            ? {
-                subtree: "retain"
-              }
-            : m(".map shadow", {
-                style: {
-                  // visibility: 'hidden'
-                },
-                config: this.mapElement
-              }),
+          // this.mapInitialized
+          //   ? {
+          //       subtree: "retain"
+          //     }
+          //   : 
+            m(".map shadow", {
+              style: {
+                // visibility: 'hidden'
+              },
+              oncreate: vnode => {
+                if (this.mapInitialized) {
+                  return;
+                }
+                this.setMapElement(vnode.dom);
+              },
+              onbeforeupdate: () => {
+                if (this.mapInitialized) {
+                  return false;
+                }
+              },
+            }),
           // report
           this.reportComponent
         ])
