@@ -17,7 +17,7 @@ const fullAddress = require("../common/addressdisplay").full;
 
 module.exports.controller = function(args, extras) {
   const ctrl = this;
-  ctrl.parsed = m.prop({});
+  ctrl.parsed = {};
 
   ctrl.page = function(page) {
     return appState.changePage(page);
@@ -116,7 +116,9 @@ module.exports.view = function(ctrl, args, extras) {
               style: {
                 cursor: "pointer"
               },
-              onclick: m.withAttr("value", ctrl.changePage),
+              onclick: function(ev) {
+                ctrl.changePage(ev.target.value);
+              },
               value: i
             },
             i
@@ -148,7 +150,9 @@ module.exports.view = function(ctrl, args, extras) {
       t("Selected Page"),
       m("input.form-control", {
         type: "number",
-        onchange: m.withAttr("value", ctrl.page),
+        onchange: function(ev) {
+          ctrl.page(ev.target.value);
+        },
         value: page
       })
     ),
@@ -158,7 +162,9 @@ module.exports.view = function(ctrl, args, extras) {
       t("Count per Page"),
       m("input.form-control", {
         type: "number",
-        onblur: m.withAttr("value", ctrl.pagesize),
+        onblur: function(ev) {
+          ctrl.pagesize(ev.target.value);
+        },
         value: pagesize
       })
     ),
@@ -169,13 +175,19 @@ module.exports.view = function(ctrl, args, extras) {
           t("Search by IMEI"),
           m("input.form-control", {
             type: "text",
-            onchange: m.withAttr("value", ctrl.search),
+            onchange: function(ev) {
+              ctrl.search(ev.target.value);
+            },
             value: state.search,
             onkeyup: function(ev) {
               if (ev.keyCode === 13) {
                 appState.updateEvents();
               } else {
-                m.redraw.strategy("none");
+                console.warn("m.redraw.strategy() does not exist in mithril 1.0");
+
+                if(m.redraw.strategy) {
+                    m.redraw.strategy("none");
+                }
               }
             }
           })
@@ -222,32 +234,28 @@ module.exports.view = function(ctrl, args, extras) {
     // ])),
     m("div", count + " " + type),
 
-    m.component(
-      modal,
-      {
-        animation: "fadeAndScale",
-        style: {
-          dialog: {
-            // backgroundColor: '#aaffee',
-            width: "600px"
-          }
-        },
-        close: "✘"
-      },
-      m.component({
-        view: function() {
-          return m(
-            "div",
-            m(
-              "pre",
-              _.isObject(ctrl.parsed())
-                ? JSON.stringify(ctrl.parsed(), null, 4)
-                : ctrl.parsed()
-            )
-          );
+    m(modal, {
+      animation: "fadeAndScale",
+      style: {
+        dialog: {
+          // backgroundColor: '#aaffee',
+          width: "600px"
         }
-      })
-    ),
+      },
+      close: "✘"
+    }, m.component({
+      view: function() {
+        return m(
+          "div",
+          m(
+            "pre",
+            _.isObject(ctrl.parsed)
+              ? JSON.stringify(ctrl.parsed, null, 4)
+              : ctrl.parsed
+          )
+        );
+      }
+    })),
 
     m("table.table-condensed table-bordered table-striped", [
       m(
@@ -276,13 +284,13 @@ module.exports.view = function(ctrl, args, extras) {
                             try {
                               parsed = eventreportparser(msg);
                               delete parsed.args;
-                              ctrl.parsed(parsed);
+                              ctrl.parsed = parsed;
                             } catch (e) {
                               parsed = e;
                               if (e.stack) {
-                                ctrl.parsed(e.stack);
+                                ctrl.parsed = e.stack;
                               } else {
-                                ctrl.parsed(e.message);
+                                ctrl.parsed = e.message;
                               }
                             }
                             // alert(JSON.stringify(parsed, null, 4));

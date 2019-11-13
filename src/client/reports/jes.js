@@ -13,7 +13,7 @@ const formatDate = require("../formatDate");
 // need location, city, state, idleStart, idleEnd, duration
 //total: vehicle, idling total
 module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result() && args.result().vehicles && args.result().results)) {
+  if (!(args.result && args.result.vehicles && args.result.results)) {
     return "";
   }
   return m("div", [
@@ -33,14 +33,14 @@ module.exports.view = function(ctrl, args, extras) {
         ]),
         m(
           "tbody",
-          _.map(Object.keys(args.result().vehicles), function(vid) {
-            return args.result().results[vid].length > 0
+          _.map(Object.keys(args.result.vehicles), function(vid) {
+            return args.result.results[vid].length > 0
               ? [
                   m(
                     "tr",
-                    m("td[colspan=18].group", args.result().vehicles[vid].name)
+                    m("td[colspan=18].group", args.result.vehicles[vid].name)
                   ),
-                  _.map(args.result().results[vid], function(result) {
+                  _.map(args.result.results[vid], function(result) {
                     if (!result.obd) {
                       result.obd = Object.create(null);
                     }

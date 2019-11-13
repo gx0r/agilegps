@@ -18,13 +18,9 @@ window.Promise.config({
 
 const m = require("mithril");
 
-m.deferred.onerror = function(e) {
-  Promise.reject(e);
-};
-
 const appState = require("./appState");
 
-m.mount(document.getElementById("root"), require("./root"));
+m.mount(document.getElementById("root"), require("./session"));
 
 require("./markers/OrgMarkers");
 require("./appSocketState");

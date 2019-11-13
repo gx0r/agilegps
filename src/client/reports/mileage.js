@@ -12,7 +12,7 @@ const _ = require("lodash");
 const isUserMetric = require("../isUserMetric");
 
 module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result() && args.result().vehicles && args.result().results)) {
+  if (!(args.result && args.result.vehicles && args.result.results)) {
     return "";
   }
 
@@ -25,16 +25,16 @@ module.exports.view = function(ctrl, args, extras) {
         ]),
         m(
           "tbody",
-          _.map(Object.keys(args.result().vehicles), function(vid) {
+          _.map(Object.keys(args.result.vehicles), function(vid) {
             return [
               m(
                 "tr",
-                m("td[colspan=7].group", args.result().vehicles[vid].name)
+                m("td[colspan=7].group", args.result.vehicles[vid].name)
               ),
-              Object.keys(args.result().results[vid]).map(function(key) {
+              Object.keys(args.result.results[vid]).map(function(key) {
                 return m("tr", [
                   m("td", key),
-                  m("td", tomiles(args.result().results[vid][key]))
+                  m("td", tomiles(args.result.results[vid][key]))
                 ]);
               })
             ];
@@ -45,7 +45,7 @@ module.exports.view = function(ctrl, args, extras) {
 
     m("br"),
 
-    args.result() && args.result().vehicles
+    args.result && args.result.vehicles
       ? m("div", [
           m("table.table-condensed table-bordered table-striped dataTable", [
             m("thead", [
@@ -54,10 +54,10 @@ module.exports.view = function(ctrl, args, extras) {
             ]),
             m(
               "tbody",
-              _.map(Object.keys(args.result().totals), function(key) {
+              _.map(Object.keys(args.result.totals), function(key) {
                 return m("tr", [
                   m("td", key),
-                  m("td", tomiles(args.result().totals[key]))
+                  m("td", tomiles(args.result.totals[key]))
                 ]);
               })
             )

@@ -31,51 +31,51 @@ module.exports.controller = function(args, extras) {
   const ctrl = this;
   const state = appState.getState();
 
-  ctrl.rollup = m.prop(true);
-  ctrl.highlightIgnition = m.prop(false);
-  ctrl.highlightStarts = m.prop(false);
-  ctrl.reverseOrder = m.prop(false);
-  ctrl.rawData = m.prop(false);
-  ctrl.vehiclehistory = m.prop([]);
-  ctrl.adjustedVehicleHistory = m.prop([]);
+  ctrl.rollup = true;
+  ctrl.highlightIgnition = false;
+  ctrl.highlightStarts = false;
+  ctrl.reverseOrder = false;
+  ctrl.rawData = false;
+  ctrl.vehiclehistory = [];
+  ctrl.adjustedVehicleHistory = [];
   ctrl.speed = 0;
-  ctrl.selecteditem = m.prop({});
-  ctrl.startDate = m.prop();
-  ctrl.endDate = m.prop();
+  ctrl.selecteditem = {};
+  ctrl.startDate = null;
+  ctrl.endDate = null;
   ctrl.firstRowClicked = false;
 
   if (state.startDate) {
-    ctrl.startDate(new Date(state.startDate));
+    ctrl.startDate = new Date(state.startDate);
   }
 
   if (state.endDate) {
-    ctrl.endDate(new Date(state.endDate));
+    ctrl.endDate = new Date(state.endDate);
   }
 
   ctrl.selectDays = function() {
     const state = appState.getState();
-    // if (ctrl.startDate() != state.startDate) {
+    // if (ctrl.startDate != state.startDate) {
     appState.selectDays(
-      ctrl.startDate(),
-      moment(ctrl.endDate())
+      ctrl.startDate,
+      moment(ctrl.endDate)
         .add(1, "day")
         .toDate()
     );
     // }
   };
 
-  ctrl.updated = m.prop();
-  ctrl.calculateDistanceBetween = m.prop("start");
+  ctrl.updated = null;
+  ctrl.calculateDistanceBetween = "start";
 
   animation.controller(this);
   ctrl.progressElem = animation.progress;
 
   ctrl.clickItem = function(item) {
-    if (ctrl.selecteditem() === item) {
-      ctrl.selecteditem({});
+    if (ctrl.selecteditem === item) {
+      ctrl.selecteditem = {};
       ClickListenerFactory.closeInfoWindow();
     } else {
-      ctrl.selecteditem(item);
+      ctrl.selecteditem = item;
       animation.clickMarkerByID(item.id);
     }
   };
@@ -131,14 +131,14 @@ module.exports.controller = function(args, extras) {
     const state = appState.getState();
     const vehicle = state.selectedVehicle;
     const hist = state.selectedVehicleHistory;
-    ctrl.vehiclehistory(hist);
+    ctrl.vehiclehistory = hist;
     let res = _.cloneDeep(state.selectedVehicleHistory);
 
-    if (ctrl.rawData()) {
-      if (ctrl.rollup()) {
+    if (ctrl.rawData) {
+      if (ctrl.rollup) {
         res = helpers.rollup(res);
       }
-      if (!ctrl.reverseOrder()) {
+      if (!ctrl.reverseOrder) {
         res.reverse();
       }
     } else {
@@ -149,23 +149,23 @@ module.exports.controller = function(args, extras) {
       res = helpers.cleanData(res);
       res = helpers.mileageChange(res);
 
-      if (ctrl.rollup()) {
+      if (ctrl.rollup) {
         res = helpers.rollup(res);
       }
       res = helpers.addStartStop(res);
 
-      if (ctrl.calculateDistanceBetween() === "start") {
+      if (ctrl.calculateDistanceBetween === "start") {
         res = helpers.startStopMileage(res);
       } else {
         res = helpers.ignitionMileage(res);
       }
 
-      if (!ctrl.reverseOrder()) {
+      if (!ctrl.reverseOrder) {
         res.reverse();
       }
     }
 
-    ctrl.adjustedVehicleHistory(res);
+    ctrl.adjustedVehicleHistory = res;
   };
 
   ctrl.recalculateAdjustedVehicleHistory();
@@ -179,8 +179,8 @@ module.exports.controller = function(args, extras) {
       ctrl.previouslySelectedVehicle = state.selectedVehicle;
     }
 
-    ctrl.startDate(new Date(state.startDate));
-    ctrl.endDate(new Date(state.endDate));
+    ctrl.startDate = new Date(state.startDate);
+    ctrl.endDate = new Date(state.endDate);
 
     // ctrl.startDatePicker.setDate(state.startDate);
     // ctrl.endDatePicker.setDate(state.endDate);
@@ -221,12 +221,12 @@ module.exports.view = function(ctrl, args, extras) {
                   el.appendChild(input);
 
                   ctrl.startDatePicker = new pikaday({
-                    defaultDate: ctrl.startDate(),
+                    defaultDate: ctrl.startDate,
                     setDefaultDate: true,
                     field: input,
                     onSelect: function() {
-                      ctrl.startDate(this.getDate());
-                      ctrl.endDate(this.getDate());
+                      ctrl.startDate = this.getDate();
+                      ctrl.endDate = this.getDate();
                       ctrl.selectDays();
                     }
                   });
@@ -259,21 +259,21 @@ module.exports.view = function(ctrl, args, extras) {
               "&latlong=" +
               state.showLatLong +
               "&rollupStationaryEvents=" +
-              ctrl.rollup() +
+              ctrl.rollup +
               "&verbose=" +
               (state.verbose ? "true" : "false") +
               "&startDate=" +
-              encodeURIComponent(ctrl.startDate().toISOString()) +
+              encodeURIComponent(ctrl.startDate.toISOString()) +
               "&endDate=" +
               encodeURIComponent(
-                moment(ctrl.endDate())
+                moment(ctrl.endDate)
                   .add(1, "day")
                   .toISOString()
               ) +
               "&calculateDistanceBetween=" +
-              ctrl.calculateDistanceBetween() +
+              ctrl.calculateDistanceBetween +
               "&reverse=" +
-              (ctrl.reverseOrder() ? "true" : "false") +
+              (ctrl.reverseOrder ? "true" : "false") +
               "&tzOffset=" +
               encodeURIComponent(tzOffset()),
             style: {
@@ -340,11 +340,11 @@ module.exports.view = function(ctrl, args, extras) {
                   el.appendChild(input);
 
                   ctrl.startDatePicker = new pikaday({
-                    defaultDate: ctrl.startDate(),
+                    defaultDate: ctrl.startDate,
                     setDefaultDate: true,
                     field: input,
                     onSelect: function() {
-                      ctrl.startDate(this.getDate());
+                      ctrl.startDate = this.getDate();
                       ctrl.selectDays();
                     }
                   });
@@ -358,11 +358,11 @@ module.exports.view = function(ctrl, args, extras) {
                   el.appendChild(input);
 
                   ctrl.endDatePicker = new pikaday({
-                    defaultDate: ctrl.endDate(),
+                    defaultDate: ctrl.endDate,
                     setDefaultDate: true,
                     field: input,
                     onSelect: function() {
-                      ctrl.endDate(this.getDate());
+                      ctrl.endDate = this.getDate();
                       ctrl.selectDays();
                     }
                   });
@@ -389,9 +389,9 @@ module.exports.view = function(ctrl, args, extras) {
                     }
                   },
                   m("input[type=radio][name=speed]", {
-                    checked: ctrl.calculateDistanceBetween() === "ignition",
+                    checked: ctrl.calculateDistanceBetween === "ignition",
                     onchange: function(a) {
-                      ctrl.calculateDistanceBetween("ignition");
+                      ctrl.calculateDistanceBetween = "ignition";
                       ctrl.recalculateAdjustedVehicleHistory();
                     },
                     value: "ignition"
@@ -407,9 +407,9 @@ module.exports.view = function(ctrl, args, extras) {
                     }
                   },
                   m("input[type=radio][name=speed]", {
-                    checked: ctrl.calculateDistanceBetween() === "start",
+                    checked: ctrl.calculateDistanceBetween === "start",
                     onchange: function(ev) {
-                      ctrl.calculateDistanceBetween("start");
+                      ctrl.calculateDistanceBetween = "start";
                       ctrl.recalculateAdjustedVehicleHistory();
                     },
                     value: "start"
@@ -424,9 +424,9 @@ module.exports.view = function(ctrl, args, extras) {
             "label.padrt",
             m("input[type=checkbox]", {
               onclick: function() {
-                ctrl.highlightStarts(this.checked);
+                ctrl.highlightStarts = this.checked;
               },
-              checked: ctrl.highlightStarts()
+              checked: ctrl.highlightStarts
             }),
             t("Highlight starts")
           ),
@@ -437,9 +437,9 @@ module.exports.view = function(ctrl, args, extras) {
                 "label.padrt",
                 m("input[type=checkbox]", {
                   onclick: function() {
-                    ctrl.highlightIgnition(this.checked);
+                    ctrl.highlightIgnition = this.checked;
                   },
-                  checked: ctrl.highlightIgnition()
+                  checked: ctrl.highlightIgnition
                 }),
                 t("Highlight ignition")
               ),
@@ -448,10 +448,10 @@ module.exports.view = function(ctrl, args, extras) {
             "label.padrt",
             m("input[type=checkbox]", {
               onclick: function() {
-                ctrl.reverseOrder(this.checked);
+                ctrl.reverseOrder = this.checked;
                 ctrl.recalculateAdjustedVehicleHistory();
               },
-              checked: ctrl.reverseOrder()
+              checked: ctrl.reverseOrder
             }),
             t("Reverse Order")
           ),
@@ -484,10 +484,10 @@ module.exports.view = function(ctrl, args, extras) {
                 "label.padrt",
                 m("input[type=checkbox]", {
                   onclick: function() {
-                    ctrl.rollup(this.checked);
+                    ctrl.rollup = this.checked;
                     ctrl.recalculateAdjustedVehicleHistory();
                   },
-                  checked: ctrl.rollup()
+                  checked: ctrl.rollup
                 }),
                 t("Rollup idling & parked")
               )
@@ -499,10 +499,10 @@ module.exports.view = function(ctrl, args, extras) {
                   "label",
                   m("input[type=checkbox]", {
                     onclick: function() {
-                      ctrl.rawData(this.checked);
+                      ctrl.rawData = this.checked;
                       ctrl.recalculateAdjustedVehicleHistory();
                     },
-                    checked: ctrl.rawData()
+                    checked: ctrl.rawData
                   }),
                   t("Raw")
                 ),
@@ -516,9 +516,9 @@ module.exports.view = function(ctrl, args, extras) {
           : m(
               "label",
               "Showing " +
-                ctrl.adjustedVehicleHistory().length +
-                (ctrl.vehiclehistory().length === 1 ? " event" : " events") +
-                (ctrl.vehiclehistory().length === 0
+                ctrl.adjustedVehicleHistory.length +
+                (ctrl.vehiclehistory.length === 1 ? " event" : " events") +
+                (ctrl.vehiclehistory.length === 0
                   ? " (Try a different date range?)"
                   : "")
             ),
@@ -546,7 +546,7 @@ module.exports.view = function(ctrl, args, extras) {
               state.verbose ? m("td", t("Online")) : "",
               state.verbose ? m("td", t("Battery %")) : "",
               m("td", t("GPS")),
-              ctrl.rawData() ? m("td", t("Raw")) : null
+              ctrl.rawData ? m("td", t("Raw")) : null
             ]),
             m(
               "tbody",
@@ -607,7 +607,7 @@ module.exports.view = function(ctrl, args, extras) {
                         m("td", hidenan(tomiles(item.s))),
                         state.showLatLong ? m("td", item.la) : "",
                         state.showLatLong ? m("td", item.lo) : "",
-                        ctrl.rawData()
+                        ctrl.rawData
                           ? m(
                               "td",
                               {
@@ -631,7 +631,7 @@ module.exports.view = function(ctrl, args, extras) {
                           : "",
                         state.verbose ? m("td", item.bp) : "",
                         m("td", helpers.getAccuracyAsImg(item.g)),
-                        ctrl.rawData()
+                        ctrl.rawData
                           ? m(
                               "td",
                               m(

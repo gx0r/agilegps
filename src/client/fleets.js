@@ -44,7 +44,7 @@ module.exports.controller = function(args, extras) {
       ctrl.availableVehicles.push(vehicle.id);
     });
 
-    ctrl.colorPickerEl().value = fleet.color;
+    ctrl.colorPickerEl.value = fleet.color;
   };
 
   ctrl.rightArrow = function() {
@@ -85,7 +85,7 @@ module.exports.controller = function(args, extras) {
     appState.saveFleet(ctrl.fleet);
   };
 
-  ctrl.colorPickerEl = m.prop();
+  ctrl.colorPickerEl = null;
 };
 
 const truckSvg = require("./svg/truck");
@@ -157,9 +157,9 @@ module.exports.view = function(ctrl, args, extras) {
                   m("input.form-control", {
                     disabled: ctrl.fleet.name == null,
                     value: ctrl.fleet.name ? ctrl.fleet.name : "",
-                    onblur: m.withAttr("value", function(val) {
-                      ctrl.fleet.name = val;
-                    })
+                    onblur: function(ev) {
+                      ctrl.fleet.name = ev.target.value;
+                    }
                   })
                 )
               ]),
@@ -169,7 +169,7 @@ module.exports.view = function(ctrl, args, extras) {
                 m("input[type=color]", {
                   config: function(el, isInitialized) {
                     if (!isInitialized) {
-                      ctrl.colorPickerEl(el);
+                      ctrl.colorPickerEl = el;
                     }
                   },
                   onchange: function(ev) {

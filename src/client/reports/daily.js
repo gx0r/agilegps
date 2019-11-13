@@ -9,7 +9,7 @@ const isUserMetric = require("../isUserMetric");
 const formatDate = require("../formatDate");
 
 module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result() && args.result().vehicles && args.result().results)) {
+  if (!(args.result && args.result.vehicles && args.result.results)) {
     return "";
   }
 
@@ -27,14 +27,14 @@ module.exports.view = function(ctrl, args, extras) {
         ]),
         m(
           "tbody",
-          _.map(Object.keys(args.result().vehicles), function(vid) {
-            return args.result().results[vid].length > 0
+          _.map(Object.keys(args.result.vehicles), function(vid) {
+            return args.result.results[vid].length > 0
               ? [
                   m(
                     "tr",
-                    m("td[colspan=7].group", args.result().vehicles[vid].name)
+                    m("td[colspan=7].group", args.result.vehicles[vid].name)
                   ),
-                  _.map(args.result().results[vid], function(result) {
+                  _.map(args.result.results[vid], function(result) {
                     return m("tr", [
                       m("td", formatDate(result.d)),
                       m(
@@ -60,7 +60,7 @@ module.exports.view = function(ctrl, args, extras) {
 
     // m('br'),
     //
-    // args.result() && args.result().vehicles ? m('div', [
+    // args.result && args.result.vehicles ? m('div', [
     // 	// m('h3', 'Totals'),
     // 	m('table.table-condensed table-bordered table-striped dataTable', [
     // 		m('thead', [
@@ -68,11 +68,11 @@ module.exports.view = function(ctrl, args, extras) {
     // 			m('td', 'Total Durations'),
     //             m('td', 'Total Miles')
     // 		]),
-    // 		m('tbody', _.map(Object.keys(args.result().vehicles), function(vid) {
+    // 		m('tbody', _.map(Object.keys(args.result.vehicles), function(vid) {
     // 			return m('tr', [
-    //                 m('td', args.result().vehicles[vid].name),
-    //                 m('td', tohms(args.result().totals[vid])),
-    //                 m('td', tohms(args.result().totals[vid]))
+    //                 m('td', args.result.vehicles[vid].name),
+    //                 m('td', tohms(args.result.totals[vid])),
+    //                 m('td', tohms(args.result.totals[vid]))
     // 			])
     // 		}))
     // 	])

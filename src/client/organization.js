@@ -26,14 +26,14 @@ const isUserMetric = require("./isUserMetric");
 
 module.exports.controller = function(args, extras) {
   const ctrl = this;
-  ctrl.selectedItem = m.prop({});
+  ctrl.selectedItem = {};
 
   ctrl.clickItem = function(item) {
-    if (ctrl.selectedItem() === item) {
-      ctrl.selectedItem({});
+    if (ctrl.selectedItem === item) {
+      ctrl.selectedItem = {};
       ClickListenerFactory.closeInfoWindow();
     } else {
-      ctrl.selectedItem(item);
+      ctrl.selectedItem = item;
       OrgMarkers.clickMarkerByVehicleID(item.id);
     }
   };
@@ -211,7 +211,7 @@ module.exports.view = function(ctrl, args, extras) {
                     ? "background-color 1s ease-in-out"
                     : "none",
                   "background-color":
-                    vehicle.id === ctrl.selectedItem().id
+                    vehicle.id === ctrl.selectedItem.id
                       ? "#FEE0C6"
                       : wasRecentlyUpdated(lastStatus.d)
                       ? "yellow"
