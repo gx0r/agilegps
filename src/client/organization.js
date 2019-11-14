@@ -125,7 +125,7 @@ module.exports.view = function(vnode) {
           encodeURIComponent(tzOffset()),
         style: {
           cursor: "pointer"
-        }
+        },
       },
       m("img", {
         src: "images/excel-icon.png"
@@ -204,7 +204,7 @@ module.exports.view = function(vnode) {
               "tr",
               {
                 id: vehicle.id,
-                key: vehicle.id,
+                // key: vehicle.id, // TODO fixme
                 onclick: function(ev) {
                   clickItem(vehicle);
                 },
