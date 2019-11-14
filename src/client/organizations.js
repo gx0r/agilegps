@@ -3,23 +3,19 @@
 const t = require("./i18n").translate;
 const m = require("mithril");
 const appState = require("./appState");
-const navbar = require("./navbar");
 const catchhandler = require("./catchhandler");
-const withAuth = require("./withAuth");
 
-module.exports.oninit = function() {
-  this.delete = function(org) {
-    let result = window.confirm(
-      "Are you sure you want to delete organization " + org.name + "?"
-    );
+function deleteOrganization(org) {
+  const result = window.confirm(
+    "Are you sure you want to delete organization " + org.name + "?"
+  );
 
-    if (result === true) {
-      appState.deleteOrg(org).catch(catchhandler);
-    }
-  };
+  if (result === true) {
+    appState.deleteOrg(org).catch(catchhandler);
+  }
 };
 
-module.exports.view = function(vnode) {
+module.exports.view = function() {
   const state = appState.getState();
   const isAdmin = state.user.isAdmin;
 
@@ -62,7 +58,7 @@ module.exports.view = function(vnode) {
                     : m(
                         "a.btn btn-primary btn-sm",
                         {
-                          onclick: function(ev) {
+                          onclick: () => {
                             appState.editOrganization(org.id);
                           }
                         },
@@ -76,8 +72,9 @@ module.exports.view = function(vnode) {
                   m(
                     "a.btn btn-primary btn-sm",
                     {
-                      onclick: function(ev) {
-                        appState.selectOrgByID(org.id).then(function() {
+                      onclick: ev => {
+                        appState.selectOrgByID(org.id)
+                        .then(() => {
                           appState.viewOrgByID(org.id);
                         });
                       }
@@ -92,9 +89,9 @@ module.exports.view = function(vnode) {
                   m(
                     "a.btn btn-primary btn-sm",
                     {
-                      onclick: function(ev) {
+                      onclick: ev => {
                         ev.preventDefault();
-                        vnode.delete(org);
+                        deleteOrganization(org);
                       }
                     },
                     m("span.middle glyphicon glyphicon-trash"),
