@@ -189,11 +189,7 @@ module.exports.view = function() {
               if (ev.keyCode === 13) {
                 appState.updateEvents();
               } else {
-                console.warn("m.redraw.strategy() does not exist in mithril 1.0");
-
-                if(m.redraw.strategy) {
-                    m.redraw.strategy("none");
-                }
+                ev.redraw = false;
               }
             }
           })
