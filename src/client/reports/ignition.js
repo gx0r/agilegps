@@ -12,10 +12,11 @@ const formatDate = require("../formatDate");
 
 const _ = require("lodash");
 
-module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result && args.result.vehicles && args.result.results)) {
+module.exports.view = function(vnode) {
+  if (!(vnode && vnode.attrs)) {
     return "";
   }
+  const args = vnode.attrs;
 
   return m("div", [
     m("div", [

@@ -13,10 +13,12 @@ const formatDate = require("../formatDate");
 
 // need location, city, state, idleStart, idleEnd, duration
 //total: vehicle, idling total
-module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result && args.result.vehicles && args.result.results)) {
+module.exports.view = function(vnode) {
+  if (!(vnode && vnode.attrs)) {
     return "";
   }
+  const args = vnode.attrs;
+
   return m("div", [
     m("div", [
       m("table.table-condensed table-bordered table-striped dataTable", [
