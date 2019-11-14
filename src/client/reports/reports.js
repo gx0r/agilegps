@@ -205,6 +205,8 @@ module.exports.oninit = function() {
 };
 
 module.exports.view = function(vnode) {
+  const self = this;
+
   return m(".div", [
     m(
       "div.business-table",
@@ -223,9 +225,9 @@ module.exports.view = function(vnode) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: () => {
-                    this.blur();
+                  onclick: ev => {
                     this.dateRangeChange("Today");
+                    ev.target.blur();
                   }
                 },
                 t("Today")
@@ -234,9 +236,9 @@ module.exports.view = function(vnode) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: () => {
-                    this.blur();
+                  onclick: ev => {
                     this.dateRangeChange("Yesterday");
+                    ev.target.blur();
                   }
                 },
                 t("Yesterday")
@@ -245,9 +247,9 @@ module.exports.view = function(vnode) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: () => {
-                    this.blur();
+                  onclick: ev => {
                     this.dateRangeChange("Last 2 Days");
+                    ev.target.blur();
                   }
                 },
                 t("Last 2 Days")
@@ -256,27 +258,27 @@ module.exports.view = function(vnode) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: () => {
-                    this.blur();
+                  onclick: ev => {
                     this.dateRangeChange("Last 3 Days");
+                    ev.target.blur();
                   }
                 },
                 t("Last 3 Days")
               ),
 
               // m('button.btn btn-default', {
-              // 	onclick: () => {
-              // 		this.blur();
+              // 	onclick: ev => {
               // 		this.dateRangeChange('This week to date');
+              //    ev.target.blur();
               // 	}
               // }, t('This week to date')),
 
               m(
                 "button.btn btn-default",
                 {
-                  onclick: () => {
-                    this.blur();
+                  onclick: ev => {
                     this.dateRangeChange("Last week");
+                    ev.target.blur();
                   }
                 },
                 t("Last week")
@@ -285,18 +287,18 @@ module.exports.view = function(vnode) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: () => {
-                    this.blur();
+                  onclick: ev => {
                     this.dateRangeChange("This month");
+                    ev.target.blur();
                   }
                 },
                 t("Last month")
               )
 
               // m('button.btn btn-default', {
-              // 	onclick: () => {
-              // 		this.blur();
+              // 	onclick: ev => {
               // 		this.dateRangeChange('Last month');
+              // 		ev.target.blur();
               // 	}
               // }, t('This month'))
             ])
@@ -321,8 +323,8 @@ module.exports.view = function(vnode) {
                   defaultDate: this.startDate,
                   setDefaultDate: true,
                   field: input,
-                  onSelect: () => {
-                    this.startDate(this.getDate());
+                  onSelect: function() {
+                    self.startDate = this.getDate();
                     m.redraw();
                   }
                 });
@@ -338,8 +340,8 @@ module.exports.view = function(vnode) {
                   defaultDate: this.endDate,
                   setDefaultDate: true,
                   field: input,
-                  onSelect: () => {
-                    this.endDate = this.getDate();
+                  onSelect: function() {
+                    self.endDate = this.getDate();
                     m.redraw();
                   }
                 });
