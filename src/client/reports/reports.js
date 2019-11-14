@@ -24,13 +24,11 @@ const withAuth = require("../withAuth");
 
 const appState = require("../appState");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.oninit = function() {
+  this.executing = false;
+  this.error = null;
 
-  ctrl.executing = false;
-  ctrl.error = null;
-
-  ctrl.result = {
+  this.result = {
     query: {
       vehicles: []
     },
@@ -38,23 +36,23 @@ module.exports.controller = function(args, extras) {
     totals: {}
   };
 
-  ctrl.reportName = "idle";
-  ctrl.startDate = moment()
+  this.reportName = "idle";
+  this.startDate = moment()
       .startOf("day")
       .toDate();
-  ctrl.endDate = moment()
+  this.endDate = moment()
       .startOf("day")
       .toDate();
 
-  ctrl.dateRangeChange = function(ev) {
+  this.dateRangeChange = ev => {
     if (ev === "Today") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("day")
           .add(1, "days")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("day")
           .add(1, "days")
@@ -62,12 +60,12 @@ module.exports.controller = function(args, extras) {
       );
     }
     if (ev === "Yesterday") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("day")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("day")
           .add(0, "days")
@@ -75,13 +73,13 @@ module.exports.controller = function(args, extras) {
       );
     }
     if (ev === "Last 2 Days") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("day")
           .subtract(0, "days")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("day")
           .add(1, "days")
@@ -89,13 +87,13 @@ module.exports.controller = function(args, extras) {
       );
     }
     if (ev === "Last 3 Days") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("day")
           .subtract(1, "days")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("day")
           .add(1, "days")
@@ -103,13 +101,13 @@ module.exports.controller = function(args, extras) {
       );
     }
     if (ev === "This week to date") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("day")
           .subtract(7, "days")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("day")
           .add(1, "days")
@@ -117,26 +115,26 @@ module.exports.controller = function(args, extras) {
       );
     }
     if (ev === "Last week") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("day")
           .subtract(1, "week")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("day")
           .format("YYYY-MM-DD")
       );
     }
     if (ev === "This month") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("month")
           .add(1, "days")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("month")
           .add(1, "month")
@@ -145,14 +143,14 @@ module.exports.controller = function(args, extras) {
       );
     }
     if (ev === "Last month") {
-      ctrl.startDatePicker.setDate(
+      this.startDatePicker.setDate(
         moment()
           .startOf("month")
           .subtract(1, "month")
           .add(1, "days")
           .format("YYYY-MM-DD")
       );
-      ctrl.endDatePicker.setDate(
+      this.endDatePicker.setDate(
         moment()
           .startOf("month")
           .add(0, "days")
@@ -161,31 +159,29 @@ module.exports.controller = function(args, extras) {
     }
   };
 
-  ctrl.run = function() {
-    ctrl.result = {};
-    ctrl.executing = true;
-    ctrl.error = null;
+  this.run = () => {
+    this.result = {};
+    this.executing = true;
+    this.error = null;
     m.redraw();
 
     const state = appState.getState();
     const IDs = [];
-    state.impliedSelectedVehicles.forEach(function(vehicle) {
-      IDs.push(vehicle.id);
-    });
+    state.impliedSelectedVehicles.forEach(vehicle => IDs.push(vehicle.id));
 
     m.request({
       url:
         "/api/organizations/" +
         state.selectedOrg.id +
         "/reports/" +
-        encodeURIComponent(ctrl.reportName) +
+        encodeURIComponent(this.reportName) +
         "?vehicles=" +
         encodeURIComponent(JSON.stringify(IDs)) +
         "&startDate=" +
-        encodeURIComponent(ctrl.startDate.toISOString()) +
+        encodeURIComponent(this.startDate.toISOString()) +
         "&endDate=" +
         encodeURIComponent(
-          moment(ctrl.endDate)
+          moment(this.endDate)
             .add(1, "day")
             .toISOString()
         ) +
@@ -196,19 +192,19 @@ module.exports.controller = function(args, extras) {
         encodeURIComponent(tzOffset()),
       config: withAuth
     })
-      .then(function(results) {
-        ctrl.result = results;
-        ctrl.executing = false;
+      .then(results => {
+        this.result = results;
+        this.executing = false;
       })
-      .catch(function(err) {
-        ctrl.executing = false;
-        ctrl.error = err;
+      .catch(err => {
+        this.executing = false;
+        this.error = err;
         throw err;
       });
   };
 };
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function(vnode) {
   return m(".div", [
     m(
       "div.business-table",
@@ -227,9 +223,9 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: function() {
+                  onclick: () => {
                     this.blur();
-                    ctrl.dateRangeChange("Today");
+                    this.dateRangeChange("Today");
                   }
                 },
                 t("Today")
@@ -238,9 +234,9 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: function() {
+                  onclick: () => {
                     this.blur();
-                    ctrl.dateRangeChange("Yesterday");
+                    this.dateRangeChange("Yesterday");
                   }
                 },
                 t("Yesterday")
@@ -249,9 +245,9 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: function() {
+                  onclick: () => {
                     this.blur();
-                    ctrl.dateRangeChange("Last 2 Days");
+                    this.dateRangeChange("Last 2 Days");
                   }
                 },
                 t("Last 2 Days")
@@ -260,27 +256,27 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: function() {
+                  onclick: () => {
                     this.blur();
-                    ctrl.dateRangeChange("Last 3 Days");
+                    this.dateRangeChange("Last 3 Days");
                   }
                 },
                 t("Last 3 Days")
               ),
 
               // m('button.btn btn-default', {
-              // 	onclick: function () {
+              // 	onclick: () => {
               // 		this.blur();
-              // 		ctrl.dateRangeChange('This week to date');
+              // 		this.dateRangeChange('This week to date');
               // 	}
               // }, t('This week to date')),
 
               m(
                 "button.btn btn-default",
                 {
-                  onclick: function() {
+                  onclick: () => {
                     this.blur();
-                    ctrl.dateRangeChange("Last week");
+                    this.dateRangeChange("Last week");
                   }
                 },
                 t("Last week")
@@ -289,18 +285,18 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "button.btn btn-default",
                 {
-                  onclick: function() {
+                  onclick: () => {
                     this.blur();
-                    ctrl.dateRangeChange("This month");
+                    this.dateRangeChange("This month");
                   }
                 },
                 t("Last month")
               )
 
               // m('button.btn btn-default', {
-              // 	onclick: function () {
+              // 	onclick: () => {
               // 		this.blur();
-              // 		ctrl.dateRangeChange('Last month');
+              // 		this.dateRangeChange('Last month');
               // 	}
               // }, t('This month'))
             ])
@@ -317,17 +313,16 @@ module.exports.view = function(ctrl, args, extras) {
           [
             m("label.padrt", t("Start Date")),
             m("span.padrt", {
-              config: function(el, isInitialized) {
-                if (isInitialized) return;
+              oncreate: vnode => {
                 const input = document.createElement("input");
-                el.appendChild(input);
+                vnode.dom.appendChild(input);
 
-                ctrl.startDatePicker = new pikaday({
-                  defaultDate: ctrl.startDate,
+                this.startDatePicker = new pikaday({
+                  defaultDate: this.startDate,
                   setDefaultDate: true,
                   field: input,
-                  onSelect: function() {
-                    ctrl.startDate(this.getDate());
+                  onSelect: () => {
+                    this.startDate(this.getDate());
                     m.redraw();
                   }
                 });
@@ -335,17 +330,16 @@ module.exports.view = function(ctrl, args, extras) {
             }),
             m("label.padrt", t("End Date")),
             m("span", {
-              config: function(el, isInitialized) {
-                if (isInitialized) return;
+              oncreate: vnode => {
                 const input = document.createElement("input");
-                el.appendChild(input);
+                vnode.dom.appendChild(input);
 
-                ctrl.endDatePicker = new pikaday({
-                  defaultDate: ctrl.endDate,
+                this.endDatePicker = new pikaday({
+                  defaultDate: this.endDate,
                   setDefaultDate: true,
                   field: input,
-                  onSelect: function() {
-                    ctrl.endDate = this.getDate();
+                  onSelect: () => {
+                    this.endDate = this.getDate();
                     m.redraw();
                   }
                 });
@@ -359,16 +353,16 @@ module.exports.view = function(ctrl, args, extras) {
             "select.form-control",
             {
               size: Object.keys(types).length,
-              onchange: function(ev) {
-                ctrl.reportName = ev.target.value;
+              onchange: ev => {
+                this.reportName = ev.target.value;
               }
             },
-            Object.keys(types).map(function(key) {
+            Object.keys(types).map(key => {
               return m(
                 "option",
                 {
                   value: key,
-                  selected: key === ctrl.reportName
+                  selected: key === this.reportName
                 },
                 t(types[key])
               );
@@ -381,80 +375,80 @@ module.exports.view = function(ctrl, args, extras) {
                 "margin-top": "1em",
                 "margin-bottom": "1em"
               },
-              disabled: ctrl.executing,
-              onclick: ctrl.run
+              disabled: this.executing,
+              onclick: this.run
             },
-            ctrl.executing ? t("Executing...") : t("Run!")
+            this.executing ? t("Executing...") : t("Run!")
           )
         ),
 
         m(".row.col-md-12", [
-          ctrl.result.query && ctrl.result.query.reportid === "idle"
+          this.result.query && this.result.query.reportid === "idle"
             ? m(idle, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "daily"
+          this.result.query && this.result.query.reportid === "daily"
             ? m(daily, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "mileage"
+          this.result.query && this.result.query.reportid === "mileage"
             ? m(mileage, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "odometer"
+          this.result.query && this.result.query.reportid === "odometer"
             ? m(odometer, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "speed"
+          this.result.query && this.result.query.reportid === "speed"
             ? m(speed, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "ignition"
+          this.result.query && this.result.query.reportid === "ignition"
             ? m(ignition, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "start"
+          this.result.query && this.result.query.reportid === "start"
             ? m(start, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "summary"
+          this.result.query && this.result.query.reportid === "summary"
             ? m(summary, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "obd"
+          this.result.query && this.result.query.reportid === "obd"
             ? m(obd, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
 
-          ctrl.result.query && ctrl.result.query.reportid === "jes"
+          this.result.query && this.result.query.reportid === "jes"
             ? m(jes, {
-                result: ctrl.result
+                result: this.result
               })
             : "",
           // ,m('div.business-table', [
-          // 	m('pre', JSON.stringify(ctrl.result, undefined, 4))
+          // 	m('pre', JSON.stringify(this.result, undefined, 4))
           // ])
 
-          ctrl.error
+          this.error
             ? m("div.business-table", [
-                m("pre", JSON.stringify(ctrl.error, undefined, 4))
+                m("pre", JSON.stringify(this.error, undefined, 4))
               ])
             : null
         ])
