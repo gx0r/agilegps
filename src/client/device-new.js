@@ -124,14 +124,10 @@ module.exports.view = function(ctrl) {
             return m("div.form-group", [
               m("label.col-md-4 control-label", t("Activation Date:") + " "),
               m(".col-md-8", {
-                config: function(el, isInitialized) {
-                  if (isInitialized) {
-                    return;
-                  }
-
+                oncreate: function(vnode) {
                   const input = document.createElement("input");
                   input.className = "form-control";
-                  el.appendChild(input);
+                  vnode.dom.appendChild(input);
 
                   ctrl.datepicker = new pikaday({
                     field: input,

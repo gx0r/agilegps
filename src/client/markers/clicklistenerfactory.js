@@ -43,8 +43,8 @@ module.exports.create = function(marker, item, position) {
         )
       ),
       m("div", {
-        config: function(el) {
-          mapel = el;
+        oncreate: function(vnode) {
+          mapel = vnode.dom;
         },
         style: "height:130px;width:360px"
       }),

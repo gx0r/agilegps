@@ -27,67 +27,66 @@ const todir = require("../common/todir");
 const isUserMetric = require("./isUserMetric");
 const formatDate = require("./formatDate");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.oninit = function(vnode) {
   const state = appState.getState();
 
-  ctrl.rollup = true;
-  ctrl.highlightIgnition = false;
-  ctrl.highlightStarts = false;
-  ctrl.reverseOrder = false;
-  ctrl.rawData = false;
-  ctrl.vehiclehistory = [];
-  ctrl.adjustedVehicleHistory = [];
-  ctrl.speed = 0;
-  ctrl.selecteditem = {};
-  ctrl.startDate = null;
-  ctrl.endDate = null;
-  ctrl.firstRowClicked = false;
+  this.rollup = true;
+  this.highlightIgnition = false;
+  this.highlightStarts = false;
+  this.reverseOrder = false;
+  this.rawData = false;
+  this.vehiclehistory = [];
+  this.adjustedVehicleHistory = [];
+  this.speed = 0;
+  this.selecteditem = {};
+  this.startDate = new Date();
+  this.endDate = new Date();
+  this.firstRowClicked = false;
 
   if (state.startDate) {
-    ctrl.startDate = new Date(state.startDate);
+    this.startDate = new Date(state.startDate);
   }
 
   if (state.endDate) {
-    ctrl.endDate = new Date(state.endDate);
+    this.endDate = new Date(state.endDate);
   }
 
-  ctrl.selectDays = function() {
+  this.selectDays = function() {
     const state = appState.getState();
-    // if (ctrl.startDate != state.startDate) {
+    // if (this.startDate != state.startDate) {
     appState.selectDays(
-      ctrl.startDate,
-      moment(ctrl.endDate)
+      this.startDate,
+      moment(this.endDate)
         .add(1, "day")
         .toDate()
     );
     // }
   };
 
-  ctrl.updated = null;
-  ctrl.calculateDistanceBetween = "start";
+  this.updated = null;
+  this.calculateDistanceBetween = "start";
 
   animation.controller(this);
-  ctrl.progressElem = animation.progress;
+  this.progressElem = animation.progress;
 
-  ctrl.clickItem = function(item) {
-    if (ctrl.selecteditem === item) {
-      ctrl.selecteditem = {};
+  this.clickItem = item => {
+    if (this.selecteditem === item) {
+      this.selecteditem = {};
       ClickListenerFactory.closeInfoWindow();
     } else {
-      ctrl.selecteditem = item;
+      this.selecteditem = item;
       animation.clickMarkerByID(item.id);
     }
   };
 
-  ctrl.play = animation.play;
-  ctrl.pause = animation.pause;
-  ctrl.stop = animation.stop;
-  ctrl.isPausable = animation.isPausable;
-  ctrl.isPlayable = animation.isPlayable;
-  ctrl.isStoppable = animation.isStoppable;
+  this.play = animation.play;
+  this.pause = animation.pause;
+  this.stop = animation.stop;
+  this.isPausable = animation.isPausable;
+  this.isPlayable = animation.isPlayable;
+  this.isStoppable = animation.isStoppable;
 
-  ctrl.speedChange = function(ev) {
+  this.speedChange = ev => {
     const val = parseInt(ev.target.value, 10);
     switch (val) {
       case 0:
@@ -127,18 +126,18 @@ module.exports.controller = function(args, extras) {
   };
   animation.setSpeed(1);
 
-  ctrl.recalculateAdjustedVehicleHistory = function recalculateAdjustedVehicleHistory() {
+  this.recalculateAdjustedVehicleHistory = () => {
     const state = appState.getState();
     const vehicle = state.selectedVehicle;
     const hist = state.selectedVehicleHistory;
-    ctrl.vehiclehistory = hist;
+    this.vehiclehistory = hist;
     let res = _.cloneDeep(state.selectedVehicleHistory);
 
-    if (ctrl.rawData) {
-      if (ctrl.rollup) {
+    if (this.rawData) {
+      if (this.rollup) {
         res = helpers.rollup(res);
       }
-      if (!ctrl.reverseOrder) {
+      if (!this.reverseOrder) {
         res.reverse();
       }
     } else {
@@ -149,60 +148,60 @@ module.exports.controller = function(args, extras) {
       res = helpers.cleanData(res);
       res = helpers.mileageChange(res);
 
-      if (ctrl.rollup) {
+      if (this.rollup) {
         res = helpers.rollup(res);
       }
       res = helpers.addStartStop(res);
 
-      if (ctrl.calculateDistanceBetween === "start") {
+      if (this.calculateDistanceBetween === "start") {
         res = helpers.startStopMileage(res);
       } else {
         res = helpers.ignitionMileage(res);
       }
 
-      if (!ctrl.reverseOrder) {
+      if (!this.reverseOrder) {
         res.reverse();
       }
     }
 
-    ctrl.adjustedVehicleHistory = res;
+    this.adjustedVehicleHistory = res;
   };
 
-  ctrl.recalculateAdjustedVehicleHistory();
+  this.recalculateAdjustedVehicleHistory();
 
-  ctrl.previouslySelectedVehicle = null;
+  this.previouslySelectedVehicle = null;
 
-  appState.getStore().subscribe(function() {
+  appState.getStore().subscribe(() => {
     const state = appState.getState();
-    if (state.selectedVehicle != ctrl.previouslySelectedVehicle) {
-      ctrl.firstRowClicked = false;
-      ctrl.previouslySelectedVehicle = state.selectedVehicle;
+    if (state.selectedVehicle != this.previouslySelectedVehicle) {
+      this.firstRowClicked = false;
+      this.previouslySelectedVehicle = state.selectedVehicle;
     }
 
-    ctrl.startDate = new Date(state.startDate);
-    ctrl.endDate = new Date(state.endDate);
+    this.startDate = new Date(state.startDate);
+    this.endDate = new Date(state.endDate);
 
-    // ctrl.startDatePicker.setDate(state.startDate);
-    // ctrl.endDatePicker.setDate(state.endDate);
+    // this.startDatePicker.setDate(state.startDate);
+    // this.endDatePicker.setDate(state.endDate);
 
-    ctrl.recalculateAdjustedVehicleHistory();
+    this.recalculateAdjustedVehicleHistory();
     m.redraw();
   });
 
   const root = require("./root");
-  ctrl.animationConfig = function(el, isInitialized) {
+  this.animationConfig = vnode =>  {
     // relocate the animation controls when the map gets big/small
     const mapEl = root.getMapElement();
     if (mapEl) {
-      const cur = el.getBoundingClientRect();
+      const cur = vnode.dom.getBoundingClientRect();
       const r = mapEl.getBoundingClientRect();
-      el.style.position = "absolute";
-      el.style.top = r.height - cur.height - 30 + "px";
+      vnode.dom.style.position = "absolute";
+      vnode.dom.style.top = r.height - cur.height - 30 + "px";
     }
   };
 };
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function(vnode) {
   const state = appState.getState();
   const advancedUI = state.user.advancedMode;
 
@@ -215,19 +214,18 @@ module.exports.view = function(ctrl, args, extras) {
           : [
               m("span", t("Select Day") + " "),
               m("span.padrt", {
-                config: function(el, isInitialized) {
-                  if (isInitialized) return;
+                oncreate: vnode => {
                   const input = document.createElement("input");
-                  el.appendChild(input);
+                  vnode.dom.appendChild(input);
 
-                  ctrl.startDatePicker = new pikaday({
-                    defaultDate: ctrl.startDate,
+                  this.startDatePicker = new pikaday({
+                    defaultDate: this.startDate,
                     setDefaultDate: true,
                     field: input,
-                    onSelect: function() {
-                      ctrl.startDate = this.getDate();
-                      ctrl.endDate = this.getDate();
-                      ctrl.selectDays();
+                    onSelect: () => {
+                      this.startDate = this.getDate();
+                      this.endDate = this.getDate();
+                      this.selectDays();
                     }
                   });
                 }
@@ -236,8 +234,8 @@ module.exports.view = function(ctrl, args, extras) {
         m(
           "button.btn btn-xs btn-primary btn-pad",
           {
-            onclick: function() {
-              ctrl.firstRowClicked = false;
+            onclick: () => {
+              this.firstRowClicked = false;
               appState.update();
             }
           },
@@ -259,21 +257,21 @@ module.exports.view = function(ctrl, args, extras) {
               "&latlong=" +
               state.showLatLong +
               "&rollupStationaryEvents=" +
-              ctrl.rollup +
+              this.rollup +
               "&verbose=" +
               (state.verbose ? "true" : "false") +
               "&startDate=" +
-              encodeURIComponent(ctrl.startDate.toISOString()) +
+              encodeURIComponent(this.startDate.toISOString()) +
               "&endDate=" +
               encodeURIComponent(
-                moment(ctrl.endDate)
+                moment(this.endDate)
                   .add(1, "day")
                   .toISOString()
               ) +
               "&calculateDistanceBetween=" +
-              ctrl.calculateDistanceBetween +
+              this.calculateDistanceBetween +
               "&reverse=" +
-              (ctrl.reverseOrder ? "true" : "false") +
+              (this.reverseOrder ? "true" : "false") +
               "&tzOffset=" +
               encodeURIComponent(tzOffset()),
             style: {
@@ -290,42 +288,38 @@ module.exports.view = function(ctrl, args, extras) {
         m(
           "div",
           {
-            config: ctrl.animationConfig,
+            oncreate: vnode => this.animationConfig(vnode),
             style: {
               "background-color": "rgb(221, 221, 221)"
             }
           },
           [
             m("button.btn btn-xs btn-success glyphicon glyphicon-play", {
-              onclick: ctrl.play,
-              disabled: !ctrl.isPlayable()
+              onclick: this.play,
+              disabled: !this.isPlayable()
             }),
             " ",
             m("button.btn btn-xs btn-warning glyphicon glyphicon-pause", {
-              onclick: ctrl.pause,
-              disabled: !ctrl.isPausable()
+              onclick: this.pause,
+              disabled: !this.isPausable()
             }),
             " ",
             m("button.btn btn-xs btn-danger glyphicon glyphicon-stop", {
-              onclick: ctrl.stop,
-              disabled: !ctrl.isStoppable()
+              onclick: this.stop,
+              disabled: !this.isStoppable()
             }),
             m("progress", {
               value: 0,
               style: {
                 "margin-left": "1em"
               },
-              config: ctrl.progressElem
+              oncreate: vnode => this.progressElem = vnode.dom
             }),
             m("input[type=range]", {
               min: 0,
               max: 10,
-              onchange: ctrl.speedChange,
-              config: function(el, isInitialized) {
-                if (!isInitialized) {
-                  el.value = 9;
-                }
-              }
+              onchange: this.speedChange,
+              oncreate: vnode => vnode.dom.value = 9,
             })
           ]
         ),
@@ -334,36 +328,34 @@ module.exports.view = function(ctrl, args, extras) {
           : [
               m("label", t("Showing:")),
               m("div", {
-                config: function(el, isInitialized) {
-                  if (isInitialized) return;
+                oncreate: vnode => {
                   const input = document.createElement("input");
-                  el.appendChild(input);
+                  vnode.dom.appendChild(input);
 
-                  ctrl.startDatePicker = new pikaday({
-                    defaultDate: ctrl.startDate,
+                  this.startDatePicker = new pikaday({
+                    defaultDate: this.startDate,
                     setDefaultDate: true,
                     field: input,
                     onSelect: function() {
-                      ctrl.startDate = this.getDate();
-                      ctrl.selectDays();
+                      this.startDate = this.getDate();
+                      this.selectDays();
                     }
                   });
                 }
               }),
               m("label", t("Through the end of:")),
               m("div", {
-                config: function(el, isInitialized) {
-                  if (isInitialized) return;
+                oncreate: vnode => {
                   const input = document.createElement("input");
-                  el.appendChild(input);
+                  vnode.dom.appendChild(input);
 
-                  ctrl.endDatePicker = new pikaday({
-                    defaultDate: ctrl.endDate,
+                  this.endDatePicker = new pikaday({
+                    defaultDate: this.endDate,
                     setDefaultDate: true,
                     field: input,
-                    onSelect: function() {
-                      ctrl.endDate = this.getDate();
-                      ctrl.selectDays();
+                    onSelect: () => {
+                      this.endDate = this.getDate();
+                      this.selectDays();
                     }
                   });
                 }
@@ -389,10 +381,10 @@ module.exports.view = function(ctrl, args, extras) {
                     }
                   },
                   m("input[type=radio][name=speed]", {
-                    checked: ctrl.calculateDistanceBetween === "ignition",
+                    checked: this.calculateDistanceBetween === "ignition",
                     onchange: function(a) {
-                      ctrl.calculateDistanceBetween = "ignition";
-                      ctrl.recalculateAdjustedVehicleHistory();
+                      this.calculateDistanceBetween = "ignition";
+                      this.recalculateAdjustedVehicleHistory();
                     },
                     value: "ignition"
                   }),
@@ -407,10 +399,10 @@ module.exports.view = function(ctrl, args, extras) {
                     }
                   },
                   m("input[type=radio][name=speed]", {
-                    checked: ctrl.calculateDistanceBetween === "start",
+                    checked: this.calculateDistanceBetween === "start",
                     onchange: function(ev) {
-                      ctrl.calculateDistanceBetween = "start";
-                      ctrl.recalculateAdjustedVehicleHistory();
+                      this.calculateDistanceBetween = "start";
+                      this.recalculateAdjustedVehicleHistory();
                     },
                     value: "start"
                   }),
@@ -424,9 +416,9 @@ module.exports.view = function(ctrl, args, extras) {
             "label.padrt",
             m("input[type=checkbox]", {
               onclick: function() {
-                ctrl.highlightStarts = this.checked;
+                this.highlightStarts = this.checked;
               },
-              checked: ctrl.highlightStarts
+              checked: this.highlightStarts
             }),
             t("Highlight starts")
           ),
@@ -437,9 +429,9 @@ module.exports.view = function(ctrl, args, extras) {
                 "label.padrt",
                 m("input[type=checkbox]", {
                   onclick: function() {
-                    ctrl.highlightIgnition = this.checked;
+                    this.highlightIgnition = this.checked;
                   },
-                  checked: ctrl.highlightIgnition
+                  checked: this.highlightIgnition
                 }),
                 t("Highlight ignition")
               ),
@@ -448,10 +440,10 @@ module.exports.view = function(ctrl, args, extras) {
             "label.padrt",
             m("input[type=checkbox]", {
               onclick: function() {
-                ctrl.reverseOrder = this.checked;
-                ctrl.recalculateAdjustedVehicleHistory();
+                this.reverseOrder = this.checked;
+                this.recalculateAdjustedVehicleHistory();
               },
-              checked: ctrl.reverseOrder
+              checked: this.reverseOrder
             }),
             t("Reverse Order")
           ),
@@ -461,7 +453,7 @@ module.exports.view = function(ctrl, args, extras) {
             m("input[type=checkbox]", {
               onclick: function() {
                 appState.setShowVerbose(this.checked);
-                ctrl.recalculateAdjustedVehicleHistory();
+                this.recalculateAdjustedVehicleHistory();
               },
               checked: state.verbose
             }),
@@ -484,10 +476,10 @@ module.exports.view = function(ctrl, args, extras) {
                 "label.padrt",
                 m("input[type=checkbox]", {
                   onclick: function() {
-                    ctrl.rollup = this.checked;
-                    ctrl.recalculateAdjustedVehicleHistory();
+                    this.rollup = this.checked;
+                    this.recalculateAdjustedVehicleHistory();
                   },
-                  checked: ctrl.rollup
+                  checked: this.rollup
                 }),
                 t("Rollup idling & parked")
               )
@@ -499,10 +491,10 @@ module.exports.view = function(ctrl, args, extras) {
                   "label",
                   m("input[type=checkbox]", {
                     onclick: function() {
-                      ctrl.rawData = this.checked;
-                      ctrl.recalculateAdjustedVehicleHistory();
+                      this.rawData = this.checked;
+                      this.recalculateAdjustedVehicleHistory();
                     },
-                    checked: ctrl.rawData
+                    checked: this.rawData
                   }),
                   t("Raw")
                 ),
@@ -516,9 +508,9 @@ module.exports.view = function(ctrl, args, extras) {
           : m(
               "label",
               "Showing " +
-                ctrl.adjustedVehicleHistory.length +
-                (ctrl.vehiclehistory.length === 1 ? " event" : " events") +
-                (ctrl.vehiclehistory.length === 0
+                this.adjustedVehicleHistory.length +
+                (this.vehiclehistory.length === 1 ? " event" : " events") +
+                (this.vehiclehistory.length === 0
                   ? " (Try a different date range?)"
                   : "")
             ),
@@ -546,42 +538,42 @@ module.exports.view = function(ctrl, args, extras) {
               state.verbose ? m("td", t("Online")) : "",
               state.verbose ? m("td", t("Battery %")) : "",
               m("td", t("GPS")),
-              ctrl.rawData ? m("td", t("Raw")) : null
+              this.rawData ? m("td", t("Raw")) : null
             ]),
             m(
               "tbody",
-              ctrl.adjustedVehicleHistory().length < 1
+              this.adjustedVehicleHistory.length < 1
                 ? m("div", t("No vehicle history for this day"))
-                : ctrl.adjustedVehicleHistory().map(function(item, index) {
+                : this.adjustedVehicleHistory.map(item  => {
                     return m(
                       "tr",
                       {
-                        config: function(el, isInitialized) {
+                        oncreate: vnode => {
                           if (
-                            !ctrl.firstRowClicked &&
+                            !this.firstRowClicked &&
                             item.la != null &&
                             item.lo != null
                           ) {
-                            ctrl.firstRowClicked = true;
+                            this.firstRowClicked = true;
                             setTimeout(() => {
-                              el.click();
-                              ctrl.firstRowClicked = true;
+                              vnode.dom.click();
+                              this.firstRowClicked = true;
                             }, 0);
                           }
                         },
                         class:
-                          (ctrl.highlightIgnition() && item.cmd === "IGN") ||
-                          (ctrl.highlightStarts() &&
+                          (this.highlightIgnition && item.cmd === "IGN") ||
+                          (this.highlightStarts &&
                             item.statusOverride === "Start")
                             ? "highlight-igniton"
                             : "",
-                        onclick: function(ev) {
-                          ctrl.clickItem(item);
+                        onclick: () => {
+                          this.clickItem(item);
                         },
                         key: item.id,
                         style: j2c.inline({
                           "background-color":
-                            item.id === ctrl.selecteditem().id ? "#FEE0C6" : ""
+                            item.id === this.selecteditem.id ? "#FEE0C6" : ""
                         })
                       },
                       [
@@ -607,7 +599,7 @@ module.exports.view = function(ctrl, args, extras) {
                         m("td", hidenan(tomiles(item.s))),
                         state.showLatLong ? m("td", item.la) : "",
                         state.showLatLong ? m("td", item.lo) : "",
-                        ctrl.rawData
+                        this.rawData
                           ? m(
                               "td",
                               {
@@ -633,7 +625,7 @@ module.exports.view = function(ctrl, args, extras) {
                         m("td", m("img", {
                           src: helpers.getAccuracyAsImg(item.g)
                         })),
-                        ctrl.rawData
+                        this.rawData
                           ? m(
                               "td",
                               m(
