@@ -48,8 +48,7 @@ function getRandomIntInclusive(min, max) {
 
 let lat = 44.952833;
 let long = -93.091971;
-
-https://www.google.com/maps/place/The+Buttered+Tin/@44.952833,-93.091971,16z/data=!4m5!3m4!1s0x0:0xe663f9063ed3d018!8m2!3d44.9510235!4d-93.0888711?hl=en-US
+let mileage = 1;
 
 (async function() {
   let count = -1;
@@ -71,7 +70,9 @@ https://www.google.com/maps/place/The+Buttered+Tin/@44.952833,-93.091971,16z/dat
     let status = "220100";
     let countH = decimalToHex(count, 4);
 
-    let message = `+RESP:GTFRI,060502,${imei},,${powervcc},10,1,${gpsAccuracy},${speed},${azimuth},,${longitude},${latitude},${d},,,,,,0,FAKE:00:00,,,${batteryPercent},${status},,,,${d},${countH}$`;
+    mileage += 1;
+
+    let message = `+RESP:GTFRI,060502,${imei},,${powervcc},10,1,${gpsAccuracy},${speed},${azimuth},,${longitude},${latitude},${d},,,,,,${mileage},FAKE:00:00,,,${batteryPercent},${status},,,,${d},${countH}$`;
     console.log(message);
 
     await socket.sendAsync(message, 0, message.length, port, host);
