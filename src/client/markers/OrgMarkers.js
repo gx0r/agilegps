@@ -1,5 +1,6 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
+const _ = require("lodash");
 const TheMap = require("../map");
 const toGoogle = require("../togoogle");
 const MarkerWithLabel = require("./markerWithLabel");

@@ -1,6 +1,5 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-const _ = require("lodash");
 const raf = require("raf");
 const Velocity = require("velocity-animate");
 const markersByVehicle = Object.create(null);

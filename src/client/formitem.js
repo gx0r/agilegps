@@ -2,8 +2,6 @@
 "use strict";
 const t = require("./i18n").translate;
 const m = require("mithril");
-const appState = require("./appState");
-const _ = require("lodash");
 const keyhelper = require("./keyhelper");
 
 module.exports = function(obj, key, col1, col2, disabled) {
@@ -18,13 +16,13 @@ module.exports = function(obj, key, col1, col2, disabled) {
       obj[key] === true || obj[key] === false
         ? m("input[type=checkbox]", {
             disabled: disabled,
-            onclick: function() {
-              obj[key] = this.checked;
+            onclick: ev => {
+              obj[key] = ev.target.checked;
             },
             checked: obj[key] === true
           })
         : m("input.form-control", {
-            onchange: function(ev) {
+            onchange: ev => {
               if (ev.target) {
                 obj[key] = ev.target.value;
               }              

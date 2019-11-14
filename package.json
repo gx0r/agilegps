@@ -87,6 +87,7 @@
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
+    "@swc/core": "^1.0.48",
     "babel-loader": "^8.0.6",
     "base64-font-loader": "^0.0.4",
     "bunyan": "^1.8.12",
@@ -106,6 +107,7 @@
     "raw-loader": "^3.1.0",
     "style-loader": "^1.0.0",
     "svg-loader": "0.0.2",
+    "swc-loader": "^0.1.6",
     "tape": "^4.11.0",
     "url-loader": "^2.2.0",
     "webpack": "^4.41.2",

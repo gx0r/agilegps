@@ -3,10 +3,8 @@
 const t = require("./i18n").translate;
 const m = require("mithril");
 const appState = require("./appState");
-const Device = require("../common/models/Device");
 const catchhandler = require("./catchhandler");
 const Organization = require("../common/models/Organization");
-const _ = require("lodash");
 const keyhelper = require("./keyhelper");
 
 module.exports.oninit = function() {

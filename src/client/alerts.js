@@ -3,10 +3,7 @@
 const m = require("mithril");
 const alertTypes = ["Location Enter", "Location Exit", "Speed Alert"];
 
-module.exports.controller = function(args, extras) {
-};
-
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function() {
   return m("div", [
     m(".col-sm-1"),
     m(".col-sm-10", [
@@ -19,10 +16,8 @@ module.exports.view = function(ctrl, args, extras) {
               return m(
                 "li.pointer list-group-item",
                 {
-                  class: ctrl.selectedAlert === alert ? "active" : "",
-                  onclick: function() {
-                    ctrl.selectedAlert = alert;
-                  }
+                  class: this.selectedAlert === alert ? "active" : "",
+                  onclick: () => this.selectedAlert = alert,
                 },
                 alert
               );
@@ -30,7 +25,7 @@ module.exports.view = function(ctrl, args, extras) {
           ])
         ])
       ),
-      m(".col-sm-8", m(".business-table", [m("h4", ctrl.selectedAlert)]))
+      m(".col-sm-8", m(".business-table", [m("h4", this.selectedAlert)]))
     ]),
     m(".col-sm-1")
   ]);
