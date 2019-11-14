@@ -67,7 +67,9 @@ module.exports.view = function(ctrl, args, extras) {
                     "select.form-control",
                     {
                       onchange: function(ev) {
-                        ctrl.vehicle[key] = ev.target.value;
+                        if (ev.target) {
+                          ctrl.vehicle[key] = ev.target.value;
+                        }
                       },
                       value: ctrl.vehicle[key]
                     },

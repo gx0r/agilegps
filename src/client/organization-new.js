@@ -49,7 +49,9 @@ module.exports.view = function() {
               "div.col-md-10",
               m("input.form-control", {
                 onchange: ev => {
-                  org[key] = ev.target.value;
+                  if (ev.target) {
+                    org[key] = ev.target.value;
+                  }
                 },
                 disabled: key === "id",
                 value: org[key]
