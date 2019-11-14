@@ -8,25 +8,24 @@ const moment = require("moment");
 const _ = require("lodash");
 const withAuth = require("./withAuth");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.oninit = function() {
   let creatingFleet;
 
-  ctrl.cancel = function() {
-    ctrl.fleet = {
+  this.cancel = () => {
+    this.fleet = {
       name: "",
       vehicles: []
     };
     const state = appState.getState();
-    ctrl.fleet.orgid = state.selectedOrg.id;
+    this.fleet.orgid = state.selectedOrg.id;
 
-    ctrl.availableVehicles = [];
-    ctrl.selectedAvailableVehicles = [];
-    ctrl.selectedInFleetVehicles = [];
+    this.availableVehicles = [];
+    this.selectedAvailableVehicles = [];
+    this.selectedInFleetVehicles = [];
   };
-  ctrl.cancel();
+  this.cancel();
 
-  ctrl.getVehicleById = function(vid) {
+  this.getVehicleById = vid => {
     const state = appState.getState();
     if (state.vehiclesByID[vid]) {
       return state.vehiclesByID[vid];
@@ -35,63 +34,61 @@ module.exports.controller = function(args, extras) {
     }
   };
 
-  ctrl.selectFleet = function(fleet) {
+  this.selectFleet = fleet => {
     const state = appState.getState();
 
-    ctrl.fleet = fleet;
-    ctrl.availableVehicles = [];
-    _.toArray(state.vehiclesByID).forEach(function(vehicle) {
-      ctrl.availableVehicles.push(vehicle.id);
-    });
+    this.fleet = fleet;
+    this.availableVehicles = [];
+    _.toArray(state.vehiclesByID).forEach(vehicle => this.availableVehicles.push(vehicle.id));
 
-    ctrl.colorPickerEl.value = fleet.color;
+    this.colorPickerEl.value = fleet.color;
   };
 
-  ctrl.rightArrow = function() {
-    while (ctrl.selectedAvailableVehicles.length) {
-      const vid = ctrl.selectedAvailableVehicles.pop();
-      const vehicle = ctrl.getVehicleById(vid);
+  this.rightArrow = () => {
+    while (this.selectedAvailableVehicles.length) {
+      const vid = this.selectedAvailableVehicles.pop();
+      const vehicle = this.getVehicleById(vid);
 
-      ctrl.fleet.vehicles = _.union(ctrl.fleet.vehicles, [vehicle.id]);
-      ctrl.availableVehicles = _.without(ctrl.availableVehicles, vid);
+      this.fleet.vehicles = _.union(this.fleet.vehicles, [vehicle.id]);
+      this.availableVehicles = _.without(this.availableVehicles, vid);
     }
   };
 
-  ctrl.leftArrow = function() {
-    while (ctrl.selectedInFleetVehicles.length) {
-      const vid = ctrl.selectedInFleetVehicles.pop();
-      const vehicle = ctrl.getVehicleById(vid);
+  this.leftArrow =  () => {
+    while (this.selectedInFleetVehicles.length) {
+      const vid = this.selectedInFleetVehicles.pop();
+      const vehicle = this.getVehicleById(vid);
 
-      ctrl.fleet.vehicles = _.without(ctrl.fleet.vehicles, vid);
-      ctrl.availableVehicles = _.union(ctrl.availableVehicles, [vid]);
+      this.fleet.vehicles = _.without(this.fleet.vehicles, vid);
+      this.availableVehicles = _.union(this.availableVehicles, [vid]);
     }
   };
 
-  ctrl.create = function() {
-    ctrl.selectFleet({
+  this.create = () => {
+    this.selectFleet({
       name: "",
       color: "",
       vehicles: []
     });
   };
 
-  ctrl.delete = function() {
-    appState.deleteFleet(ctrl.fleet);
+  this.delete = () => {
+    appState.deleteFleet(this.fleet);
   };
 
-  ctrl.save = function() {
+  this.save = () => {
     const state = appState.getState();
-    ctrl.fleet.orgid = state.selectedOrg.id;
-    appState.saveFleet(ctrl.fleet);
+    this.fleet.orgid = state.selectedOrg.id;
+    appState.saveFleet(this.fleet);
   };
 
-  ctrl.colorPickerEl = null;
+  this.colorPickerEl = null;
 };
 
 const truckSvg = require("./svg/truck");
 const getselectvalues = require("./getselectvalues");
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function() {
   const state = appState.getState();
   const fleets = _.toArray(state.fleetsByID);
 
@@ -103,23 +100,23 @@ module.exports.view = function(ctrl, args, extras) {
         m(".business-table", [
           m("h4", t("Fleets")),
           m("ul.list-group", [
-            fleets.map(function(fleet) {
+            fleets.map(fleet => {
               return m(
                 "li.pointer list-group-item",
                 {
-                  class: ctrl.fleet.name === fleet.name ? "active" : "",
-                  onclick: function() {
-                    ctrl.selectFleet(fleet);
+                  class: this.fleet.name === fleet.name ? "active" : "",
+                  onclick: () => {
+                    this.selectFleet(fleet);
                   }
                 },
                 [truckSvg(16, 16, fleet.color), " ", fleet.name]
               );
             })
           ]),
-          // ctrl.fleets().map(function(fleet) {
+          // this.fleets().map(fleet => {
           // 	return m('div', m('a.pointer', {
-          // 		onclick: function() {
-          // 			ctrl.fleet(fleet);
+          // 		onclick: () => {
+          // 			this.fleet(fleet);
           // 		}
           // 	}, fleet.name))
           // }),
@@ -128,8 +125,8 @@ module.exports.view = function(ctrl, args, extras) {
             m(
               "button.btn btn-sm btn-default",
               {
-                onclick: ctrl.delete,
-                disabled: ctrl.fleet.id == null
+                onclick: this.delete,
+                disabled: this.fleet.id == null
               },
               t("Delete")
             ),
@@ -137,7 +134,7 @@ module.exports.view = function(ctrl, args, extras) {
             m(
               "button.btn btn-sm btn-success",
               {
-                onclick: ctrl.create
+                onclick: this.create
               },
               t("Create")
             )
@@ -155,11 +152,11 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "div",
                   m("input.form-control", {
-                    disabled: ctrl.fleet.name == null,
-                    value: ctrl.fleet.name ? ctrl.fleet.name : "",
-                    onblur: function(ev) {
+                    disabled: this.fleet.name == null,
+                    value: this.fleet.name ? this.fleet.name : "",
+                    onblur: ev => {
                       if (ev.target) {
-                        ctrl.fleet.name = ev.target.value;
+                        this.fleet.name = ev.target.value;
                       }
                     }
                   })
@@ -169,12 +166,12 @@ module.exports.view = function(ctrl, args, extras) {
               m(".form-group.col-sm-6", [
                 m("label.col-sm-2 control-label", t("Fleet Color") + ":"),
                 m("input[type=color]", {
-                  oncreate: function(vnode) {
-                    ctrl.colorPickerEl = vnode.dom;
+                  oncreate: vnode => {
+                    this.colorPickerEl = vnode.dom;
                   },
                   onchange: ev => {
                     if (ev.target) {
-                      ctrl.fleet.color = ev.target.value;
+                      this.fleet.color = ev.target.value;
                     }
                   }
                 })
@@ -188,17 +185,17 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "select.fullwidth.form-control[multiple][size=20]",
                 {
-                  onblur: function(ev) {
-                    ctrl.selectedAvailableVehicles = getselectvalues(ev.target);
+                  onblur: ev => {
+                    this.selectedAvailableVehicles = getselectvalues(ev.target);
                   }
                 },
-                ctrl.availableVehicles.map(function(vid) {
+                this.availableVehicles.map(vid => {
                   return m(
                     "option",
                     {
                       value: vid
                     },
-                    ctrl.getVehicleById(vid).name
+                    this.getVehicleById(vid).name
                   );
                 })
               )
@@ -214,7 +211,7 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "button.btn-lg btn-default",
                   {
-                    onclick: ctrl.rightArrow
+                    onclick: this.rightArrow
                   },
                   "→"
                 ),
@@ -222,7 +219,7 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "button.btn-lg btn-default",
                   {
-                    onclick: ctrl.leftArrow
+                    onclick: this.leftArrow
                   },
                   "←"
                 )
@@ -233,17 +230,17 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "select.fullwidth.form-control[multiple][size=20]",
                 {
-                  onblur: function(ev) {
-                    ctrl.selectedInFleetVehicles = getselectvalues(ev.target);
+                  onblur: ev => {
+                    this.selectedInFleetVehicles = getselectvalues(ev.target);
                   }
                 },
-                ctrl.fleet.vehicles.map(function(vid) {
+                this.fleet.vehicles.map(vid => {
                   return m(
                     "option",
                     {
                       value: vid
                     },
-                    ctrl.getVehicleById(vid).name
+                    this.getVehicleById(vid).name
                   );
                 })
               )
@@ -261,7 +258,7 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "button.btn btn-sm btn-default",
                 {
-                  onclick: ctrl.cancel
+                  onclick: this.cancel
                 },
                 t("Cancel")
               ),
@@ -269,8 +266,8 @@ module.exports.view = function(ctrl, args, extras) {
               m(
                 "button.btn btn-sm btn-success",
                 {
-                  disabled: ctrl.fleet.name.trim() === "",
-                  onclick: ctrl.save
+                  disabled: this.fleet.name.trim() === "",
+                  onclick: this.save
                 },
                 t("Save")
               )
