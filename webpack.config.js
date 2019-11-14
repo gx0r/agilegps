@@ -24,10 +24,11 @@ module.exports = {
     // preLoaders: [
     //     {test: /\.js$/, exclude: /node_modules/, loader: 'jshint-loader'}
     // ],
-    rules: [{
+    rules:[{
         test: /\.m?js$/,
         exclude: /node_modules/,
         loader: "babel-loader",
+        // loader: 'swc-loader',
         options: {
           presets: ['@babel/preset-env']
         }

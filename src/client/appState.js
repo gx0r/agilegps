@@ -5,10 +5,7 @@ Uses Redux ( https://github.com/reactjs/redux ) to handle and keep all applicati
 */
 const m = require("mithril");
 const redux = require("redux");
-const withAuth = require("./withAuth");
 const _ = require("lodash");
-const io = require("socket.io-client");
-const helpers = require("../common/helpers");
 const Cookies = require("cookies-js");
 const moment = require("moment");
 const createLogger = require("redux-logger").createLogger;

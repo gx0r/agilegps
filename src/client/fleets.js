@@ -3,14 +3,9 @@
 const t = require("./i18n").translate;
 const m = require("mithril");
 const appState = require("./appState");
-const navbar = require("./navbar");
-const moment = require("moment");
 const _ = require("lodash");
-const withAuth = require("./withAuth");
 
 module.exports.oninit = function() {
-  let creatingFleet;
-
   this.cancel = () => {
     this.fleet = {
       name: "",

@@ -6,7 +6,6 @@ const appState = require("./appState");
 const _ = require("lodash");
 const moment = require("moment");
 
-const withAuth = require("./withAuth");
 const eventreportparser = require("../helper/eventreportparser");
 const modal = require("mithril-modal");
 

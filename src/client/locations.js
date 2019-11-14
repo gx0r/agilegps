@@ -2,9 +2,7 @@
 "use strict";
 const m = require("mithril");
 
-module.exports.controller = function(args, extras) {};
-
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function() {
   return m(
     "div",
     // m.component(navbar),

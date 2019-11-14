@@ -1,8 +1,6 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
 // Reducer for Redux
-const Cookies = require("cookies-js");
-const helpers = require("../common/helpers");
 let defaultState = require("./appDefaultState");
 
 if (history.state) {

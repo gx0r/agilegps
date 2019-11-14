@@ -7,10 +7,8 @@ Draws the individual vehicle history markers and provides functions to animate t
 const helpers = require("../../common/helpers");
 const tomiles = require("../tomiles");
 const Status = require("../../common/status");
-const m = require("mithril");
 const TheMap = require("../map");
 const toGoogle = require("../togoogle");
-const MarkerWithLabel = require("./markerWithLabel");
 const ClickListenerFactory = require("./clicklistenerfactory");
 const appState = require("../appState.js");
 

@@ -3,7 +3,6 @@
 const t = require("./i18n").translate;
 
 const m = require("mithril");
-const _ = require("lodash");
 const Status = require("../common/status");
 const todir = require("../common/todir");
 const helpers = require("../common/helpers");

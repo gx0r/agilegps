@@ -7,7 +7,6 @@ const Device = require("../common/models/Device");
 const catchhandler = require("./catchhandler");
 const orgselector = require("./orgselector");
 const pikaday = require("pikaday2").default;
-const _ = require("lodash");
 const moment = require("moment");
 
 module.exports.oninit = function() {

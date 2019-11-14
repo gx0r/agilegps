@@ -3,15 +3,9 @@
 /**
 Uses Redux ( https://github.com/reactjs/redux ) to handle and keep all application state in one place.
 */
-const m = require("mithril");
-const redux = require("redux");
-const withAuth = require("./withAuth");
 const _ = require("lodash");
 const io = require("socket.io-client");
-const helpers = require("../common/helpers");
 const Cookies = require("cookies-js");
-const moment = require("moment");
-const createLogger = require("redux-logger").createLogger;
 const appState = require("./appState");
 
 /*
@@ -45,9 +39,9 @@ function handleChange(msg) {
         v: "14055"
         vid: "agen1"
         */
-    let state = appState.getState();
+    const state = appState.getState();
 
-    let event = _.cloneDeep(state.vehiclesByID[msg.new_val.vid]);
+    const event = _.cloneDeep(state.vehiclesByID[msg.new_val.vid]);
 
     if (event != null) {
       event.last = msg.new_val;
@@ -65,8 +59,8 @@ function handleChange(msg) {
 }
 
 appState.getStore().subscribe(function() {
-  let state = appState.getState();
-  let jwt = Cookies.get("jwt");
+  const state = appState.getState();
+  const jwt = Cookies.get("jwt");
 
   if (lastJwt !== jwt) {
     lastJwt = jwt;
@@ -105,10 +99,18 @@ appState.getStore().subscribe(function() {
       });
     });
 
-    socket.on("vehiclehistory", handleChange);
+    socket.on("vehiclehistory", msg => {
+      // const state = appState.getState();
+      // if (!state.autoUpdate) {
+      //   // Don't auto update map TODO improve this
+      //   return;
+      // }
+      handleChange(msg);
+    });
     let tables = ["users", "devices", "vehicles", "errors"];
     tables.forEach(function(table) {
       socket.on(table, function(ev) {
+        // TODO live updates
         console.log(ev);
       });
     });
