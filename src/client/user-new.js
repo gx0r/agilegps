@@ -10,6 +10,7 @@ const User = require("../common/models/User");
 const _ = require("lodash");
 const orgselector = require("./orgselector");
 const formitem = require("./formitem");
+const passwordform = require("./passwordform");
 const keyhelper = require("./keyhelper");
 
 module.exports.oninit = function() {
@@ -96,7 +97,14 @@ module.exports.view = function() {
           //     })))])
           // }
 
-          if (key === "orgid") {
+          if (key === "password") {
+            return passwordform(
+              this.user,
+              key,
+              4,
+              8
+            );
+          } else if (key === "orgid") {
             return orgselector(this.user, 4, 8);
             // } else if (key === 'type') {
             //     return m('div.form-group', [m('label.col-md-2 control-label', key), m('div.col-md-10', m('select.form-control', {
