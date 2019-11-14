@@ -8,10 +8,11 @@ const _ = require("lodash");
 const isUserMetric = require("../isUserMetric");
 const formatDate = require("../formatDate");
 
-module.exports.view = function(ctrl, args, extras) {
-  if (!(args.result && args.result.vehicles && args.result.results)) {
+module.exports.view = function(vnode) {
+  if (!(vnode && vnode.attrs)) {
     return "";
   }
+  const args = vnode.attrs;
 
   return m("div", [
     m("div", [
