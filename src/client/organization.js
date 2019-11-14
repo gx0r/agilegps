@@ -4,17 +4,13 @@ const t = require("./i18n").translate;
 
 const m = require("mithril");
 const _ = require("lodash");
-const navbar = require("./navbar");
-const users = require("./users");
 const Status = require("../common/status");
 const todir = require("../common/todir");
 const helpers = require("../common/helpers");
 const tzOffset = require("./tzoffset");
 const tomiles = require("./tomiles");
 const hidenan = require("../common/hidenan");
-const toGoogle = require("./togoogle");
 const sorts = require("./sorts");
-const reports = require("./reports/reports");
 const street = require("../common/addressdisplay").street;
 const city = require("../common/addressdisplay").city;
 const stateFormat = require("../common/addressdisplay").state;
@@ -46,7 +42,7 @@ module.exports.view = function(vnode) {
     date = new Date(date);
     const lastUpdated = new Date() - date < RECENTLY_CHANGED;
     if (lastUpdated && refreshLater == null) {
-      refreshLater = Promise.delay(RECENTLY_CHANGED).then(function() {
+      refreshLater = Promise.delay(RECENTLY_CHANGED).then(() => {
         // queue a redraw for later to remove highlights from recently updated history items.
         m.redraw();
       });
@@ -71,7 +67,7 @@ module.exports.view = function(vnode) {
       m("input[type=checkbox]", {
         // checked: ctrl.autoUpdate(),
         checked: state.autoUpdate,
-        onclick: () => appState.setAutoUpdate(this.checked),
+        onclick: ev => appState.setAutoUpdate(ev.target.checked),
       }),
       t("Auto Update Map")
     ),
@@ -83,7 +79,7 @@ module.exports.view = function(vnode) {
     m(
       "label.padrt",
       m("input[type=checkbox]", {
-        onclick: () =>  appState.setShowVerbose(this.checked),
+        onclick: ev => appState.setShowVerbose(ev.target.checked),
         checked: state.verbose
       }),
       t("Verbose")
@@ -92,7 +88,7 @@ module.exports.view = function(vnode) {
     m(
       "label.padrt",
       m("input[type=checkbox]", {
-        onclick: () => appState.setShowLatLong(this.checked),
+        onclick: ev => appState.setShowLatLong(ev.target.checked),
         checked: state.showLatLong
       }),
       t("LAT/LONG")
@@ -193,9 +189,7 @@ module.exports.view = function(vnode) {
               {
                 id: vehicle.id,
                 // key: vehicle.id, // TODO fixme
-                onclick: function(ev) {
-                  clickItem(vehicle);
-                },
+                onclick: () => clickItem(vehicle),
                 style: {
                   transition: wasRecentlyUpdated(lastStatus.d)
                     ? "background-color 1s ease-in-out"

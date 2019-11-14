@@ -57,8 +57,8 @@ module.exports.clickMarkerByVehicleID = function(id) {
 
 let lastState = require("../appDefaultState");
 
-store.subscribe(function() {
-  TheMap.getReady().then(function() {
+store.subscribe(() => {
+  TheMap.getReady().then(() => {
     const state = store.getState();
 
     const lastImpliedSelectedVehicles = lastState.impliedSelectedVehicles;
