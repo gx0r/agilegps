@@ -8,54 +8,50 @@ const _ = require("lodash");
 const appState = require("./appState");
 const keyhelper = require("./keyhelper");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.oninit = function() {
   const state = appState.getState();
-  ctrl.vehicle = new Vehicle(state.vehiclesByID[state.viewID]);
+  this.vehicle = new Vehicle(state.vehiclesByID[state.viewID]);
 
   if (state.vehiclesByID[state.viewID]) {
-    ctrl.editing = true;
+    this.editing = true;
   } else {
-    ctrl.editing = false;
-    ctrl.vehicle = new Vehicle();
-    ctrl.vehicle.id = state.viewID;
+    this.editing = false;
+    this.vehicle = new Vehicle();
+    this.vehicle.id = state.viewID;
   }
 
   // appState.getStore().subscribe(function () {
   // 	const state = appState.getState();
-  // 	if (state.vehiclesByID[ctrl.vehicle.id]) {
-  // 		ctrl.vehicle = state.vehiclesByID[ctrl.vehicle.id];
+  // 	if (state.vehiclesByID[this.vehicle.id]) {
+  // 		this.vehicle = state.vehiclesByID[this.vehicle.id];
   // 		m.redraw();
   // 	}
   // })
 
-  ctrl.save = function() {
+  this.save = () => {
     let p;
-    if (ctrl.editing) {
-      p = appState.putVehicle(ctrl.vehicle);
+    if (this.editing) {
+      p = appState.putVehicle(this.vehicle);
     } else {
-      p = appState.postVehicle(ctrl.vehicle);
+      p = appState.postVehicle(this.vehicle);
     }
-    p.then(function() {
+    p.then(() => {
       window.history.back();
     }).catch(catchhandler);
   };
 };
 const formitem = require("./formitem");
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function() {
   const state = appState.getState();
-
-  const devices = _.toArray(state.devicesByID).filter(function(device) {
-    return device.orgid == state.selectedOrg.id;
-  });
+  const devices = _.toArray(state.devicesByID).filter(device => device.orgid == state.selectedOrg.id);
 
   return m(".div", [
     m(".col-md-3"),
     m(".col-md-6 business-table", [
-      m(".btn", ctrl.editing ? "Edit Vehicle" : "New Vehicle"),
+      m(".btn", this.editing ? "Edit Vehicle" : "New Vehicle"),
       m("form.form-horizontal", [
-        Object.keys(ctrl.vehicle).map(function(key) {
+        Object.keys(this.vehicle).map(key => {
           if (key === "device") {
             if (state.user.isAdmin) {
               // admins can change devices
@@ -66,14 +62,14 @@ module.exports.view = function(ctrl, args, extras) {
                   m(
                     "select.form-control",
                     {
-                      onchange: function(ev) {
-                        if (ev.target) {
-                          ctrl.vehicle[key] = ev.target.value;
+                      onchange: ev => {
+                        if (ev &&ev.target) {
+                          this.vehicle[key] = ev.target.value;
                         }
                       },
-                      value: ctrl.vehicle[key]
+                      value: this.vehicle[key]
                     },
-                    _.union([{ id: "" }], devices).map(function(device) {
+                    _.union([{ id: "" }], devices).map(device => {
                       return m(
                         "option",
                         {
@@ -93,26 +89,26 @@ module.exports.view = function(ctrl, args, extras) {
                   m(
                     "select.form-control[disabled]",
                     {
-                      value: ctrl.vehicle[key]
+                      value: this.vehicle[key]
                     },
                     m(
                       "option",
                       {
-                        value: ctrl.vehicle[key]
+                        value: this.vehicle[key]
                       },
-                      ctrl.vehicle[key]
+                      this.vehicle[key]
                     )
                   )
                 )
               ]);
             }
           } else if (key === "orgid") {
-            return orgselector(ctrl.vehicle, 4, 8);
+            return orgselector(this.vehicle, 4, 8);
           } else {
-            return formitem(ctrl.vehicle, key, 4, 8, key === "id");
+            return formitem(this.vehicle, key, 4, 8, key === "id");
             // return m('div.form-group', [m('label.col-md-4 control-label', _.capitalize(key)), m('div.col-md-8', m('input.form-control', {
-            // 	onchange: m.withAttr('value', ctrl.vehicle[key]),
-            // 	value: ctrl.vehicle[key]()
+            // 	onchange: m.withAttr('value', this.vehicle[key]),
+            // 	value: this.vehicle[key]()
             // }))])
           }
         })
@@ -121,7 +117,7 @@ module.exports.view = function(ctrl, args, extras) {
         m(
           "button.btn btn-default",
           {
-            onclick: function(e) {
+            onclick: e => {
               window.history.back();
             }
           },
@@ -131,7 +127,7 @@ module.exports.view = function(ctrl, args, extras) {
         m(
           "button.btn btn-success",
           {
-            onclick: ctrl.save
+            onclick: this.save
           },
           "Save"
         )
