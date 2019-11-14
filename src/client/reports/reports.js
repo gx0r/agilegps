@@ -354,7 +354,9 @@ module.exports.view = function(vnode) {
             {
               size: Object.keys(types).length,
               onchange: ev => {
-                this.reportName = ev.target.value;
+                if (ev.target) {
+                  this.reportName = ev.target.value;
+                }
               }
             },
             Object.keys(types).map(key => {

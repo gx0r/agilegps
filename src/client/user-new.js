@@ -65,7 +65,9 @@ module.exports.view = function() {
                   "input[type=checkbox]",
                   {
                     onclick: ev => {
-                      this.user[key] = ev && ev.target.checked;
+                      if (ev.target) {
+                        this.user[key] = ev.target.checked;
+                      }
                     },
                     checked: this.user[key]
                   },

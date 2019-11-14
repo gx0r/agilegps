@@ -25,7 +25,9 @@ module.exports = function(obj, col1, col2) {
           "select.form-control",
           {
             onchange: ev => {
-              obj[key] = ev.target.value;
+              if (ev.target) {
+                obj[key] = ev.target.value;
+              }
             },
             value: obj[key] || state.selectedOrg.id
           },

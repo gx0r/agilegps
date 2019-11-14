@@ -95,7 +95,9 @@ module.exports.view = function(vnode) {
               placeholder: t("Username"),
               autofocus: true,
               oninput: ev => {
-                this.username = ev.target.value;
+                if (ev.target) {
+                  this.username = ev.target.value;
+                }
               },
               onkeyup: ev => {
                 if (ev.keyCode === 13) {

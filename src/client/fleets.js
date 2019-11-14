@@ -158,7 +158,9 @@ module.exports.view = function(ctrl, args, extras) {
                     disabled: ctrl.fleet.name == null,
                     value: ctrl.fleet.name ? ctrl.fleet.name : "",
                     onblur: function(ev) {
-                      ctrl.fleet.name = ev.target.value;
+                      if (ev.target) {
+                        ctrl.fleet.name = ev.target.value;
+                      }
                     }
                   })
                 )
@@ -170,8 +172,10 @@ module.exports.view = function(ctrl, args, extras) {
                   oncreate: function(vnode) {
                     ctrl.colorPickerEl = vnode.dom;
                   },
-                  onchange: function(ev) {
-                    ctrl.fleet.color = ev.target.value;
+                  onchange: ev => {
+                    if (ev.target) {
+                      ctrl.fleet.color = ev.target.value;
+                    }
                   }
                 })
               ])

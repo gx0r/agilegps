@@ -116,7 +116,9 @@ module.exports.view = function() {
                 cursor: "pointer"
               },
               onclick: ev => {
-                this.changePage(ev.target.value);
+                if (ev.target) {
+                  this.changePage(ev.target.value);
+                }
               },
               value: i
             },
@@ -150,7 +152,9 @@ module.exports.view = function() {
       m("input.form-control", {
         type: "number",
         onchange: ev => {
-          this.page(ev.target.value);
+          if (ev.target) {
+            this.page(ev.target.value);
+          }
         },
         value: page
       })
@@ -162,7 +166,9 @@ module.exports.view = function() {
       m("input.form-control", {
         type: "number",
         onblur: ev => {
-          this.pagesize(ev.target.value);
+          if (ev.target) {
+            this.pagesize(ev.target.value);
+          }
         },
         value: pagesize
       })
@@ -175,7 +181,9 @@ module.exports.view = function() {
           m("input.form-control", {
             type: "text",
             onchange: ev => {
-              this.search(ev.target.value);
+              if (ev.target) {
+                this.search(ev.target.value);
+              }
             },
             value: state.search,
             onkeyup: ev => {

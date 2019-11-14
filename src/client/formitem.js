@@ -25,7 +25,9 @@ module.exports = function(obj, key, col1, col2, disabled) {
           })
         : m("input.form-control", {
             onchange: function(ev) {
-              obj[key] = ev.target.value;
+              if (ev.target) {
+                obj[key] = ev.target.value;
+              }              
             },
             disabled: disabled,
             value: obj[key]

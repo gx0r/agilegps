@@ -71,7 +71,9 @@ module.exports.view = function(vnode) {
     m("from.form-search", [
       m("input.input-search.fullwidth", {
         onkeyup: ev => {
-          vnode.searchInput = ev.target.value || "";
+          if (ev.target) {
+            vnode.searchInput = ev.target.value || "";
+          }
         },
         value: vnode.searchInput
       }),
