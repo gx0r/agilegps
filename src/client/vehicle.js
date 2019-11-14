@@ -204,6 +204,7 @@ module.exports.oninit = function(vnode) {
 module.exports.view = function(vnode) {
   const state = appState.getState();
   const advancedUI = state.user.advancedMode;
+  const self = this;
 
   return m("div", [
     m(".business-table", [
@@ -222,10 +223,10 @@ module.exports.view = function(vnode) {
                     defaultDate: this.startDate,
                     setDefaultDate: true,
                     field: input,
-                    onSelect: () => {
-                      this.startDate = this.getDate();
-                      this.endDate = this.getDate();
-                      this.selectDays();
+                    onSelect: function() {
+                      self.startDate = this.getDate();
+                      self.endDate = this.getDate();
+                      self.selectDays();
                     }
                   });
                 }
@@ -337,8 +338,8 @@ module.exports.view = function(vnode) {
                     setDefaultDate: true,
                     field: input,
                     onSelect: function() {
-                      this.startDate = this.getDate();
-                      this.selectDays();
+                      self.startDate = this.getDate();
+                      self.selectDays();
                     }
                   });
                 }
@@ -353,9 +354,9 @@ module.exports.view = function(vnode) {
                     defaultDate: this.endDate,
                     setDefaultDate: true,
                     field: input,
-                    onSelect: () => {
-                      this.endDate = this.getDate();
-                      this.selectDays();
+                    onSelect: function() {
+                      self.endDate = this.getDate();
+                      self.selectDays();
                     }
                   });
                 }
@@ -382,7 +383,7 @@ module.exports.view = function(vnode) {
                   },
                   m("input[type=radio][name=speed]", {
                     checked: this.calculateDistanceBetween === "ignition",
-                    onchange: function(a) {
+                    onchange: () => {
                       this.calculateDistanceBetween = "ignition";
                       this.recalculateAdjustedVehicleHistory();
                     },
@@ -400,7 +401,7 @@ module.exports.view = function(vnode) {
                   },
                   m("input[type=radio][name=speed]", {
                     checked: this.calculateDistanceBetween === "start",
-                    onchange: function(ev) {
+                    onchange: () => {
                       this.calculateDistanceBetween = "start";
                       this.recalculateAdjustedVehicleHistory();
                     },
@@ -415,8 +416,8 @@ module.exports.view = function(vnode) {
           m(
             "label.padrt",
             m("input[type=checkbox]", {
-              onclick: function() {
-                this.highlightStarts = this.checked;
+              onclick: ev => {
+                this.highlightStarts = ev.target.checked;
               },
               checked: this.highlightStarts
             }),
@@ -428,8 +429,8 @@ module.exports.view = function(vnode) {
             : m(
                 "label.padrt",
                 m("input[type=checkbox]", {
-                  onclick: function() {
-                    this.highlightIgnition = this.checked;
+                  onclick: ev => {
+                    this.highlightIgnition = ev.target.checked;
                   },
                   checked: this.highlightIgnition
                 }),
@@ -439,8 +440,8 @@ module.exports.view = function(vnode) {
           m(
             "label.padrt",
             m("input[type=checkbox]", {
-              onclick: function() {
-                this.reverseOrder = this.checked;
+              onclick: ev => {
+                this.reverseOrder = ev.target.checked;
                 this.recalculateAdjustedVehicleHistory();
               },
               checked: this.reverseOrder
@@ -451,8 +452,8 @@ module.exports.view = function(vnode) {
           m(
             "label.padrt",
             m("input[type=checkbox]", {
-              onclick: function() {
-                appState.setShowVerbose(this.checked);
+              onclick: ev => {
+                appState.setShowVerbose(ev.target.checked);
                 this.recalculateAdjustedVehicleHistory();
               },
               checked: state.verbose
@@ -463,8 +464,8 @@ module.exports.view = function(vnode) {
           m(
             "label.padrt",
             m("input[type=checkbox]", {
-              onclick: function() {
-                appState.setShowLatLong(this.checked);
+              onclick: ev => {
+                appState.setShowLatLong(ev.target.checked);
               },
               checked: state.showLatLong
             }),
@@ -475,8 +476,8 @@ module.exports.view = function(vnode) {
             ? m(
                 "label.padrt",
                 m("input[type=checkbox]", {
-                  onclick: function() {
-                    this.rollup = this.checked;
+                  onclick: ev => {
+                    this.rollup = ev.target.checked;
                     this.recalculateAdjustedVehicleHistory();
                   },
                   checked: this.rollup
@@ -490,8 +491,8 @@ module.exports.view = function(vnode) {
                 m(
                   "label",
                   m("input[type=checkbox]", {
-                    onclick: function() {
-                      this.rawData = this.checked;
+                    onclick: ev => {
+                      this.rawData = ev.target.checked;
                       this.recalculateAdjustedVehicleHistory();
                     },
                     checked: this.rawData
