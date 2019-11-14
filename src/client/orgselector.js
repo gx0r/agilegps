@@ -24,12 +24,12 @@ module.exports = function(obj, col1, col2) {
         m(
           "select.form-control",
           {
-            onchange: function(ev) {
+            onchange: ev => {
               obj[key] = ev.target.value;
             },
             value: obj[key] || state.selectedOrg.id
           },
-          _.union([{ id: " " }], _.toArray(state.orgsByID)).map(function(org) {
+          _.union([{ id: " " }], _.toArray(state.orgsByID)).map(org => {
             return m(
               "option",
               {
