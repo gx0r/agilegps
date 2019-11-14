@@ -13,8 +13,6 @@ module.exports.oninit = function(vnode) {
   this.rememberMe = false;
   this.error = "";
 
-  const store = require("./appState").getStore();
-
   this.loginClick = () => {
     this.loggingIn = true;
     this.error = "";
@@ -118,10 +116,7 @@ module.exports.view = function(vnode) {
                 if (ev.keyCode === 13) {
                   this.loginClick();
                 } else {
-                  console.warn("m.redraw.strategy() does not exist in mithril 1.0");
-                  if(m.redraw.strategy) {
-                    m.redraw.strategy("none");
-                  }
+                  ev.redraw = false;
                 }
               },
               value: this.password
@@ -133,7 +128,7 @@ module.exports.view = function(vnode) {
               "label",
               m("input[type=checkbox]", {
                 checked: this.rememberMe,
-                onclick: () => this.rememberMe = this.checked,
+                onclick: ev => this.rememberMe = ev.target.checked,
               }),
               t("Remember Me")
             )
