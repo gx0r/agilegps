@@ -12,46 +12,45 @@ const orgselector = require("./orgselector");
 const formitem = require("./formitem");
 const keyhelper = require("./keyhelper");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.oninit = function() {
   const state = appState.getState();
-  ctrl.user = new User(state.usersByID[state.viewID]);
+  this.user = new User(state.usersByID[state.viewID]);
 
   if (state.usersByID[state.viewID]) {
-    ctrl.editing = true;
+    this.editing = true;
   } else {
-    ctrl.editing = false;
-    ctrl.user = new User();
-    ctrl.user.username = state.viewID;
+    this.editing = false;
+    this.user = new User();
+    this.user.username = state.viewID;
   }
 
   // appState.getStore().subscribe(function () {
   //     const state = appState.getState();
-  //     if (state.usersByID[ctrl.user.username]) {
-  //         ctrl.user = state.usersByID[ctrl.user.username];
+  //     if (state.usersByID[this.user.username]) {
+  //         this.user = state.usersByID[this.user.username];
   //         m.redraw();
   //     }
   // })
 
-  ctrl.save = function() {
+  this.save = () => {
     appState
-      .saveUser(ctrl.user)
-      .then(function() {
+      .saveUser(this.user)
+      .then(() => {
         window.history.back();
       })
       .catch(catchhandler);
   };
 };
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function() {
   const state = appState.getState();
 
   return m("div", [
     m(".col-md-3"),
     m(".col-md-6 business-table", [
-      m(".btn", ctrl.editing ? t("Edit User") : t("New User")),
+      m(".btn", this.editing ? t("Edit User") : t("New User")),
       m("form.form-horizontal", [
-        Object.keys(ctrl.user).map(function(key) {
+        Object.keys(this.user).map(key => {
           if (!state.user.isAdmin && key === "isAdmin") {
             // only let site admins create site admins
             return;
@@ -65,12 +64,12 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "input[type=checkbox]",
                   {
-                    onclick: function() {
-                      ctrl.user[key] = this.checked;
+                    onclick: ev => {
+                      this.user[key] = ev && ev.target.checked;
                     },
-                    checked: ctrl.user[key]
+                    checked: this.user[key]
                   },
-                  timezones.map(function(tz) {
+                  timezones.map(tz => {
                     return m(
                       "option",
                       {
@@ -86,9 +85,9 @@ module.exports.view = function(ctrl, args, extras) {
 
           // if (key === 'timezone') {
           //     return m('div.form-group', [m('label.col-md-2 control-label', key), m('div.col-md-10', m('select.form-control', {
-          //         onchange: m.withAttr('value', ctrl.user[key]),
-          //         value: ctrl.user[key]()
-          //     }, timezones.map(function (tz) {
+          //         onchange: m.withAttr('value', this.user[key]),
+          //         value: this.user[key]()
+          //     }, timezones.map(tz => {
           //         return m('option', {
           //             value: tz.value
           //         }, tz.text);
@@ -96,28 +95,28 @@ module.exports.view = function(ctrl, args, extras) {
           // }
 
           if (key === "orgid") {
-            return orgselector(ctrl.user, 4, 8);
+            return orgselector(this.user, 4, 8);
             // } else if (key === 'type') {
             //     return m('div.form-group', [m('label.col-md-2 control-label', key), m('div.col-md-10', m('select.form-control', {
-            //         onchange: m.withAttr('value', ctrl.user[key]),
-            //         value: ctrl.user[key]()
-            //     }, Object.keys(ctrl.types).map(function (key) {
+            //         onchange: m.withAttr('value', this.user[key]),
+            //         value: this.user[key]()
+            //     }, Object.keys(this.types).map(key => {
             //         return m('option', {
             //             value: key
-            //         }, ctrl.types[key]);
+            //         }, this.types[key]);
             //     })))])
           } else {
             return formitem(
-              ctrl.user,
+              this.user,
               key,
               4,
               8,
-              key === "username" && ctrl.editing
+              key === "username" && this.editing
             );
             // return m('div.form-group', [m('label.col-md-4 control-label', _.capitalize(key) + ':'), m('div.col-md-8', m('input.form-control', {
-            //     onchange: m.withAttr('value', ctrl.user[key]),
-            //     disabled: ctrl.editing && key === 'username', // id's can't be edited
-            //     value: ctrl.user[key]()
+            //     onchange: m.withAttr('value', this.user[key]),
+            //     disabled: this.editing && key === 'username', // id's can't be edited
+            //     value: this.user[key]()
             // }))])
           }
         })
@@ -126,7 +125,7 @@ module.exports.view = function(ctrl, args, extras) {
         m(
           "button.btn btn-default",
           {
-            onclick: function(ev) {
+            onclick: ev => {
               ev.preventDefault();
               window.history.back();
             }
@@ -137,7 +136,7 @@ module.exports.view = function(ctrl, args, extras) {
         m(
           "button.btn btn-success",
           {
-            onclick: ctrl.save
+            onclick: this.save
           },
           t("Save")
         )

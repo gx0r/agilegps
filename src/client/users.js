@@ -7,30 +7,33 @@ const sorts = require("./sorts");
 const catchhandler = require("./catchhandler");
 const _ = require("lodash");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+function deleteUser(user) {
+  const result = window.confirm(
+    "Are you sure you want to delete " + user.username + "?"
+  );
 
-  ctrl.delete = function(user) {
-    let result = window.confirm(
-      "Are you sure you want to delete " + user.username + "?"
-    );
-
-    if (result === true) {
-      appState.deleteUser(user).catch(catchhandler);
-    }
-  };
-};
+  if (result === true) {
+    appState.deleteUser(user).catch(catchhandler);
+  }
+}
 
 function getSecurtyLevel(user) {
+  if (user == null) {
+    return t("User");
+  }
   if (user.isAdmin && user.isOrgAdmin) {
     return t("Site Admin and Organization Admin");
   }
-  if (user.isAdmin) return t("Site Admin");
-  if (user.isOrgAdmin) return t("Organization Admin");
+  if (user.isAdmin) {
+    return t("Site Admin");
+  }
+  if (user.isOrgAdmin) {
+    return t("Organization Admin");
+  }
   return t("User");
 }
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function() {
   const state = appState.getState();
   const subview = state.subview;
   const orgid = state.selectedOrg.id;
@@ -38,9 +41,7 @@ module.exports.view = function(ctrl, args, extras) {
   let users = _.toArray(state.usersByID);
 
   if (state.subview != "ALL") {
-    users = users.filter(function(user) {
-      return user.orgid === orgid;
-    });
+    users = users.filter(user => user.orgid === orgid);
   }
 
   return m(".div", [
@@ -52,7 +53,7 @@ module.exports.view = function(ctrl, args, extras) {
           style: {
             "margin-bottom": "1em"
           },
-          onclick: function() {
+          onclick: () => {
             appState.viewNewUser();
           }
         },
@@ -67,24 +68,24 @@ module.exports.view = function(ctrl, args, extras) {
             m("th[data-sort-by=firstname]", t("First Name")),
             m("th[data-sort-by=lastname]", t("Last Name")),
             m("th[data-sort-by=isOrgAdmin]", t("Security Level")),
-            ctrl.orgid ? "" : m("th", t("Organization")),
+            orgid ? "" : m("th", t("Organization")),
             m("th", t("Operations"))
           ])
         ),
         m("tbody", [
-          users.map(function(user) {
+          users.map(user => {
             return m("tr", [
               m("td", user.username),
               m("td", user.email),
               m("td", user.firstname),
               m("td", user.lastname),
               m("td", getSecurtyLevel(user)),
-              ctrl.orgid ? "" : m("td", appState.getOrgName(user.orgid)),
+              orgid ? "" : m("td", appState.getOrgName(user.orgid)),
               m("td", [
                 m(
                   "a.btn btn-primary btn-sm  ",
                   {
-                    onclick: function(ev) {
+                    onclick: ev => {
                       ev.preventDefault();
                       appState.viewUserByID(user.username);
                     }
@@ -96,9 +97,9 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "a.btn btn-primary btn-sm ",
                   {
-                    onclick: function(ev) {
+                    onclick: ev => {
                       ev.preventDefault();
-                      ctrl.delete(user);
+                      deleteUser(user);
                     }
                   },
                   m("span.middle glyphicon glyphicon-trash"),
