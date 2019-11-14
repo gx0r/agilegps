@@ -96,14 +96,15 @@ module.exports.view = function(vnode) {
           class: state.selectedAllFleets ? "active" : "",
           onclick: function(ev) {
             appState.selectFleetAll();
-          }
+          },
+          // key: 'fleets/all',
         },
         require("./svg/truck-facing")(12, 12),
         " " + t("Fleets/All")
       ),
 
       // Individual Fleets
-      fleets.map(function(fleet) {
+      fleets.map(fleet => {
         return [
           m(
             "li.pointer list-group-item",
@@ -116,7 +117,8 @@ module.exports.view = function(vnode) {
                   : "",
               onclick: function(ev) {
                 appState.selectFleet(fleet);
-              }
+              },
+              // key: fleet.id,
             },
             require("./svg/truck")(12, 12, fleet.color),
             " ",
@@ -124,7 +126,7 @@ module.exports.view = function(vnode) {
           ),
 
           fleet.vehicles
-            .filter(function(vid) {
+            .filter(vid => {
               const vehicle = state.vehiclesByID[vid];
               return (
                 vnode.searchInput === "" ||
@@ -133,7 +135,7 @@ module.exports.view = function(vnode) {
                   .indexOf(vnode.searchInput.toUpperCase()) > -1
               );
             })
-            .map(function(vid) {
+            .map(vid => {
               const vehicle = state.vehiclesByID[vid];
               return m(
                 "li.pointer list-group-item",
@@ -149,7 +151,8 @@ module.exports.view = function(vnode) {
                       : "",
                   onclick: function(ev) {
                     appState.selectVehicleByID(vehicle.id);
-                  }
+                  },
+                  // key: vehicle && vehicle.id,
                 },
                 formatVehicle(vehicle)
               );
