@@ -145,10 +145,10 @@ function controller(ctrl) {
 module.exports.controller = controller;
 
 // set the progress element
-function progress(el) {
+function setProgressElement(el) {
   progressEl = el;
 }
-module.exports.progress = progress;
+module.exports.setProgressElement = setProgressElement;
 
 // function history (hist) {
 //     history = helpers.addStartStop(helpers.rollup(helpers.cleanData(_.cloneDeep(hist))));
