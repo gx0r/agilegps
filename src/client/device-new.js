@@ -10,31 +10,30 @@ const pikaday = require("pikaday2").default;
 const _ = require("lodash");
 const moment = require("moment");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+module.exports.oninit = function() {
   const state = appState.getState();
-  ctrl.device = new Device(state.devicesByID[state.viewID]);
+  this.device = new Device(state.devicesByID[state.viewID]);
 
   if (state.devicesByID[state.viewID]) {
-    ctrl.editing = true;
+    this.editing = true;
   } else {
-    ctrl.editing = false;
-    ctrl.device = new Device();
-    ctrl.device.imei = state.viewID;
+    this.editing = false;
+    this.device = new Device();
+    this.device.imei = state.viewID;
   }
 
   // appState.getStore().subscribe(function () {
   // 	const state = appState.getState();
-  // 	if (state.devicesByID[ctrl.device.imei]) {
-  // 		ctrl.device = state.devicesByID[ctrl.device.imei];
+  // 	if (state.devicesByID[this.device.imei]) {
+  // 		this.device = state.devicesByID[this.device.imei];
   // 		m.redraw();
   // 	}
   // })
 
-  ctrl.save = function() {
+  this.save = () => {
     appState
-      .saveDevice(ctrl.device)
-      .then(function() {
+      .saveDevice(this.device)
+      .then(() => {
         window.history.back();
       })
       .catch(catchhandler);
@@ -43,9 +42,9 @@ module.exports.controller = function(args, extras) {
 
 const formitem = require("./formitem");
 
-module.exports.view = function(ctrl) {
+module.exports.view = function() {
   const state = appState.getState();
-  const device = ctrl.device;
+  const device = this.device;
 
   function lastKey(key) {
     switch (key) {
@@ -102,9 +101,9 @@ module.exports.view = function(ctrl) {
   return m("div", [
     m(".col-md-3"),
     m("div.col-md-6 business-table", [
-      m(".btn", ctrl.editing ? t("Edit Device") : t("New Device")),
+      m(".btn", this.editing ? t("Edit Device") : t("New Device")),
       m("form.form-horizontal", [
-        Object.keys(device).map(function(key) {
+        Object.keys(device).map(key => {
           if (key.indexOf("last") === 0) {
             //lastACKCFG, lastACKFRI, lastACKSRI, lastHeartbeat, etc.
             return m("div.form-group", [
@@ -124,29 +123,29 @@ module.exports.view = function(ctrl) {
             return m("div.form-group", [
               m("label.col-md-4 control-label", t("Activation Date:") + " "),
               m(".col-md-8", {
-                oncreate: function(vnode) {
+                oncreate: vnode => {
                   const input = document.createElement("input");
                   input.className = "form-control";
                   vnode.dom.appendChild(input);
 
-                  ctrl.datepicker = new pikaday({
+                  this.datepicker = new pikaday({
                     field: input,
-                    onSelect: function() {
+                    onSelect: function () {
                       device.activationDate = this.getDate().toISOString();
                       m.redraw();
                     }
                   });
 
-                  ctrl.datepicker.setDate(device.activationDate);
+                  this.datepicker.setDate(device.activationDate);
                 }
               })
             ]);
             // return m('div.form-group', [m('label.col-md-2 control-label', _.capitalize(key)), m('div.col-md-10',
-            // 	ctrl.datepicker.view())])
+            // 	this.datepicker.view())])
           } else if (typeof device[key] === "object") {
             return;
           } else {
-            return formitem(device, key, 4, 8, key === "imei" && ctrl.editing);
+            return formitem(device, key, 4, 8, key === "imei" && this.editing);
           }
         })
       ]),
@@ -154,7 +153,7 @@ module.exports.view = function(ctrl) {
         m(
           "button.btn btn-default",
           {
-            onclick: function(e) {
+            onclick: e => {
               window.history.back();
             }
           },
@@ -164,7 +163,7 @@ module.exports.view = function(ctrl) {
         m(
           "button.btn btn-success",
           {
-            onclick: ctrl.save
+            onclick: this.save
           },
           t("Save")
         )
