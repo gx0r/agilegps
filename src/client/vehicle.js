@@ -173,6 +173,10 @@ module.exports.oninit = function(vnode) {
 
   appState.getStore().subscribe(() => {
     const state = appState.getState();
+    if (!state.autoUpdate) {
+      return;
+    }
+
     if (state.selectedVehicle != this.previouslySelectedVehicle) {
       this.firstRowClicked = false;
       this.previouslySelectedVehicle = state.selectedVehicle;
@@ -314,7 +318,7 @@ module.exports.view = function(vnode) {
               style: {
                 "margin-left": "1em"
               },
-              oncreate: vnode => this.progressElem = vnode.dom
+              oncreate: vnode => animation.setProgressElement(vnode.dom)
             }),
             m("input[type=range]", {
               min: 0,
