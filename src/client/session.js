@@ -131,9 +131,7 @@ module.exports.view = function(vnode) {
               "label",
               m("input[type=checkbox]", {
                 checked: this.rememberMe,
-                onclick: function() {
-                  this.rememberMe(this.checked);
-                }
+                onclick: () => this.rememberMe = this.checked,
               }),
               t("Remember Me")
             )
