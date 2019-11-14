@@ -64,6 +64,10 @@ Promise.coroutine(function*() {
       .indexCreate("date")
       .catch(ignore),
     r
+      .table("errors")
+      .indexCreate("date")
+      .catch(ignore),
+    r
       .table("devices")
       .indexCreate("orgid")
       .catch(ignore),
