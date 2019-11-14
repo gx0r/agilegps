@@ -15,27 +15,26 @@ const catchhandler = require("./catchhandler");
 const Cookies = require("cookies-js");
 const fullAddress = require("../common/addressdisplay").full;
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
-  ctrl.parsed = {};
+module.exports.oninit = function() {
+  this.parsed = {};
 
-  ctrl.page = function(page) {
+  this.page = function(page) {
     return appState.changePage(page);
   };
 
-  ctrl.pagesize = function(size) {
+  this.pagesize = function(size) {
     return appState.changePageSize(size);
   };
 
-  ctrl.changePage = function(page) {
+  this.changePage = function(page) {
     return appState.changePage(page);
   };
 
-  ctrl.search = function(search) {
+  this.search = function(search) {
     return appState.changePageSearch(search);
   };
 
-  ctrl.nextPage = function() {
+  this.nextPage = function() {
     const page = appState.getState().page;
     return appState.changePage(page + 1);
   };
@@ -57,7 +56,7 @@ module.exports.controller = function(args, extras) {
     );
   }
 
-  ctrl.geocode = function(id, force) {
+  this.geocode = function(id, force) {
     return geocode(id, force)
       .then(function() {
         appState.updateEvents();
@@ -65,7 +64,7 @@ module.exports.controller = function(args, extras) {
       .catch(catchhandler);
   };
 
-  ctrl.geocodeAll = function() {
+  this.geocodeAll = function() {
     const state = appState.getState();
     const events = state.events;
 
@@ -83,7 +82,7 @@ module.exports.controller = function(args, extras) {
   };
 };
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function() {
   const state = appState.getState();
   const events = state.events;
   const count = state.eventCount;
@@ -103,7 +102,7 @@ module.exports.view = function(ctrl, args, extras) {
     }
   }
 
-  function buildPagination() {
+  const buildPagination = () => {
     const pages = Math.ceil(count / pagesize);
     const lis = [];
     for (let i = 1; i < pages + 1; i++) {
@@ -116,8 +115,8 @@ module.exports.view = function(ctrl, args, extras) {
               style: {
                 cursor: "pointer"
               },
-              onclick: function(ev) {
-                ctrl.changePage(ev.target.value);
+              onclick: ev => {
+                this.changePage(ev.target.value);
               },
               value: i
             },
@@ -135,7 +134,7 @@ module.exports.view = function(ctrl, args, extras) {
             style: {
               cursor: "pointer"
             },
-            onclick: ctrl.nextPage
+            onclick: this.nextPage
           },
           "»"
         )
@@ -150,8 +149,8 @@ module.exports.view = function(ctrl, args, extras) {
       t("Selected Page"),
       m("input.form-control", {
         type: "number",
-        onchange: function(ev) {
-          ctrl.page(ev.target.value);
+        onchange: ev => {
+          this.page(ev.target.value);
         },
         value: page
       })
@@ -162,8 +161,8 @@ module.exports.view = function(ctrl, args, extras) {
       t("Count per Page"),
       m("input.form-control", {
         type: "number",
-        onblur: function(ev) {
-          ctrl.pagesize(ev.target.value);
+        onblur: ev => {
+          this.pagesize(ev.target.value);
         },
         value: pagesize
       })
@@ -175,11 +174,11 @@ module.exports.view = function(ctrl, args, extras) {
           t("Search by IMEI"),
           m("input.form-control", {
             type: "text",
-            onchange: function(ev) {
-              ctrl.search(ev.target.value);
+            onchange: ev => {
+              this.search(ev.target.value);
             },
             value: state.search,
-            onkeyup: function(ev) {
+            onkeyup: ev => {
               if (ev.keyCode === 13) {
                 appState.updateEvents();
               } else {
@@ -197,7 +196,7 @@ module.exports.view = function(ctrl, args, extras) {
     m(
       "button.btn btn-success",
       {
-        onclick: function() {
+        onclick: () => {
           appState.updateEvents();
         }
       },
@@ -218,8 +217,8 @@ module.exports.view = function(ctrl, args, extras) {
       ? m(
           "button.btn-xs",
           {
-            onclick: function(ev) {
-              ctrl.geocodeAll();
+            onclick: ev => {
+              this.geocodeAll();
             }
           },
           t("Cached geocode visible with missing")
@@ -228,7 +227,7 @@ module.exports.view = function(ctrl, args, extras) {
     m("br"),
     // m('nav', m('ul.pagination', [
     //     m('li', m('a', {
-    //         onclick: m.withAttr('value', ctrl.changePage),
+    //         onclick: m.withAttr('value', this.changePage),
     //         value: '1'
     //     }, '1')),
     // ])),
@@ -242,34 +241,33 @@ module.exports.view = function(ctrl, args, extras) {
           width: "600px"
         }
       },
-      close: "✘"
-    }, m.component({
-      view: function() {
-        return m(
-          "div",
-          m(
-            "pre",
-            _.isObject(ctrl.parsed)
-              ? JSON.stringify(ctrl.parsed, null, 4)
-              : ctrl.parsed
-          )
-        );
-      }
-    })),
+      close: "✘",
+      inner: m({
+        view: () => {
+          return m(
+            "div",
+            m(
+              "pre",
+              _.isObject(this.parsed)
+                ? JSON.stringify(this.parsed, null, 4)
+                : this.parsed
+            )
+          );
+        }
+      })
+    }),
 
     m("table.table-condensed table-bordered table-striped", [
       m(
         "thead",
-        keys.map(function(key) {
-          return m("td", key);
-        })
+        keys.map(key => m("td", key)),
       ),
       type === "rawevents" || type === "events"
         ? m(
             "tbody",
-            events.map(function(event) {
+            events.map(event => {
               return m("tr", [
-                keys.map(function(key) {
+                keys.map(key => {
                   if (key === "message") {
                     const msg = event[key];
 
@@ -278,19 +276,19 @@ module.exports.view = function(ctrl, args, extras) {
                       m(
                         "button.btn btn-xs btn-default",
                         {
-                          onclick: function() {
+                          onclick: () => {
                             modal.show();
                             let parsed;
                             try {
                               parsed = eventreportparser(msg);
                               delete parsed.args;
-                              ctrl.parsed = parsed;
+                              this.parsed = parsed;
                             } catch (e) {
                               parsed = e;
                               if (e.stack) {
-                                ctrl.parsed = e.stack;
+                                this.parsed = e.stack;
                               } else {
-                                ctrl.parsed = e.message;
+                                this.parsed = e.message;
                               }
                             }
                             // alert(JSON.stringify(parsed, null, 4));
@@ -308,7 +306,7 @@ module.exports.view = function(ctrl, args, extras) {
                       return m(
                         "pre.pointer",
                         {
-                          onclick: function(ev) {
+                          onclick: ev => {
                             ev.target.innerHTML = str;
                           }
                         },
@@ -331,8 +329,8 @@ module.exports.view = function(ctrl, args, extras) {
                       m(
                         "button.button btn-xs",
                         {
-                          onclick: function(ev) {
-                            ctrl.geocode(event.id, false);
+                          onclick: ev => {
+                            this.geocode(event.id, false);
                           }
                         },
                         t("Cached")
@@ -341,8 +339,8 @@ module.exports.view = function(ctrl, args, extras) {
                       m(
                         "button.button btn-xs",
                         {
-                          onclick: function(ev) {
-                            ctrl.geocode(event.id, true);
+                          onclick: ev => {
+                            this.geocode(event.id, true);
                           }
                         },
                         t("Force")
@@ -360,10 +358,10 @@ module.exports.view = function(ctrl, args, extras) {
       type === "exceptions"
         ? m(
             "tbody",
-            events.map(function(event) {
+            events.map(event => {
               return m(
                 "tr",
-                keys.map(function(key) {
+                keys.map(key => {
                   if (key === "date") {
                     try {
                       return m(
