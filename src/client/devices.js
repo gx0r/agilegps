@@ -8,58 +8,53 @@ const sorts = require("./sorts");
 const moment = require("moment");
 const catchhandler = require("./catchhandler");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
-  ctrl.delete = function(device) {
-    const result = window.confirm(
-      "Are you sure you want to delete " + device.imei + "?"
-    );
-    if (result === true) {
-      appState.deleteDevice(device).catch(catchhandler);
-    }
-  };
-};
-
-module.exports.view = function(ctrl, args, extras) {
-  const state = appState.getState();
-  const orgid = state.selectedOrg.id;
-
-  const vehiclesByDeviceID = {};
-
-  _.toArray(state.vehiclesByID).forEach(function(vehicle) {
-    vehiclesByDeviceID[vehicle.device] = vehicle;
-  });
-
-  function hearbeatField(device) {
-    return device.lastHeartbeat
-      ? [
-          m(
-            "span",
-            {
-              style: {
-                color: "red"
-              }
-            },
-            "♥ "
-          ),
-          moment(device.lastHeartbeat).fromNow()
-        ]
-      : "";
-  }
-
-  function batteryField(device) {
-    return device.batteryPercent
-      ? m(
+function hearbeatField(device) {
+  return device.lastHeartbeat
+    ? [
+        m(
           "span",
           {
             style: {
-              "margin-left": "1em"
+              color: "red"
             }
           },
-          "" + device.batteryPercent + "%🔋"
-        )
-      : "";
+          "♥ "
+        ),
+        moment(device.lastHeartbeat).fromNow()
+      ]
+    : "";
+}
+
+function batteryField(device) {
+  return device.batteryPercent
+    ? m(
+        "span",
+        {
+          style: {
+            "margin-left": "1em"
+          }
+        },
+        "" + device.batteryPercent + "%🔋"
+      )
+    : "";
+}
+
+function deleteDevice(device) {
+  const result = window.confirm(
+    "Are you sure you want to delete " + device.imei + "?"
+  );
+  if (result === true) {
+    appState.deleteDevice(device).catch(catchhandler);
   }
+}
+
+module.exports.view = function() {
+  const state = appState.getState();
+  const vehiclesByDeviceID = {};
+
+  _.toArray(state.vehiclesByID).forEach(vehicle => {
+    vehiclesByDeviceID[vehicle.device] = vehicle;
+  });
 
   return m(".business-table", [
     m(
@@ -68,7 +63,7 @@ module.exports.view = function(ctrl, args, extras) {
         style: {
           "margin-bottom": "1em"
         },
-        onclick: function() {
+        onclick: () => {
           appState.viewNewDevice();
         }
       },
@@ -117,7 +112,7 @@ module.exports.view = function(ctrl, args, extras) {
                   "a",
                   {
                     href: "#",
-                    onclick: function(ev) {
+                    onclick: ev => {
                       ev.preventDefault();
                       appState.viewVehicleByID(
                         vehiclesByDeviceID[device.imei].id
@@ -133,7 +128,7 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "a.btn btn-primary btn-sm btn-warning ",
                   {
-                    onclick: function(ev) {
+                    onclick: ev => {
                       ev.preventDefault();
                       appState.viewDeviceByID(device.imei);
                     }
@@ -145,8 +140,8 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "a.btn btn-primary btn-sm btn-danger",
                   {
-                    onclick: function() {
-                      ctrl.delete(device);
+                    onclick: () => {
+                      deleteDevice(device);
                     }
                   },
                   m("span.middle glyphicon glyphicon-trash"),
