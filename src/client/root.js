@@ -57,7 +57,6 @@ module.exports.getMapElement = function() {
 let mapElement = null;
 
 module.exports.oninit = function(vnode) {
-
   this.mapVisible = function(visible, tall) {
     TheMap.setVisible(visible, tall);
   };

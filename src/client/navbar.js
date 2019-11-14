@@ -7,37 +7,25 @@ const moment = require("moment");
 const xcloud = require("./svg/xcloud.js");
 const isUserMetric = require("./isUserMetric");
 
-module.exports.controller = function() {
-  const ctrl = this;
-
-  ctrl.manageOpen = false;
-  ctrl.toggleManageOpen = function() {
-    ctrl.manageOpen = !ctrl.manageOpen;
-  };
-
-  ctrl.adminToolsOpen = false;
-  ctrl.adminDropDownConfig = function(el, intialized) {
-    ctrl.adminDropDownConfigEl = el;
-  };
-  ctrl.toggleAdminToolsOpen = function() {
-    ctrl.adminToolsOpen = !ctrl.adminToolsOpen;
-  };
+module.exports.oninit = function(vnode) {
+  // this.manageOpen = false;
+  // this.adminToolsOpen = false;
   // const anywhereClick = function (e) {
   //     // todo
-  //     if (!e.target === ctrl.adminDropDownConfigEl) {
-  //     //  && !e.target.contains(ctrl.adminDropDownConfigEl)) {
-  //         ctrl.adminToolsOpen(false);
+  //     if (!e.target === this.adminDropDownConfigEl) {
+  //     //  && !e.target.contains(this.adminDropDownConfigEl)) {
+  //         this.adminToolsOpen(false);
   //         m.redraw();
   //     }
   // }
   // document.body.addEventListener('click', anywhereClick);
   //
-  // ctrl.onunload = function() {
+  // this.onunload = function() {
   //     document.body.removeEventListener('click', anywhereClick);
   // }
 };
 
-module.exports.view = function(ctrl, args, extras) {
+module.exports.view = function(vnode) {
   const state = appState.getState();
   const view = state.view;
   const subview = state.subview;
@@ -291,9 +279,9 @@ module.exports.view = function(ctrl, args, extras) {
         ? m(
             "li.dropdown.pointer",
             {
-              class: ctrl.adminToolsOpen ? "open" : "",
-              onclick: ctrl.toggleAdminToolsOpen,
-              config: ctrl.adminDropDownConfig
+              class: vnode.state.adminToolsOpen ? "open" : "",
+              onclick: () => vnode.state.adminToolsOpen = !vnode.state.adminToolsOpen,
+              oncreate: node => vnode.state.adminDropDownConfig = node.dom
             },
             [
               m("a.dropdown-toggle", t("Messages"), m("span.caret")),
@@ -367,8 +355,8 @@ module.exports.view = function(ctrl, args, extras) {
         : m(
             "li.dropdown.pointer",
             {
-              class: ctrl.manageOpen ? "open" : "",
-              onclick: ctrl.toggleManageOpen
+              class: vnode.state.manageOpen ? "open" : "",
+              onclick: () => vnode.state.manageOpen = !vnode.state.manageOpen
             },
             [
               m("a.dropdown-toggle", t("Manage"), m("span.caret")),

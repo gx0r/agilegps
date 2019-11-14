@@ -167,10 +167,8 @@ module.exports.view = function(ctrl, args, extras) {
               m(".form-group.col-sm-6", [
                 m("label.col-sm-2 control-label", t("Fleet Color") + ":"),
                 m("input[type=color]", {
-                  config: function(el, isInitialized) {
-                    if (!isInitialized) {
-                      ctrl.colorPickerEl = el;
-                    }
+                  oncreate: function(vnode) {
+                    ctrl.colorPickerEl = vnode.dom;
                   },
                   onchange: function(ev) {
                     ctrl.fleet.color = ev.target.value;
