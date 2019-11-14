@@ -61,6 +61,9 @@ let lastState = require("../appDefaultState");
 store.subscribe(() => {
   TheMap.getReady().then(() => {
     const state = store.getState();
+    if (!state.autoUpdate) {
+      return;
+    }
 
     const lastImpliedSelectedVehicles = lastState.impliedSelectedVehicles;
     const lastStateVehicleStatusByID = lastState.vehiclesByID;

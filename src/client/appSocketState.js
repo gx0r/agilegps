@@ -100,11 +100,10 @@ appState.getStore().subscribe(function() {
     });
 
     socket.on("vehiclehistory", msg => {
-      // const state = appState.getState();
-      // if (!state.autoUpdate) {
-      //   // Don't auto update map TODO improve this
-      //   return;
-      // }
+      if (!appState.getState().autoUpdate) {
+        // Don't auto update map TODO improve this
+        return;
+      }
       handleChange(msg);
     });
     let tables = ["users", "devices", "vehicles", "errors"];
