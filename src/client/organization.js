@@ -24,10 +24,6 @@ const ClickListenerFactory = require("./markers/clicklistenerfactory");
 const formatDate = require("./formatDate");
 const isUserMetric = require("./isUserMetric");
 
-module.exports.oninit = function(vnode) {
-  // vnode.state.selectedItem = {};
-};
-
 module.exports.view = function(vnode) {
   const state = appState.getState();
   if (!vnode.selectedItem) {
@@ -43,8 +39,6 @@ module.exports.view = function(vnode) {
       OrgMarkers.clickMarkerByVehicleID(item.id);
     }
   };
-
-  const advancedUI = state.user.advancedMode;
 
   let refreshLater = null;
   const RECENTLY_CHANGED = 10000; /// was updated 10 seconds ago
@@ -77,9 +71,7 @@ module.exports.view = function(vnode) {
       m("input[type=checkbox]", {
         // checked: ctrl.autoUpdate(),
         checked: state.autoUpdate,
-        onclick: function() {
-          appState.setAutoUpdate(this.checked);
-        }
+        onclick: () => appState.setAutoUpdate(this.checked),
       }),
       t("Auto Update Map")
     ),
@@ -91,9 +83,7 @@ module.exports.view = function(vnode) {
     m(
       "label.padrt",
       m("input[type=checkbox]", {
-        onclick: function() {
-          appState.setShowVerbose(this.checked);
-        },
+        onclick: () =>  appState.setShowVerbose(this.checked),
         checked: state.verbose
       }),
       t("Verbose")
@@ -102,9 +92,7 @@ module.exports.view = function(vnode) {
     m(
       "label.padrt",
       m("input[type=checkbox]", {
-        onclick: function() {
-          appState.setShowLatLong(this.checked);
-        },
+        onclick: () => appState.setShowLatLong(this.checked),
         checked: state.showLatLong
       }),
       t("LAT/LONG")
