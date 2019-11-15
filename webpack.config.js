@@ -29,9 +29,9 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader",
         // loader: 'swc-loader',
-        options: {
-          presets: ['@babel/preset-env']
-        }
+        // options: {
+        //   presets: ['@babel/preset-env']
+        // }
       },
       {
         test: /bootstrap\/js\//,
