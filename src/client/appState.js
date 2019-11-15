@@ -311,9 +311,9 @@ function login(data) {
         user: user
       });
 
-      if (view === "USER") {
+      if (view === "USER" && subview === "EDIT") {
         // TODO fix viewing users
-        viewLogin();
+        viewUsers();
       }
 
       if (isAdmin) {

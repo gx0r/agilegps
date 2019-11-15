@@ -13,7 +13,7 @@ function deleteUser(user) {
   );
 
   if (result === true) {
-    appState.deleteUser(user).catch(catchhandler);
+    appState.deleteUser(user).catch(catchhandler)
   }
 }
 
@@ -34,18 +34,28 @@ function getSecurtyLevel(user) {
 }
 
 module.exports.oninit = function() {
-  const state = appState.getState();
-  const orgid = state.selectedOrg.id;
-  this.users = _.toArray(state.usersByID);
-
-  if (state.subview != "ALL") {
-    this.users = this.users.filter(user => user.orgid === orgid);
+  const update = () => {
+    const state = appState.getState();
+    if (this.usersByID !== state.usersByID) {
+      this.usersByID = state.usersByID;
+      this.usersByIDarray = _.toArray(this.usersByID);  
+    }
+    this.orgid = state.selectedOrg.id;  
+    if (state.subview != "ALL") {
+      this.usersByIDarray = this.usersByIDarray.filter(user => user.orgid === this.orgid);
+    }  
   }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
 };
 
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
+
 module.exports.view = function() {
-  const state = appState.getState();
-  const orgid = state.selectedOrg.id;
+  const orgid = this.orgid;
 
   return m(".div", [
     m(".col-md-2"),
@@ -62,7 +72,7 @@ module.exports.view = function() {
         },
         t("New User")
       ),
-      m("table.table table-bordered table-striped", sorts(this.users), [
+      m("table.table table-bordered table-striped", sorts(this.usersByIDarray), [
         m(
           "thead",
           m("tr", [
@@ -76,7 +86,7 @@ module.exports.view = function() {
           ])
         ),
         m("tbody", [
-          this.users.map(user => {
+          this.usersByIDarray.map(user => {
             return m("tr", [
               m("td", user.username),
               m("td", user.email),

@@ -15,9 +15,26 @@ function deleteOrganization(org) {
   }
 };
 
+module.exports.oninit = function() {
+  const update = () => {
+    const state = appState.getState();
+    if (this.orgsByID !== state.orgsByID) {
+      this.orgsByID = state.orgsByID;
+      this.orgsByIDarray = _.toArray(this.orgsByID);  
+    }
+    this.isAdmin = state.user.isAdmin;
+  }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
+};
+
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
+
 module.exports.view = function() {
-  const state = appState.getState();
-  const isAdmin = state.user.isAdmin;
+  const isAdmin = this.isAdmin;
 
   return m(".div", [
     m(".col-md-2"),
@@ -47,7 +64,7 @@ module.exports.view = function() {
             m("tr", [m("th", t("Name")), m("th", ""), m("th", ""), m("th", "")])
           ),
           m("tbody", [
-            _.toArray(state.orgsByID).map(function(org) {
+            this.orgsByIDarray.map(org => {
               return m("tr", [
                 m("td", org.name),
                 m(
