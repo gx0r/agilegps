@@ -8,25 +8,27 @@ const Organization = require("../common/models/Organization");
 const keyhelper = require("./keyhelper");
 
 module.exports.oninit = function() {
-  const state = appState.getState();
-  this.org = new Organization(state.orgsByID[state.viewID]);
 
-  if (state.orgsByID[state.viewID]) {
-    this.editing = true;
-  } else {
-    this.editing = false;
-    this.org = new Organization();
-    this.org.id = state.viewID;
+  const update = () => {
+    const state = appState.getState();
+
+    if (state.orgsByID[state.viewID]) {
+      this.editing = true;
+      this.org = state.orgsByID[state.viewID];
+    } else {
+      this.editing = false;
+      this.org = new Organization();
+      this.org.id = state.viewID;
+    }
   }
 
-  // appState.getStore().subscribe(function () {
-  // 	const state = appState.getState();
-  // 	if (state.orgsByID[this.org.id]) {
-  // 		this.org = state.orgsByID[this.org.id];
-  // 		m.redraw();
-  // 	}
-  // })
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
 };
+
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
 
 module.exports.view = function() {
   const org = this.org;

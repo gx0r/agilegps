@@ -13,25 +13,8 @@ const formitem = require("./formitem");
 const passwordform = require("./passwordform");
 const keyhelper = require("./keyhelper");
 
+
 module.exports.oninit = function() {
-  const state = appState.getState();
-  this.user = new User(state.usersByID[state.viewID]);
-
-  if (state.usersByID[state.viewID]) {
-    this.editing = true;
-  } else {
-    this.editing = false;
-    this.user = new User();
-    this.user.username = state.viewID;
-  }
-
-  // appState.getStore().subscribe(function () {
-  //     const state = appState.getState();
-  //     if (state.usersByID[this.user.username]) {
-  //         this.user = state.usersByID[this.user.username];
-  //         m.redraw();
-  //     }
-  // })
 
   this.save = () => {
     appState
@@ -41,18 +24,36 @@ module.exports.oninit = function() {
       })
       .catch(catchhandler);
   };
+
+  const update = () => {
+    const state = appState.getState();
+    this.isAdmin = state.user.isAdmin;
+    if (state.usersByID[state.viewID]) {
+      this.editing = true;
+      this.user = state.usersByID[state.viewID];
+      m.redraw();
+    } else {
+      this.editing = false;
+      this.user = new User();
+    }
+  }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
 };
 
-module.exports.view = function() {
-  const state = appState.getState();
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
 
+module.exports.view = function() {
   return m("div", [
     m(".col-md-3"),
     m(".col-md-6 business-table", [
       m(".btn", this.editing ? t("Edit User") : t("New User")),
       m("form.form-horizontal", [
         Object.keys(this.user).map(key => {
-          if (!state.user.isAdmin && key === "isAdmin") {
+          if (!this.isAdmin && key === "isAdmin") {
             // only let site admins create site admins
             return;
           }
