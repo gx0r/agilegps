@@ -4,6 +4,7 @@ const t = require("./i18n").translate;
 const m = require("mithril");
 const appState = require("./appState");
 const _ = require("lodash");
+const catchhandler = require("./catchhandler");
 
 module.exports.oninit = function() {
   this.cancel = () => {
@@ -68,7 +69,13 @@ module.exports.oninit = function() {
   };
 
   this.delete = () => {
-    appState.deleteFleet(this.fleet);
+    const result = window.confirm(
+      "Are you sure you want to delete fleet " + this.fleet.name + "?"
+    );
+
+    if (result === true) {
+      appState.deleteFleet(this.fleet).catch(catchhandler);
+    }
   };
 
   this.save = () => {
