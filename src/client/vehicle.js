@@ -27,6 +27,17 @@ const todir = require("../common/todir");
 const isUserMetric = require("./isUserMetric");
 const formatDate = require("./formatDate");
 
+function repositionAnimationControls(vnode) {
+  // relocate the animation controls when the map gets big/small
+  const mapEl = require("./root").getMapElement();
+  if (mapEl) {
+    const cur = vnode.dom.getBoundingClientRect();
+    const r = mapEl.getBoundingClientRect();
+    vnode.dom.style.position = "absolute";
+    vnode.dom.style.top = r.height - cur.height - 30 + "px";
+  }
+};
+
 module.exports.oninit = function(vnode) {
   const state = appState.getState();
 
@@ -127,6 +138,7 @@ module.exports.oninit = function(vnode) {
   animation.setSpeed(1);
 
   this.recalculateAdjustedVehicleHistory = () => {
+    console.log('recalculating');
     const state = appState.getState();
     const vehicle = state.selectedVehicle;
     const hist = state.selectedVehicleHistory;
@@ -167,12 +179,11 @@ module.exports.oninit = function(vnode) {
     this.adjustedVehicleHistory = res;
   };
 
-  this.recalculateAdjustedVehicleHistory();
-
   this.previouslySelectedVehicle = null;
 
-  appState.getStore().subscribe(() => {
+  const update = () => {
     const state = appState.getState();
+
     if (!state.autoUpdate) {
       return;
     }
@@ -190,20 +201,15 @@ module.exports.oninit = function(vnode) {
 
     this.recalculateAdjustedVehicleHistory();
     m.redraw();
-  });
+  }
 
-  const root = require("./root");
-  this.animationConfig = vnode =>  {
-    // relocate the animation controls when the map gets big/small
-    const mapEl = root.getMapElement();
-    if (mapEl) {
-      const cur = vnode.dom.getBoundingClientRect();
-      const r = mapEl.getBoundingClientRect();
-      vnode.dom.style.position = "absolute";
-      vnode.dom.style.top = r.height - cur.height - 30 + "px";
-    }
-  };
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
 };
+
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
 
 module.exports.view = function(vnode) {
   const state = appState.getState();
@@ -293,7 +299,8 @@ module.exports.view = function(vnode) {
         m(
           "div",
           {
-            oncreate: vnode => this.animationConfig(vnode),
+            oncreate: repositionAnimationControls,
+            onupdate: repositionAnimationControls,
             style: {
               "background-color": "rgb(221, 221, 221)"
             }
