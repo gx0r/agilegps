@@ -49,11 +49,11 @@ module.exports = {
   verbose: false
 };
 
-if (navigator.languages) {
-  for (let lang of navigator.languages) {
-    if (hasLang(lang)) {
-      this.lang = lang;
-      break;
-    }
-  }
-}
+// if (navigator.languages) {
+//   for (let lang of navigator.languages) {
+//     if (hasLang(lang)) {
+//       this.lang = lang;
+//       break;
+//     }
+//   }
+// }

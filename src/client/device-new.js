@@ -43,7 +43,6 @@ module.exports.onremove = function() {
 }
 
 module.exports.view = function() {
-  const state = appState.getState();
   const device = this.device;
 
   function lastKey(key) {
