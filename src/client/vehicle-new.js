@@ -7,26 +7,9 @@ const orgselector = require("./orgselector");
 const _ = require("lodash");
 const appState = require("./appState");
 const keyhelper = require("./keyhelper");
+const formitem = require("./formitem");
 
 module.exports.oninit = function() {
-  const state = appState.getState();
-  this.vehicle = new Vehicle(state.vehiclesByID[state.viewID]);
-
-  if (state.vehiclesByID[state.viewID]) {
-    this.editing = true;
-  } else {
-    this.editing = false;
-    this.vehicle = new Vehicle();
-    this.vehicle.id = state.viewID;
-  }
-
-  // appState.getStore().subscribe(function () {
-  // 	const state = appState.getState();
-  // 	if (state.vehiclesByID[this.vehicle.id]) {
-  // 		this.vehicle = state.vehiclesByID[this.vehicle.id];
-  // 		m.redraw();
-  // 	}
-  // })
 
   this.save = () => {
     let p;
@@ -39,12 +22,40 @@ module.exports.oninit = function() {
       window.history.back();
     }).catch(catchhandler);
   };
+
+  const update = () => {
+    const state = appState.getState();
+    this.isAdmin = state.user.isAdmin;
+
+    if (this.devicesByID !== state.devicesByID) {
+      this.devicesByID = state.devicesByID;
+      this.devicesArray = _.toArray(this.devicesByID);
+    }
+
+    if (this.selectedOrg !== state.selectedOrg) {
+      this.selectedOrg = state.selectedOrg;
+      this.vehiclesByIDarray = _.toArray(state.vehiclesByID).filter(vehicle => vehicle.orgid == state.selectedOrg.id);
+    }
+
+    if (state.vehiclesByID[state.viewID]) {
+      this.vehicle = state.vehiclesByID[state.viewID];
+      this.editing = true;
+    } else {
+      this.editing = false;
+      this.vehicle = new Vehicle();
+      this.vehicle.id = state.viewID;
+    }
+  }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
 };
-const formitem = require("./formitem");
+
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
 
 module.exports.view = function() {
-  const state = appState.getState();
-  const devices = _.toArray(state.devicesByID).filter(device => device.orgid == state.selectedOrg.id);
 
   return m(".div", [
     m(".col-md-3"),
@@ -53,7 +64,7 @@ module.exports.view = function() {
       m("form.form-horizontal", [
         Object.keys(this.vehicle).map(key => {
           if (key === "device") {
-            if (state.user.isAdmin) {
+            if (this.isAdmin) {
               // admins can change devices
               return m("div.form-group", [
                 m("label.col-md-4 control-label", keyhelper(key) + ":"),
@@ -69,7 +80,7 @@ module.exports.view = function() {
                       },
                       value: this.vehicle[key]
                     },
-                    _.union([{ id: "" }], devices).map(device => {
+                    _.union([{ id: "" }], this.devicesArray).map(device => {
                       return m(
                         "option",
                         {

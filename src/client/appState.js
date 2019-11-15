@@ -311,11 +311,6 @@ function login(data) {
         user: user
       });
 
-      if (view === "USER" && subview === "EDIT") {
-        // TODO fix viewing users
-        viewUsers();
-      }
-
       if (isAdmin) {
         next = loadSiteAdminData();
       } else {

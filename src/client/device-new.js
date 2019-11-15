@@ -8,26 +8,9 @@ const catchhandler = require("./catchhandler");
 const orgselector = require("./orgselector");
 const pikaday = require("pikaday2").default;
 const moment = require("moment");
+const formitem = require("./formitem");
 
 module.exports.oninit = function() {
-  const state = appState.getState();
-  this.device = new Device(state.devicesByID[state.viewID]);
-
-  if (state.devicesByID[state.viewID]) {
-    this.editing = true;
-  } else {
-    this.editing = false;
-    this.device = new Device();
-    this.device.imei = state.viewID;
-  }
-
-  // appState.getStore().subscribe(function () {
-  // 	const state = appState.getState();
-  // 	if (state.devicesByID[this.device.imei]) {
-  // 		this.device = state.devicesByID[this.device.imei];
-  // 		m.redraw();
-  // 	}
-  // })
 
   this.save = () => {
     appState
@@ -37,9 +20,27 @@ module.exports.oninit = function() {
       })
       .catch(catchhandler);
   };
+
+  const update = () => {
+    const state = appState.getState();
+
+    if (state.devicesByID[state.viewID]) {
+      this.device = state.devicesByID[state.viewID];
+      this.editing = true;
+  	} else {
+      this.editing = false;
+      this.device = new Device();
+      this.device.imei = state.viewID;
+    }
+  }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
 };
 
-const formitem = require("./formitem");
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
 
 module.exports.view = function() {
   const state = appState.getState();
