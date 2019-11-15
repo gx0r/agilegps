@@ -44,14 +44,6 @@ store.subscribe(function() {
       "?" + JSON.stringify(viewState)
     );
   }
-  //
-  if (
-    ["EDIT", "RAWEVENTS", "EVENTS", "EXCEPTIONS"].indexOf(state.subview) < 0
-  ) {
-    // don't redraw certain views
-    console.log("redrawing");
-    m.redraw();
-  }
 });
 
 window.onpopstate = function(ev) {
@@ -315,24 +307,29 @@ function login(data) {
         next = fetchOrganizations();
       }
 
+      next = next.then(() => {
+        return selectOrgByID(store.getState().user.orgid);
+      });
+
       if (store.getState().subview === "ORG" && store.getState().viewID) {
-        next = next.then(function() {
+        next = next.then(() => {
           return selectOrgByID(store.getState().viewID);
         });
       } else if (store.getState().view === "ORG" && store.getState().viewID) {
-        next = next.then(function() {
+        next = next.then(() => {
           return selectOrgByID(store.getState().viewID);
         });
       } else if (store.getState().user.isAdmin) {
         // do nothing
       } else if (store.getState().user.orgid != null) {
-        next = next.then(function() {
+        next = next.then(() =>{
           return selectOrgByID(store.getState().user.orgid);
         });
       }
 
-      next.finally(function() {
+      next.finally(() => {
         NProgress.done();
+        m.redraw();
       });
 
       return next;
@@ -932,6 +929,7 @@ module.exports.viewOrgByID = function(id) {
     viewID: id,
     subview: "SPLIT"
   });
+  m.redraw();
 };
 
 function viewOrganizations() {
