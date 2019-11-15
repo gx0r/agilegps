@@ -20,6 +20,7 @@ module.exports = {
     }
   },
   mode: 'development',
+  devtool: 'source-map',
   module: {
     // preLoaders: [
     //     {test: /\.js$/, exclude: /node_modules/, loader: 'jshint-loader'}
