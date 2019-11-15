@@ -40,7 +40,7 @@ module.exports.oninit = function() {
       this.usersByID = state.usersByID;
       this.usersByIDarray = _.toArray(this.usersByID);  
     }
-    this.orgid = state.selectedOrg.id;  
+    this.orgid = state.selectedOrg ? state.selectedOrg.id : null;
     if (state.subview != "ALL") {
       this.usersByIDarray = this.usersByIDarray.filter(user => user.orgid === this.orgid);
     }  
