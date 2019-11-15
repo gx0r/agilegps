@@ -33,16 +33,19 @@ function getSecurtyLevel(user) {
   return t("User");
 }
 
-module.exports.view = function() {
+module.exports.oninit = function() {
   const state = appState.getState();
-  const subview = state.subview;
   const orgid = state.selectedOrg.id;
-
-  let users = _.toArray(state.usersByID);
+  this.users = _.toArray(state.usersByID);
 
   if (state.subview != "ALL") {
-    users = users.filter(user => user.orgid === orgid);
+    this.users = this.users.filter(user => user.orgid === orgid);
   }
+};
+
+module.exports.view = function() {
+  const state = appState.getState();
+  const orgid = state.selectedOrg.id;
 
   return m(".div", [
     m(".col-md-2"),
@@ -59,7 +62,7 @@ module.exports.view = function() {
         },
         t("New User")
       ),
-      m("table.table table-bordered table-striped", sorts(users), [
+      m("table.table table-bordered table-striped", sorts(this.users), [
         m(
           "thead",
           m("tr", [
@@ -68,12 +71,12 @@ module.exports.view = function() {
             m("th[data-sort-by=firstname]", t("First Name")),
             m("th[data-sort-by=lastname]", t("Last Name")),
             m("th[data-sort-by=isOrgAdmin]", t("Security Level")),
-            orgid ? "" : m("th", t("Organization")),
+            orgid ? "" : m("th[data-sort-by=orgid]", t("Organization")),
             m("th", t("Operations"))
           ])
         ),
         m("tbody", [
-          users.map(user => {
+          this.users.map(user => {
             return m("tr", [
               m("td", user.username),
               m("td", user.email),

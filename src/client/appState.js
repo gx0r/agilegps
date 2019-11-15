@@ -307,8 +307,8 @@ function login(data) {
       });
 
       if (view === "USER") {
-        // TODO fix viewing user
-        viewUsers();
+        // TODO fix viewing users
+        viewLogin();
       }
 
       if (isAdmin) {
