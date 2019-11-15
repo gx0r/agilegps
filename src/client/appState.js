@@ -44,6 +44,11 @@ store.subscribe(function() {
       "?" + JSON.stringify(viewState)
     );
   }
+  if (["EDIT", "RAWEVENTS", "EVENTS", "EXCEPTIONS"].indexOf(state.subview) < 0) {
+    // don't redraw certain views
+    console.log("redrawing");
+    m.redraw();
+  }
 });
 
 window.onpopstate = function(ev) {
