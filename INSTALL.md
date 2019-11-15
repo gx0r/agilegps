@@ -18,7 +18,7 @@
 
 1. Run ```npm run webpack```. This builds the front-end.
 
-1. Place your Google Maps key in `agilegps/public/app/index.html` on the appropriate script tag. This is necessary for the map to display.
+1. Place your Google Maps key in `agilegps/public/app/index.html` on the Google Maps script tag. **This is necessary for the map to work.** Generate a key from https://console.cloud.google.com/ "API & Services" > Credentials > "Create Credentials" > "API Key"
 
 1. (Optional) replace the Google Analytics code with your Google Analytics in `agilegps/public/app/index.html` for site analytics.
 
