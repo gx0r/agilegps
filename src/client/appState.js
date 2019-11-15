@@ -320,7 +320,9 @@ function login(data) {
         next = loadSiteAdminData();
       } else {
         next = fetchOrganizations().then(() => {
-          return selectOrgByID(orgid);
+          if (orgid) {
+            return selectOrgByID(orgid);
+          }
         });
       }
 

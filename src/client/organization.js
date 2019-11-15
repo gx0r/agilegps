@@ -98,7 +98,7 @@ module.exports.view = function(vnode) {
       {
         href:
           "/api/organizations/" +
-          state.selectedOrg.id +
+          (state.selectedOrg ? state.selectedOrg.id : '') + //TODO fixme
           "/vehiclestatus?format=excel" +
           "&latlong=" +
           state.showLatLong +
