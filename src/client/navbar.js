@@ -491,7 +491,7 @@ module.exports.view = function(vnode) {
               appState.viewLogin();
             }
           },
-          t("Log Out")
+          t("☰") // Log Out
         )
       )
     ])
