@@ -327,7 +327,7 @@ function login(data) {
         });
       } 
 
-      if (view === "ORG" && viewID) {
+      if (view === "ORG" && viewID && isAdmin) { // TODO make better
         next = next.then(() => {
           return selectOrgByID(viewID);
         });
@@ -390,15 +390,13 @@ function selectFleetAll() {
 module.exports.selectFleetAll = selectFleetAll;
 
 function selectOrgByID(orgid) {
-  if (!orgid) {
-    throw new Error("null orgid");
-  }
   NProgress.inc();
 
   let org = store.getState().orgsByID[orgid];
 
   if (!org) {
     org = store.getState().user.orgid; // TODO fix this hack
+    console.warn('FIXME: missing orgid in selectOrgByID');
   }
 
   store.dispatch({
