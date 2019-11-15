@@ -19,8 +19,32 @@ const ClickListenerFactory = require("./markers/clicklistenerfactory");
 const formatDate = require("./formatDate");
 const isUserMetric = require("./isUserMetric");
 
+
+module.exports.oninit = function() {
+
+  const update = () => {
+    const state = appState.getState();
+
+    if (this.impliedSelectedVehicles !== state.impliedSelectedVehicles) {
+      this.impliedSelectedVehicles = state.impliedSelectedVehicles;
+    }
+    if (this.selectedOrg !== state.selectedOrg) {
+      this.selectedOrg = state.selectedOrg;
+    }
+    this.autoUpdate = state.autoUpdate;
+    this.verbose = state.verbose;
+    this.showLatLong = state.showLatLong;
+  }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
+};
+
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
+
 module.exports.view = function(vnode) {
-  const state = appState.getState();
   if (!vnode.selectedItem) {
     vnode.selectedItem = {};
   }
@@ -65,7 +89,7 @@ module.exports.view = function(vnode) {
       },
       m("input[type=checkbox]", {
         // checked: ctrl.autoUpdate(),
-        checked: state.autoUpdate,
+        checked: this.autoUpdate,
         onclick: ev => appState.setAutoUpdate(ev.target.checked),
       }),
       t("Auto Update Map")
@@ -79,7 +103,7 @@ module.exports.view = function(vnode) {
       "label.padrt",
       m("input[type=checkbox]", {
         onclick: ev => appState.setShowVerbose(ev.target.checked),
-        checked: state.verbose
+        checked: this.verbose
       }),
       t("Verbose")
     ),
@@ -88,7 +112,7 @@ module.exports.view = function(vnode) {
       "label.padrt",
       m("input[type=checkbox]", {
         onclick: ev => appState.setShowLatLong(ev.target.checked),
-        checked: state.showLatLong
+        checked: this.showLatLong
       }),
       t("LAT/LONG")
     ),
@@ -98,12 +122,12 @@ module.exports.view = function(vnode) {
       {
         href:
           "/api/organizations/" +
-          (state.selectedOrg ? state.selectedOrg.id : '') + //TODO fixme
+          (this.selectedOrg ? this.selectedOrg.id : '') + //TODO fixme
           "/vehiclestatus?format=excel" +
           "&latlong=" +
-          state.showLatLong +
+          this.showLatLong +
           "&verbose=" +
-          state.verbose +
+          this.verbose +
           "&tzOffset=" +
           encodeURIComponent(tzOffset()),
         style: {
@@ -117,10 +141,10 @@ module.exports.view = function(vnode) {
     ),
 
     m("br"),
-    m("label", "Total: " + state.impliedSelectedVehicles.length),
+    m("label", "Total: " + this.impliedSelectedVehicles.length),
     m(
       "table.table.table-bordered.table-striped",
-      sorts(state.impliedSelectedVehicles),
+      sorts(this.impliedSelectedVehicles),
       [
         m(
           "thead",
@@ -135,15 +159,15 @@ module.exports.view = function(vnode) {
             m("td", t("Address")),
             m("td", t("City")),
             m("td", t("State")),
-            !state.verbose ? "" : m("td[data-sort-by=last.m]", t("Odometer")),
-            !state.verbose ? "" : m("td[data-sort-by=last.h]", t("Hour Meter")),
+            !this.verbose ? "" : m("td[data-sort-by=last.m]", t("Odometer")),
+            !this.verbose ? "" : m("td[data-sort-by=last.h]", t("Hour Meter")),
             m("td[data-sort-by=azimuth(last)]", t("Dir")),
             m("td[data-sort-by=last.s]", isUserMetric() ? t("km/h") : t("mph")),
-            state.showLatLong ? m("td[data-sort-by=last.la]", t("Lat")) : "",
-            state.showLatLong ? m("td[data-sort-by=last.lo]", t("Long")) : "",
+            this.showLatLong ? m("td[data-sort-by=last.la]", t("Lat")) : "",
+            this.showLatLong ? m("td[data-sort-by=last.lo]", t("Long")) : "",
             m("td[data-sort-by=Status.getStatus(last)]", t("Status")),
-            !state.verbose ? "" : m("td[data-sort-by=last.b]", t("Online")),
-            !state.verbose ? "" : m("td[data-sort-by=last.bp]", t("Battery")),
+            !this.verbose ? "" : m("td[data-sort-by=last.b]", t("Online")),
+            !this.verbose ? "" : m("td[data-sort-by=last.bp]", t("Battery")),
             m("td[data-sort-by=last.g]", t("GPS"))
           ]
         ),
@@ -155,13 +179,13 @@ module.exports.view = function(vnode) {
             }
           },
 
-          state.impliedSelectedVehicles.map(function(vehicle) {
+          this.impliedSelectedVehicles.map(vehicle => {
             if (!vehicle) {
               throw new TypeError("Null vehicle");
             }
 
             let lastStatus;
-            if (state.verbose) {
+            if (this.verbose) {
               if (vehicle.lastVerbose && vehicle.last) {
                 if (
                   new Date(vehicle.lastVerbose.d) >= new Date(vehicle.last.d)
@@ -207,14 +231,14 @@ module.exports.view = function(vnode) {
                 m("td.nowrap", street(lastStatus)),
                 m("td.nowrap", city(lastStatus)),
                 m("td.nowrap", stateFormat(lastStatus)),
-                !state.verbose
+                !this.verbose
                   ? ""
                   : m("td.nowrap", hidenan(tomiles(lastStatus.m))),
-                !state.verbose ? "" : m("td.nowrap", lastStatus.h),
+                !this.verbose ? "" : m("td.nowrap", lastStatus.h),
                 m("td.nowrap", todir(lastStatus)),
                 m("td.nowrap", hidenan(tomiles(lastStatus.s))),
-                state.showLatLong ? m("td.nowrap", lastStatus.la) : "",
-                state.showLatLong ? m("td.nowrap", lastStatus.lo) : "",
+                this.showLatLong ? m("td.nowrap", lastStatus.la) : "",
+                this.showLatLong ? m("td.nowrap", lastStatus.lo) : "",
                 m(
                   "td.nowrap",
                   {
@@ -224,10 +248,10 @@ module.exports.view = function(vnode) {
                   },
                   t(Status.getStatus(lastStatus))
                 ),
-                !state.verbose
+                !this.verbose
                   ? ""
                   : m("td.nowrap", lastStatus.b ? t("Buffered") : t("Yes")),
-                !state.verbose
+                !this.verbose
                   ? ""
                   : m("td.nowrap", lastStatus.bp ? lastStatus.bp + "%" : ""),
                 m("td.nowrap", m("img", {
