@@ -48,13 +48,38 @@ function deleteDevice(device) {
   }
 }
 
-module.exports.view = function() {
-  const state = appState.getState();
-  const vehiclesByDeviceID = {};
+module.exports.oninit = function() {
+  const update = () => {
+    const state = appState.getState();
+    let changed = false;
+    if (state.vehiclesByDeviceID !== this.vehiclesByDeviceID) {
+      this.vehiclesByDeviceID = state.vehiclesByDeviceID;
+      changed = true;
+    }
+    if (this.devicesByID !== state.devicesByID) {
+      this.devicesByID = state.devicesByID;
+      this.devicesByIDarray = _.toArray(this.devicesByID);
+      changed = true;
+    }
 
-  _.toArray(state.vehiclesByID).forEach(vehicle => {
-    vehiclesByDeviceID[vehicle.device] = vehicle;
-  });
+    if (changed) {
+      this.vehiclesByDeviceID = {};
+      _.toArray(state.vehiclesByID).forEach(vehicle => {
+        this.vehiclesByDeviceID[vehicle.device] = vehicle;
+      });
+    }
+  }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
+};
+
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
+
+module.exports.view = function() {
+  const vehiclesByDeviceID = this.vehiclesByDeviceID;
 
   return m(".business-table", [
     m(
@@ -71,7 +96,7 @@ module.exports.view = function() {
     ),
     m(
       "table.table table-bordered table-striped",
-      sorts(_.toArray(state.devicesByID)),
+      sorts(this.devicesByIDarray),
       [
         m(
           "thead",
@@ -90,7 +115,7 @@ module.exports.view = function() {
           ])
         ),
         m("tbody", [
-          _.toArray(state.devicesByID).map(function(device) {
+          this.devicesByIDarray.map(device => {
             return m("tr", [
               m("td", device.imei),
               m("td", device.sim),

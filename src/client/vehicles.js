@@ -5,22 +5,37 @@ const sorts = require("./sorts");
 const catchhandler = require("./catchhandler");
 const appState = require("./appState");
 
-module.exports.controller = function(args, extras) {
-  const ctrl = this;
+function deleteVehicle(vehicle) {
+  const result = window.confirm(
+    "Are you sure you want to delete vehicle " + vehicle.name + "?"
+  );
 
-  ctrl.delete = function(vehicle) {
-    let result = window.confirm(
-      "Are you sure you want to delete vehicle " + vehicle.name + "?"
-    );
-
-    if (result === true) {
-      appState.deleteVehicle(vehicle).catch(catchhandler);
-    }
-  };
+  if (result === true) {
+    appState.deleteVehicle(vehicle)
+    .catch(catchhandler)
+  }
 };
 
-module.exports.view = function(ctrl, args, extras) {
-  const state = appState.getState();
+
+module.exports.oninit = function() {
+  const update = () => {
+    const state = appState.getState();
+    if (this.vehiclesByID !== state.vehiclesByID) {
+      this.vehiclesByID = state.vehiclesByID;
+      this.vehiclesByIDarray = _.toArray(this.vehiclesByID);  
+    }
+    this.isAdmin = state.user.isAdmin;
+  }
+
+  update();
+  this.unsubsribe = appState.getStore().subscribe(update);
+};
+
+module.exports.onremove = function() {
+  this.unsubsribe();
+}
+
+module.exports.view = function() {
 
   return m("div", [
     m(".col-sm-1"),
@@ -31,14 +46,14 @@ module.exports.view = function(ctrl, args, extras) {
           style: {
             "margin-bottom": "1em"
           },
-          onclick: function(ev) {
+          onclick: ev => {
             ev.preventDefault();
             appState.viewNewVehicle();
           }
         },
         "New Vehicle"
       ),
-      m("table.table table-bordered table-striped", sorts(state.vehiclesByID), [
+      m("table.table table-bordered table-striped", sorts(this.vehiclesByIDarray), [
         m(
           "thead",
           m("tr", [
@@ -50,7 +65,7 @@ module.exports.view = function(ctrl, args, extras) {
           ])
         ),
         m("tbody", [
-          _.toArray(state.vehiclesByID).map(function(vehicle) {
+          this.vehiclesByIDarray.map(vehicle => {
             return m("tr", [
               m("td", vehicle.name),
               m(
@@ -58,7 +73,7 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "a",
                   {
-                    onclick: function(ev) {
+                    onclick: ev => {
                       ev.preventDefault();
                       appState.viewDeviceByID(vehicle.device);
                     }
@@ -72,7 +87,7 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "a.btn btn-sm btn-primary btn-warning",
                   {
-                    onclick: function(ev) {
+                    onclick: ev => {
                       ev.preventDefault();
                       appState.viewVehicleByID(vehicle.id);
                     }
@@ -84,9 +99,9 @@ module.exports.view = function(ctrl, args, extras) {
                 m(
                   "a.btn btn-primary btn-sm btn-danger",
                   {
-                    onclick: function(ev) {
+                    onclick: ev => {
                       ev.preventDefault();
-                      ctrl.delete(vehicle);
+                      deleteVehicle(vehicle);
                     }
                   },
                   m("span.middle glyphicon glyphicon-trash"),
