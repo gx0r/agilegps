@@ -294,36 +294,44 @@ function login(data) {
     })
     .then(function(response) {
       const user = response.user;
+      const orgid = user.orgid;
+      const isAdmin = user.isAdmin;
+      const viewID = store.getState().viewID
+      const view = store.getState().view; // main view
+      const subview = store.getState().subview; // sub view
+      let next; // sequence
       NProgress.inc();
       store.dispatch({
         type: "SESSION",
         user: user
       });
 
-      let next;
-      if (user.isAdmin) {
-        next = loadSiteAdminData();
-      } else {
-        next = fetchOrganizations();
+      if (view === "USER") {
+        // TODO fix viewing user
+        viewUsers();
       }
 
-      next = next.then(() => {
-        return selectOrgByID(store.getState().user.orgid);
-      });
+      if (isAdmin) {
+        next = loadSiteAdminData();
+      } else {
+        next = fetchOrganizations().then(() => {
+          return selectOrgByID(orgid);
+        });
+      }
 
-      if (store.getState().subview === "ORG" && store.getState().viewID) {
+      if (subview === "ORG" && viewID) {
         next = next.then(() => {
-          return selectOrgByID(store.getState().viewID);
+          return selectOrgByID(viewID);
         });
-      } else if (store.getState().view === "ORG" && store.getState().viewID) {
+      } 
+
+      if (view === "ORG" && viewID) {
         next = next.then(() => {
-          return selectOrgByID(store.getState().viewID);
+          return selectOrgByID(viewID);
         });
-      } else if (store.getState().user.isAdmin) {
-        // do nothing
-      } else if (store.getState().user.orgid != null) {
+      } else if (orgid != null && !isAdmin) {
         next = next.then(() =>{
-          return selectOrgByID(store.getState().user.orgid);
+          return selectOrgByID(orgid);
         });
       }
 
@@ -942,7 +950,7 @@ function viewOrganizations() {
 }
 module.exports.viewOrganizations = viewOrganizations;
 
-module.exports.viewUsers = function() {
+const viewUsers = module.exports.viewUsers = function() {
   store.dispatch({
     type: "VIEW",
     view: "USER",
