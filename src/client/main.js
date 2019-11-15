@@ -23,7 +23,7 @@ const m = require("mithril");
 const appState = require("./appState");
 
 
-import { Root } from "./components/root";
+import Root from "./components/root";
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 
