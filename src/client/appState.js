@@ -396,6 +396,11 @@ function selectOrgByID(orgid) {
   NProgress.inc();
 
   let org = store.getState().orgsByID[orgid];
+
+  if (!org) {
+    org = store.getState().user.orgid; // TODO fix this hack
+  }
+
   store.dispatch({
     type: "SELECT_ORG",
     org: org
