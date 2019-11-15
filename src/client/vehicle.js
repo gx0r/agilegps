@@ -3,24 +3,19 @@
 const t = require("./i18n").translate;
 const m = require("mithril");
 const appState = require("./appState");
-const catchhandler = require("./catchhandler");
-const navbar = require("./navbar");
-const users = require("./users");
 const Status = require("../common/status");
 const helpers = require("../common/helpers");
 const tzOffset = require("./tzoffset");
 const tomiles = require("./tomiles");
 const hidenan = require("../common/hidenan");
-const toGoogle = require("./togoogle");
 const moment = require("moment");
 const pikaday = require("pikaday2").default;
-const tohhmmss = require("../common/tohhmmss");
 const street = require("../common/addressdisplay").street;
 const city = require("../common/addressdisplay").city;
 const renderState = require("../common/addressdisplay").state;
 const milesfield = require("../common/milesfield");
 const _ = require("lodash");
-const animation = require("./markers/vehicleanimation");
+const vehicleanimation = require("./markers/vehicleanimation");
 const ClickListenerFactory = require("./markers/clicklistenerfactory");
 const j2c = require("j2c");
 const todir = require("../common/todir");
@@ -35,6 +30,45 @@ function repositionAnimationControls(vnode) {
     const r = mapEl.getBoundingClientRect();
     vnode.dom.style.position = "absolute";
     vnode.dom.style.top = r.height - cur.height - 30 + "px";
+  }
+};
+
+function changeAnimationSpeed(ev) {
+  const val = parseInt(ev.target.value, 10);
+  switch (val) {
+    case 0:
+      vehicleanimation.setSpeed(400);
+      break;
+    case 1:
+      vehicleanimation.setSpeed(250);
+      break;
+    case 2:
+      vehicleanimation.setSpeed(100);
+      break;
+    case 3:
+      vehicleanimation.setSpeed(50);
+      break;
+    case 4:
+      vehicleanimation.setSpeed(35);
+      break;
+    case 5:
+      vehicleanimation.setSpeed(20);
+      break;
+    case 6:
+      vehicleanimation.setSpeed(15);
+      break;
+    case 7:
+      vehicleanimation.setSpeed(10);
+      break;
+    case 8:
+      vehicleanimation.setSpeed(5);
+      break;
+    case 9:
+      vehicleanimation.setSpeed(1);
+      break;
+    default:
+      vehicleanimation.setSpeed(0);
+      break;
   }
 };
 
@@ -63,22 +97,19 @@ module.exports.oninit = function(vnode) {
   }
 
   this.selectDays = function() {
-    const state = appState.getState();
-    // if (this.startDate != state.startDate) {
     appState.selectDays(
       this.startDate,
       moment(this.endDate)
         .add(1, "day")
         .toDate()
     );
-    // }
   };
 
   this.updated = null;
   this.calculateDistanceBetween = "start";
 
-  animation.controller(this);
-  this.progressElem = animation.progress;
+  // vehicleanimation.controller(this);
+  this.progressElem = vehicleanimation.progress;
 
   this.clickItem = item => {
     if (this.selecteditem === item) {
@@ -86,56 +117,18 @@ module.exports.oninit = function(vnode) {
       ClickListenerFactory.closeInfoWindow();
     } else {
       this.selecteditem = item;
-      animation.clickMarkerByID(item.id);
+      vehicleanimation.clickMarkerByID(item.id);
     }
   };
 
-  this.play = animation.play;
-  this.pause = animation.pause;
-  this.stop = animation.stop;
-  this.isPausable = animation.isPausable;
-  this.isPlayable = animation.isPlayable;
-  this.isStoppable = animation.isStoppable;
+  this.play = vehicleanimation.play;
+  this.pause = vehicleanimation.pause;
+  this.stop = vehicleanimation.stop;
+  this.isPausable = vehicleanimation.isPausable;
+  this.isPlayable = vehicleanimation.isPlayable;
+  this.isStoppable = vehicleanimation.isStoppable;
 
-  this.speedChange = ev => {
-    const val = parseInt(ev.target.value, 10);
-    switch (val) {
-      case 0:
-        animation.setSpeed(400);
-        break;
-      case 1:
-        animation.setSpeed(250);
-        break;
-      case 2:
-        animation.setSpeed(100);
-        break;
-      case 3:
-        animation.setSpeed(50);
-        break;
-      case 4:
-        animation.setSpeed(35);
-        break;
-      case 5:
-        animation.setSpeed(20);
-        break;
-      case 6:
-        animation.setSpeed(15);
-        break;
-      case 7:
-        animation.setSpeed(10);
-        break;
-      case 8:
-        animation.setSpeed(5);
-        break;
-      case 9:
-        animation.setSpeed(1);
-        break;
-      default:
-        animation.setSpeed(0);
-        break;
-    }
-  };
-  animation.setSpeed(1);
+  vehicleanimation.setSpeed(1);
 
   this.recalculateAdjustedVehicleHistory = () => {
     console.log('recalculating');
@@ -325,12 +318,12 @@ module.exports.view = function(vnode) {
               style: {
                 "margin-left": "1em"
               },
-              oncreate: vnode => animation.setProgressElement(vnode.dom)
+              oncreate: vnode => vehicleanimation.setProgressElement(vnode.dom)
             }),
             m("input[type=range]", {
               min: 0,
               max: 10,
-              onchange: this.speedChange,
+              onchange: changeAnimationSpeed,
               oncreate: vnode => vnode.dom.value = 9,
             })
           ]

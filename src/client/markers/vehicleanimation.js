@@ -20,11 +20,10 @@ let playing = false;
 let lines = [];
 let markersById = {};
 
-let playPromise,
-  history,
-  progressEl,
-  speed = 0,
-  _controller;
+let playPromise = Promise.resolve(0);
+let history = []
+let progressEl;
+let speed = 0;
 
 function create(item) {
   let position = toGoogle(item);
@@ -64,8 +63,8 @@ module.exports.clickMarkerByID = function(id) {
 
 let lastState = require("../appDefaultState");
 
-store.subscribe(function() {
-  TheMap.getReady().then(function() {
+let unsubscribe = store.subscribe(() => {
+  TheMap.getReady().then(() => {
     let state = store.getState();
 
     // let lastSelectedVehicle = lastState.selectedVehicle;
@@ -135,15 +134,6 @@ store.subscribe(function() {
   });
 });
 
-function controller(ctrl) {
-  if (ctrl != null) {
-    _controller = ctrl;
-  } else {
-    return _controller;
-  }
-}
-module.exports.controller = controller;
-
 // set the progress element
 function setProgressElement(el) {
   progressEl = el;
@@ -186,7 +176,7 @@ function animateFrame(i) {
   let speed = tomiles(history[i].s);
   let color = Status.getStatusColor(history[i]);
 
-  create(history[i], controller());
+  create(history[i]);
 
   let lineSymbol = {
     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
