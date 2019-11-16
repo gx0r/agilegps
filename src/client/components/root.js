@@ -11,6 +11,7 @@ import Sidebar from './sidebar';
 import Organization from './organization';
 import Organizations from './organizations';
 import Session from './session';
+import Help from './help';
 
 import queryString from 'query-string';
 
@@ -44,6 +45,10 @@ class Root extends React.Component {
           </div>
         </div>
       );
+    }
+
+    if (view === 'HELP') {
+      return <Help />
     }
 
     return (
