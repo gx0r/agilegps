@@ -6,6 +6,10 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import appState from '../appState';
 
+import reportsSvg from './reports.svg';
+import mapSvg from './map.svg';
+import globeSvg from './globe.svg';
+
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
@@ -62,15 +66,18 @@ class Navbar extends React.Component {
             <li>
               <a
                 onClick={ () => appState.viewReports() }
-                href="#">Reports</a>
+                href="#"><img src={ reportsSvg } />Reports
+              </a>
             </li>
             <li>
               <a
                 onClick={ () => appState.viewMap() }
-                href="#">Map</a>
+                href="#"><img src={ mapSvg } />Map</a>
+            </li>
+            <li>
               <a
                 onClick={ () => appState.viewSplitScreen() }
-                href="#">Split Screen</a>
+                href="#"><img src={ globeSvg } />Split Screen</a>
             </li>
           </ul>
           <ul className="nav navbar-nav navbar-right">

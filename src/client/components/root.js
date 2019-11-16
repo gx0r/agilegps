@@ -54,14 +54,12 @@ class Root extends React.Component {
               <Sidebar />
             </div>
             <div className="col-sm-10">
-              <Map />
+              <div className="shadow">
+                <Map />
+              </div>
+              <br />
+              <Organization />
             </div>            
-          </div>
-        </div>
-        <div className="container-fluid">
-          <div className="row">
-            {/* <Reports /> */}
-            <Organization />
           </div>
         </div>
       </Fragment>

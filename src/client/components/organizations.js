@@ -34,6 +34,7 @@ class Organizations extends React.Component {
       <div>
         <div className="col-md-2" />
         <div className="col-md-8 business-table">
+          <button class="btn btn-default" style={{marginBottom: '1em'}}>Create Organization</button>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>

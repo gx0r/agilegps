@@ -108,7 +108,7 @@ class Sidebar extends React.Component {
            style={{
              position: 'absolute',
              right: '45px',
-             top: '24px;,'
+             top: '24px',
            }}
            onClick={ this.clearSearch }
           />
