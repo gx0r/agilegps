@@ -1,6 +1,6 @@
 // /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -20,22 +20,23 @@ class Root extends React.Component {
   }
 
   componentWillMount() {
-    const parsed = queryString.parse(location.search);
-
   }
 
-  render() {
-    const { user } = this.props;
+  renderView() {
+    const { view } = this.props;
 
-    if (!user.username) {
+    if (view === 'SESSION') {
       return (
-        <Session />
-      );
+        <div className="container-fluid">
+          <div className="row">
+            <Session />
+          </div>
+        </div>
+      )
     }
 
     return (
-      <div>
-        <Navbar />
+      <Fragment>
         <div className="container-fluid">
           <div className="row">
             <div className="sidebar col-sm-2">
@@ -52,6 +53,15 @@ class Root extends React.Component {
             <Organization />
           </div>
         </div>
+      </Fragment>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        <Navbar />
+        { this.renderView() }
       </div>
     );
   }
@@ -60,6 +70,7 @@ class Root extends React.Component {
 export default connect(
   state => ({
     user: state.user,
+    view: state.view,
   }),
   dispatch => bindActionCreators({
   }, dispatch),

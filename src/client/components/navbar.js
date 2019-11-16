@@ -81,7 +81,12 @@ class Navbar extends React.Component {
                 onClick={ () => appState.viewOrganizations() }
                 href="#">Back to Organizations</a>
             </li>
-          </ul>
+            <li>
+              <a
+                onClick={ () => appState.viewLogin() }
+                href="#">☰</a>
+            </li>
+          </ul>          
         </div>
       </nav>
     );
