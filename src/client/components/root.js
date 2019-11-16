@@ -9,6 +9,9 @@ import Navbar from './navbar';
 import Map from './map';
 import Sidebar from './sidebar';
 import Organization from './organization';
+import Session from './session';
+
+import queryString from 'query-string';
 
 class Root extends React.Component {
   constructor(props) {
@@ -16,7 +19,20 @@ class Root extends React.Component {
     this.mapRef = React.createRef();
   }
 
+  componentWillMount() {
+    const parsed = queryString.parse(location.search);
+
+  }
+
   render() {
+    const { user } = this.props;
+
+    if (true || !user) {
+      return (
+        <Session />
+      );
+    }
+
     return (
       <div>
         <Navbar />
@@ -26,7 +42,7 @@ class Root extends React.Component {
               <Sidebar />
             </div>
             <div className="col-sm-10">
-              <Map />
+              {/* <Map /> */}
             </div>            
           </div>
         </div>
@@ -43,6 +59,7 @@ class Root extends React.Component {
 
 export default connect(
   state => ({
+    user: state.user,
   }),
   dispatch => bindActionCreators({
   }, dispatch),
