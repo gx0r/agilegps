@@ -9,6 +9,7 @@ import Navbar from './navbar';
 import Map from './map';
 import Sidebar from './sidebar';
 import Organization from './organization';
+import Organizations from './organizations';
 import Session from './session';
 
 import queryString from 'query-string';
@@ -23,7 +24,7 @@ class Root extends React.Component {
   }
 
   renderView() {
-    const { view } = this.props;
+    const { subview, view, viewID} = this.props;
 
     if (view === 'SESSION') {
       return (
@@ -35,6 +36,16 @@ class Root extends React.Component {
       )
     }
 
+    if (view === 'ORG' && subview === 'ALL') {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <Organizations />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <Fragment>
         <div className="container-fluid">
@@ -43,7 +54,7 @@ class Root extends React.Component {
               <Sidebar />
             </div>
             <div className="col-sm-10">
-              {/* <Map /> */}
+              <Map />
             </div>            
           </div>
         </div>
@@ -70,7 +81,9 @@ class Root extends React.Component {
 export default connect(
   state => ({
     user: state.user,
+    subview: state.subview,
     view: state.view,
+    viewID: state.viewID,
   }),
   dispatch => bindActionCreators({
   }, dispatch),
