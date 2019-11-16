@@ -48,15 +48,13 @@ class Navbar extends React.Component {
               <img src="images/logosmall.png" />
             </li>
             <li className="nav navbar-right" style={{textAlign:'right'}}>
-              <a>
-                <br />
-                <span className="company-name">{ this.props.orgName }</span>
-                <br />
-                { this.getWelcomeText() }
-                <br />
-                <a style={{color: realTimeUpdates ? '' : 'red' }}>
-                  { realTimeUpdates ? `Last update: ${this.formatLastUpdated()} ` : 'Connectivity lost' }
-                </a>
+              <br />
+              <span className="company-name">{ this.props.orgName }</span>
+              <br />
+              <a>{ this.getWelcomeText() }</a>
+              <br />
+              <a style={{color: realTimeUpdates ? '' : 'red' }}>
+                { realTimeUpdates ? `Last update: ${this.formatLastUpdated()} ` : 'Connectivity lost' }
               </a>
             </li>            
           </div>
