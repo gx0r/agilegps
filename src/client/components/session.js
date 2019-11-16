@@ -30,9 +30,9 @@ class Session extends React.Component {
     this.setState({ username: username.trim() });
   }
 
-  usernameOnKeyUp = ev => {
+  onKeyUp = ev => {
     if (ev.keyCode === 13) {
-      this.login();
+      this.loginClick();
     }
   }
 
@@ -79,7 +79,7 @@ class Session extends React.Component {
           placeholder="Username"
           autoFocus
           onChange={ ev => this.setState({ username: ev.target.value }) }
-          onKeyUp={ this.usernameOnKeyup }
+          onKeyUp={ this.onKeyUp }
           value={ this.state.username }
         >
         </input>
@@ -88,6 +88,7 @@ class Session extends React.Component {
           placeholder="password"
           type="password"
           onChange={ ev => this.setState({ password: ev.target.value }) }
+          onKeyUp={ this.onKeyUp }
           value={ this.state.password }
         >
         </input>
