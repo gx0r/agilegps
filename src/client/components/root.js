@@ -27,7 +27,7 @@ class Root extends React.Component {
   render() {
     const { user } = this.props;
 
-    if (true || !user) {
+    if (!user.username) {
       return (
         <Session />
       );

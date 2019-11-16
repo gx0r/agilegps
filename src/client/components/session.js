@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -30,6 +30,25 @@ class Session extends React.Component {
       this.login();
     }
   }
+
+  loginClick = () => {
+    this.loggingIn = true;
+    this.error = "";
+
+    appState
+      .login({
+        username: this.username.trim(),
+        password: this.password,
+        rememberMe: this.rememberMe
+      })
+      .then(() => {
+        this.loggingIn = false;
+      })
+      .catch(err => {
+        this.loggingIn = false;
+        this.error = err.message;
+      });
+  };
 
   logoutClick = () => {
     const wantsToLogout = window.confirm("Are you sure you wish to logout?");
@@ -76,6 +95,16 @@ class Session extends React.Component {
             onClick={ ev => this.rememberMe = ev.target.checked } />
           Remember Me
         </label>
+        <button
+          className="btn btn-default"
+          style={{
+            float: 'left'
+          }}
+          onClick={ this.loginClick }
+          disabled={ this.loggingIn }
+        >
+          Log In
+        </button>
       </Fragment>
     );
   }
@@ -114,7 +143,7 @@ class Session extends React.Component {
             padding: "2em"
           }}
         >
-        { user ? this.renderUser() : this.renderNoUser() }
+        { user.username ? this.renderUser() : this.renderNoUser() }
         <br />
         { this.error &&
           <div className="text-danger">
