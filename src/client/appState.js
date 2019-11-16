@@ -46,7 +46,7 @@ store.subscribe(function() {
   }
   if (["EDIT", "RAWEVENTS", "EVENTS", "EXCEPTIONS"].indexOf(state.subview) < 0) {
     // don't redraw certain views
-    console.log("redrawing");
+    // console.log("redrawing");
     m.redraw();
   }
 });
