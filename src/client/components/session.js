@@ -89,41 +89,47 @@ class Session extends React.Component {
   renderNoUser() {
     return (
       <Fragment>
-        <input className="form-control"
-          placeholder="Username"
+        <input
           autoFocus
+          className="form-control"
           onChange={ ev => this.setState({ username: ev.target.value }) }
           onKeyUp={ this.onKeyUp }
+          placeholder="Username"
           value={ this.state.username }
         >
         </input>
         <input
           className="form-control"
-          placeholder="Password"
-          type="password"
           onChange={ ev => this.setState({ password: ev.target.value }) }
           onKeyUp={ this.onKeyUp }
+          placeholder="Password"
+          type="password"
           value={ this.state.password }
         >
         </input>
         <label>
           <input
             checked={ this.rememberMe }
+            onClick={ ev => this.setState({ rememberMe: ev.target.checked })  }
+            onKeyUp={ this.onKeyUp }
             type="checkbox"
-            onClick={ ev => this.setState({ rememberMe: ev.target.checked })  } />
+          />
           Remember Me
         </label>
         <br />
-        <button
-          className="btn btn-default"
-          style={{
-            float: 'left'
-          }}
-          onClick={ this.loginClick }
-          disabled={ false && this.loggingIn }
-        >
-          Log In
-        </button>
+        <div style={{
+          textAlign: 'right',
+          marginTop: '2px'
+        }}>
+          <button
+            className="btn btn-default btn-success"
+            disabled={ false && this.loggingIn }
+            onClick={ this.loginClick }
+            onKeyUp={ this.onKeyUp }
+          >
+            Log In
+          </button>
+        </div>
       </Fragment>
     );
   }

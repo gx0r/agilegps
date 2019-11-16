@@ -77,8 +77,11 @@ class Organizations extends React.Component {
                           className="btn btn-primary btn-sm"
                           onClick={ () => appState.selectOrgByID(org.id)
                             .then(() => {
-                              appState.viewOrgByID(org.id);
+                              return appState.viewOrgByID(org.id);
                             }) 
+                            .catch(err => {
+                              toast.error(err.message);
+                            })
                           }
                         ><i className="middle glyphicon glyphicon-searcb" /> Log In
                         </a>
