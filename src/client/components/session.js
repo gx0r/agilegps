@@ -46,7 +46,7 @@ class Session extends React.Component {
       })
       .catch(err => {
         this.loggingIn = false;
-        this.error = err.message;
+        window.alert(err.message);
       });
   };
 
@@ -95,13 +95,14 @@ class Session extends React.Component {
             onClick={ ev => this.rememberMe = ev.target.checked } />
           Remember Me
         </label>
+        <br />
         <button
           className="btn btn-default"
           style={{
             float: 'left'
           }}
           onClick={ this.loginClick }
-          disabled={ this.loggingIn }
+          disabled={ false && this.loggingIn }
         >
           Log In
         </button>
@@ -110,6 +111,8 @@ class Session extends React.Component {
   }
 
   renderUser() {
+    const { user } = this.props;
+    
     return (
       <div style={{
         textAlign: 'right',
@@ -121,9 +124,8 @@ class Session extends React.Component {
             float: 'left'
           }}
           onClick={ this.logoutClick }
-          disabled={ this.loggingIn }
         >
-          Log Out
+          Log Out { user.username }
         </button>
       </div>
     );
@@ -147,7 +149,7 @@ class Session extends React.Component {
         <br />
         { this.error &&
           <div className="text-danger">
-            Error: { JSON.stringify(this.error) }
+            Error: { this.error }
           </div>
         }
         </div>
