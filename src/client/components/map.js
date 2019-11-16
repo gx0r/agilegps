@@ -29,7 +29,7 @@ class Map extends React.Component {
   static propTypes = {
   };
 
-  createMarker = vehicle => {    
+  createMarker = vehicle => {
     const map = this.map.map;
     const position = toGoogle(vehicle.last ? vehicle.last : item);
   
@@ -77,7 +77,6 @@ class Map extends React.Component {
 
   componentDidMount() {
     TheMap.mount(this.mapRef.current);
-    this.populateMapMarkers();
   }
 
   componentWillUpdate() {
@@ -86,9 +85,12 @@ class Map extends React.Component {
   }
 
   render() {
+    const { subview } = this.props;
+    const height = subview === 'SPLIT' ? '50vh' : '75vh';
+
     return (
       // Important! Always set the container height explicitly
-      <div style={{ height: '50vh', width: '100%' }} ref={ this.mapRef }>
+      <div style={{ height, width: '100%' }} ref={ this.mapRef }>
         <GoogleMapReact
           bootstrapURLKeys={{ key: '1234' }}
           defaultCenter={this.props.center}
@@ -106,6 +108,7 @@ export default connect(
     impliedSelectedVehicles: state.impliedSelectedVehicles,
     selectedFleets: state.selectedFleets,
     selectedFleetsAll: state.selectedFleetsAll,
+    subview: state.subview,
     vehiclesByID: state.vehiclesByID,
   }),
   dispatch => bindActionCreators({

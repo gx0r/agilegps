@@ -68,10 +68,10 @@ class Navbar extends React.Component {
             </li>
             <li>
               <a
-                onClick={ () => appState.viewReports() }
+                onClick={ () => appState.viewMap() }
                 href="#">Map</a>
               <a
-                onClick={ () => appState.viewReports() }
+                onClick={ () => appState.viewSplitScreen() }
                 href="#">Split Screen</a>
             </li>
           </ul>
