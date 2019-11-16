@@ -7,6 +7,9 @@ import classnames from 'classnames';
 import { toArray } from 'lodash';
 import appState from '../appState';
 
+import truckFacingImg from './truckFacing.svg';
+import carImg from './car.svg';
+
 function formatVehicle(vehicle) {
   if (!vehicle) return "";
   let str = "";
@@ -119,8 +122,7 @@ class Sidebar extends React.Component {
             onClick={ this.selectFleetAll }
             className={ classnames('list-group-item pointer', {
             'active': selectedAllFleets,
-          }) }>
-            Fleets/All 
+          }) }><img src={ truckFacingImg } /> Fleets/All
           </li>
           {
             fleets.map(fleet => {
@@ -129,9 +131,7 @@ class Sidebar extends React.Component {
                   key={ fleet.id }
                   onClick={ () => this.selectFleet(fleet) }
                   className={ classnames('list-group-item pointer', {}) }>
-                  { /* todo add truck svg */ }
-                  <b>{ fleet.name }</b>
-                  <ul className="list-group">
+                  <img src={ carImg } /> <b>{ fleet.name }</b>
                   { 
                     fleet.vehicles.filter(vid => {
                       const vehicle = vehiclesByID[vid];
@@ -156,7 +156,6 @@ class Sidebar extends React.Component {
                       )
                     })
                   }
-                  </ul>
                 </li>
               );
             })
