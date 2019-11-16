@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
-import catchhandler from '../catchhandler';
 
 import appState from '../appState';
 
 import { toArray } from 'lodash';
+import { toast } from 'react-toastify';
 
 function deleteOrganization(org) {
   const result = window.confirm(
@@ -16,7 +16,13 @@ function deleteOrganization(org) {
   );
 
   if (result === true) {
-    appState.deleteOrg(org).catch(catchhandler);
+    appState.deleteOrg(org)
+    .then(() => {
+      toast.success(`Org ${org.name} deleted.`);
+    })
+    .catch(err => {
+      toast.error(`Failed to delete org ${org.name}: ${err.message}`);
+    });
   }
 };
 
