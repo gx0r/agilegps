@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import { toast } from 'react-toastify';
 
 import appState from '../appState';
+import { confirmAlert } from 'react-confirm-alert';
 
 class Session extends React.Component {
   constructor(props) {
@@ -47,29 +48,42 @@ class Session extends React.Component {
         this.loggingIn = false;
         toast.success("Logged in", {
           position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 1500,
         });
       })
       .catch(err => {
-        toast.error(err.message);
+        toast.error(err.message, {
+          autoClose: 2000,
+        });
       });
   };
 
   logoutClick = () => {
-    const wantsToLogout = window.confirm("Are you sure you wish to logout?");
-    if (!wantsToLogout) {
-      return;
-    }
-
-    appState
-      .logOut()
-      .then(() => {
-        toast.success("Logged out", {
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-      })
-      .catch(err => {
-        toast.error(err.message);
-      });
+    confirmAlert({
+      title: 'Logout',
+      message: `Are you sure you wish to logout?`,
+      buttons: [
+        {
+          label: 'Cancel',
+        },
+        {
+          label: 'Ok',
+          onClick: () => {
+            appState
+            .logOut()
+            .then(() => {
+              toast.success("Logged out", {
+                position: toast.POSITION.BOTTOM_RIGHT,
+                autoClose: 1500,
+              });
+            })
+            .catch(err => {
+              toast.error(err.message);
+            });
+          }
+        }      
+      ]
+    });
   };
 
   renderNoUser() {
@@ -85,7 +99,7 @@ class Session extends React.Component {
         </input>
         <input
           className="form-control"
-          placeholder="password"
+          placeholder="Password"
           type="password"
           onChange={ ev => this.setState({ password: ev.target.value }) }
           onKeyUp={ this.onKeyUp }

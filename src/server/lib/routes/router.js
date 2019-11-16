@@ -25,6 +25,8 @@ const dao = require("../dao");
 const router = (module.exports.router = new Router());
 const adapt = require("koa-adapter-bluebird"); // uses bluebird-co for performance
 
+const INVALID_USERNAME_OR_PASSWORD = "Invalid username or password.";
+
 const jwtrequired = adapt(
   jwt({
     secret: config.jwtSecret
@@ -78,7 +80,7 @@ router.post("/api/session", jwtoptional, async function(ctx, next) {
   const rememberMe = ctx.request.body.rememberMe === true;
 
   if (!ctx.request.username && !ctx.request.body) {
-    ctx.body = { success: false, message: "invalid username or password" };
+    ctx.body = { success: false, message: INVALID_USERNAME_OR_PASSWORD };
     ctx.status = 400;
     return;
   }
@@ -89,7 +91,7 @@ router.post("/api/session", jwtoptional, async function(ctx, next) {
   );
 
   if (!user) {
-    ctx.body = { success: false, message: "invalid username or password" };
+    ctx.body = { success: false, message: INVALID_USERNAME_OR_PASSWORD };
     ctx.status = 400;
     return;
   }
@@ -112,7 +114,7 @@ router.post("/api/session", jwtoptional, async function(ctx, next) {
     ctx.response.body.user = user;
     ctx.response.body.jwt = jwt;
   } else {
-    ctx.body = { success: false, message: "invalid username or password" };
+    ctx.body = { success: false, message: INVALID_USERNAME_OR_PASSWORD };
     ctx.status = 400;
   }
 });

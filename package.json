@@ -71,6 +71,7 @@
     "query-string": "^6.9.0",
     "querystring": "^0.2.0",
     "raf": "^3.4.1",
+    "react-confirm-alert": "^2.4.1",
     "react-toastify": "^5.4.1",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",

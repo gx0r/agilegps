@@ -9,21 +9,30 @@ import appState from '../appState';
 
 import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 
 function deleteOrganization(org) {
-  const result = window.confirm(
-    "Are you sure you want to delete organization " + org.name + "?"
-  );
-
-  if (result === true) {
-    appState.deleteOrg(org)
-    .then(() => {
-      toast.success(`Org ${org.name} deleted.`);
-    })
-    .catch(err => {
-      toast.error(`Failed to delete org ${org.name}: ${err.message}`);
-    });
-  }
+  confirmAlert({
+    title: 'Delete organization',
+    message: `Are you sure you want to delete organization ${org.name}?`,
+    buttons: [
+      {
+        label: 'Cancel',
+      },
+      {
+        label: 'Delete',
+        onClick: () => {
+          appState.deleteOrg(org)
+          .then(() => {
+            toast.success(`Org ${org.name} deleted.`);
+          })
+          .catch(err => {
+            toast.error(`Failed to delete org ${org.name}: ${err.message}`);
+          });
+        }
+      }      
+    ]
+  });
 };
 
 class Organizations extends React.Component {

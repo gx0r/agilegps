@@ -29,6 +29,7 @@ import { IntlProvider } from 'react-intl';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const rootComponent = (
   <IntlProvider locale="en-US">
