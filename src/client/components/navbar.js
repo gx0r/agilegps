@@ -38,11 +38,58 @@ class Navbar extends React.Component {
 
   getWelcomeText = () => {
     const { user } = this.props;
-    return `Welcome: ${user.username}`;
+    if (user.username) {
+      return `Welcome ${user.username}`;
+    } else {
+      return null;
+    }
+  }
+
+  renderConnectivity() {
+    const { realTimeUpdates, user } = this.props;
+    
+    if (!user.username) {
+      return null;
+    }
+
+    return (
+      <a style={{color: realTimeUpdates ? '' : 'red' }}>
+      { realTimeUpdates ? `Last update: ${this.formatLastUpdated()} ` : 'Connectivity lost' }
+      </a>
+    );
+  }
+
+  renderLeftNav() {
+    const { selectedOrg } = this.props;
+
+    if (!selectedOrg.id) {
+      return null;
+    }
+
+    return (
+      <ul className="nav navbar-nav">
+        <li>
+          <a
+            onClick={ () => appState.viewReports() }
+            href="#"><img src={ reportsSvg } />Reports
+          </a>
+        </li>
+        <li>
+          <a
+            onClick={ () => appState.viewMap() }
+            href="#"><img src={ mapSvg } />Map</a>
+        </li>
+        <li>
+          <a
+            onClick={ () => appState.viewSplitScreen() }
+            href="#"><img src={ globeSvg } />Split Screen</a>
+        </li>
+      </ul>
+    );
+
   }
 
   render() {
-    const { realTimeUpdates } = this.props;
 
     return (
       <nav className="navbar navbar-static-top navbar-inverse">
@@ -57,29 +104,10 @@ class Navbar extends React.Component {
               <br />
               <a>{ this.getWelcomeText() }</a>
               <br />
-              <a style={{color: realTimeUpdates ? '' : 'red' }}>
-                { realTimeUpdates ? `Last update: ${this.formatLastUpdated()} ` : 'Connectivity lost' }
-              </a>
+              { this.renderConnectivity() }
             </li>            
           </div>
-          <ul className="nav navbar-nav">
-            <li>
-              <a
-                onClick={ () => appState.viewReports() }
-                href="#"><img src={ reportsSvg } />Reports
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={ () => appState.viewMap() }
-                href="#"><img src={ mapSvg } />Map</a>
-            </li>
-            <li>
-              <a
-                onClick={ () => appState.viewSplitScreen() }
-                href="#"><img src={ globeSvg } />Split Screen</a>
-            </li>
-          </ul>
+          { this.renderLeftNav() }         
           <ul className="nav navbar-nav navbar-right">
             <li>
               <a
@@ -110,6 +138,9 @@ export default connect(
     orgName: state.selectedOrg.name,
     realTimeUpdates: state.realTimeUpdates,
     user: state.user,
+    view: state.view,
+    selectedOrg: state.selectedOrg,
+    subview: state.subview,
   }),
   dispatch => bindActionCreators({
   }, dispatch),
