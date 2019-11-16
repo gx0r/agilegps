@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 
+import { toast } from 'react-toastify';
+
 import appState from '../appState';
 
 class Session extends React.Component {
@@ -12,6 +14,9 @@ class Session extends React.Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
+      username: '',
+      password: '',
+      rememberMe: false,
     }
   }
 
@@ -22,7 +27,7 @@ class Session extends React.Component {
   }
 
   changeUsername = username => {
-    this.username = username;
+    this.setState({ username: username.trim() });
   }
 
   usernameOnKeyUp = ev => {
@@ -32,21 +37,20 @@ class Session extends React.Component {
   }
 
   loginClick = () => {
-    this.loggingIn = true;
-    this.error = "";
-
     appState
       .login({
-        username: this.username.trim(),
-        password: this.password,
-        rememberMe: this.rememberMe
+        username: this.state.username,
+        password: this.state.password,
+        rememberMe: this.state.rememberMe
       })
       .then(() => {
         this.loggingIn = false;
+        toast.success("Logged in", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       })
       .catch(err => {
-        this.loggingIn = false;
-        window.alert(err.message);
+        toast.error(err.message);
       });
   };
 
@@ -55,17 +59,16 @@ class Session extends React.Component {
     if (!wantsToLogout) {
       return;
     }
-    this.loggingIn = true;
-    this.error = "";
 
     appState
       .logOut()
       .then(() => {
-        this.loggingIn = false;
+        toast.success("Logged out", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       })
       .catch(err => {
-        this.loggingIn = false;
-        this.error = err.message;
+        toast.error(err.message);
       });
   };
 
@@ -75,24 +78,24 @@ class Session extends React.Component {
         <input className="form-control"
           placeholder="Username"
           autoFocus
-          onChange={ ev => this.changeUsername(ev.target.value) }
+          onChange={ ev => this.setState({ username: ev.target.value }) }
           onKeyUp={ this.usernameOnKeyup }
-          value={ this.username }
+          value={ this.state.username }
         >
         </input>
         <input
           className="form-control"
           placeholder="password"
           type="password"
-          onChange={ ev => this.password = ev.target.value }
-          value={ this.password }
+          onChange={ ev => this.setState({ password: ev.target.value }) }
+          value={ this.state.password }
         >
         </input>
         <label>
           <input
             checked={ this.rememberMe }
             type="checkbox"
-            onClick={ ev => this.rememberMe = ev.target.checked } />
+            onClick={ ev => this.setState({ rememberMe: ev.target.checked })  } />
           Remember Me
         </label>
         <br />

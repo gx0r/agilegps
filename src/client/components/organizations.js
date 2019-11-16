@@ -34,7 +34,7 @@ class Organizations extends React.Component {
       <div>
         <div className="col-md-2" />
         <div className="col-md-8 business-table">
-          <button class="btn btn-default" style={{marginBottom: '1em'}}>Create Organization</button>
+          <button className="btn btn-default" style={{marginBottom: '1em'}}>Create Organization</button>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>
@@ -48,7 +48,7 @@ class Organizations extends React.Component {
               {
                 orgsByIDarray.map(org => {
                   return (
-                    <tr>
+                    <tr key={ org.id }>
                       <td>{ org.name }</td>
                       <td>
                         <a

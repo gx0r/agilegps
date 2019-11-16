@@ -27,10 +27,14 @@ import Root from "./components/root";
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const rootComponent = (
   <IntlProvider locale="en-US">
     <Provider store={ appState.getStore() }>
       <Root />
+      <ToastContainer />
     </Provider>
   </IntlProvider>
 );
