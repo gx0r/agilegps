@@ -1,121 +1,120 @@
-/* Copyright (c) 2016 Grant Miner */
-"use strict";
-const _ = require("lodash");
-const TheMap = require("../map");
-const toGoogle = require("../togoogle");
-const MarkerWithLabel = require("./markerWithLabel");
-const Status = require("../../common/status");
-const ClickListenerFactory = require("./clicklistenerfactory");
-const appState = require("../appState.js");
+// /* Copyright (c) 2016 Grant Miner */
+// "use strict";
+// const _ = require("lodash");
+// const toGoogle = require("../togoogle");
+// const MarkerWithLabel = require("./markerWithLabel");
+// const Status = require("../../common/status");
+// const ClickListenerFactory = require("./clicklistenerfactory");
+// const appState = require("../appState.js");
 
-const store = appState.getStore();
+// const store = appState.getStore();
 
-function create(item) {
-  const map = TheMap.getMap();
-  let position;
-  if (item.last) {
-    position = toGoogle(item.last);
-  } else {
-    position = toGoogle(item);
-  }
+// function create(item) {
+//   const map = appState.getState().map;
+//   let position;
+//   if (item.last) {
+//     position = toGoogle(item.last);
+//   } else {
+//     position = toGoogle(item);
+//   }
 
-  if (!position) {
-    console.warn("Org marker, invalid position " + JSON.stringify(item));
-    return;
-  }
+//   if (!position) {
+//     console.warn("Org marker, invalid position " + JSON.stringify(item));
+//     return;
+//   }
 
-  const marker = new MarkerWithLabel({
-    position: position,
-    map: map,
-    title: item.name,
-    labelContent: item.name,
-    labelAnchor: new google.maps.Point(0, 0),
-    labelClass: "maplabel", // the CSS class for the label
-    labelInBackground: false
-  });
+//   const marker = new MarkerWithLabel({
+//     position: position,
+//     map: map,
+//     title: item.name,
+//     labelContent: item.name,
+//     labelAnchor: new google.maps.Point(0, 0),
+//     labelClass: "maplabel", // the CSS class for the label
+//     labelInBackground: false
+//   });
 
-  marker.setIcon(Status.getMarkerIconFleetView(item.last));
-  google.maps.event.addListener(
-    marker,
-    "click",
-    ClickListenerFactory.create(marker, item, position)
-  );
+//   marker.setIcon(Status.getMarkerIconFleetView(item.last));
+//   google.maps.event.addListener(
+//     marker,
+//     "click",
+//     ClickListenerFactory.create(marker, item, position)
+//   );
 
-  return marker;
-}
+//   return marker;
+// }
 
-// const lastSelectedFleets = null;
-let markersByVehicleID = {};
+// // const lastSelectedFleets = null;
+// let markersByVehicleID = {};
 
-module.exports.clickMarkerByVehicleID = function(id) {
-  const marker = markersByVehicleID[id];
+// module.exports.clickMarkerByVehicleID = function(id) {
+//   const marker = markersByVehicleID[id];
 
-  if (marker) {
-    new google.maps.event.trigger(marker, "click");
-    TheMap.getMap().panTo(marker.position);
-  }
-};
+//   if (marker) {
+//     new google.maps.event.trigger(marker, "click");
+//     TheMap.getMap().panTo(marker.position);
+//   }
+// };
 
-let lastState = require("../appDefaultState");
+// let lastState = require("../appDefaultState");
 
-store.subscribe(() => {
-  TheMap.getReady().then(() => {
-    const state = store.getState();
-    if (!state.autoUpdate) {
-      return;
-    }
+// store.subscribe(() => {
+//   const state = store.getState();
+//   const map = state.map;
 
-    const lastImpliedSelectedVehicles = lastState.impliedSelectedVehicles;
-    const lastStateVehicleStatusByID = lastState.vehiclesByID;
+//   if (!state.autoUpdate) {
+//     return;
+//   }
 
-    if (
-      lastImpliedSelectedVehicles !== state.impliedSelectedVehicles ||
-      lastStateVehicleStatusByID !== state.vehiclesByID
-    ) {
-      if (
-        !state.autoUpdate &&
-        lastImpliedSelectedVehicles === state.impliedSelectedVehicles
-      ) {
-        // if we're looking at the same vehicles, but not autoupdating the map, don't do anything
-        return;
-      }
+//   const lastImpliedSelectedVehicles = lastState.impliedSelectedVehicles;
+//   const lastStateVehicleStatusByID = lastState.vehiclesByID;
 
-      // need to clear old markers
-      _.toArray(markersByVehicleID).forEach(function(marker) {
-        marker.setMap(null);
-      });
-      markersByVehicleID = {};
-    }
+//   if (
+//     lastImpliedSelectedVehicles !== state.impliedSelectedVehicles ||
+//     lastStateVehicleStatusByID !== state.vehiclesByID
+//   ) {
+//     if (
+//       !state.autoUpdate &&
+//       lastImpliedSelectedVehicles === state.impliedSelectedVehicles
+//     ) {
+//       // if we're looking at the same vehicles, but not autoupdating the map, don't do anything
+//       return;
+//     }
 
-    lastState = state;
+//     // need to clear old markers
+//     _.toArray(markersByVehicleID).forEach(function(marker) {
+//       marker.setMap(null);
+//     });
+//     markersByVehicleID = {};
+//   }
 
-    // if (state.vehiclesByID === lastStateVehicleStatusByID) {
-    //     // vehicle status are the same, don't need to
-    //     return;
-    // }
+//   lastState = state;
 
-    if (state.selectedFleetsAll || state.selectedFleets.length > 0) {
-      // lastSelectedFleets = _.cloneDeep(state.selectedFleets);
+//   // if (state.vehiclesByID === lastStateVehicleStatusByID) {
+//   //     // vehicle status are the same, don't need to
+//   //     return;
+//   // }
 
-      const bounds = new google.maps.LatLngBounds();
-      const vehicles = state.impliedSelectedVehicles;
+//   if (state.selectedFleetsAll || state.selectedFleets.length > 0) {
+//     // lastSelectedFleets = _.cloneDeep(state.selectedFleets);
 
-      state.impliedSelectedVehicles.forEach(function(vehicle) {
-        if (state.vehiclesByID[vehicle.id]) {
-          const marker = create(state.vehiclesByID[vehicle.id], false);
-          if (marker) {
-            bounds.extend(marker.position);
-            if (markersByVehicleID[vehicle.id]) {
-              markersByVehicleID[vehicle.id].setMap(null); // TODO why necessary
-            }
-            markersByVehicleID[vehicle.id] = marker;
-          }
-        }
-      });
+//     const bounds = new google.maps.LatLngBounds();
+//     const vehicles = state.impliedSelectedVehicles;
 
-      Promise.delay(0).then(function() {
-        TheMap.getMap().fitBounds(bounds);
-      });
-    }
-  });
-});
+//     state.impliedSelectedVehicles.forEach(function(vehicle) {
+//       if (state.vehiclesByID[vehicle.id]) {
+//         const marker = create(state.vehiclesByID[vehicle.id], false);
+//         if (marker) {
+//           bounds.extend(marker.position);
+//           if (markersByVehicleID[vehicle.id]) {
+//             markersByVehicleID[vehicle.id].setMap(null); // TODO why necessary
+//           }
+//           markersByVehicleID[vehicle.id] = marker;
+//         }
+//       }
+//     });
+
+//     Promise.delay(0).then(function() {
+//       map.fitBounds(bounds);
+//     });
+//   }
+// });

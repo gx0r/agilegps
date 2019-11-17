@@ -28,13 +28,13 @@ module.exports.mount = function(el) {
   // map.setMapTypeId(google.maps.MapTypeId.HYBRID);
   // map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
 
-  mapElement = el.firstChild;
+  // mapElement = el.firstChild;
 
-  if (queued) {
-    setVisible(queued[0], queued[1]).then(function() {
-      readyResolver(mapElement);
-    });
-  }
+  // if (queued) {
+  //   setVisible(queued[0], queued[1]).then(function() {
+  //     readyResolver(mapElement);
+  //   });
+  // }
 };
 
 module.exports.setMap = function(map) {

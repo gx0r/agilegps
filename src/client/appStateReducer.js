@@ -337,6 +337,16 @@ module.exports = function reducer(state, action) {
       return Object.assign({}, state, {
         showLatLong: !!action.value
       });
+    
+    case "SET_MAP":
+        return Object.assign({}, state, {
+          map: action.value
+        });
+
+    case "SET_MARKERS_BY_VEHICLE_ID":
+      return Object.assign({}, state, {
+        markersByVehicleID: action.value
+      });    
 
     default:
       return state;

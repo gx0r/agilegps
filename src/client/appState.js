@@ -1125,3 +1125,17 @@ module.exports.setShowLatLong = function(bool) {
     value: bool
   });
 };
+
+module.exports.setMap = function(map) {
+  store.dispatch({
+    type: "SET_MAP",
+    value: map
+  });
+}
+
+module.exports.setMarkersByVehicleID = function(markers) {
+  store.dispatch({
+    type: "SET_MARKERS_BY_VEHICLE_ID",
+    value: markers
+  });
+}

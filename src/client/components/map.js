@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import GoogleMapReact from 'google-map-react';
-import TheMap from '../map';
 import ClickListenerFactory from '../markers/clicklistenerfactory';
 import toGoogle from '../togoogle.js';
 import MarkerWithLabel from '../markers/markerWithLabel';
 import Status from "../../common/status";
+
+import appState from '../appState';
 
 class Map extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class Map extends React.Component {
   };
 
   createMarker = vehicle => {
-    const map = this.map.map;
+    const map = this.map;
     const position = toGoogle(vehicle.last ? vehicle.last : item);
   
     const marker = new MarkerWithLabel({
@@ -55,6 +56,16 @@ class Map extends React.Component {
     return marker;
   }
 
+  clickMarkerByVehicleID = id => {
+    const { markersByVehicleID } = this;
+    const marker = markersByVehicleID[id];
+  
+    if (marker) {
+      new google.maps.event.trigger(marker, "click");
+      this.map.panTo(marker.position);
+    }
+  };
+
   populateMapMarkers = () => {
     const { impliedSelectedVehicles, vehiclesByID } = this.props;
     const { markersByVehicleID } = this;
@@ -64,20 +75,29 @@ class Map extends React.Component {
     impliedSelectedVehicles.forEach(vehicle => {
       if (vehiclesByID[vehicle.id] && vehiclesByID[vehicle.id].last) {
         const marker = this.createMarker(vehiclesByID[vehicle.id], false);
-        bounds.extend(marker.position);
-        markersByVehicleID[vehicle.id] = marker;
+        if (marker) {
+          bounds.extend(marker.position);
+          if (markersByVehicleID[vehicle.id]) {
+            markersByVehicleID[vehicle.id].setMap(null);
+          }
+          markersByVehicleID[vehicle.id] = marker;
+        }
       }
+    });
+
+    appState.setMarkersByVehicleID(markersByVehicleID);
+
+    Promise.delay(0).then(function() {
+      map.fitBounds(bounds);
     });
   }
 
   handleApiLoaded = (map, maps) => {
-    this.map = map;
-    TheMap.setMap(map);
+    this.map = map.map;
+    appState.setMap(this.map);
   };
 
   componentDidMount() {
-    TheMap.mount(this.mapRef.current);
-    TheMap.setMap(this.map);
   }
 
   componentWillUpdate() {

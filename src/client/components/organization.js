@@ -39,7 +39,15 @@ class Organization extends React.Component {
       ClickListenerFactory.closeInfoWindow();
     } else {
       this.selectedItem = item;
-      OrgMarkers.clickMarkerByVehicleID(item.id);
+      const state = appState.getState();
+      const marker = state.markersByVehicleID[item.id];
+      const map = state.map;
+
+      // if (marker) {
+        new google.maps.event.trigger(marker, "click");
+        map.panTo(marker.position);
+      // }
+      // OrgMarkers.clickMarkerByVehicleID(item.id);
     }
   }
 
@@ -129,6 +137,7 @@ class Organization extends React.Component {
                 <tr
                   id={ vehicle.id }
                   onClick={ () => this.clickItem(vehicle) }
+                  style={{cursor: 'pointer'}}
                 >
                   <td className="nowrap">{ vehicle.name }</td>
                   <td className="nowrap">{ lastStatus.d ? formatDate(lastStatus.d) : "" } </td>
