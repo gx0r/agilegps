@@ -15,7 +15,6 @@ import appState from '../appState';
 class Map extends React.Component {
   constructor(props) {
     super(props);
-    this.mapRef = React.createRef();
     this.markersByVehicleID = {};
   }
 
@@ -62,9 +61,22 @@ class Map extends React.Component {
   
     if (marker) {
       new google.maps.event.trigger(marker, "click");
-      this.map.panTo(marker.position);
+      // this.map.panTo(marker.position);
     }
   };
+
+  removeMapMarkers = () => {
+    const { impliedSelectedVehicles } = this.props;
+    const { markersByVehicleID } = this;
+
+    impliedSelectedVehicles.forEach(vehicle => {
+        if (markersByVehicleID[vehicle.id]) {
+          markersByVehicleID[vehicle.id].setMap(null);
+        }
+    });
+
+    this.markersByVehicleID = {};
+  }
 
   populateMapMarkers = () => {
     const { impliedSelectedVehicles, vehiclesByID } = this.props;
@@ -77,9 +89,6 @@ class Map extends React.Component {
         const marker = this.createMarker(vehiclesByID[vehicle.id], false);
         if (marker) {
           bounds.extend(marker.position);
-          if (markersByVehicleID[vehicle.id]) {
-            markersByVehicleID[vehicle.id].setMap(null);
-          }
           markersByVehicleID[vehicle.id] = marker;
         }
       }
@@ -87,7 +96,7 @@ class Map extends React.Component {
 
     appState.setMarkersByVehicleID(markersByVehicleID);
 
-    Promise.delay(0).then(function() {
+    Promise.delay(100).then(() => {
       map.fitBounds(bounds);
     });
   }
@@ -101,7 +110,10 @@ class Map extends React.Component {
   }
 
   componentWillUpdate() {
-    // this.removeMapMarkers();
+    this.removeMapMarkers();
+  }
+
+  componentDidUpdate() {
     this.populateMapMarkers();
   }
 
@@ -111,7 +123,7 @@ class Map extends React.Component {
 
     return (
       // Important! Always set the container height explicitly
-      <div style={{ height, width: '100%' }} ref={ this.mapRef }>
+      <div style={{ height, width: '100%' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: '1234' }}
           defaultCenter={this.props.center}
