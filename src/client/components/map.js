@@ -77,6 +77,7 @@ class Map extends React.Component {
 
   componentDidMount() {
     TheMap.mount(this.mapRef.current);
+    TheMap.setMap(this.map);
   }
 
   componentWillUpdate() {
