@@ -46,11 +46,11 @@ class Map extends React.Component {
     marker.setIcon(Status.getMarkerIconFleetView(vehicle.last));
 
     // TODO
-    // google.maps.event.addListener(
-    //   marker,
-    //   "click",
-    //   ClickListenerFactory.create(marker, item, position)
-    // );
+    google.maps.event.addListener(
+      marker,
+      "click",
+      ClickListenerFactory.create(marker, vehicle, position, map)
+    );
   
     return marker;
   }
