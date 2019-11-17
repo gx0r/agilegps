@@ -45,7 +45,7 @@ class Organization extends React.Component {
 
       // if (marker) {
         new google.maps.event.trigger(marker, "click");
-        map.panTo(marker.position);
+        // map.panTo(marker.position);
       // }
       // OrgMarkers.clickMarkerByVehicleID(item.id);
     }
