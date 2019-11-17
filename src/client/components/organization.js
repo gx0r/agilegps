@@ -139,6 +139,8 @@ class Organization extends React.Component {
               { verbose && <td>Hour Meter</td> }
               <td>Dir</td>
               <td>{ isUserMetric() ? "km/h" : "mph" }</td>
+              { showLatLong && <td>Lat</td> }
+              { showLatLong && <td>Long</td> }
               <td>Status</td>
               { verbose && <td>Online</td> }
               { verbose && <td>Battery</td> }
