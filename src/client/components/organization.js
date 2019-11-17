@@ -16,15 +16,17 @@ import tomiles from "../tomiles";
 import todir from "../../common/todir";
 import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
-import OrgMarkers from "../markers/OrgMarkers.js";
 import ClickListenerFactory from "../markers/clicklistenerfactory";
+
+const RECENTLY_CHANGED = 10000;
 
 class Organization extends React.Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
-    this.state = {
-    }
+    // this.state = {
+    //   selectedItemID: null,
+    // }
   }
 
   static propTypes = {
@@ -33,15 +35,32 @@ class Organization extends React.Component {
   componentDidMount() {
   }
 
-  clickItem(item) {
-    if (this.selectedItem === item) {
-      this.selectedItem = {};
+  wasRecentlyUpdated = date => {
+    date = new Date(date);
+    const lastUpdated = new Date() - date < RECENTLY_CHANGED;
+
+    if (lastUpdated) {
+      Promise.delay(RECENTLY_CHANGED).then(() => {
+        this.forceUpdate();
+      });
+    }
+    return lastUpdated;
+  }
+
+  clickItem = item => {
+    const { selectedItemID } = this;
+    // const { selectedItemID } = this.state;
+
+    if (item.ID === selectedItemID) {
+      this.selectedItemID = null;
+      // this.setState({ selectedItemID: null})
       ClickListenerFactory.closeInfoWindow();
     } else {
-      this.selectedItem = item;
+      this.selectedItemID = item.ID;
+      // this.setState({ selectedItemID: item.ID})
       const state = appState.getState();
       const marker = state.markersByVehicleID[item.id];
-      const map = state.map;
+      // const map = state.map;
 
       // if (marker) {
         new google.maps.event.trigger(marker, "click");
@@ -49,6 +68,7 @@ class Organization extends React.Component {
       // }
       // OrgMarkers.clickMarkerByVehicleID(item.id);
     }
+    this.forceUpdate();
   }
 
   render() {
@@ -60,6 +80,9 @@ class Organization extends React.Component {
       version,
       verbose,
      } = this.props;
+    // const { selectedItemID } = this.state;
+    const { selectedItemID } = this;
+    console.log(selectedItemID);
 
      const getLastStatus = (vehicle) => {
       if (verbose) {
@@ -137,7 +160,17 @@ class Organization extends React.Component {
                 <tr
                   id={ vehicle.id }
                   onClick={ () => this.clickItem(vehicle) }
-                  style={{cursor: 'pointer'}}
+                  style={
+                    {
+                      cursor: 'pointer',
+                      transition: 'background-color 1s ease-in-out',
+                      backgroundColor: vehicle.id === this.selectedItemID
+                      ? '#FEE0C6'
+                      : this.wasRecentlyUpdated(lastStatus.d)
+                      ? 'yellow'
+                      : ''
+                    }
+                  }
                 >
                   <td className="nowrap">{ vehicle.name }</td>
                   <td className="nowrap">{ lastStatus.d ? formatDate(lastStatus.d) : "" } </td>
@@ -155,7 +188,8 @@ class Organization extends React.Component {
                       color: Status.getStatusColor(lastStatus)
                     }}
                     className="nowrap">{ Status.getStatus(lastStatus) }</td>
-                  { verbose && <td style="nowrap">{ lastStatus.b ? 'Buffered' : 'Yes' } </td> }
+                  { verbose && <td className="nowrap">{ lastStatus.b ? 'Buffered' : 'Yes' } </td> }
+                  { verbose && <td className="nowrap">{ lastStatus.bp ? `${lastStatus.bp}%` : null }</td> }
                   <td className="nowrap">
                     <img src={ helpers.getAccuracyAsImg(lastStatus.g) } />
                   </td>
