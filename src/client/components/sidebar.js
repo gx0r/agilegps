@@ -93,8 +93,56 @@ class Sidebar extends React.Component {
     appState.selectFleet(fleet);
   };
 
+  renderFleet = fleet => {
+    const { selectedFleets, selectedVehicle, vehiclesByID } = this.props;
+    const { searchInput } = this.state;
+
+    let selectedFleet = null;
+    if (selectedFleets.length === 1) { // TODO move to reducer/selector
+      selectedFleet = selectedFleets[0];
+    }
+
+    const vehicleElements = fleet.vehicles.filter(vid => {
+      const vehicle = vehiclesByID[vid];
+      return searchInput === '' || vehicle.name.toUpperCase().includes(searchInput.toUpperCase());
+    })
+    .map(vid => {
+      const vehicle = vehiclesByID[vid];
+      return (
+        <li
+          style={{
+            margin: '0 0 0 15px',
+          }}
+          className={ classnames('list-group-item pointer', {
+            active: selectedVehicle === vehicle
+          }) }
+          onClick={ () => appState.selectVehicleByID(vehicle.id) }
+          data-key={ vid }
+          key={ vid }
+        >
+          { formatVehicle(vehicle) }
+        </li>
+      )
+    });
+
+    return (
+      <>
+        <li
+          data-key={ fleet.id }
+          key={ fleet.id }
+          onClick={ () => this.selectFleet(fleet) }
+          className={ classnames('list-group-item pointer', {
+            active: selectedFleet && selectedFleet.id === fleet.id
+          }) }>
+          <CarImage fill={fleet.color} /> <b>{ fleet.name }</b>
+        </li>
+        { vehicleElements }
+      </>
+    );
+  }
+
   render() {
-    const { fleets, selectedAllFleets, selectedVehicle, vehiclesByID } = this.props;
+    const { fleets, selectedAllFleets } = this.props;
     const { searchInput } = this.state;
 
     return (
@@ -125,40 +173,7 @@ class Sidebar extends React.Component {
           }) }><TruckFacing fill="black" /> Fleets/All
           </li>
           {
-            fleets.map(fleet => {
-              return (
-                <li
-                  key={ fleet.id }
-                  onClick={ () => this.selectFleet(fleet) }
-                  className={ classnames('list-group-item pointer', {}) }>
-                  <CarImage fill={fleet.color} /> <b>{ fleet.name }</b>
-                  { 
-                    fleet.vehicles.filter(vid => {
-                      const vehicle = vehiclesByID[vid];
-                      return searchInput === '' || vehicle.name.toUpperCase().includes(searchInput);
-                    })
-                    .map(vid => {
-                      const vehicle = vehiclesByID[vid];
-                      return (
-                        <li
-                          className="list-group-item pointer"
-                          style={{ 
-                            margin: '0 0 0 15px',
-                          }}
-                          className={ classnames({
-                            active: selectedVehicle === vehicle
-                          }) }
-                          onClick={ () => appState.selectVehicleByID(vehicle.id) }
-                          key={ vid }
-                        >
-                          { formatVehicle(vehicle) }
-                        </li>
-                      )
-                    })
-                  }
-                </li>
-              );
-            })
+            fleets.map(this.renderFleet)
           }
         </ul>
       </div>
@@ -170,6 +185,7 @@ export default connect(
   state => ({
     fleets: toArray(state.fleetsByID),
     selectedAllFleets: state.selectedAllFleets,
+    selectedFleets: state.selectedFleets,
     selectedVehicle: state.selectedVehicle,
     vehiclesByID: state.vehiclesByID,
   }),
