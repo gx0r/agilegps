@@ -17,6 +17,7 @@ import todir from "../../common/todir";
 import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
 import ClickListenerFactory from "../markers/clicklistenerfactory";
+import tzOffset from "../tzoffset";
 
 const RECENTLY_CHANGED = 10000;
 
@@ -24,9 +25,9 @@ class Organization extends React.Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
-    // this.state = {
-    //   selectedItemID: null,
-    // }
+    this.state = {
+      selectedItemID: null,
+    }
   }
 
   static propTypes = {
@@ -47,28 +48,26 @@ class Organization extends React.Component {
     return lastUpdated;
   }
 
-  clickItem = item => {
+  clickItem = vehicle => {
     const { selectedItemID } = this;
     // const { selectedItemID } = this.state;
 
-    if (item.ID === selectedItemID) {
+    if (vehicle.ID === selectedItemID) {
       this.selectedItemID = null;
-      // this.setState({ selectedItemID: null})
+      this.setState({ selectedItemID: null})
       ClickListenerFactory.closeInfoWindow();
     } else {
-      this.selectedItemID = item.ID;
-      // this.setState({ selectedItemID: item.ID})
+      this.selectedItemID = vehicle.ID;
+      this.setState({ selectedItemID: vehicle.ID})
       const state = appState.getState();
-      const marker = state.markersByVehicleID[item.id];
+      const marker = state.markersByVehicleID[vehicle.id];
       // const map = state.map;
 
-      // if (marker) {
-        new google.maps.event.trigger(marker, "click");
+      if (marker) {
+        new google.maps.event.trigger(marker, 'click');
         // map.panTo(marker.position);
-      // }
-      // OrgMarkers.clickMarkerByVehicleID(item.id);
+      }
     }
-    this.forceUpdate();
   }
 
   render() {
@@ -104,6 +103,8 @@ class Organization extends React.Component {
       }
      }
 
+    const excelHref = `/api/organizations/${selectedOrg.id}/vehiclestatus?format=excel&latlong=${this.showLatLong}&verbose=${this.verbose}&tzOffset=${encodeURIComponent(tzOffset())}`;
+
     return (
       <div className="business-table">
         <label style={{marginRight: "0.5em"}} >
@@ -119,6 +120,7 @@ class Organization extends React.Component {
           LAT/LONG
         </label>
         <a
+          href={ excelHref }
           className="padrt"
           style={{ cursor: 'pointer'}} >
           <img src="images/excel-icon.png" />
