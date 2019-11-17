@@ -5,8 +5,6 @@ const ReactDOM = require('react-dom');
 const render = require('react-dom').render;
 
 const t = require("../i18n").translate;
-const TheMap = require("../map");
-const m = require("mithril");
 const moment = require("moment");
 const Status = require("../../common/status");
 const hidenan = require("../../common/hidenan");
@@ -21,13 +19,13 @@ function closeInfoWindow() {
 }
 module.exports.closeInfoWindow = closeInfoWindow;
 
-module.exports.create = function(marker, item, position, mapArg) {
+module.exports.create = function(marker, item, position, map) {
   return function() {
     if (!item.last) {
       item.last = _.cloneDeep(item);
     }
 
-    const map = mapArg || TheMap.getMap();
+    const map = appState.getState().map;
     map.setCenter(position);
     const ref = React.createRef();
     
