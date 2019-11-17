@@ -7,8 +7,8 @@ import classnames from 'classnames';
 import { toArray } from 'lodash';
 import appState from '../appState';
 
-import truckFacingImg from './truckFacing.svg';
-import carImg from './car.svg';
+import TruckFacing from './truckfacing';
+import CarImage from './car';
 
 function formatVehicle(vehicle) {
   if (!vehicle) return "";
@@ -122,7 +122,7 @@ class Sidebar extends React.Component {
             onClick={ this.selectFleetAll }
             className={ classnames('list-group-item pointer', {
             'active': selectedAllFleets,
-          }) }><img src={ truckFacingImg } /> Fleets/All
+          }) }><TruckFacing fill="black" /> Fleets/All
           </li>
           {
             fleets.map(fleet => {
@@ -131,7 +131,7 @@ class Sidebar extends React.Component {
                   key={ fleet.id }
                   onClick={ () => this.selectFleet(fleet) }
                   className={ classnames('list-group-item pointer', {}) }>
-                  <img src={ carImg } /> <b>{ fleet.name }</b>
+                  <CarImage fill={fleet.color} /> <b>{ fleet.name }</b>
                   { 
                     fleet.vehicles.filter(vid => {
                       const vehicle = vehiclesByID[vid];
