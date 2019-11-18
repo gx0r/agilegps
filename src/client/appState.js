@@ -1139,3 +1139,10 @@ module.exports.setMarkersByVehicleID = function(markers) {
     value: markers
   });
 }
+
+module.exports.selectMapVehicleID = function(id) {
+  store.dispatch({
+    type: "SET_MAP_VEHICLE",
+    value: id
+  });
+}

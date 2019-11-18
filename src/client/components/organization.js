@@ -49,13 +49,13 @@ class Organization extends React.Component {
   }
 
   clickItem = vehicle => {
-    const { selectedItemID } = this.state;
+    const { selectedMapVehicleID } = this.props;
 
-    if (vehicle.id === selectedItemID) {
-      this.setState({ selectedItemID: null})
+    if (vehicle.id === selectedMapVehicleID) {
+      appState.selectMapVehicleID(null);
       ClickListenerFactory.closeInfoWindow();
     } else {
-      this.setState({ selectedItemID: vehicle.id})
+      appState.selectMapVehicleID(vehicle.id);
       const state = appState.getState();
       const marker = state.markersByVehicleID[vehicle.id];
       const map = state.map;
@@ -71,12 +71,12 @@ class Organization extends React.Component {
     const { 
       autoUpdate,
       impliedSelectedVehicles,
+      selectedMapVehicleID,
       selectedOrg,
       showLatLong,
       version,
       verbose,
      } = this.props;
-    const { selectedItemID } = this.state;
 
      const getLastStatus = (vehicle) => {
       if (verbose) {
@@ -163,7 +163,7 @@ class Organization extends React.Component {
                     {
                       cursor: 'pointer',
                       transition: 'background-color 0.2s ease-in-out',
-                      backgroundColor: vehicle.id === selectedItemID
+                      backgroundColor: vehicle.id === selectedMapVehicleID
                       ? '#FEE0C6'
                       : this.wasRecentlyUpdated(lastStatus.d)
                       ? 'yellow'
@@ -210,6 +210,7 @@ export default connect(
     autoUpdate: state.autoUpdate,
     impliedSelectedVehicles: state.impliedSelectedVehicles,
     selectedOrg: state.selectedOrg,
+    selectedMapVehicleID: state.selectedMapVehicleID,
     showLatLong: state.showLatLong,
     user: state.user,
     verbose: state.verbose,

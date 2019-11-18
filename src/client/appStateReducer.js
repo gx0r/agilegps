@@ -348,6 +348,11 @@ module.exports = function reducer(state, action) {
         markersByVehicleID: action.value
       });    
 
+    case "SET_MAP_VEHICLE":
+        return Object.assign({}, state, {
+          selectedMapVehicleID: action.value
+        }); 
+
     default:
       return state;
   }
