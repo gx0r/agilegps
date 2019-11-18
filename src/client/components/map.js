@@ -108,9 +108,6 @@ class Map extends React.Component {
     appState.setMap(this.map);
   };
 
-  componentDidMount() {
-  }
-
   componentWillUpdate() {
     this.removeMapMarkers();
   }

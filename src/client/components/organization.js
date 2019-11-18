@@ -107,11 +107,19 @@ class Organization extends React.Component {
           Auto-Update Map            
         </label>
         <label className="padrt">
-          <input type="checkbox" onClick={ ev => appState.setShowVerbose(ev.target.checked) } />
+          <input
+            checked={ verbose }
+            type="checkbox"
+            onClick={ ev => appState.setShowVerbose(ev.target.checked) }
+          />
           Verbose
         </label>
         <label className="padrt">
-          <input type="checkbox" onClick={ ev => appState.setShowLatLong(ev.target.checked) } />
+          <input
+            checked={ showLatLong }
+            type="checkbox"
+            onClick={ ev => appState.setShowLatLong(ev.target.checked) }
+          />
           LAT/LONG
         </label>
         <a
