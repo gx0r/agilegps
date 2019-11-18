@@ -53,7 +53,7 @@ if (RENDER_WITH_REACT) {
 }
 
 
-require("./markers/OrgMarkers");
+// require("./markers/OrgMarkers");
 require("./appSocketState");
 
 // if ('scrollRestoration' in history) {

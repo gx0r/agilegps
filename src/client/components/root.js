@@ -12,6 +12,7 @@ import Organization from './organization';
 import Organizations from './organizations';
 import Session from './session';
 import Help from './help';
+import Vehicle from './vehicle';
 
 import queryString from 'query-string';
 
@@ -25,7 +26,7 @@ class Root extends React.Component {
   }
 
   renderView() {
-    const { subview, view, viewID} = this.props;
+    const { selectedVehicle, subview, view, viewID} = this.props;
 
     if (view === 'SESSION') {
       return (
@@ -51,6 +52,13 @@ class Root extends React.Component {
       return <Help />
     }
 
+    let lowerView = null;
+    if (selectedVehicle) {
+      lowerView = <Vehicle />;
+    } else {
+      lowerView = <Organization />;
+    }
+
     return (
       <Fragment>
         <div className="container-fluid">
@@ -63,7 +71,7 @@ class Root extends React.Component {
                 <Map />
               </div>
               <br />
-              <Organization />
+              { lowerView }
             </div>            
           </div>
         </div>
@@ -84,6 +92,7 @@ class Root extends React.Component {
 export default connect(
   state => ({
     user: state.user,
+    selectedVehicle: state.selectedVehicle,
     subview: state.subview,
     view: state.view,
     viewID: state.viewID,
