@@ -1,5 +1,6 @@
 "use strict";
 const hasLang = require("./i18n").hasLang;
+const moment = require('moment');
 
 module.exports = {
   lang: "", // set below
@@ -31,8 +32,8 @@ module.exports = {
   subview: "",
   viewID: "", // object ID to view, if any
 
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: moment(),
+  endDate: moment(),
 
   // events / errors / rawevents
   eventCount: 0,
