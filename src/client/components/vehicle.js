@@ -36,7 +36,6 @@ class Vehicle extends React.Component {
       raw: false,
       rollup: true,
     }
-    this.adjustedVehicleHistory = [];
   }
 
   static propTypes = {
@@ -56,7 +55,7 @@ class Vehicle extends React.Component {
     );
   }
 
-  componentDidUpdate() {
+  recalculateHistory = () => {
     // console.log('recalculating');
     const { hist, verbose } = this.props;
     const {
@@ -96,10 +95,11 @@ class Vehicle extends React.Component {
       if (!reverseOrder) {
         res.reverse();
       }
+      
+      return res;
     }
 
-    // console.log(res)
-    this.adjustedVehicleHistory = res;
+    this.setState({ adjustedVehicleHistory: res });
   }
 
   render() {
@@ -126,9 +126,7 @@ class Vehicle extends React.Component {
       selectedItemID,
      } = this.state;
 
-     const {
-      adjustedVehicleHistory,
-     } = this;
+     const adjustedVehicleHistory = this.recalculateHistory(hist);
 
      console.log(hist);
 
