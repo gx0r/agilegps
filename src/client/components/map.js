@@ -79,7 +79,7 @@ class Map extends React.Component {
   }
 
   populateMapMarkers = () => {
-    const { impliedSelectedVehicles, vehiclesByID } = this.props;
+    const { impliedSelectedVehicles, selectedMapVehicleID, vehiclesByID } = this.props;
     const { markersByVehicleID } = this;
 
     const bounds = new google.maps.LatLngBounds();
@@ -90,6 +90,9 @@ class Map extends React.Component {
         if (marker) {
           bounds.extend(marker.position);
           markersByVehicleID[vehicle.id] = marker;
+          if (selectedMapVehicleID === vehicle.id) {
+            new google.maps.event.trigger(marker, 'click');
+          }
         }
       }
     });
@@ -141,6 +144,7 @@ export default connect(
     impliedSelectedVehicles: state.impliedSelectedVehicles,
     selectedFleets: state.selectedFleets,
     selectedFleetsAll: state.selectedFleetsAll,
+    selectedMapVehicleID: state.selectedMapVehicleID,
     subview: state.subview,
     vehiclesByID: state.vehiclesByID,
   }),
