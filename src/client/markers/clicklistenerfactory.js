@@ -15,7 +15,7 @@ const _ = require("lodash");
 let lastinfowindow;
 
 function closeInfoWindow() {
-  if (lastinfowindow) lastinfowindow.close();
+  // if (lastinfowindow) lastinfowindow.close();
 }
 module.exports.closeInfoWindow = closeInfoWindow;
 
@@ -26,10 +26,29 @@ module.exports.create = function(marker, item, position, map) {
     }
 
     const map = appState.getState().map;
-    map.setCenter(position);
+    // map.setCenter(position);
     const ref = React.createRef();
-    
+  
     function PopupView() {
+
+      const zoomIn = () => {
+        const center = new google.maps.LatLng(
+          item.last.la + 0.0003,
+          item.last.lo
+        );
+        map.setCenter(center);
+        map.setZoom(18);
+      };
+
+      const zoomOut = () => {
+        var markers = _.toArray(appState.getState().markersByVehicleID);
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markers.length; i++) {
+          bounds.extend(markers[i].getPosition());
+        }
+        map.fitBounds(bounds);
+      };
+
       return (
         <>
           <div>
@@ -54,37 +73,32 @@ module.exports.create = function(marker, item, position, map) {
               { moment(item.last.d).format("M/DD/YYYY h:mm:ss A") }
             </div>
             <div style={{textAlign:'center'}}>
-              Zoom in: <a onClick={ () => {
-                const center = new google.maps.LatLng(
-                  item.last.la + 0.0003,
-                  item.last.lo
-                );
-                map.setCenter(center);
-                map.setZoom(18);
+              Zoom In: <a onClick={ () => {
+                zoomIn();
                 map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
               }}>Road</a> | <a onClick={ () => {
-                const center = new google.maps.LatLng(
-                  item.last.la + 0.0003,
-                  item.last.lo
-                );
-                map.setCenter(center);
-                map.setZoom(18);
+                zoomIn();
                 map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
               }}>Satellite</a> | <a onClick={ () => {
-                const center = new google.maps.LatLng(
-                  item.last.la + 0.0003,
-                  item.last.lo
-                );
-                map.setCenter(center);
-                map.setZoom(18);
+                zoomIn();
                 map.setMapTypeId(google.maps.MapTypeId.HYBRID);
               }}>Hybrid</a> | <a onClick={ () => {
-                const center = new google.maps.LatLng(
-                  item.last.la + 0.0003,
-                  item.last.lo
-                );
-                map.setCenter(center);
-                map.setZoom(18);
+                zoomIn();
+                map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+              }}>Terrain</a>
+              <br />
+              Zoom Out: <a onClick={ () => {
+                zoomOut();
+                map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+              }}>
+                Road</a> | <a onClick={ () => {
+                zoomOut();
+                map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+              }}>Satellite</a> | <a onClick={ () => {
+                zoomOut();
+                map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+              }}>Hybrid</a> | <a onClick={ () => {
+                zoomOut();
                 map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
               }}>Terrain</a>
             </div>
@@ -101,14 +115,14 @@ module.exports.create = function(marker, item, position, map) {
 
     const streetViewService = new google.maps.StreetViewService();
     const STREETVIEW_MAX_DISTANCE = 100;
-    const infowindow = new google.maps.InfoWindow({
+    const infoWindow = new google.maps.InfoWindow({
       content: renderedElement
     });
 
     streetViewService.getPanoramaByLocation(
       position,
       STREETVIEW_MAX_DISTANCE,
-      function(streetViewPanoramaData, status) {
+      (streetViewPanoramaData, status) => {
         if (status === google.maps.StreetViewStatus.OK) {
           const pano = new google.maps.StreetViewPanorama(ref.current, {
             pov: {
@@ -121,7 +135,7 @@ module.exports.create = function(marker, item, position, map) {
           pano.setPosition(streetViewPanoramaData.location.latLng);
           pano.setVisible(true);
 
-          google.maps.event.addListener(infowindow, "closeclick", function() {
+          google.maps.event.addListener(infoWindow, "closeclick", function() {
             pano.unbind("position");
             pano.setVisible(false);
           });
@@ -131,8 +145,8 @@ module.exports.create = function(marker, item, position, map) {
       }
     );
 
-    closeInfoWindow();
-    infowindow.open(map, this);
-    lastinfowindow = infowindow;
+    // closeInfoWindow();
+    infoWindow.open(map, this);
+    lastinfowindow = infoWindow;
   };
 };
