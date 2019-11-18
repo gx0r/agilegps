@@ -803,7 +803,7 @@ module.exports.selectDays = function(startDate, endDate) {
 };
 
 function selectDay(startDate) {
-  startDate = new Date(startDate);
+  startDate = moment(startDate);
   store.dispatch({
     type: "SELECT_DAYS",
     startDate: startDate,

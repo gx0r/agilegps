@@ -8,6 +8,7 @@ import { toArray } from 'lodash';
 import appState from '../appState';
 
 import moment from 'moment';
+import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
 
 import helpers from '../../common/helpers';
 import { city, street } from "../../common/addressdisplay";
@@ -56,7 +57,6 @@ class Vehicle extends React.Component {
   }
 
   recalculateHistory = () => {
-    // console.log('recalculating');
     const { hist, verbose } = this.props;
     const {
       calculateDistanceBetween,
@@ -95,23 +95,23 @@ class Vehicle extends React.Component {
       if (!reverseOrder) {
         res.reverse();
       }
-      
-      return res;
     }
 
-    this.setState({ adjustedVehicleHistory: res });
+    return res;
   }
 
   render() {
     const { 
       advancedUI,
       autoUpdate,
+      endDate,
       hist,
       impliedSelectedVehicles,
       selectedMapVehicleID,
       selectedOrg,
       selectedVehicle,
       showLatLong,
+      startDate,
       version,
       verbose,
      } = this.props;
@@ -127,8 +127,6 @@ class Vehicle extends React.Component {
      } = this.state;
 
      const adjustedVehicleHistory = this.recalculateHistory(hist);
-
-     console.log(hist);
 
      const excelHref = `/api/organizations/${selectedOrg.id}/vehiclehistory/${selectedVehicle}/?format=excel&latlong=${this.showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&tzOffset=${encodeURIComponent(tzOffset())}`;
 
@@ -155,6 +153,16 @@ class Vehicle extends React.Component {
         </div>
         <br />
         <div className="nowrap">
+          <DateRangePicker
+            startDate={ moment(startDate) } // momentPropTypes.momentObj or null,
+            startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
+            endDate={ moment(endDate) } // momentPropTypes.momentObj or null,
+            endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
+            onDatesChange={ ({ startDate, endDate }) => appState.selectDays(startDate, endDate) } // PropTypes.func.isRequired,
+            focusedInput={ this.state.focusedInput } // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+            onFocusChange={ focusedInput => this.setState({ focusedInput }) } // PropTypes.func.isRequired,
+            isOutsideRange={ () => false }
+          />
           <label className="padrt">
             <input
               checked={ highlightStarts }
@@ -288,10 +296,12 @@ export default connect(
   state => ({
     advancedUI: state.user.advancedUI,
     autoUpdate: state.autoUpdate,
+    endDate: state.endDate,
     hist: state.selectedVehicleHistory,
     impliedSelectedVehicles: state.impliedSelectedVehicles,
     selectedOrg: state.selectedOrg,
     selectedVehicle: state.selectedVehicle,
+    startDate: state.startDate,
     showLatLong: state.showLatLong,
     user: state.user,
     verbose: state.verbose,

@@ -5,6 +5,11 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+
+import queryString from 'query-string';
+
 import Navbar from './navbar';
 import Map from './map';
 import Sidebar from './sidebar';
@@ -13,8 +18,6 @@ import Organizations from './organizations';
 import Session from './session';
 import Help from './help';
 import Vehicle from './vehicle';
-
-import queryString from 'query-string';
 
 class Root extends React.Component {
   constructor(props) {
