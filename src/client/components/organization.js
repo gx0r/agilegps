@@ -49,19 +49,16 @@ class Organization extends React.Component {
   }
 
   clickItem = vehicle => {
-    const { selectedItemID } = this;
-    // const { selectedItemID } = this.state;
+    const { selectedItemID } = this.state;
 
-    if (vehicle.ID === selectedItemID) {
-      this.selectedItemID = null;
+    if (vehicle.id === selectedItemID) {
       this.setState({ selectedItemID: null})
       ClickListenerFactory.closeInfoWindow();
     } else {
-      this.selectedItemID = vehicle.ID;
-      this.setState({ selectedItemID: vehicle.ID})
+      this.setState({ selectedItemID: vehicle.id})
       const state = appState.getState();
       const marker = state.markersByVehicleID[vehicle.id];
-      // const map = state.map;
+      const map = state.map;
 
       if (marker) {
         new google.maps.event.trigger(marker, 'click');
@@ -79,9 +76,7 @@ class Organization extends React.Component {
       version,
       verbose,
      } = this.props;
-    // const { selectedItemID } = this.state;
-    const { selectedItemID } = this;
-    console.log(selectedItemID);
+    const { selectedItemID } = this.state;
 
      const getLastStatus = (vehicle) => {
       if (verbose) {
@@ -167,8 +162,8 @@ class Organization extends React.Component {
                   style={
                     {
                       cursor: 'pointer',
-                      transition: 'background-color 1s ease-in-out',
-                      backgroundColor: vehicle.id === this.selectedItemID
+                      transition: 'background-color 0.2s ease-in-out',
+                      backgroundColor: vehicle.id === selectedItemID
                       ? '#FEE0C6'
                       : this.wasRecentlyUpdated(lastStatus.d)
                       ? 'yellow'
