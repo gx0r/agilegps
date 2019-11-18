@@ -53,7 +53,7 @@ class Organization extends React.Component {
 
     if (vehicle.id === selectedMapVehicleID) {
       appState.selectMapVehicleID(null);
-      ClickListenerFactory.closeInfoWindow();
+      // ClickListenerFactory.closeInfoWindow();
     } else {
       appState.selectMapVehicleID(vehicle.id);
       const state = appState.getState();

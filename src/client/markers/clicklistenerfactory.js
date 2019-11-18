@@ -12,12 +12,8 @@ const tomiles = require("../tomiles");
 const isUserMetric = require("../isUserMetric");
 const appState = require("../appState");
 const _ = require("lodash");
-let lastinfowindow;
 
-function closeInfoWindow() {
-  // if (lastinfowindow) lastinfowindow.close();
-}
-module.exports.closeInfoWindow = closeInfoWindow;
+const infoWindowsByVehicleID = {};
 
 module.exports.create = function(marker, item, position, map) {
   return function() {
@@ -25,7 +21,12 @@ module.exports.create = function(marker, item, position, map) {
       item.last = _.cloneDeep(item);
     }
 
-    const map = appState.getState().map;
+    const state = appState.getState();
+    if (infoWindowsByVehicleID[item.id]) {
+      infoWindowsByVehicleID[item.id].setMap(null);
+      infoWindowsByVehicleID[item.id] = null;
+    }
+    const map = state.map;
     // map.setCenter(position);
     const ref = React.createRef();
   
@@ -145,8 +146,7 @@ module.exports.create = function(marker, item, position, map) {
       }
     );
 
-    // closeInfoWindow();
     infoWindow.open(map, this);
-    lastinfowindow = infoWindow;
+    infoWindowsByVehicleID[item.id] = infoWindow;
   };
 };
