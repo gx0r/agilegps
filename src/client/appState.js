@@ -18,7 +18,8 @@ const logger = createLogger({
 });
 const store = redux.createStore(
   reducer,
-  REDUX_LOGGING ? redux.applyMiddleware(logger) : null
+  // REDUX_LOGGING ? redux.applyMiddleware(logger) : null
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 if (Cookies.get("jwt")) {
@@ -646,25 +647,26 @@ function update() {
 module.exports.update = update;
 
 module.exports.selectVehicleByID = function(id) {
-  let state = store.getState();
-
   store.dispatch({
     type: "SELECT_VEHICLE",
     id: id
   });
 
+  const state = store.getState();
+  let retVal = Promise.resolve();
   let lastStatus;
   if (state.vehiclesByID[id]) {
     lastStatus = state.vehiclesByID[id].last;
+    if (lastStatus != null && lastStatus.d) {
+      retVal = selectDay(
+        moment(lastStatus.d)
+          .startOf("day")
+          .toDate()
+      );
+    }
   }
 
-  if (lastStatus != null && lastStatus.d) {
-    return selectDay(
-      moment(lastStatus.d)
-        .startOf("day")
-        .toDate()
-    );
-  }
+  return retVal;
 };
 
 module.exports.saveOrg = function(org) {

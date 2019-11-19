@@ -49,3 +49,10 @@ export function animationStop() {
     value: true
   };
 };
+
+export function setAnimationSpeed(value) {
+  return {
+    type: "ANIMATION_SPEED",
+    value,
+  };
+};

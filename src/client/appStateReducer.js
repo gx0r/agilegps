@@ -367,7 +367,11 @@ module.exports = function reducer(state, action) {
         return Object.assign({}, state, {
           animationPlaying: false,
         });
-    
+
+    case "ANIMATION_SPEED":
+        return Object.assign({}, state, {
+          animationSpeed: action.value,
+        });
 
     default:
       return state;

@@ -4,7 +4,7 @@ const moment = require('moment');
 
 module.exports = {
   animationPlaying: false,
-  animationSpeed: 1000,
+  animationSpeed: 15,
 
   lang: "", // set below
 
