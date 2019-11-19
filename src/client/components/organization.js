@@ -21,6 +21,10 @@ import tzOffset from "../tzoffset";
 
 const RECENTLY_CHANGED = 10000;
 
+import {
+  setShowVerbose,
+  setShowLatLong,
+} from '../appStateActionCreators';
 class Organization extends React.Component {
   constructor(props) {
     super(props);
@@ -69,6 +73,8 @@ class Organization extends React.Component {
       impliedSelectedVehicles,
       selectedMapVehicleID,
       selectedOrg,
+      setShowLatLong,
+      setShowVerbose,
       showLatLong,
       version,
       verbose,
@@ -110,7 +116,7 @@ class Organization extends React.Component {
           <input
             checked={ verbose }
             type="checkbox"
-            onClick={ ev => appState.setShowVerbose(ev.target.checked) }
+            onClick={ ev => setShowVerbose(ev.target.checked) }
           />
           Verbose
         </label>
@@ -118,7 +124,7 @@ class Organization extends React.Component {
           <input
             checked={ showLatLong }
             type="checkbox"
-            onClick={ ev => appState.setShowLatLong(ev.target.checked) }
+            onClick={ ev => setShowLatLong(ev.target.checked) }
           />
           LAT/LONG
         </label>
@@ -224,5 +230,7 @@ export default connect(
     verbose: state.verbose,
   }),
   dispatch => bindActionCreators({
+    setShowLatLong,
+    setShowVerbose,
   }, dispatch),
 )(Organization);

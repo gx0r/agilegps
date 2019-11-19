@@ -23,7 +23,12 @@ import Status from "../../common/status.js";
 import ClickListenerFactory from "../markers/clicklistenerfactory";
 import tzOffset from "../tzoffset";
 
-const RECENTLY_CHANGED = 10000;
+import {
+  selectDays,
+  selectHistoryItemID,
+  setShowVerbose,
+  setShowLatLong,
+} from '../appStateActionCreators';
 
 class Vehicle extends React.Component {
   constructor(props) {
@@ -47,17 +52,19 @@ class Vehicle extends React.Component {
   };
 
   componentWillMount() {
+    const { selectDays } = this.props;
     // todo
-    appState.selectDays(
-      moment().subtract(1, 'day').toDate(),
-      moment()
-        .add(2, "day")
-        .toDate()
-    );
+    // selectDays(
+    //   moment().subtract(1, 'day').toDate(),
+    //   moment()
+    //     .add(2, "day")
+    //     .toDate()
+    // );
   }
 
   clickItem = item => {
-    appState.selectHistoryItemID(item.id);
+    const { selectHistoryItemID } = this.props;
+    selectHistoryItemID(item.id);
   };
 
   recalculateHistory = () => {
@@ -111,10 +118,13 @@ class Vehicle extends React.Component {
       endDate,
       hist,
       impliedSelectedVehicles,
+      selectDays,
       selectedHistoryItemID,
       selectedMapVehicleID,
       selectedOrg,
       selectedVehicle,
+      setShowVerbose,
+      setShowLatLong,
       showLatLong,
       startDate,
       version,
@@ -163,7 +173,7 @@ class Vehicle extends React.Component {
             startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
             endDate={ moment(endDate) } // momentPropTypes.momentObj or null,
             endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
-            onDatesChange={ ({ startDate, endDate }) => appState.selectDays(startDate, endDate) } // PropTypes.func.isRequired,
+            onDatesChange={ ({ startDate, endDate }) => selectDays(startDate, endDate) } // PropTypes.func.isRequired,
             focusedInput={ this.state.focusedInput } // PropTypes.oneOf([START_DATE, END_DATE]) or null,
             onFocusChange={ focusedInput => this.setState({ focusedInput }) } // PropTypes.func.isRequired,
             isOutsideRange={ () => false }
@@ -193,7 +203,7 @@ class Vehicle extends React.Component {
             <input
               checked={ verbose }
               type="checkbox"
-              onClick={ ev => appState.setShowVerbose(ev.target.checked) }
+              onClick={ ev => setShowVerbose(ev.target.checked) }
             />
             Verbose
           </label>
@@ -201,7 +211,7 @@ class Vehicle extends React.Component {
             <input
               checked={ showLatLong }
               type="checkbox"
-              onClick={ ev => appState.setShowLatLong(ev.target.checked) }
+              onClick={ ev => setShowLatLong(ev.target.checked) }
             />
             LAT/LONG
           </label>
@@ -313,5 +323,9 @@ export default connect(
     verbose: state.verbose,
   }),
   dispatch => bindActionCreators({
+    selectHistoryItemID,
+    selectDays,
+    setShowVerbose,
+    setShowLatLong,
   }, dispatch),
 )(Vehicle);
