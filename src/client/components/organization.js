@@ -24,10 +24,6 @@ const RECENTLY_CHANGED = 10000;
 class Organization extends React.Component {
   constructor(props) {
     super(props);
-    this.myRef = React.createRef();
-    this.state = {
-      selectedItemID: null,
-    }
   }
 
   static propTypes = {
@@ -103,7 +99,11 @@ class Organization extends React.Component {
     return (
       <div className="business-table">
         <label style={{marginRight: "0.5em"}} >
-          <input type="checkbox" onClick={ ev => appState.setAutoUpdate(ev.target.checked) } />
+          <input
+          checked={ autoUpdate }
+            type="checkbox"
+            onClick={ ev => appState.setAutoUpdate(ev.target.checked) }
+          />
           Auto-Update Map            
         </label>
         <label className="padrt">

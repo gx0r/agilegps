@@ -14,6 +14,7 @@ module.exports = {
   selectedVehicles: [],
   selectedVehicle: null,
   selectedMapVehicleID: null,
+  selectedHistoryItemID: null,
   selectedVehicleHistory: [],
   selectedOrg: {},
 

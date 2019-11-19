@@ -1146,3 +1146,11 @@ module.exports.selectMapVehicleID = function(id) {
     value: id
   });
 }
+
+// vehicle page history item row
+module.exports.selectHistoryItemID = function(id) {
+  store.dispatch({
+    type: "SET_HISTORY_ITEM_ID",
+    value: id
+  });
+}

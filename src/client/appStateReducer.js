@@ -353,6 +353,11 @@ module.exports = function reducer(state, action) {
           selectedMapVehicleID: action.value
         }); 
 
+    case "SET_HISTORY_ITEM_ID":
+        return Object.assign({}, state, {
+          selectedHistoryItemID: action.value
+        });
+
     default:
       return state;
   }
