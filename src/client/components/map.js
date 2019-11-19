@@ -16,6 +16,7 @@ class Map extends React.Component {
   constructor(props) {
     super(props);
     this.markersByVehicleID = {};
+    this.historyMarkersByID = {};
   }
 
   static defaultProps = {
@@ -54,6 +55,36 @@ class Map extends React.Component {
     return marker;
   }
 
+  createHistoryMarker = historyItem => {
+    const { historyMarkersByID } = this;
+
+    const map = this.map;
+    const position = toGoogle(historyItem.last ? historyItem.last : historyItem);
+
+    const marker = new MarkerWithLabel({
+      position,
+      map,
+      title: historyItem.name,
+      labelContent: historyItem.name,
+      labelAnchor: new google.maps.Point(0, 0),
+      labelClass: "maplabel", // the CSS class for the label
+      labelInBackground: false
+    });
+
+    marker.setIcon(Status.getMarkerIconFleetView(historyItem.last));
+
+    google.maps.event.addListener(
+      marker,
+      "click",
+      ClickListenerFactory.create(marker, historyItem, position, map)
+    );
+
+    historyMarkersByID[historyItem.id] = marker;
+
+    return marker;
+  }
+
+
   clickMarkerByVehicleID = id => {
     const { markersByVehicleID } = this;
     const marker = markersByVehicleID[id];
@@ -66,19 +97,42 @@ class Map extends React.Component {
 
   removeMapMarkers = () => {
     const { impliedSelectedVehicles } = this.props;
-    const { markersByVehicleID } = this;
+    const { historyMarkersByID, markersByVehicleID } = this;
+
+    Object.keys(historyMarkersByID).forEach(key => {
+      historyMarkersByID[key].setMap(null);
+      delete historyMarkersByID[key];
+    })
 
     impliedSelectedVehicles.forEach(vehicle => {
         if (markersByVehicleID[vehicle.id]) {
           markersByVehicleID[vehicle.id].setMap(null);
+          delete markersByVehicleID[vehicle.id];
         }
     });
 
     this.markersByVehicleID = {};
   }
 
+  populateVehicleHistoryMarkers = () => {
+    const { hist, impliedSelectedVehicles, selectedMapVehicleID, selectedVehicle, vehiclesByID } = this.props;
+    const { markersByVehicleID } = this;
+
+    const bounds = new google.maps.LatLngBounds();
+
+    if (selectedVehicle) {
+      // individual vehicle history
+      hist.forEach(item => {
+        const marker = this.createHistoryMarker(item);
+        if (marker) {
+          bounds.extend(marker.position);
+        }
+      });
+    }
+  }
+
   populateMapMarkers = () => {
-    const { impliedSelectedVehicles, selectedMapVehicleID, vehiclesByID } = this.props;
+    const { hist, impliedSelectedVehicles, selectedMapVehicleID, vehiclesByID } = this.props;
     const { markersByVehicleID } = this;
 
     const bounds = new google.maps.LatLngBounds();
@@ -98,9 +152,9 @@ class Map extends React.Component {
 
     appState.setMarkersByVehicleID(markersByVehicleID);
 
-    Promise.delay(100).then(() => {
-      map.fitBounds(bounds);
-    });
+    // Promise.delay(100).then(() => {
+    //   map.fitBounds(bounds);
+    // });
   }
 
   handleApiLoaded = (map, maps) => {
@@ -114,6 +168,7 @@ class Map extends React.Component {
 
   componentDidUpdate() {
     this.populateMapMarkers();
+    this.populateVehicleHistoryMarkers();
   }
 
   render() {
@@ -137,10 +192,13 @@ class Map extends React.Component {
 
 export default connect(
   state => ({
+    hist: state.selectedVehicleHistory,
     impliedSelectedVehicles: state.impliedSelectedVehicles,
     selectedFleets: state.selectedFleets,
     selectedFleetsAll: state.selectedFleetsAll,
+    selectedHistoryItemID: state.selectedHistoryItemID,
     selectedMapVehicleID: state.selectedMapVehicleID,
+    selectedVehicle: state.selectedVehicle,
     subview: state.subview,
     vehiclesByID: state.vehiclesByID,
   }),
