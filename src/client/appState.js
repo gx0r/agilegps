@@ -1112,19 +1112,19 @@ module.exports.setAutoUpdate = function(bool) {
   });
 };
 
-module.exports.setShowVerbose = function(bool) {
-  store.dispatch({
-    type: "SHOWVERBOSE",
-    value: bool
-  });
-};
+// module.exports.setShowVerbose = function(bool) {
+//   store.dispatch({
+//     type: "SHOWVERBOSE",
+//     value: bool
+//   });
+// };
 
-module.exports.setShowLatLong = function(bool) {
-  store.dispatch({
-    type: "SHOWLATLONG",
-    value: bool
-  });
-};
+// module.exports.setShowLatLong = function(bool) {
+//   store.dispatch({
+//     type: "SHOWLATLONG",
+//     value: bool
+//   });
+// };
 
 module.exports.setMap = function(map) {
   store.dispatch({
