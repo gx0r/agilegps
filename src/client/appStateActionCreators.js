@@ -27,3 +27,25 @@ export function setShowLatLong(bool) {
     value: bool
   };
 };
+
+
+export function animationPlay() {
+  return {
+    type: "ANIMATION_PLAY",
+    value: true
+  };
+};
+
+export function animationPause() {
+  return {
+    type: "ANIMATION_PAUSE",
+    value: true
+  };
+};
+
+export function animationStop() {
+  return {
+    type: "ANIMATION_STOP",
+    value: true
+  };
+};

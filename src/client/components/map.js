@@ -18,6 +18,8 @@ class Map extends React.Component {
     this.markersByVehicleID = {};
     this.historyMarkersByID = {};
     this.linesByHistoryItemID = {};
+    this.animationPromise = Promise.resolve();
+    this.currentAnimationFrame = 0;
   }
 
   static defaultProps = {
@@ -170,20 +172,46 @@ class Map extends React.Component {
     });
   }
 
+  nextAnimation = (currentAnimationFrame = 0) => {
+    const { animationPromise, map } = this;
+    const { animationSpeed, hist } = this.props;
+    const bounds = new google.maps.LatLngBounds();
+    console.log(currentAnimationFrame);
+    console.log(hist.length);
+    if (currentAnimationFrame < hist.length) {
+      return Promise.delay(500).then(() => {
+        const marker = this.createHistoryMarker(hist[currentAnimationFrame]);
+        if (marker) {
+          map.fitBounds(marker.position);
+        }
+        if (currentAnimationFrame >= history.length - 1) {
+          playing = false;
+          paused = false;
+        } else {
+          this.nextAnimation(currentAnimationFrame + 1);
+        }
+      });
+    }
+  }
+
   populateVehicleHistoryMarkers = () => {
-    const { hist, impliedSelectedVehicles, selectedMapVehicleID, selectedVehicle, vehiclesByID } = this.props;
+    const { animationPlaying, hist, impliedSelectedVehicles, selectedMapVehicleID, selectedVehicle, vehiclesByID } = this.props;
     const { markersByVehicleID } = this;
 
     const bounds = new google.maps.LatLngBounds();
 
     if (selectedVehicle) {
       // individual vehicle history
-      hist.forEach(item => {
-        const marker = this.createHistoryMarker(item);
-        if (marker) {
-          bounds.extend(marker.position);
-        }
-      });
+      if (!animationPlaying) {
+        hist.forEach(item => {
+          const marker = this.createHistoryMarker(item);
+          if (marker) {
+            bounds.extend(marker.position);
+          }
+        });  
+      } else {
+        this.nextAnimation();
+      }
     }
   }
 
@@ -248,6 +276,7 @@ class Map extends React.Component {
 
 export default connect(
   state => ({
+    animationPlaying: state.animationPlaying,
     hist: state.selectedVehicleHistory,
     impliedSelectedVehicles: state.impliedSelectedVehicles,
     selectedFleets: state.selectedFleets,

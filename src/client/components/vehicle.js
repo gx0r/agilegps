@@ -21,6 +21,9 @@ import Status from "../../common/status.js";
 import tzOffset from "../tzoffset";
 
 import {
+  animationPlay,
+  animationPause,
+  animationStop,
   selectDays,
   selectHistoryItemID,
   setShowVerbose,
@@ -107,6 +110,9 @@ class Vehicle extends React.Component {
 
   render() {
     const { 
+      animationPlay,
+      animationPause,
+      animationStop,
       advancedUI,
       autoUpdate,
       endDate,
@@ -152,9 +158,18 @@ class Vehicle extends React.Component {
         <div style={{
           backgroundColor: 'rgb(221, 221, 221)'
         }}>
-          <button className="btn btn-xs btn-success glyphicon glyphicon-play" />
-          <button className="btn btn-xs btn-success glyphicon glyphicon-pause" />
-          <button className="btn btn-xs btn-success glyphicon glyphicon-stop" />
+          <button
+            className="btn btn-xs btn-success glyphicon glyphicon-play"
+            onClick={ animationPlay }
+          />
+          <button
+            className="btn btn-xs btn-success glyphicon glyphicon-pause"
+            onClick={ animationPause }
+          />
+          <button
+            className="btn btn-xs btn-success glyphicon glyphicon-stop"
+            onClick={ animationStop }
+          />
           <progress value={ 0 } style={{
             marginLeft: '1em',
           }} />
@@ -317,6 +332,9 @@ export default connect(
     verbose: state.verbose,
   }),
   dispatch => bindActionCreators({
+    animationPlay,
+    animationPause,
+    animationStop,
     selectHistoryItemID,
     selectDays,
     setShowVerbose,
