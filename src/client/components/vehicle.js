@@ -47,8 +47,9 @@ class Vehicle extends React.Component {
   static propTypes = {
   };
 
-  clickItem = () => {
-
+  clickItem = historyItem => {
+    const { selectHistoryItemID } = this.props;
+    selectHistoryItemID(historyItem.id);
   };
 
   componentWillMount() {
@@ -62,10 +63,6 @@ class Vehicle extends React.Component {
     // );
   }
 
-  clickItem = item => {
-    const { selectHistoryItemID } = this.props;
-    selectHistoryItemID(item.id);
-  };
 
   recalculateHistory = () => {
     const { hist, verbose } = this.props;
