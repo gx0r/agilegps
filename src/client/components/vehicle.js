@@ -56,6 +56,10 @@ class Vehicle extends React.Component {
     );
   }
 
+  clickItem = item => {
+    appState.selectHistoryItemID(item.id);
+  };
+
   recalculateHistory = () => {
     const { hist, verbose } = this.props;
     const {
@@ -107,6 +111,7 @@ class Vehicle extends React.Component {
       endDate,
       hist,
       impliedSelectedVehicles,
+      selectedHistoryItemID,
       selectedMapVehicleID,
       selectedOrg,
       selectedVehicle,
@@ -242,13 +247,13 @@ class Vehicle extends React.Component {
               adjustedVehicleHistory.map(item => {
                 return (
                   <tr
-                    className={ classnames({
+                    className={ classnames('pointer', {
                       'highlight-igniton': highlightIgnition && item.cmd === "IGN" || highlightStarts && item.statusOverride === "Start"
                     }) }
                     key={ item.id }
-                    onClick={ this.clickItem(item) }
+                    onClick={ () => this.clickItem(item) }
                     style={{
-                      backgroundColor: item.id === selectedItemID ? '#FEE0C6' : ''
+                      backgroundColor: item.id === selectedHistoryItemID ? '#FEE0C6' : ''
                     }}
                   >
                     <td>{ formatDate(item.d) }</td>
@@ -299,6 +304,7 @@ export default connect(
     endDate: state.endDate,
     hist: state.selectedVehicleHistory,
     impliedSelectedVehicles: state.impliedSelectedVehicles,
+    selectedHistoryItemID: state.selectedHistoryItemID,
     selectedOrg: state.selectedOrg,
     selectedVehicle: state.selectedVehicle,
     startDate: state.startDate,
