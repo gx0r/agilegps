@@ -56,6 +56,7 @@ class Map extends React.Component {
   }
 
   createHistoryMarker = historyItem => {
+    const { selectedHistoryItemID } = this.props;
     const { historyMarkersByID } = this;
 
     const map = this.map;
@@ -81,9 +82,21 @@ class Map extends React.Component {
 
     historyMarkersByID[historyItem.id] = marker;
 
+    if (selectedHistoryItemID === historyItem.id) {
+      new google.maps.event.trigger(marker, 'click');
+    }
+
     return marker;
   }
 
+  clickMarkerByHistoryID = id => {
+    const { historyMarkersByID } = this;
+    const marker = historyMarkersByID[id];
+
+    if (marker) {
+      new google.maps.event.trigger(marker, "click");
+    }
+  };
 
   clickMarkerByVehicleID = id => {
     const { markersByVehicleID } = this;
@@ -91,7 +104,6 @@ class Map extends React.Component {
   
     if (marker) {
       new google.maps.event.trigger(marker, "click");
-      // this.map.panTo(marker.position);
     }
   };
 
