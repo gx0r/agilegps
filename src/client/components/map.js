@@ -162,7 +162,7 @@ class Map extends React.Component {
   };
 
   removeMapMarkers = () => {
-    const { impliedSelectedVehicles } = this.props;
+    const { impliedSelectedVehiclesByID } = this.props;
     const { historyMarkersByID, linesByHistoryItemID, markersByVehicleID } = this;
 
     Object.keys(linesByHistoryItemID).forEach(key => {
@@ -175,11 +175,12 @@ class Map extends React.Component {
       delete historyMarkersByID[key];
     })
 
-    impliedSelectedVehicles.forEach(vehicle => {
-        if (markersByVehicleID[vehicle.id]) {
-          markersByVehicleID[vehicle.id].setMap(null);
-          delete markersByVehicleID[vehicle.id];
-        }
+    Object.keys(impliedSelectedVehiclesByID).forEach(key => {
+      const vehicle = impliedSelectedVehiclesByID[key];
+      if (markersByVehicleID[vehicle.id]) {
+        markersByVehicleID[vehicle.id].setMap(null);
+        delete markersByVehicleID[vehicle.id];
+      }
     });
   }
 
@@ -227,12 +228,13 @@ class Map extends React.Component {
   }
 
   populateMapMarkers = () => {
-    const { impliedSelectedVehicles, selectedMapVehicleID, vehiclesByID } = this.props;
+    const { impliedSelectedVehiclesByID, selectedMapVehicleID, vehiclesByID } = this.props;
     const { markersByVehicleID, map } = this;
 
     const bounds = new google.maps.LatLngBounds();
 
-    impliedSelectedVehicles.forEach(vehicle => {
+    Object.keys(impliedSelectedVehiclesByID).forEach(key => {
+      const vehicle = impliedSelectedVehiclesByID[key];
       if (vehiclesByID[vehicle.id] && vehiclesByID[vehicle.id].last) {
         const marker = this.createMarker(vehiclesByID[vehicle.id], false);
         if (marker) {
@@ -288,7 +290,7 @@ export default connect(
     animationPlaying: state.animationPlaying,
     autoUpdate: state.autoUpdate,
     hist: state.selectedVehicleHistory,
-    impliedSelectedVehicles: state.impliedSelectedVehicles,
+    impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
     selectedFleets: state.selectedFleets,
     selectedFleetsAll: state.selectedFleetsAll,
     selectedHistoryItemID: state.selectedHistoryItemID,
