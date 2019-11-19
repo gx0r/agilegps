@@ -8,15 +8,16 @@ import GoogleMapReact from 'google-map-react';
 import ClickListenerFactory from '../markers/clicklistenerfactory';
 import toGoogle from '../togoogle.js';
 import MarkerWithLabel from '../markers/markerWithLabel';
-import { getMarkerIconFleetView, getMarkerIconIndividualHistory } from "../../common/status";
-
-import appState from '../appState';
+import { getMarkerIconFleetView, getMarkerIconIndividualHistory, getStatusColor } from "../../common/status";
+import * as tomiles from "../tomiles";
+import * as appState from '../appState';
 
 class Map extends React.Component {
   constructor(props) {
     super(props);
     this.markersByVehicleID = {};
     this.historyMarkersByID = {};
+    this.linesByHistoryItemID = {};
   }
 
   static defaultProps = {
@@ -57,7 +58,7 @@ class Map extends React.Component {
 
   createHistoryMarker = historyItem => {
     const { selectedHistoryItemID } = this.props;
-    const { historyMarkersByID } = this;
+    const { historyMarkersByID, linesByHistoryItemID } = this;
 
     const map = this.map;
     const position = toGoogle(historyItem);
@@ -94,6 +95,39 @@ class Map extends React.Component {
       new google.maps.event.trigger(marker, 'click');
     }
 
+    // now draw lines
+
+    if (this.previousHistoryItem) {
+      const { previousHistoryItem } = this;
+      const flightPlanCoordinates = [toGoogle(previousHistoryItem), toGoogle(historyItem)];
+      const speed = tomiles(historyItem.s)
+      const color = getStatusColor(historyItem);
+      const lineSymbol = { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW };
+      if (
+        flightPlanCoordinates &&
+        flightPlanCoordinates.length == 2 &&
+        flightPlanCoordinates[0] != null &&
+        flightPlanCoordinates[1] != null
+      ) {
+        linesByHistoryItemID[historyItem.id] = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            // https://developers.google.com/maps/documentation/javascript/examples/overlay-symbol-arrow
+            // icons: [{
+            // 	icon: lineSymbol,
+            // 	offset: '50%'
+            // }],
+            geodesic: true,
+            strokeColor: color,
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            // position: loc,
+            map,
+            // title: i + ''
+          });
+      }
+    }
+
+    this.previousHistoryItem = historyItem;
     return marker;
   }
 
@@ -117,7 +151,12 @@ class Map extends React.Component {
 
   removeMapMarkers = () => {
     const { impliedSelectedVehicles } = this.props;
-    const { historyMarkersByID, markersByVehicleID } = this;
+    const { historyMarkersByID, linesByHistoryItemID, markersByVehicleID } = this;
+
+    Object.keys(linesByHistoryItemID).forEach(key => {
+      linesByHistoryItemID[key].setMap(null);
+      delete linesByHistoryItemID[key];
+    });
 
     Object.keys(historyMarkersByID).forEach(key => {
       historyMarkersByID[key].setMap(null);
