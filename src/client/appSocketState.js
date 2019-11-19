@@ -109,8 +109,8 @@ appState.getStore().subscribe(function() {
     let tables = ["users", "devices", "vehicles", "errors"];
     tables.forEach(function(table) {
       socket.on(table, function(ev) {
-        // TODO live updates
-        console.log(ev);
+        // TODO uncomment for live updates
+        // console.log(ev);
       });
     });
 
