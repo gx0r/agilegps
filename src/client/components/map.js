@@ -68,7 +68,6 @@ class Map extends React.Component {
     }
 
     const icon = getMarkerIconIndividualHistory(historyItem);
-    console.log(icon);
 
     const marker = new google.maps.Marker({
       position: position,
