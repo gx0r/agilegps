@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
-import { toArray } from 'lodash';
-import appState from '../appState';
 
 import moment from 'moment';
 import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
@@ -20,7 +18,6 @@ import tomiles from "../tomiles";
 import todir from "../../common/todir";
 import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
-import ClickListenerFactory from "../markers/clicklistenerfactory";
 import tzOffset from "../tzoffset";
 
 import {
