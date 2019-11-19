@@ -3,6 +3,9 @@ const hasLang = require("./i18n").hasLang;
 const moment = require('moment');
 
 module.exports = {
+  animationPlaying: false,
+  animationSpeed: 1000,
+
   lang: "", // set below
 
   user: {},

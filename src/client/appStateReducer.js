@@ -358,6 +358,17 @@ module.exports = function reducer(state, action) {
           selectedHistoryItemID: action.value
         });
 
+    case "ANIMATION_PLAY":
+        return Object.assign({}, state, {
+          animationPlaying: true,
+        });
+
+    case "ANIMATION_STOP":
+        return Object.assign({}, state, {
+          animationPlaying: false,
+        });
+    
+
     default:
       return state;
   }
