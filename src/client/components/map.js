@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import GoogleMapReact from 'google-map-react';
+
 import ClickListenerFactory from '../markers/clicklistenerfactory';
 import toGoogle from '../togoogle.js';
 import MarkerWithLabel from '../markers/markerWithLabel';
@@ -31,6 +32,16 @@ class Map extends React.Component {
   };
 
   static propTypes = {
+  };
+
+  maybeRepositionMap = bounds => {
+    const { autoUpdate } = this.props;
+    const { map } = this;
+    if (autoUpdate) {
+      Promise.delay(100).then(() => {
+        map.fitBounds(bounds);
+      });
+    }
   };
 
   createMarker = vehicle => {
@@ -174,16 +185,16 @@ class Map extends React.Component {
 
   nextAnimation = (currentAnimationFrame = 0) => {
     const { animationPromise, map } = this;
-    const { animationSpeed, hist } = this.props;
+    const { animationSpeed, autoUpdate, hist } = this.props;
     const bounds = new google.maps.LatLngBounds();
     console.log(currentAnimationFrame);
     console.log(hist.length);
     if (currentAnimationFrame < hist.length) {
       return Promise.delay(500).then(() => {
         const marker = this.createHistoryMarker(hist[currentAnimationFrame]);
-        // if (marker) {
-        //   map.fitBounds(marker.position);
-        // }
+        if (marker && autoUpdate) {
+          map.fitBounds(marker.position);
+        }
         const animationPlaying = appState.getState().animationPlaying;
         if (!animationPlaying || currentAnimationFrame >= history.length - 1) {
           playing = false;
@@ -196,9 +207,7 @@ class Map extends React.Component {
   }
 
   populateVehicleHistoryMarkers = () => {
-    const { animationPlaying, hist, impliedSelectedVehicles, selectedMapVehicleID, selectedVehicle, vehiclesByID } = this.props;
-    const { markersByVehicleID } = this;
-
+    const { animationPlaying, hist, selectedVehicle } = this.props;
     const bounds = new google.maps.LatLngBounds();
 
     if (selectedVehicle) {
@@ -210,18 +219,15 @@ class Map extends React.Component {
             bounds.extend(marker.position);
           }
         });  
+        this.maybeRepositionMap(bounds);
       } else {
         this.nextAnimation();
       }
     }
-
-    Promise.delay(100).then(() => {
-      map.fitBounds(bounds);
-    });
   }
 
   populateMapMarkers = () => {
-    const { hist, impliedSelectedVehicles, selectedMapVehicleID, vehiclesByID } = this.props;
+    const { impliedSelectedVehicles, selectedMapVehicleID, vehiclesByID } = this.props;
     const { markersByVehicleID, map } = this;
 
     const bounds = new google.maps.LatLngBounds();
@@ -241,9 +247,7 @@ class Map extends React.Component {
 
     appState.setMarkersByVehicleID(markersByVehicleID);
 
-    Promise.delay(100).then(() => {
-      map.fitBounds(bounds);
-    });
+    this.maybeRepositionMap(bounds);
   }
 
   handleApiLoaded = (map, maps) => {
@@ -282,6 +286,7 @@ class Map extends React.Component {
 export default connect(
   state => ({
     animationPlaying: state.animationPlaying,
+    autoUpdate: state.autoUpdate,
     hist: state.selectedVehicleHistory,
     impliedSelectedVehicles: state.impliedSelectedVehicles,
     selectedFleets: state.selectedFleets,

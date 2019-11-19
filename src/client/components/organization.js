@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
-import { toArray } from 'lodash';
 import appState from '../appState';
 
 import helpers from '../../common/helpers';
@@ -16,7 +15,6 @@ import tomiles from "../tomiles";
 import todir from "../../common/todir";
 import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
-import ClickListenerFactory from "../markers/clicklistenerfactory";
 import tzOffset from "../tzoffset";
 
 const RECENTLY_CHANGED = 10000;
@@ -110,7 +108,7 @@ class Organization extends React.Component {
             type="checkbox"
             onClick={ ev => appState.setAutoUpdate(ev.target.checked) }
           />
-          Auto-Update Map            
+          Auto-Zoom Map            
         </label>
         <label className="padrt">
           <input
