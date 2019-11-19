@@ -8,7 +8,7 @@ import GoogleMapReact from 'google-map-react';
 import ClickListenerFactory from '../markers/clicklistenerfactory';
 import toGoogle from '../togoogle.js';
 import MarkerWithLabel from '../markers/markerWithLabel';
-import Status from "../../common/status";
+import { getMarkerIconFleetView, getMarkerIconIndividualHistory } from "../../common/status";
 
 import appState from '../appState';
 
@@ -44,7 +44,7 @@ class Map extends React.Component {
       labelInBackground: false
     });
   
-    marker.setIcon(Status.getMarkerIconFleetView(vehicle.last));
+    marker.setIcon(getMarkerIconFleetView(vehicle.last));
 
     google.maps.event.addListener(
       marker,
@@ -60,19 +60,27 @@ class Map extends React.Component {
     const { historyMarkersByID } = this;
 
     const map = this.map;
-    const position = toGoogle(historyItem.last ? historyItem.last : historyItem);
+    const position = toGoogle(historyItem);
+    if (!position) {
+      console.warn("Invalid vehicle position " + JSON.stringify(historyItem));
+      return;
+    }
 
-    const marker = new MarkerWithLabel({
-      position,
+    const icon = getMarkerIconIndividualHistory(historyItem);
+    console.log(icon);
+
+    const marker = new google.maps.Marker({
+      position: position,
       map,
-      title: historyItem.name,
-      labelContent: historyItem.name,
-      labelAnchor: new google.maps.Point(0, 0),
-      labelClass: "maplabel", // the CSS class for the label
-      labelInBackground: false
+      title: historyItem.name
     });
 
-    marker.setIcon(Status.getMarkerIconFleetView(historyItem.last));
+    if (icon == null) {
+      // hide extraneous "moving" markers
+      marker.setVisible(false);
+    } else {
+      marker.setIcon(icon);
+    }
 
     google.maps.event.addListener(
       marker,
@@ -122,8 +130,6 @@ class Map extends React.Component {
           delete markersByVehicleID[vehicle.id];
         }
     });
-
-    this.markersByVehicleID = {};
   }
 
   populateVehicleHistoryMarkers = () => {
