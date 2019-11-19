@@ -181,10 +181,11 @@ class Map extends React.Component {
     if (currentAnimationFrame < hist.length) {
       return Promise.delay(500).then(() => {
         const marker = this.createHistoryMarker(hist[currentAnimationFrame]);
-        if (marker) {
-          map.fitBounds(marker.position);
-        }
-        if (currentAnimationFrame >= history.length - 1) {
+        // if (marker) {
+        //   map.fitBounds(marker.position);
+        // }
+        const animationPlaying = appState.getState().animationPlaying;
+        if (!animationPlaying || currentAnimationFrame >= history.length - 1) {
           playing = false;
           paused = false;
         } else {
@@ -213,11 +214,15 @@ class Map extends React.Component {
         this.nextAnimation();
       }
     }
+
+    Promise.delay(100).then(() => {
+      map.fitBounds(bounds);
+    });
   }
 
   populateMapMarkers = () => {
     const { hist, impliedSelectedVehicles, selectedMapVehicleID, vehiclesByID } = this.props;
-    const { markersByVehicleID } = this;
+    const { markersByVehicleID, map } = this;
 
     const bounds = new google.maps.LatLngBounds();
 
@@ -236,9 +241,9 @@ class Map extends React.Component {
 
     appState.setMarkersByVehicleID(markersByVehicleID);
 
-    // Promise.delay(100).then(() => {
-    //   map.fitBounds(bounds);
-    // });
+    Promise.delay(100).then(() => {
+      map.fitBounds(bounds);
+    });
   }
 
   handleApiLoaded = (map, maps) => {

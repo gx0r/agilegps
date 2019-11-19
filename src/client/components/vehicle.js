@@ -28,6 +28,7 @@ import {
   selectHistoryItemID,
   setShowVerbose,
   setShowLatLong,
+  setAnimationSpeed,
 } from '../appStateActionCreators';
 
 class Vehicle extends React.Component {
@@ -113,6 +114,7 @@ class Vehicle extends React.Component {
       animationPlay,
       animationPause,
       animationStop,
+      animationSpeed,
       advancedUI,
       autoUpdate,
       endDate,
@@ -123,6 +125,7 @@ class Vehicle extends React.Component {
       selectedMapVehicleID,
       selectedOrg,
       selectedVehicle,
+      setAnimationSpeed,
       setShowVerbose,
       setShowLatLong,
       showLatLong,
@@ -173,7 +176,14 @@ class Vehicle extends React.Component {
           <progress value={ 0 } style={{
             marginLeft: '1em',
           }} />
-          <input type="range" min="0" max="10" />
+          <input
+            type="range"
+            min="0"
+            max="2000"
+            // onChange={ setAnimationSpeed }
+            step="1"
+            value={ animationSpeed }
+          />
         </div>
         <br />
         <div className="nowrap">
@@ -319,6 +329,7 @@ class Vehicle extends React.Component {
 export default connect(
   state => ({
     advancedUI: state.user.advancedUI,
+    animationSpeed: state.animationSpeed,
     autoUpdate: state.autoUpdate,
     endDate: state.endDate,
     hist: state.selectedVehicleHistory,
@@ -339,5 +350,6 @@ export default connect(
     selectDays,
     setShowVerbose,
     setShowLatLong,
+    setAnimationSpeed,
   }, dispatch),
 )(Vehicle);
