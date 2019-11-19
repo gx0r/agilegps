@@ -21,7 +21,7 @@ module.exports = {
   selectedVehicleHistory: [],
   selectedOrg: {},
 
-  impliedSelectedVehicles: [],
+  impliedSelectedVehiclesByID: {},
 
   usersByID: {}, // username is the ID
   devicesByID: {},

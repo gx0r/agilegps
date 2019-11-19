@@ -42,46 +42,38 @@ module.exports = function reducer(state, action) {
 
     case "SELECT_FLEET":
       newState = {};
-      newState.impliedSelectedVehicles = [];
+      newState.impliedSelectedVehiclesByID = {};
       newState.selectedFleets = [action.fleet];
       newState.selectedAllFleets = false;
       newState.selectedVehicle = null;
 
-      newState.selectedFleets.forEach(function(fleet) {
-        fleet.vehicles.forEach(function(vid) {
-          if (state.vehiclesByID[vid] != null) {
-            newState.impliedSelectedVehicles.push(state.vehiclesByID[vid]);
-          }
+      newState.selectedFleets.forEach(fleet => {
+        fleet.vehicles.forEach(vid => {
+          newState.impliedSelectedVehiclesByID[vid] = state.vehiclesByID[vid];
         });
       });
 
-      newState.impliedSelectedVehicles = _.uniq(
-        newState.impliedSelectedVehicles
-      );
       return Object.assign({}, state, newState);
 
     case "SELECT_FLEET_ALL":
       newState = {};
       newState.selectedFleets = _.cloneDeep(_.toArray(state.fleetsByID));
-      newState.impliedSelectedVehicles = [];
+      newState.impliedSelectedVehiclesByID = {};
       newState.selectedAllFleets = true;
       newState.selectedVehicle = null;
-      newState.selectedFleets.forEach(function(fleet) {
-        fleet.vehicles.forEach(function(vid) {
-          if (state.vehiclesByID[vid] != null) {
-            newState.impliedSelectedVehicles.push(state.vehiclesByID[vid]);
-          }
+      newState.selectedFleets.forEach(fleet => {
+        fleet.vehicles.forEach(vid => {
+          newState.impliedSelectedVehiclesByID[vid] = state.vehiclesByID[vid];
         });
       });
-      newState.impliedSelectedVehicles = _.uniq(
-        newState.impliedSelectedVehicles
-      );
       return Object.assign({}, state, newState);
 
     case "SELECT_VEHICLE":
       return Object.assign({}, state, {
         selectedVehicle: state.vehiclesByID[action.id],
-        impliedSelectedVehicles: [state.vehiclesByID[action.id]],
+        impliedSelectedVehiclesByID: {
+          [action.id]: state.vehiclesByID[action.id],
+        },
         view: "ORG",
         selectedAllFleets: false,
         selectedFleets: [],
@@ -142,36 +134,24 @@ module.exports = function reducer(state, action) {
       var vehiclesByID = _.cloneDeep(state.vehiclesByID);
       vehiclesByID[action.vehicle.id] = action.vehicle;
 
-      var impliedSelectedVehicles = _.cloneDeep(state.impliedSelectedVehicles);
-
-      for (let i = 0; i < impliedSelectedVehicles.length; i++) {
-        if (impliedSelectedVehicles[i].id == action.vehicle.id) {
-          impliedSelectedVehicles[i] = action.vehicle;
-          break;
-        }
-      }
+      var impliedSelectedVehiclesByID = state.impliedSelectedVehiclesByID;
+      impliedSelectedVehiclesByID[action.vehicle.id] = action.vehicle;
 
       return Object.assign({}, state, {
         vehiclesByID: vehiclesByID,
-        impliedSelectedVehicles: impliedSelectedVehicles
+        impliedSelectedVehiclesByID: impliedSelectedVehiclesByID
       });
 
     case "DELETE_VEHICLE":
       var vehiclesByID = _.cloneDeep(state.vehiclesByID);
       delete vehiclesByID[action.vehicle.id];
 
-      var impliedSelectedVehicles = _.cloneDeep(state.impliedSelectedVehicles);
-
-      for (let i = 0; i < impliedSelectedVehicles.length; i++) {
-        if (impliedSelectedVehicles[i].id == action.vehicle.id) {
-          delete impliedSelectedVehicles[i];
-          break;
-        }
-      }
+      var impliedSelectedVehiclesByID = state.impliedSelectedVehiclesByID;
+      delete impliedSelectedVehiclesByID[action.vehicle.id];
 
       return Object.assign({}, state, {
         vehiclesByID: vehiclesByID,
-        impliedSelectedVehicles: impliedSelectedVehicles
+        impliedSelectedVehiclesByID: impliedSelectedVehiclesByID
       });
 
     case "DELETE_USER":
@@ -238,7 +218,7 @@ module.exports = function reducer(state, action) {
         selectedItem: isAllOrgs ? null : state.selectedItem,
         selectedVehicle: isAllOrgs ? null : state.selectedVehicle,
         selectedVehicles: isAllOrgs ? null : state.selectedVehicles,
-        impliedSelectedVehicles: isAllOrgs ? [] : state.impliedSelectedVehicles,
+        impliedSelectedVehiclesByID: isAllOrgs ? {} : state.impliedSelectedVehiclesByID,
         selectedVehicleHistory: isAllOrgs ? [] : state.selectedVehicleHistory,
         vehiclesByID: isAllOrgs ? {} : state.vehiclesByID
       });
@@ -290,11 +270,11 @@ module.exports = function reducer(state, action) {
         vehiclesByID: vehiclesByID,
         lastUpdated: new Date()
       });
-      newState.impliedSelectedVehicles = [];
+      newState.impliedSelectedVehiclesByID = {};
 
-      for (let vehicle of state.impliedSelectedVehicles) {
-        newState.impliedSelectedVehicles.push(vehiclesByID[vehicle.id]);
-      }
+      Object.keys(state.impliedSelectedVehiclesByID).forEach(key => {
+        newState.impliedSelectedVehiclesByID[key] = state.impliedSelectedVehiclesByID[key];
+      });
 
       return newState;
 

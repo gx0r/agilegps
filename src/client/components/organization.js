@@ -68,7 +68,7 @@ class Organization extends React.Component {
   render() {
     const { 
       autoUpdate,
-      impliedSelectedVehicles,
+      impliedSelectedVehiclesByID,
       selectedMapVehicleID,
       selectedOrg,
       setShowLatLong,
@@ -133,7 +133,7 @@ class Organization extends React.Component {
           <img src="images/excel-icon.png" />
         </a>
         <br />
-        <label>Total { impliedSelectedVehicles.length }</label>
+        <label>Total { Object.keys(impliedSelectedVehiclesByID).length }</label>
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
@@ -156,7 +156,8 @@ class Organization extends React.Component {
           </thead>
           <tbody>
           {
-            impliedSelectedVehicles.map(vehicle => {
+            Object.keys(impliedSelectedVehiclesByID).map(id => {
+              const vehicle = impliedSelectedVehiclesByID[id];
               const lastStatus = getLastStatus(vehicle);
               
               if (!lastStatus) {
@@ -220,7 +221,7 @@ class Organization extends React.Component {
 export default connect(
   state => ({
     autoUpdate: state.autoUpdate,
-    impliedSelectedVehicles: state.impliedSelectedVehicles,
+    impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
     selectedOrg: state.selectedOrg,
     selectedMapVehicleID: state.selectedMapVehicleID,
     showLatLong: state.showLatLong,
