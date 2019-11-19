@@ -46,7 +46,7 @@ class Map extends React.Component {
 
   createMarker = vehicle => {
     const map = this.map;
-    const position = toGoogle(vehicle.last ? vehicle.last : item);
+    const position = toGoogle(vehicle.last);
   
     const marker = new MarkerWithLabel({
       position,
@@ -58,6 +58,9 @@ class Map extends React.Component {
       labelInBackground: false
     });
   
+    marker.la = vehicle.last.la;
+    marker.lo = vehicle.last.lo;
+
     marker.setIcon(getMarkerIconFleetView(vehicle.last));
 
     google.maps.event.addListener(
@@ -227,16 +230,38 @@ class Map extends React.Component {
     }
   }
 
-  populateMapMarkers = () => {
+  repopulateMapMarkers = () => {
     const { impliedSelectedVehiclesByID, selectedMapVehicleID, vehiclesByID } = this.props;
     const { markersByVehicleID, map } = this;
 
     const bounds = new google.maps.LatLngBounds();
 
+    // Delete markers for vehicles not shown anymore
+    Object.keys(markersByVehicleID).forEach(key => {
+      if (impliedSelectedVehiclesByID[key] == null) {
+        markersByVehicleID[key].setMap(null);
+        delete markersByVehicleID[key];
+      }
+    })
+
     Object.keys(impliedSelectedVehiclesByID).forEach(key => {
       const vehicle = impliedSelectedVehiclesByID[key];
-      if (vehiclesByID[vehicle.id] && vehiclesByID[vehicle.id].last) {
-        const marker = this.createMarker(vehiclesByID[vehicle.id], false);
+      if (vehicle.id && vehicle.last) {
+        if (markersByVehicleID[vehicle.id]) {
+          const oldMarker = markersByVehicleID[vehicle.id];
+          if (oldMarker.la === vehicle.last.la && oldMarker.lo === vehicle.last.lo) {
+            // The below doesn't work due to floating points
+            // if (oldMarker.position.lat() === vehicle.last.la && oldMarker.position.lng() === vehicle.last.lo) {
+            // console.log(`same position for ${vehicle.name}`);
+            bounds.extend(oldMarker.position);
+            return;
+          } else {
+            markersByVehicleID[vehicle.id].setMap(null);
+            delete markersByVehicleID[vehicle.id];
+          }
+        }
+
+        const marker = this.createMarker(vehicle);
         if (marker) {
           bounds.extend(marker.position);
           markersByVehicleID[vehicle.id] = marker;
@@ -257,12 +282,12 @@ class Map extends React.Component {
     appState.setMap(this.map);
   };
 
-  componentWillUpdate() {
+  componentWillUnmount() {
     this.removeMapMarkers();
   }
 
   componentDidUpdate() {
-    this.populateMapMarkers();
+    this.repopulateMapMarkers();
     this.populateVehicleHistoryMarkers();
   }
 
