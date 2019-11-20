@@ -72,9 +72,8 @@ class Map extends React.Component {
     return marker;
   }
 
-  createHistoryMarker = historyItem => {
+  createHistoryMarkerAndLine = historyItem => {
     const { selectedHistoryItemID } = this.props;
-    const { historyMarkersByID, linesByHistoryItemID } = this;
 
     const map = this.map;
     const position = toGoogle(historyItem);
@@ -104,16 +103,15 @@ class Map extends React.Component {
       ClickListenerFactory.create(marker, historyItem, position, map)
     );
 
-    historyMarkersByID[historyItem.id] = marker;
-
     if (selectedHistoryItemID === historyItem.id) {
       new google.maps.event.trigger(marker, 'click');
     }
 
     // now draw lines
+    let line = null;
 
-    if (this.previousHistoryItem) {
-      const { previousHistoryItem } = this;
+    const { previousHistoryItem } = this;
+    if (previousHistoryItem) {
       const flightPlanCoordinates = [toGoogle(previousHistoryItem), toGoogle(historyItem)];
       const speed = tomiles(historyItem.s)
       const color = getStatusColor(historyItem);
@@ -124,7 +122,7 @@ class Map extends React.Component {
         flightPlanCoordinates[0] != null &&
         flightPlanCoordinates[1] != null
       ) {
-        linesByHistoryItemID[historyItem.id] = new google.maps.Polyline({
+        line = new google.maps.Polyline({
             path: flightPlanCoordinates,
             // https://developers.google.com/maps/documentation/javascript/examples/overlay-symbol-arrow
             // icons: [{
@@ -143,7 +141,11 @@ class Map extends React.Component {
     }
 
     this.previousHistoryItem = historyItem;
-    return marker;
+
+    return {
+      marker,
+      line
+    };
   }
 
   clickMarkerByHistoryID = id => {
@@ -214,27 +216,36 @@ class Map extends React.Component {
 
   repopulateVehicleHistoryMarkers = () => {
     const { animationPlaying, hist, selectedVehicle } = this.props;
-    const { historyMarkersByID } = this;
+    const { historyMarkersByID, linesByHistoryItemID } = this;
     const bounds = new google.maps.LatLngBounds();
 
     Object.keys(historyMarkersByID).forEach(key => {
-      console.log(key)
       historyMarkersByID[key].setMap(null);
       delete historyMarkersByID[key];
+    });
+
+    Object.keys(linesByHistoryItemID).forEach(key => {
+      linesByHistoryItemID[key].setMap(null);
+      delete linesByHistoryItemID[key];
     });
 
     if (selectedVehicle) {
       // individual vehicle history
       if (!animationPlaying) {
         hist.forEach(item => {
-          const marker = this.createHistoryMarker(item);
+          const { marker, line } = this.createHistoryMarkerAndLine(item);
           historyMarkersByID[item.id] = marker;
+          if (line) {
+            // may be null
+            linesByHistoryItemID[item.id] = line;
+          }
           if (marker) {
             bounds.extend(marker.position);
           }
         });  
         this.maybeRepositionMap(bounds);
       } else {
+        // TODO fixup
         this.nextAnimation();
       }
     }
