@@ -56,3 +56,13 @@ export function setAnimationSpeed(value) {
     value,
   };
 };
+
+export function viewNewOrganization() {
+  return {
+    type: "VIEW",
+    view: "ORG",
+    subview: "NEW",
+    viewID: ""
+  };
+}
+

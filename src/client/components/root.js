@@ -15,6 +15,7 @@ import Map from './map';
 import Sidebar from './sidebar';
 import Organization from './organization';
 import Organizations from './organizations';
+import OrganizationEditor from './organization-editor';
 import Session from './session';
 import Help from './help';
 import Vehicle from './vehicle';
@@ -50,6 +51,16 @@ class Root extends React.Component {
         </div>
       );
     }
+    if (view === 'ORG' && (subview === 'NEW' || subview === 'EDIT')) {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <OrganizationEditor />
+          </div>
+        </div>
+      );
+    }
+
 
     if (view === 'HELP') {
       return <Help />

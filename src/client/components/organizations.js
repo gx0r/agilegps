@@ -11,6 +11,8 @@ import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
+import { viewNewOrganization } from "../appStateActionCreators";
+
 function deleteOrganization(org) {
   confirmAlert({
     title: 'Delete organization',
@@ -43,13 +45,21 @@ class Organizations extends React.Component {
   }
 
   render() {
-    const { orgsByIDarray, user } = this.props;
+    const {
+      orgsByIDarray,
+      user,
+      viewNewOrganization,
+    } = this.props;
 
     return (
       <div>
         <div className="col-md-2" />
         <div className="col-md-8 business-table">
-          <button className="btn btn-default" style={{marginBottom: '1em'}}>Create Organization</button>
+          <button
+            className="btn btn-default"
+            style={{marginBottom: '1em'}}
+            onClick={ () => viewNewOrganization() }
+          >Create Organization</button>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>
@@ -112,5 +122,6 @@ export default connect(
     orgsByIDarray: toArray(state.orgsByID),
   }),
   dispatch => bindActionCreators({
+    viewNewOrganization,
   }, dispatch),
 )(Organizations);
