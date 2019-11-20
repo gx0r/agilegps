@@ -11,6 +11,7 @@ const isFinite = require("lodash").isFinite;
 const port = require("../../config/listener.js").port;
 const host = require("../../config/listener.js").host;
 const sack = require("../../config/listener.js").sack;
+const relayTo = require("../../config/listener.js").relayTo || [];
 const geocode = require("../../config/listener.js").geocode;
 const insertrawevents = require("../../config/listener.js").insertrawevents;
 const isNotVerbose = require("../common/helpers").isNotVerbose;
@@ -27,7 +28,7 @@ const verror = require("verror");
 const socket = dgram.createSocket("udp4");
 const vehicleCache = new LRU();
 const log = bunyan.createLogger({
-  name: "listen"
+  name: "listen",
   // level: 'debug'
 });
 
@@ -80,6 +81,14 @@ let outstandingInserts = {};
     }
   }
 })();
+
+const relaySocket = dgram.createSocket("udp4");
+function maybeRelayMessage(msg) {
+  relayTo.forEach(relayInfo => {
+    log.debug("Relaying to: " + relayInfo.host + ":" + relayInfo.port);
+    relaySocket.send(msg, 0, msg.length, relayInfo.port, relayInfo.host);
+  });
+}
 
 function sendSack(parsed, remote) {
   let msg;
@@ -138,6 +147,9 @@ socket.on("message", async function(message, remote) {
     throw wrapped;
   }
 
+  log.debug(parsed);
+  maybeRelayMessage(message);
+
   if (insertrawevents) {
     let raw = r
       .table("rawevents")
@@ -186,6 +198,11 @@ socket.on("message", async function(message, remote) {
     }
     isDeviceUpdateOnly = true;
   }
+
+  log.info({
+    imei: parsed.imei,
+    deviceUpdate: deviceUpdate,
+  });
 
   await r
     .table("devices")
@@ -342,6 +359,11 @@ socket.on("message", async function(message, remote) {
   const replacerObj = Object.create(null);
   Object.keys(vehicleUpdate).forEach(function(key) {
     replacerObj[key] = true;
+  });
+
+  log.info({
+    imei: parsed.imei,
+    historyUpdate: toInsert,
   });
 
   await r

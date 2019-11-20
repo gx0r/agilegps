@@ -47,7 +47,6 @@ module.exports = async function reverseGeo(lat, lng, timeout, force) {
       },
       1
     ))[0][0];
-    console.log(JSON.stringify(result, null, 2));
     return result;
   }
 
