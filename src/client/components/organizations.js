@@ -87,8 +87,13 @@ class Organizations extends React.Component {
                           className="btn btn-primary btn-sm"
                           onClick={ () => appState.selectOrgByID(org.id)
                             .then(() => {
-                              return appState.viewOrgByID(org.id);
-                            }) 
+                              appState.viewOrgByID(org.id);
+                              return Promise.delay(200);
+                            })
+                            .then(() => {
+                              // appState.viewOrgByID(org.id);
+                              appState.selectFleetAll();
+                            })
                             .catch(err => {
                               toast.error(err.message);
                             })
