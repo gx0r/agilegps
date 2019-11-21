@@ -26,19 +26,25 @@ const appState = require("./appState");
 import Root from "./components/root";
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
+import { toast } from 'react-toastify';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import './css/toasts.css';
 
 const rootComponent = (
   <IntlProvider locale="en-US">
     <Provider store={ appState.getStore() }>
       <Root />
-      <ToastContainer />
+      <ToastContainer
+        autoClose={ 4000 }
+        position={ toast.POSITION.BOTTOM_RIGHT }
+      />
     </Provider>
   </IntlProvider>
 );
+
 
 let RENDER_WITH_REACT;
 RENDER_WITH_REACT = true;

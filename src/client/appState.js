@@ -71,6 +71,7 @@ function auth() {
     // 'credentials': 'include' // include JWT cookie
   };
 }
+module.exports.auth = auth;
 
 function authWithCookies() {
   return {
@@ -128,6 +129,7 @@ function validateResponse(response) {
     });
   }
 }
+module.exports.validateResponse = validateResponse;
 
 function loadOrgState(orgid) {
   NProgress.inc();
