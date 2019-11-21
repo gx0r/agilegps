@@ -6,9 +6,9 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import appState from '../appState';
 
-import reportsSvg from './reports.svg';
-import mapSvg from './map.svg';
-import globeSvg from './globe.svg';
+import reportsSvg from '../svg/reports.svg';
+import mapSvg from '../svg/map.svg';
+import globeSvg from '../svg/globe.svg';
 import xcloudSvg from '../svg/xcloud.svg';
 
 
