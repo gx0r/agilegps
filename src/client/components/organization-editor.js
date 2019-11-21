@@ -1,9 +1,9 @@
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import classnames from 'classnames';
+import * as classnames from 'classnames';
 
 import { Formik } from 'formik';
 import { toast } from 'react-toastify';
