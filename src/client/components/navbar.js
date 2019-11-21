@@ -9,6 +9,8 @@ import appState from '../appState';
 import reportsSvg from './reports.svg';
 import mapSvg from './map.svg';
 import globeSvg from './globe.svg';
+import xcloudSvg from '../svg/xcloud.svg';
+
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -54,7 +56,10 @@ class Navbar extends React.Component {
 
     return (
       <a style={{color: realTimeUpdates ? '' : 'red' }}>
-      { realTimeUpdates ? `Last update: ${this.formatLastUpdated()} ⚡` : 'connection lost ⚠' }
+      
+      { realTimeUpdates && `Last update: ${this.formatLastUpdated()} ⚡` }
+      { !realTimeUpdates && 'Connection lost ' }
+      { !realTimeUpdates && <img src={ xcloudSvg } /> }
       </a>
     );
   }
