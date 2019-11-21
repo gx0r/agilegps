@@ -1,11 +1,11 @@
 
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import classnames from 'classnames';
+import * as classnames from 'classnames';
 
-import appState from '../appState';
+import * as appState from '../appState';
 
 import { toArray } from 'lodash';
 import { toast } from 'react-toastify';

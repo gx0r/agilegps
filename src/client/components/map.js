@@ -1,14 +1,13 @@
-
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import GoogleMapReact from 'google-map-react';
 
-import ClickListenerFactory from '../markers/clicklistenerfactory';
-import toGoogle from '../togoogle.js';
-import MarkerWithLabel from '../markers/markerWithLabel';
+import * as ClickListenerFactory from '../markers/clicklistenerfactory';
+import * as toGoogle from '../togoogle.js';
+import * as MarkerWithLabel from '../markers/markerWithLabel';
 import { getMarkerIconFleetView, getMarkerIconIndividualHistory, getStatusColor } from "../../common/status";
 import * as tomiles from "../tomiles";
 import * as appState from '../appState';

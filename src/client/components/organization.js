@@ -1,21 +1,21 @@
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import classnames from 'classnames';
-import appState from '../appState';
+import * as classnames from 'classnames';
+import * as appState from '../appState';
 
-import helpers from '../../common/helpers';
+import * as helpers from '../../common/helpers';
 import { city, street } from "../../common/addressdisplay";
 import { state as stateFormat } from "../../common/addressdisplay";
-import formatDate from "../formatDate";
-import hidenan from "../../common/hidenan";
-import tomiles from "../tomiles";
-import todir from "../../common/todir";
-import isUserMetric from "../isUserMetric";
-import Status from "../../common/status.js";
-import tzOffset from "../tzoffset";
+import * as formatDate from "../formatDate";
+import * as hidenan from "../../common/hidenan";
+import * as tomiles from "../tomiles";
+import * as todir from "../../common/todir";
+import * as isUserMetric from "../isUserMetric";
+import * as Status from "../../common/status.js";
+import * as tzOffset from "../tzoffset";
 
 const RECENTLY_CHANGED = 10000;
 
