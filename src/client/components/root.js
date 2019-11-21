@@ -20,6 +20,7 @@ import Session from './session';
 import Events from './events';
 import Help from './help';
 import Users from './users';
+import UserEditor from './user-editor';
 import Devices from './devices';
 import Vehicle from './vehicle';
 
@@ -44,17 +45,17 @@ class Root extends React.Component {
 
     if (view === 'EVENTS') {
       return (
-        <Events type="events" />
+        <Events />
       )
     }
     if (view === 'RAWEVENTS') {
       return (
-        <Events type="rawevents" />
+        <Events />
       )
     }
     if (view === 'EXCEPTIONS') {
       return (
-        <Events type="exceptions" />
+        <Events />
       )
     }
 
@@ -94,7 +95,15 @@ class Root extends React.Component {
         </div>
       );
     }
-
+    if (view === 'USER' && (subview === 'NEW' || subview === 'EDIT')) {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <UserEditor />
+          </div>
+        </div>
+      );
+    }
 
     if (view === 'HELP') {
       return <Help />

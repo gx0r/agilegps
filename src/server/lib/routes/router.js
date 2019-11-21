@@ -125,21 +125,21 @@ Events: only admins can acccess.
 
 // r.db('agilegps').table('events').orderBy({index: r.desc('order')})
 router.get("/api/events", jwtrequired, mustBeAdmin, async function(ctx, next) {
+  const queryPageSize = ctx.query.pagesize || ctx.query.pageSize;
+  
   let events;
-  if (ctx.query.page && ctx.query.pagesize) {
-    let page = parseInt(ctx.query.page, 10);
-    page = page - 1;
-    let pagesize = parseInt(ctx.query.pagesize, 10);
-    events = await r
+  if (ctx.query.page && queryPageSize) {
+    const page = parseInt(ctx.query.page, 10) - 1;
+    const pageSize = parseInt(queryPageSize, 10);
+    ctx.body = await r
       .table("vehiclehistory")
       .orderBy({ index: r.desc("id") })
-      .slice(page * pagesize, page * pagesize + pagesize, {
+      .slice(page * pageSize, page * pageSize + pageSize, {
         right_bound: "open"
       });
   } else {
-    events = await r.table("vehiclehistory").orderBy({ index: r.desc("id") });
+    ctx.body = await r.table("vehiclehistory").orderBy({ index: r.desc("id") });
   }
-  ctx.body = events;
 });
 
 router.get("/api/count/events", jwtrequired, mustBeAdmin, async function(

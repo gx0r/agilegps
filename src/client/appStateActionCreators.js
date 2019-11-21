@@ -66,3 +66,11 @@ export function viewNewOrganization() {
   };
 }
 
+export function viewNewUser() {
+  return {
+    type: "VIEW",
+    view: "USER",
+    subview: "NEW",
+    viewID: ""
+  };
+}

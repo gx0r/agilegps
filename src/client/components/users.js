@@ -41,12 +41,12 @@ function deleteUser(user) {
       {
         label: 'Delete',
         onClick: () => {
-          appState.deleteOrg(org)
+          appState.deleteUser(user)
           .then(() => {
-            toast.success(`User ${org.name} deleted.`);
+            toast.success(`User ${user.username} deleted.`);
           })
           .catch(err => {
-            toast.error(`Failed to delete user ${org.name}: ${err.message}`);
+            toast.error(`Failed to delete user ${user.username}: ${err.message}`);
           });
         }
       }      
@@ -73,6 +73,7 @@ class Users extends React.Component {
   render() {
     const {
       usersByID,
+      viewNewUser,
     } = this.props;
 
     return (
