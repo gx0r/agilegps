@@ -136,7 +136,7 @@ class Events extends React.Component {
       <a className="pointer" onClick={ this.nextPage }>»</a>
     </li>)
 
-    return <nav><ul className="pagination">{ elements }</ul></nav>;
+    return <ul className="pagination">{ elements }</ul>;
   }
   
   render() { 
@@ -148,49 +148,58 @@ class Events extends React.Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <label>
-            Selected Page 
-            <input
-              className="form-control"
-              onChange={ ev => this.setState( { page: parseInt(ev.target.value, 10) }) }
-              type="number"
-              min={ 1 }
-              max={ pages }
-              value={ page }
-            />
-          </label>
-          <label>
-          Count per Page
-            <input
-              className="form-control"
-              onChange={ ev => this.setState( { events: [], count: 0, pageSize: parseInt(ev.target.value, 10) }) }
-              type="number"
-              value={ pageSize }
-            />
-          </label>
-          { type === 'rawevents' && <label>
-            Search by IMEI
-            <input
-              className="form-control"
-              onChange={ ev => this.setState({ search: ev.target.value }) }
-              value={ search }
-            />
-          </label> }
-          <label>
-          Parse Dates to Local <input
-              className="form-control"
-              checked={ parseDates }
-              onChange={ ev => this.setState( { parseDates: ev.target.checked }) }
-              type="checkBox"
-            />
-          </label>
-          <button
-            className="btn btn-default btn-success"
-            disabled={ loading }
-            onClick={ this.updateEvents }
-          >Refresh</button>
-          { this.renderPagination() }
+          <div className="col">
+            <label className="control-label col-sm-1">
+              Selected Page 
+              <input
+                className="form-control"
+                onChange={ ev => this.setState( { page: parseInt(ev.target.value, 10) }) }
+                type="number"
+                min={ 1 }
+                max={ pages }
+                value={ page }
+              />
+            </label>
+            <label className="control-label col-sm-1">
+            Count per Page
+              <input
+                className="form-control"
+                onChange={ ev => this.setState( { events: [], count: 0, pageSize: parseInt(ev.target.value, 10) }) }
+                type="number"
+                value={ pageSize }
+              />
+            </label>
+            { type === 'rawevents' && <label>
+              Search by IMEI
+              <input
+                className="form-control"
+                onChange={ ev => this.setState({ search: ev.target.value }) }
+                value={ search }
+              />
+            </label> }
+            <label className="control-label col-sm-2">
+              Parse Dates to Local
+              <input
+                className="form-control"
+                checked={ parseDates }
+                onChange={ ev => this.setState( { parseDates: ev.target.checked }) }
+                type="checkbox"
+              />
+            </label>
+            <label className="control-label">
+              <button
+                className="btn btn-default btn-success"
+                disabled={ loading }
+                onClick={ this.updateEvents }
+                style={{
+                  marginTop: '-63px',
+                  marginRight: '1em',
+                }}
+              >Refresh</button>
+            </label>
+            { this.renderPagination() }
           </div>
+        </div>
         <div className="row">
           { type === 'events' && <div>Legend: a = azimuth, b = buffered, bp = battery percentage, d = date sent by the unit, faketow = maybe about to be towing, g = gps accuracy (1=most accurate/20=least/0=unknown or not reported), gss = gpsSignalStatus report (1 seeing, 0 not seeing), satelliteNumber = number of GPS satellites seeing, h = engine hours, ig = ignition, igd = ignition duration, m = distance (kilometers), mo = motion, p = powervcc, rid = report id, rty = report type, s = speed (kph)</div> }
           { `${count} ${type}` }
