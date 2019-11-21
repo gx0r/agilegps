@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
 
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
 
 import * as appState from '../appState';
@@ -101,87 +101,58 @@ class UserEditor extends React.Component {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label className="col-md-2 control-label">Email</label>
+                  <label className="col-md-2 control-label">Last Name</label>
                   <div className="col-md-10">
                     <input
                       className="form-control"
-                      name="email"
+                      name="lastname"
                       onChange={ handleChange }
                       onBlur={ handleBlur }
-                      value={ values.email }
+                      value={ values.lastname }
                     />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label className="col-md-2 control-label">Email</label>
+                  <div className="col-md-10">
+                    <Field className="form-control" name="email" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Password</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="password"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.password }
-                    />
+                    <Field className="form-control" name="password" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Workphone</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="workphone"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.workphone }
-                    />
+                    <Field className="form-control" name="workphone" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Mobilephone</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="mobilephone"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.mobilephone }
-                    />
+                    <Field className="form-control" name="mobilePhone" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Fax</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="fax"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.fax }
-                    />
+                    <Field className="form-control" name="fax" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Is Admin</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="isAdmin"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.isAdmin }
-                    />
+                    <Field type="checkbox" name="isAdmin" />
                   </div>
                 </div>
+                
                 <div className="form-group">
                   <label className="col-md-2 control-label">Is Org Admin</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="isOrgAdmin"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.isOrgAdmin }
-                    />
+                    <Field type="checkbox" name="isOrgAdmin" />
                   </div>
                 </div>
                 <div className="form-group">
@@ -199,25 +170,13 @@ class UserEditor extends React.Component {
                 <div className="form-group">
                   <label className="col-md-2 control-label">Advanced Mode</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="advancedMode"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.advancedMode }
-                    />
+                    <Field type="checkbox" name="advancedMode" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Metric</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="metric"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.metric }
-                    />
+                    <Field type="checkbox" name="metric" />
                   </div>
                 </div>
                 <div className="buttons-right">
