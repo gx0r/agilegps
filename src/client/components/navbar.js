@@ -124,7 +124,11 @@ class Navbar extends React.Component {
 
     return (
       <>
-        <li>
+        <li
+          className={ classnames({
+            active: view === 'ORG'
+          }) }
+        >
           <a
             onClick={ () => appState.viewOrganizations() }
             href="#">Organizations</a>
