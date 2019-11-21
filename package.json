@@ -106,6 +106,7 @@
     "exports-loader": "^0.7.0",
     "faucet": "0.0.1",
     "file-loader": "^4.2.0",
+    "formik": "^2.0.4",
     "jshint": "^2.10.3",
     "jshint-loader": "^0.8.4",
     "json-loader": "^0.5.7",
