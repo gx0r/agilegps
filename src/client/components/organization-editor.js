@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
 
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
 
 import * as appState from '../appState';
@@ -73,98 +73,49 @@ class OrganizationEditor extends React.Component {
                 <div className="form-group">
                   <label className="col-md-2 control-label">Name</label>
                   <div className="col-md-10">
-                    { errors.name && touched.name && errors.name }
-                    <input
-                      className="form-control"
-                      name="name"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.name }
-                    />                    
+                    <Field className="form-control" name="name" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">EIN</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="ein"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.ein }
-                    />
+                    <Field className="form-control" name="ein" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Address Line 1</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="address1"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.address1 }
-                    />
+                    <Field className="form-control" name="address1" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Address Line 2</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="address2"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.address2 }
-                    />
+                    <Field className="form-control" name="address2" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">City</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="city"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.city }
-                    />
+                    <Field className="form-control" name="city" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">State</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="state"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.state }
-                    />
+                    <Field className="form-control" name="state" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">ZIP</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="zip"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.zip }
-                    />
+                    <Field className="form-control" name="zip" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Country</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="country"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.country }
-                    />
+                    <Field className="form-control" name="country" />
                   </div>
                 </div>    
                 <div className="form-group">
