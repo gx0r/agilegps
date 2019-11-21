@@ -18,6 +18,7 @@ import Organizations from './organizations';
 import OrganizationEditor from './organization-editor';
 import Session from './session';
 import Help from './help';
+import Users from './users';
 import Vehicle from './vehicle';
 
 class Root extends React.Component {
@@ -44,6 +45,15 @@ class Root extends React.Component {
         <div className="container-fluid">
           <div className="row">
             <Organizations />
+          </div>
+        </div>
+      );
+    }
+    if (view === 'USER' && subview === 'ALL') {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <Users />
           </div>
         </div>
       );
