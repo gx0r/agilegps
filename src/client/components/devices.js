@@ -12,7 +12,7 @@ import { confirmAlert } from 'react-confirm-alert';
 
 import { translate as t } from "../i18n";
 import * as appState from '../appState';
-import { viewNewUser } from "../appStateActionCreators";
+import { viewNewDevice } from "../appStateActionCreators";
 import { getVehiclesByDeviceID } from "../selectors/getVehiclesByDeviceID";
 
 function hearbeatField(device) {
@@ -70,6 +70,7 @@ class Devices extends React.Component {
     const {
       devicesByID,
       vehiclesByDeviceID,
+      viewNewDevice,
     } = this.props;
 
     return (
@@ -79,7 +80,7 @@ class Devices extends React.Component {
           <button
             className="btn btn-default"
             style={{marginBottom: '1em'}}
-            onClick={ () => viewNewDevice() }
+            onClick={ viewNewDevice }
           >New Device</button>
           <table className="table table-bordered table-striped">
             <thead>
@@ -152,6 +153,6 @@ export default connect(
     vehiclesByDeviceID: getVehiclesByDeviceID(state),
   }),
   {
-    viewNewUser,
+    viewNewDevice,
   },
 )(Devices);

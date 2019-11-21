@@ -13,6 +13,7 @@ import queryString from 'query-string';
 import Navbar from './navbar';
 import Map from './map';
 import Sidebar from './sidebar';
+import DeviceEditor from './device-editor';
 import Organization from './organization';
 import Organizations from './organizations';
 import OrganizationEditor from './organization-editor';
@@ -100,6 +101,15 @@ class Root extends React.Component {
         <div className="container-fluid">
           <div className="row">
             <UserEditor />
+          </div>
+        </div>
+      );
+    }
+    if (view === 'DEVICE' && (subview === 'NEW' || subview === 'EDIT')) {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <DeviceEditor />
           </div>
         </div>
       );
