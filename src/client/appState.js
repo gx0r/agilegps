@@ -48,7 +48,7 @@ store.subscribe(function() {
   if (["EDIT", "RAWEVENTS", "EVENTS", "EXCEPTIONS"].indexOf(state.subview) < 0) {
     // don't redraw certain views
     // console.log("redrawing");
-    m.redraw();
+    // m.redraw();
   }
 });
 
@@ -342,7 +342,7 @@ function login(data) {
 
       next.finally(() => {
         NProgress.done();
-        m.redraw();
+        // m.redraw();
       });
 
       return next;
@@ -402,14 +402,14 @@ function selectOrgByID(orgid) {
     console.warn('FIXME: missing orgid in selectOrgByID');
   }
 
-  store.dispatch({
-    type: "SELECT_ORG",
-    org: org
-  });
+  // store.dispatch({
+  //   type: "SELECT_ORG",
+  //   org: org
+  // });
 
   return loadOrgState(orgid)
     .then(function() {
-      return selectFleetAll();
+      // return selectFleetAll();
     })
     .finally(function() {
       NProgress.done();
@@ -946,7 +946,6 @@ module.exports.viewOrgByID = function(id) {
     viewID: id,
     subview: "SPLIT"
   });
-  m.redraw();
 };
 
 function viewOrganizations() {
