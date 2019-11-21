@@ -18,6 +18,9 @@ class Navbar extends React.Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
+    this.state = {
+      adminToolsOpen: false,
+    }
   }
 
   static propTypes = {
@@ -37,8 +40,16 @@ class Navbar extends React.Component {
     }
   }
 
-  componentDidMount() {
+  orgPresent() {
+    const { selectedOrg } = this.props;
+    return selectedOrg && selectedOrg.id != null;
   }
+
+  isAdmin() {
+    const { user } = this.props;
+    return user.isAdmin;
+  }
+
 
   getWelcomeText = () => {
     const { user } = this.props;
@@ -69,7 +80,7 @@ class Navbar extends React.Component {
   renderLeftNav() {
     const { selectedOrg, subview } = this.props;
 
-    if (!selectedOrg.id) {
+    if (!this.orgPresent()) {
       return null;
     }
 
@@ -108,15 +119,67 @@ class Navbar extends React.Component {
   }
 
   renderRightNav() {
-    const { view } = this.props;
+    const { user, view } = this.props;
+    const { isAdmin } = user;
+    const { adminToolsOpen } = this.state;
 
     return (
       <ul className="nav navbar-nav navbar-right">
-        <li>
+        { isAdmin && <li>
           <a
             onClick={ () => appState.viewOrganizations() }
-            href="#">Back to Organizations</a>
+            href="#">Organizations</a>
+        </li> }
+        { isAdmin && !this.orgPresent() && <li
+          className={ classnames({
+            active: view === 'USER'
+          }) }
+        ><a
+            onClick={ () => appState.viewUsers() }
+            href="#">Users</a>
         </li>
+        }
+        { isAdmin && !this.orgPresent() && <li
+          className={ classnames({
+            active: view === 'DEVICE'
+          }) }
+        ><a
+            onClick={ () => appState.viewDevices() }
+            href="#">Devices</a>
+        </li>
+        }
+        { isAdmin && !this.orgPresent() && <li
+          onClick={ () => this.setState( { adminToolsOpen: !adminToolsOpen }) }
+          className={ classnames('dropdown pointer', {
+            open: adminToolsOpen
+          }) }
+        >
+          <a className="dropdown-toggle">Messages<span className="caret"></span></a>
+          <ul className="dropdown-menu">
+            <li
+              className={ classnames({
+                active: view === 'EVENTS'
+              }) }
+            >
+              <a href="#" onClick={ () => appState.viewEvents() }>Processed Messages</a>
+            </li>
+            <li
+              className={ classnames({
+                active: view === 'RAWEVENTS'
+              }) }
+            >
+              <a href="#" onClick={ () => appState.viewRawEvents() }>Raw Messages</a>
+            </li>
+            <li
+              className={ classnames({
+                active: view === 'EXCEPTIONS'
+              }) }
+            >
+              <a href="#" onClick={ () => appState.viewExceptions() }>Uncaught Exceptions</a>
+            </li>
+          </ul>
+        </li>
+        }
         <li
           className={ classnames({
             active: view === 'HELP'
@@ -141,8 +204,6 @@ class Navbar extends React.Component {
   }
 
   render() {
-    const { view } = this.props;
-
     return (
       <nav className="navbar navbar-static-top navbar-inverse">
         <div className="container-fluid">
