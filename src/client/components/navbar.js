@@ -78,7 +78,7 @@ class Navbar extends React.Component {
   }
 
   renderLeftNav() {
-    const { selectedOrg, subview } = this.props;
+    const { subview } = this.props;
 
     if (!this.orgPresent()) {
       return null;
@@ -118,19 +118,18 @@ class Navbar extends React.Component {
     );
   }
 
-  renderRightNav() {
-    const { user, view } = this.props;
-    const { isAdmin } = user;
+  renderSiteAdminNav() {
+    const { view } = this.props;
     const { adminToolsOpen } = this.state;
 
     return (
-      <ul className="nav navbar-nav navbar-right">
-        { isAdmin && <li>
+      <>
+        <li>
           <a
             onClick={ () => appState.viewOrganizations() }
             href="#">Organizations</a>
-        </li> }
-        { isAdmin && !this.orgPresent() && <li
+        </li>
+        <li
           className={ classnames({
             active: view === 'USER'
           }) }
@@ -138,8 +137,7 @@ class Navbar extends React.Component {
             onClick={ () => appState.viewUsers() }
             href="#">Users</a>
         </li>
-        }
-        { isAdmin && !this.orgPresent() && <li
+        <li
           className={ classnames({
             active: view === 'DEVICE'
           }) }
@@ -147,8 +145,7 @@ class Navbar extends React.Component {
             onClick={ () => appState.viewDevices() }
             href="#">Devices</a>
         </li>
-        }
-        { isAdmin && !this.orgPresent() && <li
+        <li
           onClick={ () => this.setState( { adminToolsOpen: !adminToolsOpen }) }
           className={ classnames('dropdown pointer', {
             open: adminToolsOpen
@@ -179,7 +176,22 @@ class Navbar extends React.Component {
             </li>
           </ul>
         </li>
-        }
+      </>
+    );
+  }
+
+  renderRightNav() {
+    const { user, view } = this.props;
+    const { isAdmin } = user;
+
+    return (
+      <ul className="nav navbar-nav navbar-right">
+        { isAdmin && !this.orgPresent() ? this.renderSiteAdminNav() :
+        <li>
+          <a
+            onClick={ () => appState.viewOrganizations() }
+            href="#">Back To Organizations</a>
+        </li> }
         <li
           className={ classnames({
             active: view === 'HELP'
