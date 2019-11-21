@@ -9,6 +9,8 @@ import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 import { take, union } from 'lodash';
+import * as moment from 'moment';
+import * as formatDate from "../formatDate";
 
 import { viewNewOrganization } from "../appStateActionCreators";
 import * as appState from '../appState';
@@ -23,6 +25,7 @@ class Events extends React.Component {
       loading: false,
       page: 1,
       pageSize: 300,
+      parseDates: true,
       search: '',
     }
   }
@@ -138,81 +141,95 @@ class Events extends React.Component {
   
   render() { 
     const { type } = this.props;
-    const { count, events, loading, page, pageSize, search } = this.state;
+    const { count, events, loading, page, pageSize, parseDates, search } = this.state;
     const keys = this.getEventKeys();
     const pages = Math.ceil(count / pageSize);
 
     return (
       <div className="container-fluid">
         <div className="row">
-          <div>
-            <div className="col">
-              <label>
-                Selected Page 
-                <input
-                  className="form-control"
-                  onChange={ ev => this.setState( { page: parseInt(ev.target.value, 10) }) }
-                  type="number"
-                  min={ 1 }
-                  max={ pages }
-                  value={ page }
-                />
-              </label>
-              <label>
-              Count per Page
-                <input
-                  className="form-control"
-                  onChange={ ev => this.setState( { events: [], count: 0, pageSize: parseInt(ev.target.value, 10) }) }
-                  type="number"
-                  value={ pageSize }
-                />
-              </label>
-              { type === 'rawevents' && <label>
-                Search by IMEI
-                <input
-                  className="form-control"
-                  onChange={ ev => this.setState({ search: ev.target.value }) }
-                  value={ search }
-                />
-              </label> }
-              <button
-                className="btn btn-default btn-success"
-                disabled={ loading }
-                onClick={ this.updateEvents }
-              >Refresh</button>
-              { this.renderPagination() }
-              { type === 'events' && <div>Legend: a = azimuth, b = buffered, bp = battery percentage, d = date sent by the unit, faketow = maybe about to be towing, g = gps accuracy (1=most accurate/20=least/0=unknown or not reported), gss = gpsSignalStatus report (1 seeing, 0 not seeing), satelliteNumber = number of GPS satellites seeing, h = engine hours, ig = ignition, igd = ignition duration, m = distance (kilometers), mo = motion, p = powervcc, rid = report id, rty = report type, s = speed (kph)</div> }
-              { `${count} ${type}` }
-              <table className="table table-bordered table-striped business-table">
-                <thead>
-                  <tr>
-                  { keys.map(key => <td>{ key }</td>) }
-                  </tr>
-                </thead>
-                <tbody>
-                {
-                  events.map(event => {
-                    return (
-                      <tr key={ event.id }>
-                        {
-                          keys.map(key => {
-                            if (key === 'ad') {
-                              return <td><pre>...</pre></td>
-                            } else {
-                              return (
-                                <td>{ event[key] }</td>
-                              )
-                            }
-                          })
-                        }
-                      </tr>
-                    );
-                  })
-                }
-                </tbody>
-              </table>
-            </div>
+          <label>
+            Selected Page 
+            <input
+              className="form-control"
+              onChange={ ev => this.setState( { page: parseInt(ev.target.value, 10) }) }
+              type="number"
+              min={ 1 }
+              max={ pages }
+              value={ page }
+            />
+          </label>
+          <label>
+          Count per Page
+            <input
+              className="form-control"
+              onChange={ ev => this.setState( { events: [], count: 0, pageSize: parseInt(ev.target.value, 10) }) }
+              type="number"
+              value={ pageSize }
+            />
+          </label>
+          { type === 'rawevents' && <label>
+            Search by IMEI
+            <input
+              className="form-control"
+              onChange={ ev => this.setState({ search: ev.target.value }) }
+              value={ search }
+            />
+          </label> }
+          <label>
+          Parse Dates to Local <input
+              className="form-control"
+              checked={ parseDates }
+              onChange={ ev => this.setState( { parseDates: ev.target.checked }) }
+              type="checkBox"
+            />
+          </label>
+          <button
+            className="btn btn-default btn-success"
+            disabled={ loading }
+            onClick={ this.updateEvents }
+          >Refresh</button>
+          { this.renderPagination() }
           </div>
+        <div className="row">
+          { type === 'events' && <div>Legend: a = azimuth, b = buffered, bp = battery percentage, d = date sent by the unit, faketow = maybe about to be towing, g = gps accuracy (1=most accurate/20=least/0=unknown or not reported), gss = gpsSignalStatus report (1 seeing, 0 not seeing), satelliteNumber = number of GPS satellites seeing, h = engine hours, ig = ignition, igd = ignition duration, m = distance (kilometers), mo = motion, p = powervcc, rid = report id, rty = report type, s = speed (kph)</div> }
+          { `${count} ${type}` }
+          <table className="table table-bordered table-striped business-table">
+            <thead>
+              <tr>
+              { keys.map(key => <td>{ key }</td>) }
+              </tr>
+            </thead>
+            <tbody>
+            {
+              events.map(event => {
+                return (
+                  <tr key={ event.id }>
+                    {
+                      keys.map(key => {
+                        if (key === 'ad') {
+                          return <td><pre>...</pre></td>
+                        } else if (
+                            parseDates
+                            && (key === 'd' && type === 'events'
+                            || (key === 'date' || key === 'serverDate' && type === 'rawevents'))
+                          ) {
+                          return (
+                            <td>{ formatDate(event[key]) }</td>
+                          )  
+                        } else {
+                          return (
+                            <td>{ event[key] }</td>
+                          )
+                        }
+                      })
+                    }
+                  </tr>
+                );
+              })
+            }
+            </tbody>
+          </table>
         </div>
       </div>
     )
