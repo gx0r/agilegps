@@ -20,6 +20,7 @@ class Navbar extends React.Component {
     this.myRef = React.createRef();
     this.state = {
       adminToolsOpen: false,
+      orgToolsOpen: false,
     }
   }
 
@@ -118,6 +119,55 @@ class Navbar extends React.Component {
     );
   }
 
+  renderInOrgNav() {
+    // Right side, logged into an org
+    const { subview, user } = this.props;
+    const { orgToolsOpen } = this.state;
+
+    return (
+      <>
+        <li
+          className={ classnames({
+            open: orgToolsOpen
+          }) }
+          onClick={ () => this.setState( { orgToolsOpen: !orgToolsOpen}) }
+        >
+          <a className="dropdown-toggle">Manage<span className="caret"></span></a>
+          <ul className="dropdown-menu">
+            <li
+              className={ classnames({
+                active: subview === 'USERS',
+              }) }
+            >
+              <a href="#" onClick={ appState.viewOrgUsers() }>Users</a>
+            </li>
+            <li
+              className={ classnames({
+                active: subview === 'FLEETS',
+              }) }
+            >
+              <a href="#" onClick={ appState.viewOrgFleets() }>Fleets</a>
+            </li>
+            <li
+              className={ classnames({
+                active: subview === 'VEHICLES',
+              }) }
+            >
+              <a href="#" onClick={ appState.viewOrgVehicles() }>Vehicles</a>
+            </li>
+          </ul>
+        </li>
+        <li
+          className={ classnames({
+            active: subview === 'PROFILE',
+          }) }
+        >
+          <a href="#" onClick={ () => appState.viewUserByID(user.username) }>Profile</a>
+        </li>
+      </>
+    );
+  }
+
   renderSiteAdminNav() {
     const { view } = this.props;
     const { adminToolsOpen } = this.state;
@@ -196,6 +246,7 @@ class Navbar extends React.Component {
             onClick={ () => appState.viewOrganizations() }
             href="#">Back To Organizations</a>
         </li> }
+        { this.orgPresent() && this.renderInOrgNav() }
         <li
           className={ classnames({
             active: view === 'HELP'
