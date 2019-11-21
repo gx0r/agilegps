@@ -160,14 +160,17 @@ class Vehicle extends React.Component {
             className="btn btn-xs btn-success glyphicon glyphicon-stop"
             onClick={ animationStop }
           />
-          <progress value={ 0 } style={{
-            marginLeft: '1em',
-          }} />
+          <progress
+            value={ 0 }
+            style={{
+              marginLeft: '1em',
+            }}
+          />
           <input
             type="range"
             min="0"
             max="2000"
-            // onChange={ setAnimationSpeed }
+            onChange={ () => window.alert('todo') }
             step="1"
             value={ animationSpeed }
           />
@@ -187,21 +190,21 @@ class Vehicle extends React.Component {
           <label className="padrt">
             <input
               checked={ highlightStarts }
-              onClick={ () => this.setState({ highlightStarts: !highlightStarts })}
+              onChange={ ev => this.setState({ highlightStarts: ev.target.checked })}
               type="checkbox"
             /> Highlight starts
           </label>
           <label className="padrt">
             <input
               checked={ highlightIgnition }
-              onClick={ () => this.setState({ highlightIgnition: !highlightIgnition })}
+              onChange={ ev => this.setState({ highlightIgnition: ev.target.checked })}
               type="checkbox"
             /> Highlight ignition
           </label>
           <label className="padrt">
             <input
               checked={ reverseOrder }
-              onClick={ ev => this.setState({ reverseOrder: ev.target.checked })}
+              onChange={ ev => this.setState({ reverseOrder: ev.target.checked })}
               type="checkbox"
             /> Reverse Order
           </label>
@@ -209,7 +212,7 @@ class Vehicle extends React.Component {
             <input
               checked={ verbose }
               type="checkbox"
-              onClick={ ev => setShowVerbose(ev.target.checked) }
+              onChange={ ev => setShowVerbose(ev.target.checked) }
             />
             Verbose
           </label>
@@ -217,7 +220,7 @@ class Vehicle extends React.Component {
             <input
               checked={ showLatLong }
               type="checkbox"
-              onClick={ ev => setShowLatLong(ev.target.checked) }
+              onChange={ ev => setShowLatLong(ev.target.checked) }
             />
             LAT/LONG
           </label>
@@ -225,7 +228,7 @@ class Vehicle extends React.Component {
             <input
               checked={ rollup }
               type="checkbox"
-              onClick={ ev => this.setState({ rollup: ev.target.checked}) }
+              onChange={ ev => this.setState({ rollup: ev.target.checked}) }
             />
             Rollup idling & parked
           </label>
@@ -233,32 +236,34 @@ class Vehicle extends React.Component {
             <input
               checked={ raw }
               type="checkbox"
-              onClick={ ev => this.setState({ raw: ev.target.checked}) }
+              onChange={ ev => this.setState({ raw: ev.target.checked}) }
             />
             Raw
           </label>
         </div>
         <table className="table table-bordered table-striped">
           <thead>
-            <td>Date</td>
-            <td>Address</td>
-            <td>City</td>
-            <td>State</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-            { verbose && <td>Odometer</td> }
-            { verbose && <td>Engine Hours</td> }
-            <td>Dir</td>
-            <td>{ isUserMetric() ? 'km/h' : 'mph' }</td>
-            { showLatLong && <td>Lat</td> }
-            { showLatLong && <td>Long</td> }
-            <td>Status</td>
-            { verbose && <td>Online</td> }
-            { verbose && <td>Battery %</td> }
-            <td>GPS</td>
-            { raw && <td>Raw</td> }
+            <tr>
+              <td>Date</td>
+              <td>Address</td>
+              <td>City</td>
+              <td>State</td>
+              <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+              { verbose && <td>Odometer</td> }
+              { verbose && <td>Engine Hours</td> }
+              <td>Dir</td>
+              <td>{ isUserMetric() ? 'km/h' : 'mph' }</td>
+              { showLatLong && <td>Lat</td> }
+              { showLatLong && <td>Long</td> }
+              <td>Status</td>
+              { verbose && <td>Online</td> }
+              { verbose && <td>Battery %</td> }
+              <td>GPS</td>
+              { raw && <td>Raw</td> }
+            </tr>
           </thead>
           <tbody>
-            { adjustedVehicleHistory.length < 1 && <div>No vehicle history for this day</div> }
+            { adjustedVehicleHistory.length < 1 && <tr><td>No vehicle history for this day</td></tr> }
             { 
               adjustedVehicleHistory.map(item => {
                 return (

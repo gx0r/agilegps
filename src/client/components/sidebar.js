@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -126,10 +126,8 @@ class Sidebar extends React.Component {
     });
 
     return (
-      <>
+      <Fragment key={ fleet.id }>
         <li
-          data-key={ fleet.id }
-          key={ fleet.id }
           onClick={ () => this.selectFleet(fleet) }
           className={ classnames('list-group-item pointer', {
             active: selectedFleet && selectedFleet.id === fleet.id
@@ -137,7 +135,7 @@ class Sidebar extends React.Component {
           <CarImage fill={fleet.color} /> <b>{ fleet.name }</b>
         </li>
         { vehicleElements }
-      </>
+      </Fragment>
     );
   }
 

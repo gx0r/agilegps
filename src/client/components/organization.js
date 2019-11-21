@@ -104,9 +104,9 @@ class Organization extends React.Component {
       <div className="business-table">
         <label style={{marginRight: "0.5em"}} >
           <input
-          checked={ autoUpdate }
+            checked={ autoUpdate }
             type="checkbox"
-            onClick={ ev => appState.setAutoUpdate(ev.target.checked) }
+            onChange={ ev => appState.setAutoUpdate(ev.target.checked) }
           />
           Auto-Zoom Map            
         </label>
@@ -114,7 +114,7 @@ class Organization extends React.Component {
           <input
             checked={ verbose }
             type="checkbox"
-            onClick={ ev => setShowVerbose(ev.target.checked) }
+            onChange={ ev => setShowVerbose(ev.target.checked) }
           />
           Verbose
         </label>
@@ -122,7 +122,7 @@ class Organization extends React.Component {
           <input
             checked={ showLatLong }
             type="checkbox"
-            onClick={ ev => setShowLatLong(ev.target.checked) }
+            onChange={ ev => setShowLatLong(ev.target.checked) }
           />
           LAT/LONG
         </label>
@@ -162,7 +162,7 @@ class Organization extends React.Component {
               
               if (!lastStatus) {
                 return (
-                  <tr>
+                  <tr key={ vehicle.id }>
                     <td className="nowrap">{ vehicle.name }</td>
                   </tr>
                 );
@@ -171,6 +171,7 @@ class Organization extends React.Component {
               return (
                 <tr
                   id={ vehicle.id }
+                  key={ vehicle.id }
                   onClick={ () => this.clickItem(vehicle) }
                   style={
                     {
