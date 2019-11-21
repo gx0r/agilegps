@@ -53,18 +53,6 @@ class Vehicle extends React.Component {
     selectHistoryItemID(historyItem.id);
   };
 
-  componentWillMount() {
-    const { selectDays } = this.props;
-    // todo
-    // selectDays(
-    //   moment().subtract(1, 'day').toDate(),
-    //   moment()
-    //     .add(2, "day")
-    //     .toDate()
-    // );
-  }
-
-
   recalculateHistory = () => {
     const { hist, verbose } = this.props;
     const {

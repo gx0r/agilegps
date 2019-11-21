@@ -54,12 +54,14 @@ store.subscribe(function() {
 
 window.onpopstate = function(ev) {
   let location = ev.state;
-  store.dispatch({
-    type: "VIEW",
-    view: location.view,
-    subview: location.subview,
-    viewID: location.viewID
-  });
+  if (location) {
+    store.dispatch({
+      type: "VIEW",
+      view: location.view,
+      subview: location.subview,
+      viewID: location.viewID
+    }); 
+  }
 };
 // END routing
 

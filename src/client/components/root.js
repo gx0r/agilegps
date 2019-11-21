@@ -26,9 +26,6 @@ class Root extends React.Component {
     this.mapRef = React.createRef();
   }
 
-  componentWillMount() {
-  }
-
   renderView() {
     const { selectedVehicle, subview, view, viewID} = this.props;
 
