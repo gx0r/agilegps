@@ -48,7 +48,6 @@ class OrganizationEditor extends React.Component {
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-              debugger;
               const org = new Organization(values);
               appState.saveOrg(org)
               .then(() => {
