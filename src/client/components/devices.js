@@ -10,10 +10,10 @@ import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
-import * as appState from '../appState';
-
-import { viewNewUser } from "../appStateActionCreators";
 import { translate as t } from "../i18n";
+import * as appState from '../appState';
+import { viewNewUser } from "../appStateActionCreators";
+import { getVehiclesByDeviceID } from "../selectors/getVehiclesByDeviceID";
 
 function hearbeatField(device) {
   if (!device.lastHeartbeat) {
@@ -68,11 +68,9 @@ class Devices extends React.Component {
 
   render() {
     const {
-      vehiclesByID,
       devicesByID,
+      vehiclesByDeviceID,
     } = this.props;
-
-    const vehiclesByDeviceID = {}; // todo
 
     return (
       <div>
@@ -151,6 +149,7 @@ export default connect(
   state => ({
     devicesByID: state.devicesByID,
     usersByID: state.usersByID,
+    vehiclesByDeviceID: getVehiclesByDeviceID(state),
   }),
   {
     viewNewUser,
