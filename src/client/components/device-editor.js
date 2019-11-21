@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 import * as appState from '../appState';
 import * as Device from "../../common/models/Device";
+import { createOrgSelector } from './orgselector';
 
 class DeviceEditor extends React.Component {
   constructor(props) {
@@ -115,7 +116,7 @@ class DeviceEditor extends React.Component {
                 <div className="form-group">
                   <label className="col-md-2 control-label">Organization ID</label>
                   <div className="col-md-10">
-                    <Field className="form-control" name="orgid" />
+                    { createOrgSelector(this.props.orgsByID) }
                   </div>
                 </div>                
                 <div className="buttons-right">
@@ -155,6 +156,7 @@ export default connect(
 
     return {
       device: device,
+      orgsByID: state.orgsByID,
     }
   },
 )(DeviceEditor);
