@@ -105,6 +105,38 @@ class Navbar extends React.Component {
         </li>
       </ul>
     );
+  }
+
+  renderRightNav() {
+    const { view } = this.props;
+
+    return (
+      <ul className="nav navbar-nav navbar-right">
+        <li>
+          <a
+            onClick={ () => appState.viewOrganizations() }
+            href="#">Back to Organizations</a>
+        </li>
+        <li
+          className={ classnames({
+            active: view === 'HELP'
+          }) }
+        >
+          <a
+            onClick={ () => appState.viewHelp() }
+            href="#">Help</a>
+        </li>
+        <li
+          className={ classnames({
+            active: view === 'SESSION'
+          }) }
+        >
+          <a
+            onClick={ () => appState.viewLogin() }
+            href="#">☰</a>
+        </li>
+      </ul>  
+    );
 
   }
 
@@ -128,31 +160,7 @@ class Navbar extends React.Component {
             </li>            
           </div>
           { this.renderLeftNav() }         
-          <ul className="nav navbar-nav navbar-right">
-            <li>
-              <a
-                onClick={ () => appState.viewOrganizations() }
-                href="#">Back to Organizations</a>
-            </li>
-            <li
-              className={ classnames({
-                active: view === 'HELP'
-              }) }
-            >
-              <a
-                onClick={ () => appState.viewHelp() }
-                href="#">Help</a>
-            </li>
-            <li
-              className={ classnames({
-                active: view === 'SESSION'
-              }) }
-            >
-              <a
-                onClick={ () => appState.viewLogin() }
-                href="#">☰</a>
-            </li>
-          </ul>          
+          { this.renderRightNav() }        
         </div>
       </nav>
     );
