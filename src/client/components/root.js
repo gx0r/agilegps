@@ -17,6 +17,7 @@ import Organization from './organization';
 import Organizations from './organizations';
 import OrganizationEditor from './organization-editor';
 import Session from './session';
+import Events from './events';
 import Help from './help';
 import Users from './users';
 import Devices from './devices';
@@ -38,6 +39,22 @@ class Root extends React.Component {
             <Session />
           </div>
         </div>
+      )
+    }
+
+    if (view === 'EVENTS') {
+      return (
+        <Events type="events" />
+      )
+    }
+    if (view === 'RAWEVENTS') {
+      return (
+        <Events type="rawevents" />
+      )
+    }
+    if (view === 'EXCEPTIONS') {
+      return (
+        <Events type="exceptions" />
       )
     }
 
