@@ -1,16 +1,18 @@
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
-import appState from '../appState';
+
+import * as moment from 'moment';
+import * as classnames from 'classnames';
+
+import * as appState from '../appState';
 
 import reportsSvg from '../svg/reports.svg';
 import mapSvg from '../svg/map.svg';
 import globeSvg from '../svg/globe.svg';
 import xcloudSvg from '../svg/xcloud.svg';
-
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -65,7 +67,7 @@ class Navbar extends React.Component {
   }
 
   renderLeftNav() {
-    const { selectedOrg } = this.props;
+    const { selectedOrg, subview } = this.props;
 
     if (!selectedOrg.id) {
       return null;
@@ -73,18 +75,30 @@ class Navbar extends React.Component {
 
     return (
       <ul className="nav navbar-nav">
-        <li>
+        <li
+          className={ classnames({
+            active: subview === 'REPORT'
+          }) }
+        >
           <a
             onClick={ () => appState.viewReports() }
             href="#"><img src={ reportsSvg } />Reports
           </a>
         </li>
-        <li>
+        <li
+          className={ classnames({
+            active: subview === 'MAP'
+          }) }
+        >
           <a
             onClick={ () => appState.viewMap() }
             href="#"><img src={ mapSvg } />Map</a>
         </li>
-        <li>
+        <li
+          className={ classnames({
+            active: subview === 'SPLIT'
+          }) }
+        >
           <a
             onClick={ () => appState.viewSplitScreen() }
             href="#"><img src={ globeSvg } />Split Screen</a>
@@ -95,6 +109,7 @@ class Navbar extends React.Component {
   }
 
   render() {
+    const { view } = this.props;
 
     return (
       <nav className="navbar navbar-static-top navbar-inverse">
@@ -119,12 +134,20 @@ class Navbar extends React.Component {
                 onClick={ () => appState.viewOrganizations() }
                 href="#">Back to Organizations</a>
             </li>
-            <li>
+            <li
+              className={ classnames({
+                active: view === 'HELP'
+              }) }
+            >
               <a
                 onClick={ () => appState.viewHelp() }
                 href="#">Help</a>
             </li>
-            <li>
+            <li
+              className={ classnames({
+                active: view === 'SESSION'
+              }) }
+            >
               <a
                 onClick={ () => appState.viewLogin() }
                 href="#">☰</a>
@@ -142,10 +165,10 @@ export default connect(
     metric: state.user && state.user.metric,
     orgName: state.selectedOrg.name,
     realTimeUpdates: state.realTimeUpdates,
-    user: state.user,
-    view: state.view,
     selectedOrg: state.selectedOrg,
     subview: state.subview,
+    user: state.user,
+    view: state.view,
   }),
   dispatch => bindActionCreators({
   }, dispatch),
