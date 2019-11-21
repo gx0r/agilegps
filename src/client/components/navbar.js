@@ -54,7 +54,7 @@ class Navbar extends React.Component {
 
     return (
       <a style={{color: realTimeUpdates ? '' : 'red' }}>
-      { realTimeUpdates ? `Last update: ${this.formatLastUpdated()} ` : 'Connectivity lost' }
+      { realTimeUpdates ? `Last update: ${this.formatLastUpdated()} ⚡` : 'connection lost ⚠' }
       </a>
     );
   }
