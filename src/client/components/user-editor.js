@@ -11,6 +11,8 @@ import { toast } from 'react-toastify';
 import * as appState from '../appState';
 import * as User from "../../common/models/User";
 
+import { createOrgSelector } from './orgselector';
+
 class UserEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,7 @@ class UserEditor extends React.Component {
   };
 
   render() {
-    const { user } = this.props;
+    const { orgsByID, user } = this.props;
 
     return (
       <div>
@@ -158,13 +160,7 @@ class UserEditor extends React.Component {
                 <div className="form-group">
                   <label className="col-md-2 control-label">Org ID</label>
                   <div className="col-md-10">
-                    <input
-                      className="form-control"
-                      name="orgid"
-                      onChange={ handleChange }
-                      onBlur={ handleBlur }
-                      value={ values.orgid }
-                    />
+                    { createOrgSelector(orgsByID) }
                   </div>
                 </div>
                 <div className="form-group">
@@ -215,7 +211,8 @@ export default connect(
     }
 
     return {
-      user: user,
+      orgsByID: state.orgsByID,
+      user,
     }
   },
 )(UserEditor);
