@@ -74,3 +74,12 @@ export function viewNewUser() {
     viewID: ""
   };
 }
+
+export function viewNewDevice() {
+  return {
+    type: "VIEW",
+    view: "DEVICE",
+    subview: "NEW",
+    viewID: ""
+  };
+}

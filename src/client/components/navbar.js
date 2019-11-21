@@ -169,7 +169,7 @@ class Navbar extends React.Component {
   }
 
   renderSiteAdminNav() {
-    const { view } = this.props;
+    const { user, view, viewID } = this.props;
     const { adminToolsOpen } = this.state;
 
     return (
@@ -185,7 +185,7 @@ class Navbar extends React.Component {
         </li>
         <li
           className={ classnames({
-            active: view === 'USER'
+            active: view === 'USER' && viewID !== user.username
           }) }
         ><a
             onClick={ () => appState.viewUsers() }
@@ -235,7 +235,7 @@ class Navbar extends React.Component {
   }
 
   renderRightNav() {
-    const { user, view } = this.props;
+    const { user, view, viewID } = this.props;
     const { isAdmin } = user;
 
     return (
@@ -247,6 +247,16 @@ class Navbar extends React.Component {
             href="#">Back To Organizations</a>
         </li> }
         { this.orgPresent() && this.renderInOrgNav() }
+        <li
+          className={ classnames({
+            active: view === 'USER' && viewID === user.username
+          }) }
+        >
+          <a
+            onClick={ () => appState.viewUserByID(user.username) }
+            href="#">Profile</a>
+        </li>
+
         <li
           className={ classnames({
             active: view === 'HELP'
@@ -305,6 +315,7 @@ export default connect(
     subview: state.subview,
     user: state.user,
     view: state.view,
+    viewID: state.viewID,
   }),
   dispatch => bindActionCreators({
   }, dispatch),
