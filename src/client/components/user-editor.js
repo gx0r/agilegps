@@ -145,14 +145,14 @@ class UserEditor extends React.Component {
                 <div className="form-group">
                   <label className="col-md-2 control-label">Is Admin</label>
                   <div className="col-md-10">
-                    <Field type="checkbox" name="isAdmin" />
+                    <Field className="form-control" type="checkbox" name="isAdmin" />
                   </div>
                 </div>
                 
                 <div className="form-group">
                   <label className="col-md-2 control-label">Is Org Admin</label>
                   <div className="col-md-10">
-                    <Field type="checkbox" name="isOrgAdmin" />
+                    <Field className="form-control" type="checkbox" name="isOrgAdmin" />
                   </div>
                 </div>
                 <div className="form-group">
@@ -170,13 +170,13 @@ class UserEditor extends React.Component {
                 <div className="form-group">
                   <label className="col-md-2 control-label">Advanced Mode</label>
                   <div className="col-md-10">
-                    <Field type="checkbox" name="advancedMode" />
+                    <Field className="form-control" type="checkbox" name="advancedMode" />
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="col-md-2 control-label">Metric</label>
                   <div className="col-md-10">
-                    <Field type="checkbox" name="metric" />
+                    <Field className="form-control" type="checkbox" name="metric" />
                   </div>
                 </div>
                 <div className="buttons-right">
