@@ -11,6 +11,7 @@ import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
+import { getRelevantUsers } from '../selectors/getUsers.js';
 import { viewNewUser } from "../appStateActionCreators";
 import { translate as t } from "../i18n";
 
@@ -138,7 +139,7 @@ class Users extends React.Component {
 export default connect(
   state => ({
     orgsByID: state.orgsByID,
-    usersByID: state.usersByID,
+    usersByID: getRelevantUsers(state),
   }),
   {
     viewNewUser,
