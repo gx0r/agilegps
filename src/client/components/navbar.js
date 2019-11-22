@@ -139,21 +139,21 @@ class Navbar extends React.Component {
                 active: subview === 'USERS',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgUsers() }>Users</a>
+              <a href="#" onClick={ appState.viewOrgUsers }>Users</a>
             </li>
             <li
               className={ classnames({
                 active: subview === 'FLEETS',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgFleets() }>Fleets</a>
+              <a href="#" onClick={ appState.viewOrgFleets }>Fleets</a>
             </li>
             <li
               className={ classnames({
                 active: subview === 'VEHICLES',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgVehicles() }>Vehicles</a>
+              <a href="#" onClick={ appState.viewOrgVehicles }>Vehicles</a>
             </li>
           </ul>
         </li>
