@@ -169,7 +169,7 @@ class Events extends React.Component {
                 value={ pageSize }
               />
             </label>
-            { type === 'rawevents' && <label>
+            { type === 'rawevents' && <label className="control-label col-sm-2">
               Search by IMEI
               <input
                 className="form-control"
