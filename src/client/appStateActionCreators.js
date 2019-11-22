@@ -83,3 +83,12 @@ export function viewNewDevice() {
     viewID: ""
   };
 }
+
+export function viewNewVehicle() {
+  return {
+    type: "VIEW",
+    view: "VEHICLE",
+    subview: "NEW",
+    viewID: ""
+  };
+}
