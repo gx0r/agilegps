@@ -7,7 +7,7 @@ export function createOrgSelector(orgsByID) {
       {
         Object.keys(orgsByID).map(key => {
           const org = orgsByID[key];
-          return <option value={ org.id }>{ org.name }</option>
+          return <option key={ org.id } value={ org.id }>{ org.name }</option>
         })
       }
     </Field>

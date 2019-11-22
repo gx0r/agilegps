@@ -2,19 +2,13 @@
 import React, { Fragment } from 'react';
 import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
 
-import { toArray } from 'lodash';
-import { toast } from 'react-toastify';
-import { confirmAlert } from 'react-confirm-alert';
-import { take, union } from 'lodash';
-import * as moment from 'moment';
-import * as formatDate from "../formatDate";
-
-import { viewNewOrganization } from "../appStateActionCreators";
-import * as appState from '../appState';
+import { union } from 'lodash';
 import { auth, validateResponse, } from "../appState.js";
+import * as formatDate from "../formatDate";
+import eventreportparser from '../../helper/eventreportparser';
+import { confirmAlert } from 'react-confirm-alert';
 
 class Events extends React.Component {
   constructor(props) {
@@ -216,7 +210,20 @@ class Events extends React.Component {
                   <tr key={ event.id }>
                     {
                       keys.map(key => {
-                        if (key === 'ad') {
+                        if (type === 'rawevents' && key === 'message') {
+                          const rawMessage = event[key];
+                          return <td><button onClick={ () => {
+                            const parsed = eventreportparser(rawMessage);
+                            delete parsed.args;
+                            confirmAlert({
+                              title: 'Parsed',
+                              buttons: [
+                                { label: 'Close' }
+                              ],
+                              message: <pre>{ JSON.stringify(parsed, null, 4) }</pre>,
+                            });
+                          }}>Parse</button> { rawMessage }</td>
+                        } else if (key === 'ad') {
                           return <td><pre>...</pre></td>
                         } else if (
                             parseDates
