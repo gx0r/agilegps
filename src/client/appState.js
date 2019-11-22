@@ -404,10 +404,10 @@ function selectOrgByID(orgid) {
     console.warn('FIXME: missing orgid in selectOrgByID');
   }
 
-  // store.dispatch({
-  //   type: "SELECT_ORG",
-  //   org: org
-  // });
+  store.dispatch({
+    type: "SELECT_ORG",
+    org: org
+  });
 
   return loadOrgState(orgid)
     .then(function() {
