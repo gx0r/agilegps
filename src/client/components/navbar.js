@@ -157,13 +157,6 @@ class Navbar extends React.Component {
             </li>
           </ul>
         </li>
-        <li
-          className={ classnames({
-            active: subview === 'PROFILE',
-          }) }
-        >
-          <a href="#" onClick={ () => appState.viewUserByID(user.username) }>Profile</a>
-        </li>
       </>
     );
   }
