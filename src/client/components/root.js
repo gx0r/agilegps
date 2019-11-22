@@ -24,6 +24,8 @@ import Users from './users';
 import UserEditor from './user-editor';
 import Devices from './devices';
 import Vehicle from './vehicle';
+import Vehicles from './vehicles';
+import VehicleEditor from './vehicle-editor';
 
 class Root extends React.Component {
   constructor(props) {
@@ -124,7 +126,15 @@ class Root extends React.Component {
         </div>
       );
     }
-
+    if (view === 'VEHICLE' && (subview === 'NEW' || subview === 'EDIT')) {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <VehicleEditor />
+          </div>
+        </div>
+      );
+    }
     if (view === 'USER' && subview === 'ORG') {
       return (
         <div className="container-fluid">
@@ -150,13 +160,11 @@ class Root extends React.Component {
       return (
         <div className="container-fluid">
           <div className="row">
-            TODO
-            {/* <Vehicles /> */}
+            <Vehicles />
           </div>
         </div>
       );
     }
-
 
     if (view === 'HELP') {
       return <Help />
