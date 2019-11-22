@@ -39,15 +39,6 @@ module.exports = {
   startDate: moment(),
   endDate: moment(),
 
-  // events / errors / rawevents
-  eventCount: 0,
-  events: [],
-  rawevents: [],
-  exceptions: [],
-  page: 1,
-  pagesize: 300,
-  search: "",
-
   // view state
   autoUpdate: true,
   realTimeUpdates: false, // is the socket.io connection is working
