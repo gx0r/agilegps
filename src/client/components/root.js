@@ -87,6 +87,16 @@ class Root extends React.Component {
         </div>
       );
     }
+    if (view === 'ORG' && subview === 'REPORT') {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            TODO
+            {/* <Reports /> */}
+          </div>
+        </div>
+      );
+    }
     if (view === 'ORG' && (subview === 'NEW' || subview === 'EDIT')) {
       return (
         <div className="container-fluid">
@@ -114,6 +124,39 @@ class Root extends React.Component {
         </div>
       );
     }
+
+    if (view === 'USER' && subview === 'ORG') {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            <Users />
+          </div>
+        </div>
+      );
+    }
+
+    if (view === 'FLEET' && subview === 'ORG') {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            TODO
+            {/* <Fleets /> */}
+          </div>
+        </div>
+      );
+    }
+
+    if (view === 'VEHICLE' && subview === 'ORG') {
+      return (
+        <div className="container-fluid">
+          <div className="row">
+            TODO
+            {/* <Vehicles /> */}
+          </div>
+        </div>
+      );
+    }
+
 
     if (view === 'HELP') {
       return <Help />
