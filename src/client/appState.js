@@ -3,23 +3,28 @@
 /**
 Uses Redux ( https://github.com/reactjs/redux ) to handle and keep all application state in one place.
 */
-const m = require("mithril");
 const redux = require("redux");
+const compose = redux.compose;
 const _ = require("lodash");
 const Cookies = require("cookies-js");
 const moment = require("moment");
 const createLogger = require("redux-logger").createLogger;
 const reducer = require("./appStateReducer");
 
-const REDUX_LOGGING = false;
 const logger = createLogger({
   duration: true,
   timestamp: true
 });
+
+const composedEnhancers = compose(
+  redux.applyMiddleware(logger),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
+
 const store = redux.createStore(
   reducer,
-  // REDUX_LOGGING ? redux.applyMiddleware(logger) : null
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  undefined,
+  composedEnhancers
 );
 
 if (Cookies.get("jwt")) {
