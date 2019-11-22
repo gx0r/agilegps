@@ -104,7 +104,7 @@ class DeviceEditor extends React.Component {
                 <div className="form-group">
                   <label className="col-md-2 control-label">Network Provider (Carrier)</label>
                   <div className="col-md-10">
-                    <Field className="form-control" name="activationDate" />
+                    <Field className="form-control" name="network" />
                   </div>
                 </div>
                 <div className="form-group">
