@@ -186,7 +186,6 @@ class Events extends React.Component {
                 disabled={ loading }
                 onClick={ this.updateEvents }
                 style={{
-                  marginTop: '-63px',
                   marginRight: '1em',
                 }}
               >Refresh</button>
@@ -224,7 +223,17 @@ class Events extends React.Component {
                             });
                           }}>Parse</button> { rawMessage }</td>
                         } else if (key === 'ad') {
-                          return <td><pre>...</pre></td>
+                          const ad = event[key];
+                          return <td><button onClick={ () => {
+                            confirmAlert({
+                              title: 'Address',
+                              buttons: [
+                                { label: 'Close' }
+                              ],
+                              message: <pre>{ JSON.stringify(ad, null, 4) }</pre>,
+                            });
+                          }}>Show</button> { ad.name && ad.name }</td>
+                          // return <td><pre>...</pre></td>
                         } else if (
                             parseDates
                             && (key === 'd' && type === 'events'
