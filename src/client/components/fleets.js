@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
-import { toArray } from 'lodash';
+import { toArray, cloneDeep } from 'lodash';
 
 import * as appState from '../appState';
 import getselectvalues from "../getselectvalues";
@@ -18,10 +18,8 @@ function Fleets(props) {
     color: 'black',
     vehicles: [],
   });
-  const [availableVehicles, setAvailableVehicles] = useState(toArray(vehiclesByID));
+  const [availableVehicles, setAvailableVehicles] = useState(toArray(Object.keys(vehiclesByID)));
   const [selectedInFleetVehicles, setSlectedInFleetVehicles] = useState(selectedFleet ? selectedFleet.vehicles : []);
-
-  console.log(availableVehicles)
 
   const createFleet = () => {
     const newFleet = {
@@ -35,7 +33,24 @@ function Fleets(props) {
 
   const deleteFleet = () => {
     alert('tood');
-  }
+  };
+
+  const rightArrow = () => {
+    console.log(availableVehicles)
+    const fleet = cloneDeep(selectedFleet);
+    fleet.vechicles = cloneDeep(availableVehicles);
+    selectFleet(fleet);
+    setSlectedInFleetVehicles(fleet.vehicles);
+  };
+
+  const leftArrow = () => {
+    console.log(selectedInFleetVehicles)
+
+    const fleet = cloneDeep(selectedFleet);
+    fleet.vechicles = cloneDeep(selectedInFleetVehicles);
+    selectFleet(fleet);
+    setSlectedInFleetVehicles(fleet.vehicles);
+  };
 
   return (
     <div className="row">
@@ -114,7 +129,7 @@ function Fleets(props) {
                 onBlur={ ev => selectAvailableVehicles(getselectvalues(ev.target)) }
               >
                 {
-                  availableVehicles.map(vehicle => <option key={ vehicle.id } value={vehicle.id} >{ vehicle.name }</option>)
+                  availableVehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
                 }
               </select>
             </div>
@@ -131,7 +146,7 @@ function Fleets(props) {
                   onBlur={ ev => setSlectedInFleetVehicles(getselectvalues(ev.target)) }
               >
                 {
-                  selectedInFleetVehicles.map(vehicle => <option key={ vehicle.id } value={vehicle.id} >{ vehicle.name }</option>)
+                  selectedInFleetVehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
                 }
               </select>
             </div>
