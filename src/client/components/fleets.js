@@ -6,29 +6,37 @@ import classnames from 'classnames';
 
 import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
-import { toArray, cloneDeep } from 'lodash';
+import { toArray, cloneDeep, union, without } from 'lodash';
 
 import * as appState from '../appState';
 import getselectvalues from "../getselectvalues";
 
 function Fleets(props) {
-  const { fleetsByID, vehiclesByID } = props;
+  const { fleetsByID, selectedOrg, vehiclesByID } = props;
   const [selectedFleet, selectFleet] = useState({
+    id: null,
     name: '',
     color: 'black',
     vehicles: [],
   });
   const [availableVehicles, setAvailableVehicles] = useState(toArray(Object.keys(vehiclesByID)));
-  const [selectedInFleetVehicles, setSlectedInFleetVehicles] = useState(selectedFleet ? selectedFleet.vehicles : []);
+  const [selectedAvailableVehicles, setSelectedAvailableVehicles] = useState([]);
+  const [selectedInFleetVehicles, setSelectedInFleetVehicles] = useState(selectedFleet ? selectedFleet.vehicles : []);
+
+  const save = () => {
+    appState.saveFleet(selectedFleet);
+  }
 
   const createFleet = () => {
     const newFleet = {
       color: 'black',
       name: 'New Fleet',
+      orgid: selectedOrg.id,
       vehicles: [],
     };
     selectFleet(newFleet);
-    setSlectedInFleetVehicles(newFleet.vehicles);
+    setAvailableVehicles(toArray(Object.keys(vehiclesByID)));
+    setSelectedInFleetVehicles(newFleet.vehicles);
   };
 
   const deleteFleet = () => {
@@ -36,20 +44,36 @@ function Fleets(props) {
   };
 
   const rightArrow = () => {
-    console.log(availableVehicles)
-    const fleet = cloneDeep(selectedFleet);
-    fleet.vechicles = cloneDeep(availableVehicles);
-    selectFleet(fleet);
-    setSlectedInFleetVehicles(fleet.vehicles);
+    // console.log(availableVehicles)
+    // const fleet = cloneDeep(selectedFleet);
+    // fleet.vechicles = cloneDeep(selectedAvailableVehicles);
+    // selectFleet(fleet);
+    // setSlectedInFleetVehicles(fleet.vehicles);
+    while (selectedAvailableVehicles.length) {
+      const vid = selectedAvailableVehicles.pop();
+      const vehicle = vehiclesByID[vid];
+
+      selectedFleet.vehicles = union(selectedFleet.vehicles, [vehicle.id]);
+      availableVehicles = without(availableVehicles, vid);
+    }
+    setAvailableVehicles(availableVehicles);
+    setSelectedAvailableVehicles(selectedAvailableVehicles);
   };
 
   const leftArrow = () => {
-    console.log(selectedInFleetVehicles)
+    // console.log(selectedInFleetVehicles)
 
-    const fleet = cloneDeep(selectedFleet);
-    fleet.vechicles = cloneDeep(selectedInFleetVehicles);
-    selectFleet(fleet);
-    setSlectedInFleetVehicles(fleet.vehicles);
+    // const fleet = cloneDeep(selectedFleet);
+    // fleet.vechicles = cloneDeep(selectedInFleetVehicles);
+    // selectFleet(fleet);
+    // setSlectedInFleetVehicles(fleet.vehicles);
+    while (selectedInFleetVehicles.length) {
+      const vid = selectedInFleetVehicles.pop();
+      const vehicle = vehiclesByID[vid];
+
+      fleet.vehicles = without(fleet.vehicles, vid);
+      availableVehicles = union(availableVehicles, [vid]);
+    }
   };
 
   return (
@@ -126,7 +150,7 @@ function Fleets(props) {
             <div className="col-sm-5">
               <div>Available Vehicles</div>
               <select className="fullwidth form-control" multiple size="20"
-                onBlur={ ev => selectAvailableVehicles(getselectvalues(ev.target)) }
+                onBlur={ ev => setSelectedAvailableVehicles(getselectvalues(ev.target)) }
               >
                 {
                   availableVehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
@@ -143,10 +167,10 @@ function Fleets(props) {
             <div className="col-sm-5">
               <div>Vehicles in Fleet</div>
               <select className="fullwidth form-control" multiple size="20"
-                  onBlur={ ev => setSlectedInFleetVehicles(getselectvalues(ev.target)) }
+                  onBlur={ ev => setSelectedInFleetVehicles(getselectvalues(ev.target)) }
               >
                 {
-                  selectedInFleetVehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
+                  selectedFleet.vehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
                 }
               </select>
             </div>
@@ -168,6 +192,7 @@ function Fleets(props) {
 
 export default connect(
   state => ({
+    selectedOrg: state.selectedOrg,
     fleetsByID: state.fleetsByID,
     vehiclesByID: state.vehiclesByID,
   })

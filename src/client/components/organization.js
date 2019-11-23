@@ -6,6 +6,8 @@ import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
 import * as appState from '../appState';
 
+import { delay } from 'bluebird';
+
 import * as helpers from '../../common/helpers';
 import { city, street } from "../../common/addressdisplay";
 import { state as stateFormat } from "../../common/addressdisplay";
@@ -39,7 +41,7 @@ class Organization extends React.Component {
     const lastUpdated = new Date() - date < RECENTLY_CHANGED;
 
     if (lastUpdated) {
-      Promise.delay(RECENTLY_CHANGED).then(() => {
+      delay(RECENTLY_CHANGED).then(() => {
         this.forceUpdate();
       });
     }
