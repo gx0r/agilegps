@@ -62,11 +62,9 @@ class Organizations extends React.Component {
       <div>
         <div className="col-md-2" />
         <div className="col-md-8 business-table">
-          <button
+          <Link
             className="btn btn-default"
-            style={{marginBottom: '1em'}}
-            onClick={ () => viewNewOrganization() }
-          >Create Organization</button>
+            to="/orgs/new">Create Organization</Link>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>

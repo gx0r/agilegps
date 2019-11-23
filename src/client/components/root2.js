@@ -47,6 +47,13 @@ export default function Root() {
                 </div>
               </div>
             </Route>
+            <Route path="/orgs/new">
+              <div className="container-fluid">
+                <div className="row">
+                  <OrganizationEditor />
+               </div>
+              </div>
+            </Route>
             <Route path="/orgs/edit/:orgId">
               <div className="container-fluid">
                 <div className="row">

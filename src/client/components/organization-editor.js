@@ -15,7 +15,7 @@ import * as Organization from "../../common/models/Organization";
 
 function OrganizationEditor(props) {
   let { orgId } = useParams();
-  orgId = orgId.trim();
+  orgId = orgId && orgId.trim();
   const { orgsByID } = props;
   let org;
   if (orgId) {
