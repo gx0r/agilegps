@@ -160,7 +160,7 @@ class Navbar extends React.Component {
                 active: subview === 'VEHICLES',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgVehicles }>Vehicles</a>
+              <Link to={ `/org/${selectedOrg.id}/vehicles` }>Vehicles</Link>
             </li>
           </ul>
         </li>
@@ -250,7 +250,7 @@ class Navbar extends React.Component {
           <Link className={ classnames({
               active: view === 'HELP'
             }) }
-            to={ `/users/edit/${user.username}`}>Profile</Link>
+            to={ `/users/edit/${user.username}` }>Profile</Link>
         </li> }
         
         { user.username && <li

@@ -1,8 +1,7 @@
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as classnames from 'classnames';
 import { Link } from "react-router-dom";
 
 import * as appState from '../appState';
@@ -12,7 +11,6 @@ import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
 import { viewNewOrganization } from "../appStateActionCreators";
-
 
 function deleteOrganization(org) {
   confirmAlert({
@@ -77,12 +75,12 @@ class Organizations extends React.Component {
                       <td>{ org.name }</td>
                       <td>
                       <Link className="btn btn-primary btn-sm"
-                       to={ `/orgs/edit/${org.id} `}><i className="middle glyphicon glyphicon-pencil" /> Update</Link>
+                       to={ `/orgs/edit/${org.id}` }><i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                       </td>
                       <td>
                         <Link
                           className="btn btn-primary btn-sm"
-                          to={ `/org/${org.id} `}
+                          to={ `/org/${org.id}`}
                           onClick={ () => appState.selectOrgByID(org.id) }
                         ><i className="middle glyphicon glyphicon-searcb" /> Log In</Link>
                       </td>

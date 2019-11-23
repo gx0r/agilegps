@@ -68,6 +68,20 @@ export default function Root() {
                 </div>
               </div>
             </Route>
+            <Route path="/vehicle/:vehicleId/edit">
+              <div className="container-fluid">
+                  <div className="row">
+                    <VehicleEditor />
+                </div>
+              </div>
+            </Route>
+            <Route path="/org/:orgId/vehicles">
+              <div className="container-fluid">
+                  <div className="row">
+                    <Vehicles />
+                </div>
+              </div>
+            </Route>
             <Route path="/org/:orgId">
               <Fragment>
                 <div className="container-fluid">

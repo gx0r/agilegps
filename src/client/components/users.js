@@ -113,7 +113,7 @@ function Users(props) {
                     <td>{ getOrgName(user.orgid) }</td>
                     <td>
                       <Link className="btn btn-primary btn-sm"
-                        to={ `/users/edit/${user.username} `}>
+                        to={ `/users/edit/${user.username}` }>
                           <i className="middle glyphicon glyphicon-pencil" /> Update
                       </Link>
                       <span> </span>

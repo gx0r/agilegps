@@ -14,8 +14,7 @@ import { createOrgSelector } from './orgselector';
 function UserEditor(props) {
   const { orgsByID, usersByID } = props;
 
-  let { userId } = useParams();
-  userId = userId && userId.trim();
+  const { userId } = useParams();
   let user;
   if (userId) {
     user = usersByID[userId];

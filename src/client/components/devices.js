@@ -120,7 +120,7 @@ class Devices extends React.Component {
                       </td>
                       <td>
                         <Link className="btn btn-primary btn-warning"
-                          to={ `/devices/edit/${device.imei} `}>
+                          to={ `/devices/edit/${device.imei}`}>
                             <i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                         {/* <a
                           className="btn btn-primary btn-warning "

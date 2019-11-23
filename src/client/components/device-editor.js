@@ -14,8 +14,7 @@ import { createOrgSelector } from './orgselector';
 function DeviceEditor(props) {
   const { orgsByID, devicesByID } = props;
 
-  let { deviceId } = useParams();
-  deviceId = deviceId && deviceId.trim();
+  const { deviceId } = useParams();
   let device;
   if (deviceId) {
     device = devicesByID[deviceId];
