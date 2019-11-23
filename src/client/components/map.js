@@ -3,6 +3,8 @@ import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { delay } from 'bluebird';
+
 import GoogleMapReact from 'google-map-react';
 
 import * as ClickListenerFactory from '../markers/clicklistenerfactory';
@@ -37,7 +39,7 @@ class Map extends React.Component {
     const { autoUpdate } = this.props;
     const { map } = this;
     if (autoUpdate) {
-      Promise.delay(100).then(() => {
+      delay(100).then(() => {
         map.fitBounds(bounds);
       });
     }
@@ -195,7 +197,7 @@ class Map extends React.Component {
     console.log(currentAnimationFrame);
     console.log(hist.length);
     if (currentAnimationFrame < hist.length) {
-      return Promise.delay(500).then(() => {
+      return delay(500).then(() => {
         const item = hist[currentAnimationFrame];
         const marker = this.createHistoryMarker(item);
         historyMarkersByID[item.id] = marker;
@@ -312,8 +314,8 @@ class Map extends React.Component {
   }
 
   render() {
-    const { subview } = this.props;
-    const height = subview === 'SPLIT' ? '50vh' : '75vh';
+    const { split } = this.props;
+    const height = split ? '50vh' : '75vh';
 
     return (
       // Important! Always set the container height explicitly
@@ -342,7 +344,6 @@ export default connect(
     selectedHistoryItemID: state.selectedHistoryItemID,
     selectedMapVehicleID: state.selectedMapVehicleID,
     selectedVehicle: state.selectedVehicle,
-    subview: state.subview,
     vehiclesByID: state.vehiclesByID,
   }),
   dispatch => bindActionCreators({

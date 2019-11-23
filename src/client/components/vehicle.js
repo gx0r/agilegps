@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 
 import moment from 'moment';
-import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+import { DateRangePicker } from 'react-dates';
 
 import helpers from '../../common/helpers';
 import { city, street } from "../../common/addressdisplay";
@@ -19,6 +19,8 @@ import todir from "../../common/todir";
 import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
 import tzOffset from "../tzoffset";
+
+import { updateSelectedVehicleHistory } from '../appState';
 
 import {
   animationPlay,
@@ -107,7 +109,6 @@ class Vehicle extends React.Component {
       autoUpdate,
       endDate,
       hist,
-      selectDays,
       selectedHistoryItemID,
       selectedMapVehicleID,
       selectedOrg,
@@ -131,6 +132,11 @@ class Vehicle extends React.Component {
       selectedItemID,
      } = this.state;
 
+     const selectDays = (startDate, endDate) => {
+       this.props.selectDays(startDate, endDate);
+       updateSelectedVehicleHistory();
+     }
+
      const adjustedVehicleHistory = this.recalculateHistory(hist);
 
      const excelHref = `/api/organizations/${selectedOrg.id}/vehiclehistory/${selectedVehicle}/?format=excel&latlong=${this.showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&tzOffset=${encodeURIComponent(tzOffset())}`;
@@ -144,7 +150,7 @@ class Vehicle extends React.Component {
         <a href={ excelHref } style={{
           cursor: 'pointer',
           marginLeft: '1em',
-        }}><img src="images/excel-icon.png" /> Excel</a>
+        }}><img src="/images/excel-icon.png" /> Excel</a>
         <div style={{
           backgroundColor: 'rgb(221, 221, 221)'
         }}>
@@ -179,9 +185,9 @@ class Vehicle extends React.Component {
         <div className="nowrap">
           <DateRangePicker
             startDate={ moment(startDate) } // momentPropTypes.momentObj or null,
-            startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
+            startDateId="verhicles_start_date_id" // PropTypes.string.isRequired,
             endDate={ moment(endDate) } // momentPropTypes.momentObj or null,
-            endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
+            endDateId="vehicles_end_date_id" // PropTypes.string.isRequired,
             onDatesChange={ ({ startDate, endDate }) => selectDays(startDate, endDate) } // PropTypes.func.isRequired,
             focusedInput={ this.state.focusedInput } // PropTypes.oneOf([START_DATE, END_DATE]) or null,
             onFocusChange={ focusedInput => this.setState({ focusedInput }) } // PropTypes.func.isRequired,

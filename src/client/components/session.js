@@ -182,7 +182,7 @@ class Session extends React.Component {
             marginTop: '2em',
             textAlign: 'center'
           }}>
-            <img src="images/logo2.png" />  
+            <img src="/images/logo2.png" />  
           </div>
         </div>
       </div>

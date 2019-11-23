@@ -1,9 +1,8 @@
 
-import React, { Fragment } from 'react';
-import * as PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as classnames from 'classnames';
+import { Link } from "react-router-dom";
 
 import * as appState from '../appState';
 
@@ -55,11 +54,10 @@ class Organizations extends React.Component {
       <div>
         <div className="col-md-2" />
         <div className="col-md-8 business-table">
-          <button
+          <Link
             className="btn btn-default"
             style={{marginBottom: '1em'}}
-            onClick={ () => viewNewOrganization() }
-          >Create Organization</button>
+            to="/orgs/new">Create Organization</Link>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>
@@ -76,30 +74,15 @@ class Organizations extends React.Component {
                     <tr key={ org.id }>
                       <td>{ org.name }</td>
                       <td>
-                        <a
-                          className="btn btn-primary btn-sm"
-                          onClick={ () => appState.editOrganization(org.id) }
-                        ><i className="middle glyphicon glyphicon-pencil" /> Update
-                        </a>
+                      <Link className="btn btn-primary btn-sm"
+                       to={ `/orgs/edit/${org.id}` }><i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                       </td>
                       <td>
-                        <a
+                        <Link
                           className="btn btn-primary btn-sm"
-                          onClick={ () => appState.selectOrgByID(org.id)
-                            .then(() => {
-                              appState.viewOrgByID(org.id);
-                              return Promise.delay(200);
-                            })
-                            .then(() => {
-                              // appState.viewOrgByID(org.id);
-                              appState.selectFleetAll();
-                            })
-                            .catch(err => {
-                              toast.error(err.message);
-                            })
-                          }
-                        ><i className="middle glyphicon glyphicon-searcb" /> Log In
-                        </a>
+                          to={ `/org/${org.id}`}
+                          onClick={ () => appState.selectOrgByID(org.id) }
+                        ><i className="middle glyphicon glyphicon-searcb" /> Log In</Link>
                       </td>
                       <td>
                         <a
