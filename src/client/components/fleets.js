@@ -5,11 +5,36 @@ import { useParams } from "react-router-dom";
 import classnames from 'classnames';
 
 import { Formik, Field } from 'formik';
+import { confirmAlert } from 'react-confirm-alert';
 import { toast } from 'react-toastify';
 import { toArray, cloneDeep, union, without } from 'lodash';
 
 import * as appState from '../appState';
 import getselectvalues from "../getselectvalues";
+
+function deleteFleet(fleet) {
+  confirmAlert({
+    title: 'Delete fleet',
+    message: `Are you sure you want to delete fleet ${fleet.name}?`,
+    buttons: [
+      {
+        label: 'Cancel',
+      },
+      {
+        label: 'Delete',
+        onClick: () => {
+          appState.deleteFleet(fleet)
+          .then(() => {
+            toast.success(`Fleet ${fleet.name} deleted.`);
+          })
+          .catch(err => {
+            toast.error(`Failed to delete fleet ${fleet.name}: ${err.message}`);
+          });
+        }
+      }      
+    ]
+  });
+};
 
 function Fleets(props) {
   const { fleetsByID, selectedOrg, vehiclesByID } = props;
@@ -37,10 +62,6 @@ function Fleets(props) {
     selectFleet(newFleet);
     setAvailableVehicles(toArray(Object.keys(vehiclesByID)));
     setSelectedInFleetVehicles(newFleet.vehicles);
-  };
-
-  const deleteFleet = () => {
-    alert('tood');
   };
 
   const rightArrow = () => {
@@ -108,7 +129,7 @@ function Fleets(props) {
               <button
                 className="btn btn-sm btn-default"
                 disabled={ !selectedFleet.name }
-                onClick={ () => deleteFleet() }
+                onClick={ () => deleteFleet(selectedFleet) }
               >
                 Delete
               </button>
