@@ -86,9 +86,9 @@ function Root(props) {
               <Fragment>
                 <div className="container-fluid">
                   <div className="row">
-                    <div className="sidebar col-sm-2">
+                    {/* <div className="sidebar col-sm-2">
                       <Sidebar />
-                    </div>
+                    </div> */}
                     <div className="col-sm-10">
                       <div className="shadow">
                         <Fleets />
