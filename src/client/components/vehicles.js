@@ -14,6 +14,30 @@ import { translate as t } from "../i18n";
 import * as appState from '../appState';
 import { viewNewVehicle } from "../appStateActionCreators";
 
+function deleteVehicle(vehicle) {
+  confirmAlert({
+    title: 'Delete vehicle',
+    message: `Are you sure you want to delete vehicle ${vehicle.name}?`,
+    buttons: [
+      {
+        label: 'Cancel',
+      },
+      {
+        label: 'Delete',
+        onClick: () => {
+          appState.deleteVehicle(vehicle)
+          .then(() => {
+            toast.success(`Vehicle ${vehicle.name} deleted.`);
+          })
+          .catch(err => {
+            toast.error(`Failed to delete vehicle ${vehicle.name}: ${err.message}`);
+          });
+        }
+      }      
+    ]
+  });
+};
+
 class Vehicles extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +65,10 @@ class Vehicles extends React.Component {
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Device IMEI</th>
+                <th>Plate</th>
+                <th>VIN</th>
+                <th>Operations</th>
               </tr>
             </thead>
             <tbody>
@@ -50,6 +78,24 @@ class Vehicles extends React.Component {
                   return (
                     <tr key={ vehicle.id }>
                       <td>{ vehicle.name }</td>
+                      <td className="pointer"
+                        onClick={ () => appState.viewDeviceByID(vehicle.device) }
+                      ><a href="#">{ vehicle.device }</a></td>
+                      <td>{ vehicle.plate }</td>
+                      <td>{ vehicle.vin }</td>
+                      <td>
+                        <a
+                          className="btn btn-primary btn-sm"
+                          onClick={ () => appState.viewVehicleByID(vehicle.id) }
+                        ><i className="middle glyphicon glyphicon-pencil" /> Update
+                        </a>
+                        <span> </span>
+                        <a
+                          className="btn btn-primary btn-sm"
+                          onClick={ () => deleteVehicle(vehicle) }
+                        ><i className="middle glyphicon glyphicon-trash" /> Delete
+                        </a>
+                      </td>
                     </tr>
                   );
                 })
