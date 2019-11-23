@@ -121,6 +121,11 @@ function Fleets(props) {
               </select>
             </div>
           </div>
+          <div className="buttons-right">
+            <button className="btn btn-sm btn-default" onClick={ () => cancel() }>Cancel</button>
+            <span> </span>
+            <button disabled={ !selectedFleet || selectedFleet.name.trim() === "" } className="btn btn-sm btn-success" onClick={ () => save() }>Save</button>
+          </div>
         </div>
       </div>
       <div className="col-sm-1" />
