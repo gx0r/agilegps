@@ -13,14 +13,24 @@ import getselectvalues from "../getselectvalues";
 
 function Fleets(props) {
   const { fleetsByID, vehiclesByID } = props;
-  const [selectedFleet, selectFleet] = useState();
+  const [selectedFleet, selectFleet] = useState({
+    name: '',
+    color: 'black',
+    vehicles: [],
+  });
   const [availableVehicles, setAvailableVehicles] = useState(toArray(vehiclesByID));
   const [selectedInFleetVehicles, setSlectedInFleetVehicles] = useState(selectedFleet ? selectedFleet.vehicles : []);
 
   console.log(availableVehicles)
 
   const createFleet = () => {
-    selectFleet({});
+    const newFleet = {
+      color: 'black',
+      name: 'New Fleet',
+      vehicles: [],
+    };
+    selectFleet(newFleet);
+    setSlectedInFleetVehicles(newFleet.vehicles);
   };
 
   const deleteFleet = () => {
@@ -43,7 +53,7 @@ function Fleets(props) {
                   <li
                     key={ fleet.name }
                     className={ classnames('pointer', 'list-group-item', {
-                      active: selectedFleet && fleet.name === selectedFleet.name
+                      active: fleet.name === selectedFleet.name
                     }) }
                     onClick={ () => selectFleet(fleet) }
                   >
@@ -58,7 +68,7 @@ function Fleets(props) {
             <div className="buttons-right">
               <button
                 className="btn btn-sm btn-default"
-                disabled={ !selectedFleet }
+                disabled={ !selectedFleet.name }
                 onClick={ () => deleteFleet() }
               >
                 Delete
@@ -80,8 +90,13 @@ function Fleets(props) {
                 <label className="control-label">Fleet Name: </label>
                 <div>
                   <input
-                    disabled={ !selectedFleet }
+                    disabled={ !selectedFleet.name }
                     className="form-control"
+                    value={ selectedFleet.name }
+                    onChange={ ev => {
+                      // selectedFleet.name = ev.target.value; 
+                      selectFleet(Object.assign({}, selectedFleet, {name: ev.target.value}));
+                    } }
                   />
                 </div>
               </div>
@@ -99,7 +114,7 @@ function Fleets(props) {
                 onBlur={ ev => selectAvailableVehicles(getselectvalues(ev.target)) }
               >
                 {
-                  availableVehicles.map(vehicle => <option value={vehicle.id} >{ vehicle.name }</option>)
+                  availableVehicles.map(vehicle => <option key={ vehicle.id } value={vehicle.id} >{ vehicle.name }</option>)
                 }
               </select>
             </div>
@@ -116,7 +131,7 @@ function Fleets(props) {
                   onBlur={ ev => setSlectedInFleetVehicles(getselectvalues(ev.target)) }
               >
                 {
-                  selectedInFleetVehicles.map(vehicle => <option value={vehicle.id} >{ vehicle.name }</option>)
+                  selectedInFleetVehicles.map(vehicle => <option key={ vehicle.id } value={vehicle.id} >{ vehicle.name }</option>)
                 }
               </select>
             </div>
@@ -124,7 +139,10 @@ function Fleets(props) {
           <div className="buttons-right">
             <button className="btn btn-sm btn-default" onClick={ () => cancel() }>Cancel</button>
             <span> </span>
-            <button disabled={ !selectedFleet || selectedFleet.name.trim() === "" } className="btn btn-sm btn-success" onClick={ () => save() }>Save</button>
+            <button
+              disabled={ !selectedFleet.name || selectedFleet.name.trim() === "" }
+              className="btn btn-sm btn-success" onClick={ () => save() }>Save
+            </button>
           </div>
         </div>
       </div>
