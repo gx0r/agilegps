@@ -24,6 +24,7 @@ import DeviceEditor from './device-editor';
 import Organization from './organization';
 import Organizations from './organizations';
 import OrganizationEditor from './organization-editor';
+import Reports from './reports';
 import Session from './session';
 import Events from './events';
 import Help from './help';
@@ -74,6 +75,22 @@ export default function Root() {
                     <VehicleEditor />
                 </div>
               </div>
+            </Route>
+            <Route path="/org/:orgId/reports">
+            <Fragment>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="sidebar col-sm-2">
+                      <Sidebar />
+                    </div>
+                    <div className="col-sm-10">
+                      <div className="shadow">
+                      <Reports />
+                      </div>
+                    </div>            
+                  </div>
+                </div>
+              </Fragment>
             </Route>
             <Route path="/org/:orgId/vehicles">
               <div className="container-fluid">

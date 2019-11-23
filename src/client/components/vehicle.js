@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 
 import moment from 'moment';
-import { DateRangePicker, SingleDatePicker, DayPickerRangeController } from 'react-dates';
+import { DateRangePicker } from 'react-dates';
 
 import helpers from '../../common/helpers';
 import { city, street } from "../../common/addressdisplay";
@@ -179,9 +179,9 @@ class Vehicle extends React.Component {
         <div className="nowrap">
           <DateRangePicker
             startDate={ moment(startDate) } // momentPropTypes.momentObj or null,
-            startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
+            startDateId="verhicles_start_date_id" // PropTypes.string.isRequired,
             endDate={ moment(endDate) } // momentPropTypes.momentObj or null,
-            endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
+            endDateId="vehicles_end_date_id" // PropTypes.string.isRequired,
             onDatesChange={ ({ startDate, endDate }) => selectDays(startDate, endDate) } // PropTypes.func.isRequired,
             focusedInput={ this.state.focusedInput } // PropTypes.oneOf([START_DATE, END_DATE]) or null,
             onFocusChange={ focusedInput => this.setState({ focusedInput }) } // PropTypes.func.isRequired,
