@@ -312,8 +312,8 @@ class Map extends React.Component {
   }
 
   render() {
-    const { subview } = this.props;
-    const height = subview === 'SPLIT' ? '50vh' : '75vh';
+    const { split } = this.props;
+    const height = split ? '50vh' : '75vh';
 
     return (
       // Important! Always set the container height explicitly
@@ -342,7 +342,6 @@ export default connect(
     selectedHistoryItemID: state.selectedHistoryItemID,
     selectedMapVehicleID: state.selectedMapVehicleID,
     selectedVehicle: state.selectedVehicle,
-    subview: state.subview,
     vehiclesByID: state.vehiclesByID,
   }),
   dispatch => bindActionCreators({

@@ -82,6 +82,24 @@ export default function Root() {
                 </div>
               </div>
             </Route>
+            <Route path="/org/:orgId/map">
+              <Fragment>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="sidebar col-sm-2">
+                      <Sidebar />
+                    </div>
+                    <div className="col-sm-10">
+                      <div className="shadow">
+                        <Map split={ false } />
+                      </div>
+                      <br />
+                      <Organization />
+                    </div>            
+                  </div>
+                </div>
+              </Fragment>
+            </Route>
             <Route path="/org/:orgId">
               <Fragment>
                 <div className="container-fluid">
@@ -91,7 +109,7 @@ export default function Root() {
                     </div>
                     <div className="col-sm-10">
                       <div className="shadow">
-                        <Map />
+                        <Map split={ true } />
                       </div>
                       <br />
                       <Organization />

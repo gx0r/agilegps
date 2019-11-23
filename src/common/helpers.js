@@ -53,19 +53,19 @@ module.exports.getAccuracyAsImg = function getAccuracyAsImg(i) {
   }
   i = Number(i);
   if (i === 0) {
-    return "images/signal0.png";
+    return "/images/signal0.png";
   } else if (i <= 1 && i > 0) {
-    return "images/signal5.png";
+    return "/images/signal5.png";
   } else if (i <= 2) {
-    return "images/signal4.png";
+    return "/images/signal4.png";
   } else if (i <= 5) {
-    return "images/signal3.png";
+    return "/images/signal3.png";
   } else if (i <= 10) {
-    return "images/signal2.png";
+    return "/images/signal2.png";
   } else if (i <= 20) {
-    return "images/signal1.png";
+    return "/images/signal1.png";
   } else {
-    return "images/signal0.png";
+    return "/images/signal0.png";
   }
 };
 

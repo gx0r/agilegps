@@ -271,7 +271,7 @@ class Navbar extends React.Component {
         <div className="container-fluid">
           <div className="container-fluid">
             <li style={{float:'left'}}>
-              <img src="images/logosmall.png" />
+              <img src="/images/logosmall.png" />
             </li>
             <li className="nav navbar-right" style={{textAlign:'right'}}>
               <br />
