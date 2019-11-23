@@ -11,6 +11,7 @@ import { toArray, cloneDeep, union, without } from 'lodash';
 
 import * as appState from '../appState';
 import getselectvalues from "../getselectvalues";
+import CarImage from './car';
 
 function deleteFleet(fleet) {
   confirmAlert({
@@ -122,7 +123,7 @@ function Fleets(props) {
                     }) }
                     onClick={ () => selectFleet(fleet) }
                   >
-                    { fleet.name }
+                     <CarImage fill={fleet.color} /> { fleet.name }
                   </li>
                 );
 
