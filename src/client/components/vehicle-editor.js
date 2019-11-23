@@ -30,7 +30,32 @@ function VehicleEditor(props) {
           initialValues={{
             id: vehicle.id,
             name: vehicle.name,
+            device: vehicle.device,
+            orgid: vehicle.orgid,
+            odometer: vehicle.odometer,
+            engineHours: vehicle.engineHours,
+            vin: vehicle.vin,
             plate: vehicle.plate,
+            installLocation: vehicle.installLocation,
+            hookedAsset: vehicle.hookedAsset,
+            document: vehicle.document,
+            seat: vehicle.seat,
+            length: vehicle.length,
+            width: vehicle.width,
+            height: vehicle.height,
+            gvWeight: vehicle.gvWeight,
+            gcWeight: vehicle.gcWeight,
+            axies: vehicle.axies,
+            hazardLevel: vehicle.hazardLevel,
+            navigationKey: vehicle.navigationKey,
+            navigationNumber: vehicle.navigationNumber,
+            disableHos: vehicle.disableHos,
+            forceMessageReadStatus: vehicle.forceMessageReadStatus,
+            enableAssignedDriverIgnition: vehicle.enableAssignedDriverIgnition,
+            enableTollFuelTab: vehicle.enableTollFuelTab,
+            allowCoDriving: vehicle.allowCoDriving,
+            driverLoginEnforced: vehicle.driverLoginEnforced,
+            enableFuelSensor: vehicle.enableFuelSensor,
           }}
           validate={values => {
             // const errors = {};
@@ -70,53 +95,156 @@ function VehicleEditor(props) {
                 </div>
               </div>
               <div className="form-group">
+                <label className="col-md-2 control-label">Device</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="device" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">Organization ID</label>
+                <div className="col-md-10">
+                  { createOrgSelector(orgsByID) }
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">Odometer</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="odometer" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">Engine Hours</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="engineHours" />
+                </div>
+              </div>
+              <hr />
+              <div className="form-group">
+                <label className="col-md-2 control-label">VIN</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="vin" />
+                </div>
+              </div>
+              <div className="form-group">
                 <label className="col-md-2 control-label">Plate</label>
                 <div className="col-md-10">
                   <Field className="form-control" name="plate" />
                 </div>
               </div>
               <div className="form-group">
-                <label className="col-md-2 control-label">Active</label>
+                <label className="col-md-2 control-label">Install Loation</label>
                 <div className="col-md-10">
-                  <Field className="form-control" type="checkbox" name="active" />
+                  <Field className="form-control" name="installLocation" />
                 </div>
               </div>
               <div className="form-group">
-                <label className="col-md-2 control-label">Activation Date</label>
+                <label className="col-md-2 control-label">Hooked Asset</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="activationDate" />
+                  <Field className="form-control" name="hookedAsset" />
                 </div>
               </div>
               <div className="form-group">
-                <label className="col-md-2 control-label">SIM</label>
+                <label className="col-md-2 control-label">Seat</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="sim" />
+                  <Field className="form-control" name="seat" />
                 </div>
               </div>
               <div className="form-group">
-                <label className="col-md-2 control-label">Phone</label>
+                <label className="col-md-2 control-label">Length</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="phone" />
-                </div>
-              </div>                  
-              <div className="form-group">
-                <label className="col-md-2 control-label">Network Provider (Carrier)</label>
-                <div className="col-md-10">
-                  <Field className="form-control" name="network" />
+                  <Field className="form-control" name="length" />
                 </div>
               </div>
               <div className="form-group">
-                <label className="col-md-2 control-label">Status</label>
+                <label className="col-md-2 control-label">Width</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="status" />
+                  <Field className="form-control" name="width" />
                 </div>
-              </div>                
+              </div>
               <div className="form-group">
-                <label className="col-md-2 control-label">Organization ID</label>
+                <label className="col-md-2 control-label">Height</label>
                 <div className="col-md-10">
-                  { createOrgSelector(orgsByID) }
+                  <Field className="form-control" name="height" />
                 </div>
-              </div>                
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">GV Weight</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="gvWeight" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">GC Weight</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="gcWeight" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">axies</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="axies" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">hazardLevel</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="hazardLevel" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">navigationKey</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="navigationKey" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">navigationNumber</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="navigationNumber" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">disableHos</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="disableHos" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">forceMessageReadStatus</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="forceMessageReadStatus" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">enableAssignedDriverIgnition</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="enableAssignedDriverIgnition" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">enableTollFuelTab</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="enableTollFuelTab" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">allowCoDriving</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="allowCoDriving" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">driverLoginEnforced</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="driverLoginEnforced" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">enableFuelSensor</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="enableFuelSensor" />
+                </div>
+              </div>
               <div className="buttons-right">
                 <button
                   className="btn btn-default"
