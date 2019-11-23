@@ -130,7 +130,7 @@ class Organization extends React.Component {
           href={ excelHref }
           className="padrt"
           style={{ cursor: 'pointer'}} >
-          <img src="images/excel-icon.png" />
+          <img src="/images/excel-icon.png" />
         </a>
         <br />
         <label>Total { Object.keys(impliedSelectedVehiclesByID).length }</label>
