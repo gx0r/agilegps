@@ -1,8 +1,6 @@
 
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as classnames from 'classnames';
 import { useParams } from "react-router-dom";
 
 import { Formik, Field } from 'formik';

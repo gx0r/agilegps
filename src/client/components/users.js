@@ -77,11 +77,10 @@ function Users(props) {
     <div>
       <div className="col-md-2" />
       <div className="col-md-8 business-table">
-        <button
+        <Link
           className="btn btn-default"
           style={{marginBottom: '1em'}}
-          onClick={ () => viewNewUser() }
-        >Create User</button>
+          to="/users/new">Create User</Link>
         <table className="table table-bordered table-striped">
           <thead>
             <tr>

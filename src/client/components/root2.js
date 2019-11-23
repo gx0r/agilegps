@@ -93,6 +93,20 @@ export default function Root() {
                 </div>
               </div>
             </Route>
+            <Route path="/devices/new">
+              <div className="container-fluid">
+                <div className="row">
+                  <DeviceEditor />
+                </div>
+              </div>
+            </Route>
+            <Route path="/devices/edit/:deviceId">
+              <div className="container-fluid">
+                <div className="row">
+                  <DeviceEditor />
+                </div>
+              </div>
+            </Route>
             <Route path="/devices">
               <div className="container-fluid">
                 <div className="row">

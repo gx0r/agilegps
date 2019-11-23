@@ -1,9 +1,9 @@
 
 import React, { Fragment } from 'react';
-import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
+import { Link } from "react-router-dom";
 
 import * as appState from '../appState';
 
@@ -13,9 +13,6 @@ import { confirmAlert } from 'react-confirm-alert';
 
 import { viewNewOrganization } from "../appStateActionCreators";
 
-import {
-  Link
-} from "react-router-dom";
 
 function deleteOrganization(org) {
   confirmAlert({
@@ -61,6 +58,7 @@ class Organizations extends React.Component {
         <div className="col-md-8 business-table">
           <Link
             className="btn btn-default"
+            style={{marginBottom: '1em'}}
             to="/orgs/new">Create Organization</Link>
           <table className="table table-bordered table-striped">
             <thead>

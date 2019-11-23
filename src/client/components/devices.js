@@ -1,12 +1,11 @@
 
 import React, { Fragment } from 'react';
-import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
+import { Link } from "react-router-dom";
 
 import * as moment from 'moment';
-import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
@@ -35,9 +34,9 @@ function batteryField(device) {
   );
 }
 
-function deleteDevice(user) {
+function deleteDevice(device) {
   confirmAlert({
-    title: 'Delete user',
+    title: 'Delete device',
     message: `Are you sure you want to delete device ${device.imei}?`,
     buttons: [
       {
@@ -77,11 +76,10 @@ class Devices extends React.Component {
       <div>
         <div className="col-md-1" />
         <div className="col-md-10 business-table">
-          <button
+          <Link
             className="btn btn-default"
             style={{marginBottom: '1em'}}
-            onClick={ viewNewDevice }
-          >New Device</button>
+            to="/devices/new">Create Device</Link>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>
@@ -121,11 +119,14 @@ class Devices extends React.Component {
                         </a>
                       </td>
                       <td>
-                        <a
+                        <Link className="btn btn-primary btn-warning"
+                          to={ `/devices/edit/${device.imei} `}>
+                            <i className="middle glyphicon glyphicon-pencil" /> Update</Link>
+                        {/* <a
                           className="btn btn-primary btn-warning "
                           onClick={ () => appState.viewDeviceByID(device.imei) }
                         ><i className="middle glyphicon glyphicon-pencil" /> Update
-                        </a>
+                        </a> */}
                         <span> </span>
                         <a
                           className="btn btn-primary btn-sm btn-danger"
