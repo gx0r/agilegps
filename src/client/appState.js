@@ -586,9 +586,9 @@ function updateSelectedVehicleHistory() {
     "/vehiclehistory/" +
     vehicle.id +
     "?startDate=" +
-    encodeURIComponent(state.startDate.toISOString()) +
+    encodeURIComponent(state.startDate.toISOString(true)) +
     "&endDate=" +
-    encodeURIComponent(state.endDate.toISOString());
+    encodeURIComponent(state.endDate.toISOString(true));
 
   return Promise.resolve(fetch(url, auth()))
     .then(function(response) {
@@ -606,6 +606,7 @@ function updateSelectedVehicleHistory() {
       NProgress.done();
     });
 }
+module.exports.updateSelectedVehicleHistory = updateSelectedVehicleHistory;
 
 function update() {
   let state = store.getState();

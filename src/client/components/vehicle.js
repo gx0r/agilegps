@@ -20,6 +20,8 @@ import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
 import tzOffset from "../tzoffset";
 
+import { updateSelectedVehicleHistory } from '../appState';
+
 import {
   animationPlay,
   animationPause,
@@ -107,7 +109,6 @@ class Vehicle extends React.Component {
       autoUpdate,
       endDate,
       hist,
-      selectDays,
       selectedHistoryItemID,
       selectedMapVehicleID,
       selectedOrg,
@@ -130,6 +131,11 @@ class Vehicle extends React.Component {
       rollup,
       selectedItemID,
      } = this.state;
+
+     const selectDays = (startDate, endDate) => {
+       this.props.selectDays(startDate, endDate);
+       updateSelectedVehicleHistory();
+     }
 
      const adjustedVehicleHistory = this.recalculateHistory(hist);
 
