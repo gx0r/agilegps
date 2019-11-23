@@ -14,9 +14,6 @@ import { confirmAlert } from 'react-confirm-alert';
 import { viewNewOrganization } from "../appStateActionCreators";
 
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link
 } from "react-router-dom";
 

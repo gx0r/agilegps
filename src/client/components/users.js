@@ -1,13 +1,11 @@
 
-import React, { Fragment } from 'react';
-import * as PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
+import { Link } from "react-router-dom";
 
 import * as appState from '../appState';
 
-import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
@@ -111,11 +109,10 @@ class Users extends React.Component {
                       <td>{ getSecurtyLevel(user) }</td>
                       <td>{ this.getOrgName(user.orgid) }</td>
                       <td>
-                        <a
-                          className="btn btn-primary btn-sm"
-                          onClick={ () => appState.viewUserByID(user.username) }
-                        ><i className="middle glyphicon glyphicon-pencil" /> Update
-                        </a>
+                        <Link className="btn btn-primary btn-sm"
+                          to={ `/users/edit/${user.username} `}>
+                            <i className="middle glyphicon glyphicon-pencil" /> Update
+                        </Link>
                         <span> </span>
                         <a
                           className="btn btn-primary btn-sm"

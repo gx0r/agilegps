@@ -75,6 +75,20 @@ export default function Root() {
                 </div>
               </div>
             </Route>
+            <Route path="/users/new">
+              <div className="container-fluid">
+                <div className="row">
+                  <UserEditor />
+                </div>
+              </div>
+            </Route>
+            <Route path="/users/edit/:userId">
+              <div className="container-fluid">
+                <div className="row">
+                  <UserEditor />
+                </div>
+              </div>
+            </Route>
             <Route path="/users">
               <div className="container-fluid">
                 <div className="row">
