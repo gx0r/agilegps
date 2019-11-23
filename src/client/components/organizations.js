@@ -82,25 +82,11 @@ class Organizations extends React.Component {
                        to={ `/orgs/edit/${org.id} `}><i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                       </td>
                       <td>
-                        
-                        <Link to={ `/orgs/${org.id} `}>View Org</Link>
-                        <a
+                        <Link
                           className="btn btn-primary btn-sm"
-                          onClick={ () => appState.selectOrgByID(org.id)
-                            .then(() => {
-                              appState.viewOrgByID(org.id);
-                              return Promise.delay(200);
-                            })
-                            .then(() => {
-                              // appState.viewOrgByID(org.id);
-                              appState.selectFleetAll();
-                            })
-                            .catch(err => {
-                              toast.error(err.message);
-                            })
-                          }
-                        ><i className="middle glyphicon glyphicon-searcb" /> Log In
-                        </a>
+                          to={ `/orgs/${org.id} `}
+                          onClick={ () => appState.selectOrgByID(org.id) }
+                        ><i className="middle glyphicon glyphicon-searcb" /> Log In</Link>
                       </td>
                       <td>
                         <a

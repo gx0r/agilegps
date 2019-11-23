@@ -370,7 +370,6 @@ function selectOrgByID(orgid) {
 
   if (!org) {
     org = store.getState().user.orgid; // TODO fix this hack
-    console.warn('FIXME: missing orgid in selectOrgByID');
   }
 
   store.dispatch({
@@ -380,7 +379,7 @@ function selectOrgByID(orgid) {
 
   return loadOrgState(orgid)
     .then(function() {
-      // return selectFleetAll();
+      return selectFleetAll();
     })
     .finally(function() {
       NProgress.done();

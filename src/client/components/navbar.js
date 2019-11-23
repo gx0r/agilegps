@@ -235,7 +235,10 @@ class Navbar extends React.Component {
       <ul className="nav navbar-nav navbar-right">
         { isAdmin && !this.orgPresent() ? this.renderSiteAdminNav() :
         <li>
-          <Link to="/">Back To Organizations</Link>
+          <Link
+            to="/orgs"
+            onClick={ () => appState.selectOrgByID(null) }
+          >Back To Organizations</Link>
         </li> }
         { this.orgPresent() && this.renderInOrgNav() }
         <li
