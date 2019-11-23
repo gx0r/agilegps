@@ -1,19 +1,18 @@
 
-import React, { Fragment } from 'react';
-import * as PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as classnames from 'classnames';
+import { Link } from "react-router-dom";
 
 import * as appState from '../appState';
 
-import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
 import { getRelevantUsers } from '../selectors/getUsers.js';
 import { viewNewUser } from "../appStateActionCreators";
 import { translate as t } from "../i18n";
+import { useParams } from "react-router-dom";
 
 function getSecurtyLevel(user) {
   if (user == null) {
@@ -55,15 +54,9 @@ function deleteUser(user) {
   });
 };
 
-class Users extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    }
-  }
-
-  getOrgName(id) {
-    const { orgsByID } = this.props;
+function Users(props) {
+  const getOrgName = id => {
+    const { orgsByID } = props;
     if (orgsByID[id]) {
       return orgsByID[id].name;
     } else {
@@ -71,69 +64,75 @@ class Users extends React.Component {
     }
   }
 
-  render() {
-    const {
-      usersByID,
-      viewNewUser,
-    } = this.props;
+  let { orgId } = useParams();
+  orgId = orgId && orgId.trim();
+  console.log(orgId);
 
-    return (
-      <div>
-        <div className="col-md-2" />
-        <div className="col-md-8 business-table">
-          <button
-            className="btn btn-default"
-            style={{marginBottom: '1em'}}
-            onClick={ () => viewNewUser() }
-          >Create User</button>
-          <table className="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Security Level</th>
-                <th>Organization</th>
-                <th>Operations</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                Object.keys(usersByID).map(key => {
-                  const user = usersByID[key];
-                  return (
-                    <tr key={ user.username }>
-                      <td>{ user.username }</td>
-                      <td>{ user.email }</td>
-                      <td>{ user.firstname }</td>
-                      <td>{ user.lastname }</td>
-                      <td>{ getSecurtyLevel(user) }</td>
-                      <td>{ this.getOrgName(user.orgid) }</td>
-                      <td>
-                        <a
-                          className="btn btn-primary btn-sm"
-                          onClick={ () => appState.viewUserByID(user.username) }
-                        ><i className="middle glyphicon glyphicon-pencil" /> Update
-                        </a>
-                        <span> </span>
-                        <a
-                          className="btn btn-primary btn-sm"
-                          onClick={ () => deleteUser(user) }
-                        ><i className="middle glyphicon glyphicon-trash" /> Delete
-                        </a>
-                      </td>
-                    </tr>
-                  );
-                })
-              }
-            </tbody>
-          </table>
-        </div>
-        <div className="col-md-3" />
+  const {
+    usersByID,
+    viewNewUser,
+  } = props;
+
+  return (
+    <div>
+      <div className="col-md-2" />
+      <div className="col-md-8 business-table">
+        <Link
+          className="btn btn-default"
+          style={{marginBottom: '1em'}}
+          to="/users/new">Create User</Link>
+        <table className="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Security Level</th>
+              <th>Organization</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              Object.keys(usersByID)
+              .map(key => {
+                const user = usersByID[key];
+
+                if (orgId && user.orgid !== orgId) {
+                  return;
+                }
+
+                return (
+                  <tr key={ user.username }>
+                    <td>{ user.username }</td>
+                    <td>{ user.email }</td>
+                    <td>{ user.firstname }</td>
+                    <td>{ user.lastname }</td>
+                    <td>{ getSecurtyLevel(user) }</td>
+                    <td>{ getOrgName(user.orgid) }</td>
+                    <td>
+                      <Link className="btn btn-primary btn-sm"
+                        to={ `/users/edit/${user.username}` }>
+                          <i className="middle glyphicon glyphicon-pencil" /> Update
+                      </Link>
+                      <span> </span>
+                      <a
+                        className="btn btn-primary btn-sm"
+                        onClick={ () => deleteUser(user) }
+                      ><i className="middle glyphicon glyphicon-trash" /> Delete
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
       </div>
-    )
-  }
+      <div className="col-md-3" />
+    </div>
+  )
 }
 
 export default connect(

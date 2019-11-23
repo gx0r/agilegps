@@ -26,49 +26,13 @@ const store = redux.createStore(
   undefined,
   composedEnhancers
 );
+module.exports.store = store;
 
 if (Cookies.get("jwt")) {
   setImmediate(function() {
     login();
   });
 }
-
-// START routing
-let lastViewState = {};
-store.subscribe(function() {
-  let state = store.getState();
-  let viewState = {};
-  viewState.view = state.view;
-  viewState.subview = state.subview;
-  viewState.viewID = state.viewID;
-
-  if (!_.isEqual(lastViewState, viewState)) {
-    lastViewState = viewState;
-    window.history.pushState(
-      viewState,
-      viewState.view + " " + viewState.subview + " " + viewState.viewID,
-      "?" + JSON.stringify(viewState)
-    );
-  }
-  if (["EDIT", "RAWEVENTS", "EVENTS", "EXCEPTIONS"].indexOf(state.subview) < 0) {
-    // don't redraw certain views
-    // console.log("redrawing");
-    // m.redraw();
-  }
-});
-
-window.onpopstate = function(ev) {
-  let location = ev.state;
-  if (location) {
-    store.dispatch({
-      type: "VIEW",
-      view: location.view,
-      subview: location.subview,
-      viewID: location.viewID
-    }); 
-  }
-};
-// END routing
 
 function auth() {
   return {
@@ -406,7 +370,6 @@ function selectOrgByID(orgid) {
 
   if (!org) {
     org = store.getState().user.orgid; // TODO fix this hack
-    console.warn('FIXME: missing orgid in selectOrgByID');
   }
 
   store.dispatch({
@@ -416,7 +379,7 @@ function selectOrgByID(orgid) {
 
   return loadOrgState(orgid)
     .then(function() {
-      // return selectFleetAll();
+      return selectFleetAll();
     })
     .finally(function() {
       NProgress.done();
@@ -623,9 +586,9 @@ function updateSelectedVehicleHistory() {
     "/vehiclehistory/" +
     vehicle.id +
     "?startDate=" +
-    encodeURIComponent(state.startDate.toISOString()) +
+    encodeURIComponent(state.startDate.toISOString(true)) +
     "&endDate=" +
-    encodeURIComponent(state.endDate.toISOString());
+    encodeURIComponent(state.endDate.toISOString(true));
 
   return Promise.resolve(fetch(url, auth()))
     .then(function(response) {
@@ -643,6 +606,7 @@ function updateSelectedVehicleHistory() {
       NProgress.done();
     });
 }
+module.exports.updateSelectedVehicleHistory = updateSelectedVehicleHistory;
 
 function update() {
   let state = store.getState();

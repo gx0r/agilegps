@@ -14,6 +14,13 @@ import mapSvg from '../svg/map.svg';
 import globeSvg from '../svg/globe.svg';
 import xcloudSvg from '../svg/xcloud.svg';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
@@ -79,7 +86,7 @@ class Navbar extends React.Component {
   }
 
   renderLeftNav() {
-    const { subview } = this.props;
+    const { selectedOrg, subview } = this.props;
 
     if (!this.orgPresent()) {
       return null;
@@ -92,28 +99,21 @@ class Navbar extends React.Component {
             active: subview === 'REPORT'
           }) }
         >
-          <a
-            onClick={ () => appState.viewReports() }
-            href="#"><img src={ reportsSvg } />Reports
-          </a>
+          <Link to={ `/org/${selectedOrg.id}/reports` }><img src={ reportsSvg } /> Reports</Link>
         </li>
         <li
           className={ classnames({
             active: subview === 'MAP'
           }) }
         >
-          <a
-            onClick={ () => appState.viewMap() }
-            href="#"><img src={ mapSvg } />Map</a>
+          <Link to={ `/org/${selectedOrg.id}/map` }><img src={ mapSvg } /> Map</Link>
         </li>
         <li
           className={ classnames({
             active: subview === 'SPLIT'
           }) }
         >
-          <a
-            onClick={ () => appState.viewSplitScreen() }
-            href="#"><img src={ globeSvg } />Split Screen</a>
+          <Link to={ `/org/${selectedOrg.id}/split` }><img src={ globeSvg } /> Split Screen</Link>
         </li>
       </ul>
     );
@@ -121,7 +121,7 @@ class Navbar extends React.Component {
 
   renderInOrgNav() {
     // Right side, logged into an org
-    const { subview, user } = this.props;
+    const { selectedOrg, subview, user } = this.props;
     const { orgToolsOpen } = this.state;
 
     return (
@@ -132,28 +132,28 @@ class Navbar extends React.Component {
           }) }
           onClick={ () => this.setState( { orgToolsOpen: !orgToolsOpen}) }
         >
-          <a className="dropdown-toggle">Manage<span className="caret"></span></a>
+          <a className="pointer dropdown-toggle">Manage<span className="caret"></span></a>
           <ul className="dropdown-menu">
             <li
               className={ classnames({
                 active: subview === 'USERS',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgUsers }>Users</a>
+              <Link to={ `/org/${selectedOrg.id}/users` }>Users</Link>
             </li>
             <li
               className={ classnames({
                 active: subview === 'FLEETS',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgFleets }>Fleets</a>
+              <Link to={ `/org/${selectedOrg.id}/fleets` }>Fleets</Link>
             </li>
             <li
               className={ classnames({
                 active: subview === 'VEHICLES',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgVehicles }>Vehicles</a>
+              <Link to={ `/org/${selectedOrg.id}/vehicles` }>Vehicles</Link>
             </li>
           </ul>
         </li>
@@ -171,26 +171,19 @@ class Navbar extends React.Component {
           className={ classnames({
             active: view === 'ORG'
           }) }
-        >
-          <a
-            onClick={ () => appState.viewOrganizations() }
-            href="#">Organizations</a>
+        ><Link to="/orgs">Organizations</Link>
         </li>
         <li
           className={ classnames({
             active: view === 'USER' && viewID !== user.username
           }) }
-        ><a
-            onClick={ () => appState.viewUsers() }
-            href="#">Users</a>
+        ><Link to="/users">Users</Link>
         </li>
         <li
           className={ classnames({
             active: view === 'DEVICE'
           }) }
-        ><a
-            onClick={ () => appState.viewDevices() }
-            href="#">Devices</a>
+        ><Link to="/devices">Devices</Link>
         </li>
         <li
           onClick={ () => this.setState( { adminToolsOpen: !adminToolsOpen }) }
@@ -205,21 +198,21 @@ class Navbar extends React.Component {
                 active: view === 'EVENTS'
               }) }
             >
-              <a href="#" onClick={ () => appState.viewEvents() }>Processed Messages</a>
+              <Link to="/processed_messages">Processed Messages</Link>
             </li>
             <li
               className={ classnames({
                 active: view === 'RAWEVENTS'
               }) }
             >
-              <a href="#" onClick={ () => appState.viewRawEvents() }>Raw Messages</a>
+              <Link to="/raw_messages">Raw Messages</Link>
             </li>
             <li
               className={ classnames({
                 active: view === 'EXCEPTIONS'
               }) }
             >
-              <a href="#" onClick={ () => appState.viewExceptions() }>Uncaught Exceptions</a>
+              <Link to="/exceptions">Uncaught Exceptions</Link>
             </li>
           </ul>
         </li>
@@ -234,39 +227,38 @@ class Navbar extends React.Component {
     return (
       <ul className="nav navbar-nav navbar-right">
         { isAdmin && !this.orgPresent() ? this.renderSiteAdminNav() :
-        <li>
-          <a
-            onClick={ () => appState.viewOrganizations() }
-            href="#">Back To Organizations</a>
-        </li> }
+          user.username && 
+          <li>
+            <Link
+              to="/orgs"
+              onClick={ () => appState.selectOrgByID(null) }
+            >Back To Organizations</Link>
+          </li> }
         { this.orgPresent() && this.renderInOrgNav() }
-        <li
+        { user.username && <li
           className={ classnames({
             active: view === 'USER' && viewID === user.username
           }) }
         >
-          <a
-            onClick={ () => appState.viewUserByID(user.username) }
-            href="#">Profile</a>
-        </li>
-
-        <li
-          className={ classnames({
-            active: view === 'HELP'
-          }) }
-        >
-          <a
-            onClick={ () => appState.viewHelp() }
-            href="#">Help</a>
-        </li>
+          <Link className={ classnames({
+              active: view === 'HELP'
+            }) }
+            to={ `/users/edit/${user.username}` }>Profile</Link>
+        </li> }
+        
+        { user.username && <li
+         className={ classnames({
+             active: view === 'HELP'
+           }) }
+         >
+           <Link to="/help">Help</Link>
+          </li> }
         <li
           className={ classnames({
             active: view === 'SESSION'
           }) }
         >
-          <a
-            onClick={ () => appState.viewLogin() }
-            href="#">☰</a>
+          <Link to="/">☰</Link>
         </li>
       </ul>  
     );
@@ -279,7 +271,7 @@ class Navbar extends React.Component {
         <div className="container-fluid">
           <div className="container-fluid">
             <li style={{float:'left'}}>
-              <img src="images/logosmall.png" />
+              <Link to="/"><img src="/images/logosmall.png" /></Link>
             </li>
             <li className="nav navbar-right" style={{textAlign:'right'}}>
               <br />

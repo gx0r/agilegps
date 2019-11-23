@@ -1,12 +1,8 @@
 
-import React, { Fragment } from 'react';
-import * as PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as classnames from 'classnames';
+import { Link } from "react-router-dom";
 
-import * as moment from 'moment';
-import { toArray } from 'lodash';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
@@ -80,15 +76,13 @@ class Vehicles extends React.Component {
                       <td>{ vehicle.name }</td>
                       <td className="pointer"
                         onClick={ () => appState.viewDeviceByID(vehicle.device) }
-                      ><a href="#">{ vehicle.device }</a></td>
+                      ><Link to={ `/devices/edit/${vehicle.device}` }>{ vehicle.device }</Link></td>
                       <td>{ vehicle.plate }</td>
                       <td>{ vehicle.vin }</td>
                       <td>
-                        <a
-                          className="btn btn-primary btn-sm"
-                          onClick={ () => appState.viewVehicleByID(vehicle.id) }
-                        ><i className="middle glyphicon glyphicon-pencil" /> Update
-                        </a>
+                        <Link className="btn btn-primary btn-sm"
+                          to={ `/vehicle/${vehicle.id}/edit` }>
+                            <i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                         <span> </span>
                         <a
                           className="btn btn-primary btn-sm"
