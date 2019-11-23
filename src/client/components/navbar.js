@@ -234,14 +234,15 @@ class Navbar extends React.Component {
     return (
       <ul className="nav navbar-nav navbar-right">
         { isAdmin && !this.orgPresent() ? this.renderSiteAdminNav() :
-        <li>
-          <Link
-            to="/orgs"
-            onClick={ () => appState.selectOrgByID(null) }
-          >Back To Organizations</Link>
-        </li> }
+          user.username && 
+          <li>
+            <Link
+              to="/orgs"
+              onClick={ () => appState.selectOrgByID(null) }
+            >Back To Organizations</Link>
+          </li> }
         { this.orgPresent() && this.renderInOrgNav() }
-        <li
+        { user.username && <li
           className={ classnames({
             active: view === 'USER' && viewID === user.username
           }) }
@@ -250,16 +251,15 @@ class Navbar extends React.Component {
               active: view === 'HELP'
             }) }
             to={ `/users/edit/${user.username}`}>Profile</Link>
-        </li>
-
+        </li> }
         
-        <li
+        { user.username && <li
          className={ classnames({
              active: view === 'HELP'
            }) }
          >
            <Link to="/help">Help</Link>
-        </li>
+          </li> }
         <li
           className={ classnames({
             active: view === 'SESSION'
