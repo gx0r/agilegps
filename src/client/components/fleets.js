@@ -64,6 +64,10 @@ function Fleets(props) {
     setSelectedInFleetVehicles(newFleet.vehicles);
   };
 
+  const changeColor = color => {
+    selectedFleet.color = color;
+  }
+
   const rightArrow = () => {
     // console.log(availableVehicles)
     // const fleet = cloneDeep(selectedFleet);
@@ -163,7 +167,7 @@ function Fleets(props) {
               <div className="form-group col-sm-2" />
               <div className="form-group col-sm-6">
                 <label className="col-sm-2 control-label">Fleet Color:</label>
-                <input type="color" onChange={ ev => changeColor(ev.target.value) } />
+                <input type="color" onChange={ ev => changeColor(ev.target.value) } value={ selectedFleet.color } />
               </div>
             </div>
           </div>
