@@ -128,7 +128,7 @@ class Navbar extends React.Component {
 
   renderInOrgNav() {
     // Right side, logged into an org
-    const { subview, user } = this.props;
+    const { selectedOrg, subview, user } = this.props;
     const { orgToolsOpen } = this.state;
 
     return (
@@ -146,7 +146,7 @@ class Navbar extends React.Component {
                 active: subview === 'USERS',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgUsers }>Users</a>
+              <Link to={ `/org/${selectedOrg.id}/users` }>Users</Link>
             </li>
             <li
               className={ classnames({

@@ -61,7 +61,14 @@ export default function Root() {
                </div>
               </div>
             </Route>
-            <Route path="/orgs/:orgId">
+            <Route path="/org/:orgId/users">
+              <div className="container-fluid">
+                  <div className="row">
+                    <Users />
+                </div>
+              </div>
+            </Route>
+            <Route path="/org/:orgId">
               <Fragment>
                 <div className="container-fluid">
                   <div className="row">
