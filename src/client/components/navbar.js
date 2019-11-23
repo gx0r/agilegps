@@ -86,7 +86,7 @@ class Navbar extends React.Component {
   }
 
   renderLeftNav() {
-    const { subview } = this.props;
+    const { selectedOrg, subview } = this.props;
 
     if (!this.orgPresent()) {
       return null;
@@ -99,28 +99,21 @@ class Navbar extends React.Component {
             active: subview === 'REPORT'
           }) }
         >
-          <a
-            onClick={ () => appState.viewReports() }
-            href="#"><img src={ reportsSvg } />Reports
-          </a>
+          <Link to={ `/org/${selectedOrg.id}/reports` }><img src={ reportsSvg } /> Reports</Link>
         </li>
         <li
           className={ classnames({
             active: subview === 'MAP'
           }) }
         >
-          <a
-            onClick={ () => appState.viewMap() }
-            href="#"><img src={ mapSvg } />Map</a>
+          <Link to={ `/org/${selectedOrg.id}/map` }><img src={ mapSvg } /> Map</Link>
         </li>
         <li
           className={ classnames({
             active: subview === 'SPLIT'
           }) }
         >
-          <a
-            onClick={ () => appState.viewSplitScreen() }
-            href="#"><img src={ globeSvg } />Split Screen</a>
+          <Link to={ `/org/${selectedOrg.id}/split` }><img src={ globeSvg } /> Split Screen</Link>
         </li>
       </ul>
     );
@@ -153,7 +146,7 @@ class Navbar extends React.Component {
                 active: subview === 'FLEETS',
               }) }
             >
-              <a href="#" onClick={ appState.viewOrgFleets }>Fleets</a>
+              <Link to={ `/org/${selectedOrg.id}/fleets` }>Fleets</Link>
             </li>
             <li
               className={ classnames({
