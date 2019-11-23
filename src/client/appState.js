@@ -26,6 +26,7 @@ const store = redux.createStore(
   undefined,
   composedEnhancers
 );
+module.exports.store = store;
 
 if (Cookies.get("jwt")) {
   setImmediate(function() {

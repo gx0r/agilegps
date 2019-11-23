@@ -32,10 +32,6 @@ module.exports = {
 
   selectedItem: null,
 
-  view: "SESSION",
-  subview: "",
-  viewID: "", // object ID to view, if any
-
   startDate: moment(),
   endDate: moment(),
 

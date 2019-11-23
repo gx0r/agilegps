@@ -17,7 +17,7 @@ window.Promise.config({
   warnings: false
 });
 
-import appState from "./appState";
+import appState, { store } from "./appState";
 
 import Root from "./components/root2";
 import { Provider } from 'react-redux';
@@ -31,7 +31,7 @@ import './css/toasts.css';
 
 const rootComponent = (
   <IntlProvider locale="en-US">
-    <Provider store={ appState.getStore() }>
+    <Provider store={ store }>
       <Root />
       <ToastContainer
         autoClose={ 4000 }

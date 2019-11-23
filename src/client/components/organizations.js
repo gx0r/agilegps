@@ -13,6 +13,13 @@ import { confirmAlert } from 'react-confirm-alert';
 
 import { viewNewOrganization } from "../appStateActionCreators";
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 function deleteOrganization(org) {
   confirmAlert({
     title: 'Delete organization',
@@ -76,13 +83,12 @@ class Organizations extends React.Component {
                     <tr key={ org.id }>
                       <td>{ org.name }</td>
                       <td>
-                        <a
-                          className="btn btn-primary btn-sm"
-                          onClick={ () => appState.editOrganization(org.id) }
-                        ><i className="middle glyphicon glyphicon-pencil" /> Update
-                        </a>
+                      <Link className="btn btn-primary btn-sm"
+                       to={ `/orgs/edit/${org.id} `}><i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                       </td>
                       <td>
+                        
+                        <Link to={ `/orgs/${org.id} `}>View Org</Link>
                         <a
                           className="btn btn-primary btn-sm"
                           onClick={ () => appState.selectOrgByID(org.id)
