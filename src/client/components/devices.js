@@ -100,6 +100,9 @@ class Devices extends React.Component {
               {
                 Object.keys(devicesByID).map(key => {
                   const device = devicesByID[key];
+                  const toVehicleLink = vehiclesByDeviceID[device.imei] ?
+                    `/vehicle/${vehiclesByDeviceID[device.imei].id}/edit` : null;
+                  const toVehicleName = vehiclesByDeviceID[device.imei] && vehiclesByDeviceID[device.imei].name;
                   return (
                     <tr key={ device.imei }>
                       <td>{ device.imei }</td>
@@ -114,19 +117,14 @@ class Devices extends React.Component {
                         { device.activationDate && moment(device.activationDate).format("M/DD/YYYY") }
                       </td>
                       <td>
-                        <a href="#" onClick={ () => appState.viewDeviceByID(vehiclesByDeviceID[device.imei].id) }>
-                          { vehiclesByDeviceID[device.imei] && vehiclesByDeviceID[device.imei].name }
-                        </a>
+                        <Link to={ toVehicleLink }>
+                          { toVehicleName }
+                        </Link>
                       </td>
                       <td>
                         <Link className="btn btn-primary btn-warning"
                           to={ `/devices/edit/${device.imei}`}>
                             <i className="middle glyphicon glyphicon-pencil" /> Update</Link>
-                        {/* <a
-                          className="btn btn-primary btn-warning "
-                          onClick={ () => appState.viewDeviceByID(device.imei) }
-                        ><i className="middle glyphicon glyphicon-pencil" /> Update
-                        </a> */}
                         <span> </span>
                         <a
                           className="btn btn-primary btn-sm btn-danger"

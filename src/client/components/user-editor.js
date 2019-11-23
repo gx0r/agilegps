@@ -180,6 +180,7 @@ function UserEditor(props) {
                     window.history.back();
                   } }
                 >Cancel</button>
+                <span> </span>
                 <button
                   className="btn btn-success"
                   disabled={ isSubmitting }
