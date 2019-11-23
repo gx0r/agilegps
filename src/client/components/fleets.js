@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
-import toArray from 'lodash';
+import { toArray } from 'lodash';
 
 import * as appState from '../appState';
 import getselectvalues from "../getselectvalues";
@@ -14,7 +14,10 @@ import getselectvalues from "../getselectvalues";
 function Fleets(props) {
   const { fleetsByID, vehiclesByID } = props;
   const [selectedFleet, selectFleet] = useState();
-  const [availableVehicles, setAvailableVehicles] = useState([toArray(vehiclesByID)]);
+  const [availableVehicles, setAvailableVehicles] = useState(toArray(vehiclesByID));
+  const [selectedInFleetVehicles, setSlectedInFleetVehicles] = useState(selectedFleet ? selectedFleet.vehicles : []);
+
+  console.log(availableVehicles)
 
   const createFleet = () => {
     selectFleet({});
@@ -99,6 +102,24 @@ function Fleets(props) {
                 }
               </select>
             </div>
+            <div
+              className="col sm-2 verticalcenter"
+              style={{ marginTop: '10em' }}
+            >
+              <button className="btn-lg btn-default" onClick={ () => rightArrow() }>→</button>
+              <span> </span>
+              <button className="btn-lg btn-default" onClick={ () => leftArrow() }>←</button>
+            </div>
+          </div>
+          <div className="col-sm-5">
+            <div>Vehicles in Fleet</div>
+            <select className="fullwidth form-control" multiple size="20"
+                onBlur={ ev => setSlectedInFleetVehicles(getselectvalues(ev.target)) }
+            >
+              {
+                selectedInFleetVehicles.map(vehicle => <option value={vehicle.id} >{ vehicle.name }</option>)
+              }
+            </select>
           </div>
         </div>
       </div>
