@@ -85,17 +85,8 @@ function Root(props) {
             <Route path="/org/:orgId/fleets">
               <Fragment>
                 <div className="container-fluid">
-                  <div className="row">
-                    {/* <div className="sidebar col-sm-2">
-                      <Sidebar />
-                    </div> */}
-                    <div className="col-sm-10">
-                      <div className="shadow">
-                        <Fleets />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  <Fleets />
+]               </div>
               </Fragment>
             </Route>
             <Route path="/org/:orgId/reports">

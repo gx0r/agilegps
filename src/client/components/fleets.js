@@ -28,7 +28,8 @@ function Fleets(props) {
   }
 
   return (
-    <div>
+    <div className="row">
+      <div className="col-sm-1" />
       <div className="col-sm-10">
         <div className="col-sm-4">
           <div className="business-table">
@@ -102,27 +103,27 @@ function Fleets(props) {
                 }
               </select>
             </div>
-            <div
-              className="col sm-2 verticalcenter"
+            <div className="col sm-2 verticalcenter"
               style={{ marginTop: '10em' }}
             >
               <button className="btn-lg btn-default" onClick={ () => rightArrow() }>→</button>
               <span> </span>
               <button className="btn-lg btn-default" onClick={ () => leftArrow() }>←</button>
             </div>
-          </div>
-          <div className="col-sm-5">
-            <div>Vehicles in Fleet</div>
-            <select className="fullwidth form-control" multiple size="20"
-                onBlur={ ev => setSlectedInFleetVehicles(getselectvalues(ev.target)) }
-            >
-              {
-                selectedInFleetVehicles.map(vehicle => <option value={vehicle.id} >{ vehicle.name }</option>)
-              }
-            </select>
+            <div className="col-sm-5">
+              <div>Vehicles in Fleet</div>
+              <select className="fullwidth form-control" multiple size="20"
+                  onBlur={ ev => setSlectedInFleetVehicles(getselectvalues(ev.target)) }
+              >
+                {
+                  selectedInFleetVehicles.map(vehicle => <option value={vehicle.id} >{ vehicle.name }</option>)
+                }
+              </select>
+            </div>
           </div>
         </div>
       </div>
+      <div className="col-sm-1" />
     </div>
   );
 }
