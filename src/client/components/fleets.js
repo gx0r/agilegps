@@ -96,9 +96,10 @@ function Fleets(props) {
       const vid = selectedInFleetVehicles.pop();
       const vehicle = vehiclesByID[vid];
 
-      fleet.vehicles = without(fleet.vehicles, vid);
+      selectedFleet.vehicles = without(selectedFleet.vehicles, vid);
       availableVehicles = union(availableVehicles, [vid]);
     }
+    setAvailableVehicles(availableVehicles);
   };
 
   return (
