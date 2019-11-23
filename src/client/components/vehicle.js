@@ -150,7 +150,7 @@ class Vehicle extends React.Component {
         <a href={ excelHref } style={{
           cursor: 'pointer',
           marginLeft: '1em',
-        }}><img src="images/excel-icon.png" /> Excel</a>
+        }}><img src="/images/excel-icon.png" /> Excel</a>
         <div style={{
           backgroundColor: 'rgb(221, 221, 221)'
         }}>
