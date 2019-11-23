@@ -29,6 +29,8 @@ function VehicleEditor(props) {
         <Formik
           initialValues={{
             id: vehicle.id,
+            name: vehicle.name,
+            plate: vehicle.plate,
           }}
           validate={values => {
             // const errors = {};
@@ -62,9 +64,15 @@ function VehicleEditor(props) {
           }) => (
             <form className="form-horizontal" onSubmit={ handleSubmit }>
               <div className="form-group">
-                <label className="col-md-2 control-label">IMEI</label>
+                <label className="col-md-2 control-label">Name</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="imei" />
+                  <Field className="form-control" name="name" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-md-2 control-label">Plate</label>
+                <div className="col-md-10">
+                  <Field className="form-control" name="plate" />
                 </div>
               </div>
               <div className="form-group">

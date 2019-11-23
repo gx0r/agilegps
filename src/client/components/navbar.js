@@ -139,7 +139,7 @@ class Navbar extends React.Component {
           }) }
           onClick={ () => this.setState( { orgToolsOpen: !orgToolsOpen}) }
         >
-          <a className="dropdown-toggle">Manage<span className="caret"></span></a>
+          <a className="pointer dropdown-toggle">Manage<span className="caret"></span></a>
           <ul className="dropdown-menu">
             <li
               className={ classnames({
