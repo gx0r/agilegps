@@ -14,6 +14,13 @@ import mapSvg from '../svg/map.svg';
 import globeSvg from '../svg/globe.svg';
 import xcloudSvg from '../svg/xcloud.svg';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
@@ -245,28 +252,32 @@ class Navbar extends React.Component {
             active: view === 'USER' && viewID === user.username
           }) }
         >
-          <a
-            onClick={ () => appState.viewUserByID(user.username) }
-            href="#">Profile</a>
+          <Link className={ classnames({
+              active: view === 'HELP'
+            }) }
+            to={ `/users/${user.username}`}>Profile</Link>
         </li>
 
+        
         <li
-          className={ classnames({
-            active: view === 'HELP'
-          }) }
-        >
-          <a
-            onClick={ () => appState.viewHelp() }
-            href="#">Help</a>
+         className={ classnames({
+             active: view === 'HELP'
+           }) }
+         >
+           <Link className={ classnames({
+              active: view === 'HELP'
+            }) }
+            to="/help">Help</Link>
         </li>
         <li
           className={ classnames({
             active: view === 'SESSION'
           }) }
         >
-          <a
-            onClick={ () => appState.viewLogin() }
-            href="#">☰</a>
+          <Link className={ classnames({
+              active: view === 'HELP'
+            }) }
+            to="/">☰</Link>
         </li>
       </ul>  
     );

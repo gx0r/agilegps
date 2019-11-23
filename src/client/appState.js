@@ -33,43 +33,6 @@ if (Cookies.get("jwt")) {
   });
 }
 
-// START routing
-let lastViewState = {};
-store.subscribe(function() {
-  let state = store.getState();
-  let viewState = {};
-  viewState.view = state.view;
-  viewState.subview = state.subview;
-  viewState.viewID = state.viewID;
-
-  if (!_.isEqual(lastViewState, viewState)) {
-    lastViewState = viewState;
-    window.history.pushState(
-      viewState,
-      viewState.view + " " + viewState.subview + " " + viewState.viewID,
-      "?" + JSON.stringify(viewState)
-    );
-  }
-  if (["EDIT", "RAWEVENTS", "EVENTS", "EXCEPTIONS"].indexOf(state.subview) < 0) {
-    // don't redraw certain views
-    // console.log("redrawing");
-    // m.redraw();
-  }
-});
-
-window.onpopstate = function(ev) {
-  let location = ev.state;
-  if (location) {
-    store.dispatch({
-      type: "VIEW",
-      view: location.view,
-      subview: location.subview,
-      viewID: location.viewID
-    }); 
-  }
-};
-// END routing
-
 function auth() {
   return {
     headers: headers()

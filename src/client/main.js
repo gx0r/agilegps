@@ -1,15 +1,14 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-require("es6-object-assign").polyfill();
-require("setimmediate");
-require("bootstrap/less/bootstrap.less");
-require("pikaday2/css/pikaday.css");
-require("./style.css");
+// import "setimmediate";
+import "bootstrap/less/bootstrap.less";
+// import "pikaday2/css/pikaday.css";
+import "./style.css";
 require("isomorphic-fetch");
-const React = require("react");
-const ReactDOM = require("react-dom");
-
 // require('nprogress/nprogress.css');
+
+import React from "react";
+import ReactDOM from "react-dom";
 
 window.Promise = require("bluebird");
 window.Promise.config({
@@ -18,12 +17,9 @@ window.Promise.config({
   warnings: false
 });
 
-const m = require("mithril");
+import appState from "./appState";
 
-const appState = require("./appState");
-
-
-import Root from "./components/root";
+import Root from "./components/root2";
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { toast } from 'react-toastify';
@@ -45,24 +41,15 @@ const rootComponent = (
   </IntlProvider>
 );
 
-
-let RENDER_WITH_REACT;
-RENDER_WITH_REACT = true;
-
-if (RENDER_WITH_REACT) {
-  ReactDOM.render(
-    rootComponent,
-    document.getElementById('root')
-  );
-} else {
-  m.mount(document.getElementById("root"), require("./root"));
-}
-
+ReactDOM.render(
+  rootComponent,
+  document.getElementById('root')
+);
 
 // require("./markers/OrgMarkers");
 require("./appSocketState");
 
 // if ('scrollRestoration' in history) {
 // 	// Back off, browser, I got this...
-// 	// history.scrollRestoration = 'manual';
+// 	history.scrollRestoration = 'manual';
 // }
