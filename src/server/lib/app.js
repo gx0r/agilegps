@@ -1,29 +1,18 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-const Readable = require("stream").Readable;
 // https://github.com/koajs/koa/blob/v2.x/docs/api/index.md
 const Koa = require("koa");
 const app = (module.exports = new Koa());
 const config = require("../../../config/web.js");
-const session = require("koa-session");
+// const session = require("koa-session");
 const Compress = require("koa-compress");
 const helmet = require("koa-helmet");
-const Morgan = require("koa-morgan");
-const proxy = require("koa-proxy");
+// const Morgan = require("koa-morgan");
 const Conditional = require("koa-conditional-get");
 const Etag = require("koa-etag");
 const ResponseTime = require("koa-response-time");
 const BodyParser = require("koa-bodyparser");
-const ServeStatic = require("koa-static");
-
-if (config.proxy) {
-  app.use(
-    proxy({
-      host: config.proxy,
-      match: /^(?!\/api)(?!\/app)/ // ...everything except /api and /app
-    })
-  );
-}
+const KoaSinglePage = require('koa-single-page');
 
 app.use(ResponseTime());
 app.use(Conditional());
@@ -87,4 +76,4 @@ const router = require("./routes/router").router;
 
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.use(ServeStatic("../../public"));
+app.use(KoaSinglePage('../../public/app'));
