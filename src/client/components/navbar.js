@@ -249,7 +249,7 @@ class Navbar extends React.Component {
           <Link className={ classnames({
               active: view === 'HELP'
             }) }
-            to={ `/users/${user.username}`}>Profile</Link>
+            to={ `/users/edit/${user.username}`}>Profile</Link>
         </li>
 
         
