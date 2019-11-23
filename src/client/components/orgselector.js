@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Field } from 'formik';
 
-export function createOrgSelector(orgsByID) {
+export function createOrgSelector(orgsByID, selectedOrgId = null) {
   return (
-    <Field className="form-control" as="select" name="orgid">
+    <Field className="form-control" as="select" name="orgid" defaultValue={ selectedOrgId }>
       {
         Object.keys(orgsByID).map(key => {
           const org = orgsByID[key];

@@ -76,7 +76,7 @@ class Vehicles extends React.Component {
                       <td>{ vehicle.name }</td>
                       <td className="pointer"
                         onClick={ () => appState.viewDeviceByID(vehicle.device) }
-                      ><Link to={ `/devices/${vehicle.device}` }>{ vehicle.device }</Link></td>
+                      ><Link to={ `/devices/edit/${vehicle.device}` }>{ vehicle.device }</Link></td>
                       <td>{ vehicle.plate }</td>
                       <td>{ vehicle.vin }</td>
                       <td>

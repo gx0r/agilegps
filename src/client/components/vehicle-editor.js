@@ -100,13 +100,13 @@ function VehicleEditor(props) {
               <div className="form-group">
                 <label className="col-md-2 control-label">Link To Device IMEI</label>
                 <div className="col-md-10">
-                  { createDeviceSelector(selectedOrg.id, devicesByID, vehicle.device ) }
+                  { createDeviceSelector(devicesByID, vehicle.device, selectedOrg.id ) }
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">Organization ID</label>
                 <div className="col-md-10">
-                  { createOrgSelector(orgsByID) }
+                  { createOrgSelector(orgsByID, selectedOrg && selectedOrg.id) }
                 </div>
               </div>
               <div className="form-group">

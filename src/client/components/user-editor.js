@@ -12,7 +12,7 @@ import * as User from "../../common/models/User";
 import { createOrgSelector } from './orgselector';
 
 function UserEditor(props) {
-  const { orgsByID, usersByID } = props;
+  const { orgsByID, selectedOrg, usersByID } = props;
 
   const { userId } = useParams();
   let user;
@@ -157,7 +157,7 @@ function UserEditor(props) {
               <div className="form-group">
                 <label className="col-md-2 control-label">Org ID</label>
                 <div className="col-md-10">
-                  { createOrgSelector(orgsByID) }
+                  { createOrgSelector(orgsByID, selectedOrg && selectedOrg.id) }
                 </div>
               </div>
               <div className="form-group">
@@ -200,7 +200,9 @@ function UserEditor(props) {
 
 export default connect(
   state => ({
+    currentOrg: state.currentOrg,
     orgsByID: state.orgsByID,
+    selectedOrg: state.selectedOrg,
     usersByID: state.usersByID,
   }),
 )(UserEditor);

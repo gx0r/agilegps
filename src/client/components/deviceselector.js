@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Field } from 'formik';
 
-export function createDeviceSelector(orgId, devicesByID, selectedDeviceId) {
+export function createDeviceSelector(devicesByID, selectedDeviceId, orgId = null) {
   return (
     <Field className="form-control" as="select" name="device" defaultValue={ selectedDeviceId } >
       <option key="" value=""></option>
