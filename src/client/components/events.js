@@ -10,7 +10,7 @@ import * as formatDate from "../formatDate";
 import eventreportparser from '../../helper/eventreportparser';
 import { confirmAlert } from 'react-confirm-alert';
 
-class Events extends React.Component {
+export default class Events extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -260,9 +260,3 @@ class Events extends React.Component {
     )
   }
 }
-
-export default connect(
-  state => ({
-    type: state.view.toLowerCase(),
-  })
-)(Events);

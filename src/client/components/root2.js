@@ -40,6 +40,48 @@ export default function Root() {
       <div>
         <Navbar />
           <Switch>
+            <Route path="/help">
+              <div className="container-fluid">
+                <div className="row">
+                  <Help />
+                </div>
+              </div>
+            </Route>
+            <Route path="/devices">
+              <div className="container-fluid">
+                <div className="row">
+                  <Devices />
+                </div>
+              </div>
+            </Route>
+            <Route path="/users">
+              <div className="container-fluid">
+                <div className="row">
+                  <Users />
+                </div>
+              </div>
+            </Route>
+            <Route path="/processed_messages">
+              <div className="container-fluid">
+                <div className="row">
+                  <Events type="events" />
+                </div>
+              </div>
+            </Route>
+            <Route path="/raw_messages">
+              <div className="container-fluid">
+                <div className="row">
+                  <Events type="rawevents" />
+                </div>
+              </div>
+            </Route>
+            <Route path="/exceptions">
+              <div className="container-fluid">
+                <div className="row">
+                  <Events type="exceptions" />
+                </div>
+              </div>
+            </Route>
             <Route path="/">
               <div className="container-fluid">
                 <div className="row">

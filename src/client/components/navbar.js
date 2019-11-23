@@ -187,17 +187,13 @@ class Navbar extends React.Component {
           className={ classnames({
             active: view === 'USER' && viewID !== user.username
           }) }
-        ><a
-            onClick={ () => appState.viewUsers() }
-            href="#">Users</a>
+        ><Link to="/users">Users</Link>
         </li>
         <li
           className={ classnames({
             active: view === 'DEVICE'
           }) }
-        ><a
-            onClick={ () => appState.viewDevices() }
-            href="#">Devices</a>
+        ><Link to="/devices">Devices</Link>
         </li>
         <li
           onClick={ () => this.setState( { adminToolsOpen: !adminToolsOpen }) }
@@ -212,21 +208,21 @@ class Navbar extends React.Component {
                 active: view === 'EVENTS'
               }) }
             >
-              <a href="#" onClick={ () => appState.viewEvents() }>Processed Messages</a>
+              <Link to="/processed_messages">Processed Messages</Link>
             </li>
             <li
               className={ classnames({
                 active: view === 'RAWEVENTS'
               }) }
             >
-              <a href="#" onClick={ () => appState.viewRawEvents() }>Raw Messages</a>
+              <Link to="/raw_messages">Raw Messages</Link>
             </li>
             <li
               className={ classnames({
                 active: view === 'EXCEPTIONS'
               }) }
             >
-              <a href="#" onClick={ () => appState.viewExceptions() }>Uncaught Exceptions</a>
+              <Link to="/exceptions">Uncaught Exceptions</Link>
             </li>
           </ul>
         </li>
@@ -242,9 +238,7 @@ class Navbar extends React.Component {
       <ul className="nav navbar-nav navbar-right">
         { isAdmin && !this.orgPresent() ? this.renderSiteAdminNav() :
         <li>
-          <a
-            onClick={ () => appState.viewOrganizations() }
-            href="#">Back To Organizations</a>
+          <Link to="/orgs">Back To Organizations</Link>
         </li> }
         { this.orgPresent() && this.renderInOrgNav() }
         <li
@@ -264,20 +258,14 @@ class Navbar extends React.Component {
              active: view === 'HELP'
            }) }
          >
-           <Link className={ classnames({
-              active: view === 'HELP'
-            }) }
-            to="/help">Help</Link>
+           <Link to="/help">Help</Link>
         </li>
         <li
           className={ classnames({
             active: view === 'SESSION'
           }) }
         >
-          <Link className={ classnames({
-              active: view === 'HELP'
-            }) }
-            to="/">☰</Link>
+          <Link to="/">☰</Link>
         </li>
       </ul>  
     );
