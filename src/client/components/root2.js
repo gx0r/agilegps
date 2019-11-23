@@ -35,7 +35,12 @@ import Vehicle from './vehicle';
 import Vehicles from './vehicles';
 import VehicleEditor from './vehicle-editor';
 
-export default function Root() {
+function Root(props) {
+
+  const { selectedVehicle } = props;
+
+  const renderVehicleOrOrg = () => selectedVehicle ? <Vehicle /> : <Organization />;
+
   return (
     <Router>
       <div>
@@ -111,7 +116,7 @@ export default function Root() {
                         <Map split={ false } />
                       </div>
                       <br />
-                      <Organization />
+                      { renderVehicleOrOrg() }
                     </div>            
                   </div>
                 </div>
@@ -129,7 +134,7 @@ export default function Root() {
                         <Map split={ true } />
                       </div>
                       <br />
-                      <Organization />
+                      { renderVehicleOrOrg() }
                     </div>            
                   </div>
                 </div>
@@ -218,3 +223,9 @@ export default function Root() {
   );
 }
 
+
+export default connect(
+  state => ({
+    selectedVehicle: state.selectedVehicle,
+  })
+)(Root);
