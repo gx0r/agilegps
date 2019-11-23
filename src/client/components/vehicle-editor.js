@@ -9,9 +9,10 @@ import { toast } from 'react-toastify';
 import * as appState from '../appState';
 import * as Vehicle from "../../common/models/Vehicle";
 import { createOrgSelector } from './orgselector';
+import { createDeviceSelector } from './deviceselector';
 
 function VehicleEditor(props) {
-  const { orgsByID, vehiclesByID } = props;
+  const { devicesByID, orgsByID, selectedOrg, vehiclesByID } = props;
 
   const { vehicleId } = useParams();
   let vehicle;
@@ -66,7 +67,9 @@ function VehicleEditor(props) {
           }}
           onSubmit={(values, { setSubmitting }) => {
             const vehicle = new Vehicle(values);
-            appState.saveVehicle(vehicle)
+
+            const save = vehicle.id ? appState.putVehicle(vehicle) : appState.postVehicle(vehicle); // todo unify
+            save
             .then(() => {
               setSubmitting(false);
               toast.success(`Vehicle ${vehicle.name} saved`);
@@ -95,9 +98,9 @@ function VehicleEditor(props) {
                 </div>
               </div>
               <div className="form-group">
-                <label className="col-md-2 control-label">Device</label>
+                <label className="col-md-2 control-label">Link To Device IMEI</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="device" />
+                  { createDeviceSelector(selectedOrg.id, devicesByID, vehicle.device ) }
                 </div>
               </div>
               <div className="form-group">
@@ -253,6 +256,7 @@ function VehicleEditor(props) {
                     window.history.back();
                   } }
                 >Cancel</button>
+                <span> </span>
                 <button
                   className="btn btn-success"
                   disabled={ isSubmitting }
@@ -272,7 +276,9 @@ function VehicleEditor(props) {
 
 export default connect(
   state => ({
+    devicesByID: state.devicesByID,
     orgsByID: state.orgsByID,
+    selectedOrg: state.selectedOrg,
     vehiclesByID: state.vehiclesByID,
   }),
 )(VehicleEditor);
