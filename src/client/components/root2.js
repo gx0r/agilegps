@@ -27,6 +27,7 @@ import OrganizationEditor from './organization-editor';
 import Reports from './reports';
 import Session from './session';
 import Events from './events';
+import Fleets from './fleets';
 import Help from './help';
 import Users from './users';
 import UserEditor from './user-editor';
@@ -81,8 +82,24 @@ function Root(props) {
                 </div>
               </div>
             </Route>
+            <Route path="/org/:orgId/fleets">
+              <Fragment>
+                <div className="container-fluid">
+                  <div className="row">
+                    <div className="sidebar col-sm-2">
+                      <Sidebar />
+                    </div>
+                    <div className="col-sm-10">
+                      <div className="shadow">
+                        <Fleets />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Fragment>
+            </Route>
             <Route path="/org/:orgId/reports">
-            <Fragment>
+              <Fragment>
                 <div className="container-fluid">
                   <div className="row">
                     <div className="sidebar col-sm-2">
