@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 import { useParams } from "react-router-dom";
@@ -12,15 +11,9 @@ import * as appState from '../appState';
 import * as Organization from "../../common/models/Organization";
 
 function OrganizationEditor(props) {
-  let { orgId } = useParams();
-  orgId = orgId && orgId.trim();
+  const { orgId } = useParams();
   const { orgsByID } = props;
-  let org;
-  if (orgId) {
-    org = orgsByID[orgId];
-  } else {
-    org = new Organization();
-  }
+  const org = orgId ? orgsByID[orgId] : new Organization();
 
   return (
     <div>
@@ -52,6 +45,7 @@ function OrganizationEditor(props) {
             .then(() => {
               setSubmitting(false);
               toast.success("Org saved");
+              window.history.back();
             })
             .catch(err => {
               setSubmitting(false);
