@@ -53,6 +53,8 @@ function deleteUser(user) {
 };
 
 function Users({orgsByID, usersByID}) {
+  const { orgId } = useParams();
+
   const getOrgName = id => {
     if (orgsByID[id]) {
       return orgsByID[id].name;
@@ -61,10 +63,6 @@ function Users({orgsByID, usersByID}) {
     }
   }
 
-  let { orgId } = useParams();
-  orgId = orgId && orgId.trim();
-  console.log(orgId);
-
   return (
     <div>
       <div className="col-md-2" />
@@ -72,7 +70,7 @@ function Users({orgsByID, usersByID}) {
         <Link
           className="btn btn-default"
           style={{marginBottom: '1em'}}
-          to="/users/new">Create User</Link>
+          to={ orgId ? `/org/${orgId}/users/new` : `/users/new` }>Create User</Link>
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
@@ -105,7 +103,7 @@ function Users({orgsByID, usersByID}) {
                     <td>{ getOrgName(user.orgid) }</td>
                     <td>
                       <Link className="btn btn-primary btn-sm"
-                        to={ `/users/edit/${user.username}` }>
+                        to={ orgId ? `/org/${orgId}/users/edit/${user.username}` : `/users/edit/${user.username}` }>
                           <i className="middle glyphicon glyphicon-pencil" /> Update
                       </Link>
                       <span> </span>
