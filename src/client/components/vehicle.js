@@ -73,9 +73,11 @@ function Vehicle({ animationPlay,
         "/vehiclehistory/" +
         vehicleId +
         "?startDate=" +
-        encodeURIComponent(startDate.toISOString(true)) +
+        encodeURIComponent(moment().subtract(1, 'day').toISOString(true)) +
+        // encodeURIComponent(startDate.toISOString(true)) +
         "&endDate=" +
-        encodeURIComponent(endDate.toISOString(true));
+        encodeURIComponent(moment().add(1, 'day').toISOString(true));
+        // encodeURIComponent(endDate.toISOString(true));
 
       return fetch(url, auth())
         .then(validateResponse)
@@ -110,11 +112,12 @@ function Vehicle({ animationPlay,
               res.reverse();
             }
           }
+          console.log(res)
           setData(res);
         });
     };
     fetchData();
-  }, []);
+  }, [startDate, endDate]);
 
   // useEffect(() => {
   //   let ignore = false;
