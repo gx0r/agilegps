@@ -135,7 +135,9 @@ module.exports = function reducer(state, action) {
       vehiclesByID[action.vehicle.id] = action.vehicle;
 
       var impliedSelectedVehiclesByID = state.impliedSelectedVehiclesByID;
-      impliedSelectedVehiclesByID[action.vehicle.id] = action.vehicle;
+      if (impliedSelectedVehiclesByID[action.vehicle.id]) {
+        impliedSelectedVehiclesByID[action.vehicle.id] = action.vehicle;
+      }
 
       return Object.assign({}, state, {
         vehiclesByID: vehiclesByID,
