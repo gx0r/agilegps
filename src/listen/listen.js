@@ -25,6 +25,8 @@ const LRU = require("lru-cache");
 const decimalToHex = require("./decimaltohex");
 const verror = require("verror");
 
+process.name = 'agilegps-listener';
+
 const socket = dgram.createSocket("udp4");
 const vehicleCache = new LRU();
 const log = bunyan.createLogger({
