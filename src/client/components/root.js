@@ -68,6 +68,7 @@ function Root(props) {
             </div>
           </Route>
           <Route path="/orgs/edit/:orgId">
+            <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -76,6 +77,7 @@ function Root(props) {
             </div>
           </Route>
           <Route path="/org/:orgId/users">
+            <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
                 <div className="row">
@@ -100,12 +102,14 @@ function Root(props) {
             </div>
           </Route>
           <Route path="/org/:orgId/fleets">
+            <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
               <Fleets />
             </div>
           </Route>
           <Route path="/org/:orgId/reports">
+            <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -121,6 +125,7 @@ function Root(props) {
             </div>
           </Route>
           <Route path="/org/:orgId/vehicles">
+            <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
                 <div className="row">
@@ -129,6 +134,7 @@ function Root(props) {
             </div>
           </Route>
           <Route path="/org/:orgId/map">
+            <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
               <div className="row">
