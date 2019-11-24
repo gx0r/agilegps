@@ -56,39 +56,3 @@ export function setAnimationSpeed(value) {
     value,
   };
 };
-
-export function viewNewOrganization() {
-  return {
-    type: "VIEW",
-    view: "ORG",
-    subview: "NEW",
-    viewID: ""
-  };
-}
-
-export function viewNewUser() {
-  return {
-    type: "VIEW",
-    view: "USER",
-    subview: "NEW",
-    viewID: ""
-  };
-}
-
-export function viewNewDevice() {
-  return {
-    type: "VIEW",
-    view: "DEVICE",
-    subview: "NEW",
-    viewID: ""
-  };
-}
-
-export function viewNewVehicle() {
-  return {
-    type: "VIEW",
-    view: "VEHICLE",
-    subview: "NEW",
-    viewID: ""
-  };
-}
