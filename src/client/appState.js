@@ -32,9 +32,7 @@ const store = redux.createStore(
 module.exports.store = store;
 
 if (Cookies.get("jwt")) {
-  setTimeout(() => {
-    login();
-  }, 0);
+  login();
 }
 
 function auth() {
@@ -104,7 +102,10 @@ function validateResponse(response) {
 module.exports.validateResponse = validateResponse;
 
 function loadOrgState(orgid) {
-  NProgress.inc();
+  if (!orgid) {
+    console.warn('Unnecessary loadOrgState');
+    return Promise.resolve();
+  }
 
   return fetch("/api/organizations/" + orgid, auth())
     .then(validateResponse)
@@ -144,48 +145,36 @@ function loadOrgState(orgid) {
             users: users
           });
         });
-      return Promise.all([fleetp, statusp, usersp]);
+      return Promise.all([fleetp, statusp, usersp]).finally(NProgress.done);
     });
 }
 module.exports.loadOrgState = loadOrgState;
 
 function loadVehicles(orgid) {
   NProgress.start();
-  return Promise.resolve(
-    fetch("/api/organizations/" + orgid + "/vehiclestatus", auth())
-  )
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
-    .then(function(vehicles) {
+  return fetch("/api/organizations/" + orgid + "/vehiclestatus", auth())
+    .then(validateResponse)
+    .then(vehicles => {
       store.dispatch({
         type: "VEHICLES",
         vehicles: vehicles,
         orgid: orgid
       });
     })
-    .finally(function() {
-      NProgress.done();
-    });
+    .finally(NProgress.done);
 }
 
 function fetchOrganizations() {
   NProgress.inc();
   return Promise.resolve(fetch("/api/organizations/", auth()))
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
-    .then(function(orgs) {
+    .then(validateResponse)
+    .then(orgs => {
       store.dispatch({
         type: "ORGS",
         orgs: orgs
       });
     })
-    .finally(function() {
-      NProgress.done();
-    });
+    .finally(NProgress.done);
 }
 
 function loadSiteAdminData() {
@@ -194,10 +183,7 @@ function loadSiteAdminData() {
 
   // LOAD USERS
   let usersp = Promise.resolve(fetch("/api/users/", auth()))
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function(users) {
       NProgress.inc();
       store.dispatch({
@@ -208,10 +194,7 @@ function loadSiteAdminData() {
 
   // LOAD devices
   let devicesp = fetch("/api/devices/", auth())
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function(devices) {
       NProgress.inc();
       store.dispatch({
@@ -222,10 +205,7 @@ function loadSiteAdminData() {
 
   // LOAD all vehicles (needed for device <-> vehicle association)
   let vehiclesp = Promise.resolve(fetch("/api/vehicles/", auth()))
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function(vehicles) {
       NProgress.inc();
       store.dispatch({
@@ -235,20 +215,9 @@ function loadSiteAdminData() {
     });
 
   return Promise.all([orgsp, usersp, devicesp, vehiclesp]).then(function() {
-    NProgress.inc();
+    NProgress.done();
   });
 }
-
-function afterLogin() {}
-
-function viewLogin() {
-  store.dispatch({
-    type: "VIEW",
-    view: "SESSION"
-  });
-}
-module.exports.viewLogin = viewLogin;
-
 function login(data) {
   // data is an object {username, password}
   NProgress.inc();
@@ -261,17 +230,10 @@ function login(data) {
   }
 
   return initial
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function(response) {
       const user = response.user;
-      const orgid = user.orgid;
       const isAdmin = user.isAdmin;
-      const viewID = store.getState().viewID
-      const view = store.getState().view; // main view
-      const subview = store.getState().subview; // sub view
       let next; // sequence
       NProgress.inc();
       store.dispatch({
@@ -282,33 +244,11 @@ function login(data) {
       if (isAdmin) {
         next = loadSiteAdminData();
       } else {
-        next = fetchOrganizations().then(() => {
-          if (orgid) {
-            return selectOrgByID(orgid);
-          }
-        });
+        next = fetchOrganizations();
       }
-
-      if (subview === "ORG" && viewID) {
-        next = next.then(() => {
-          return selectOrgByID(viewID);
-        });
-      } 
-
-      if (view === "ORG" && viewID && isAdmin) { // TODO make better
-        next = next.then(() => {
-          return selectOrgByID(viewID);
-        });
-      } else if (orgid != null && !isAdmin) {
-        next = next.then(() =>{
-          return selectOrgByID(orgid);
-        });
-      }
-
 
       next.finally(() => {
         NProgress.done();
-        // m.redraw();
       });
 
       return next;
@@ -319,8 +259,7 @@ module.exports.login = login;
 module.exports.logOut = function() {
   stopListening();
   
-  return Promise.resolve(
-    fetch(
+  return fetch(
       "/api/session",
       Object.assign(
         {
@@ -328,16 +267,12 @@ module.exports.logOut = function() {
         },
         authWithCookies()
       )
-    )
-  ).then(() => {
-    Cookies.expire("jwt");
-    store.dispatch({
-      type: "LOGOUT"
+    ).then(() => {
+      Cookies.expire("jwt");
+      store.dispatch({
+        type: "LOGOUT"
+      });
     });
-    return viewLogin();
-  })
-  .finally ( () => {
-  })
 };
 
 module.exports.getState = function() {
@@ -348,11 +283,6 @@ module.exports.getStore = function() {
   return store;
 };
 
-module.exports.getOrgName = function(id) {
-  let org = store.getState().orgsByID[id];
-  return org ? org.name : "";
-};
-
 function selectFleetAll() {
   store.dispatch({
     type: "SELECT_FLEET_ALL"
@@ -361,30 +291,6 @@ function selectFleetAll() {
   return Promise.resolve();
 }
 module.exports.selectFleetAll = selectFleetAll;
-
-function selectOrgByID(orgid) {
-  NProgress.inc();
-
-  let org = store.getState().orgsByID[orgid];
-
-  if (!org) {
-    org = store.getState().user.orgid; // TODO fix this hack
-  }
-
-  store.dispatch({
-    type: "SELECT_ORG",
-    org: org
-  });
-
-  return loadOrgState(orgid)
-    .then(function() {
-      return selectFleetAll();
-    })
-    .finally(function() {
-      NProgress.done();
-    });
-}
-module.exports.selectOrgByID = selectOrgByID;
 
 module.exports.deleteOrg = function(org) {
   return Promise.resolve(

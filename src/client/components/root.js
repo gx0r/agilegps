@@ -1,6 +1,6 @@
 // /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import {
@@ -29,7 +29,7 @@ import Vehicle from './vehicle';
 import Vehicles from './vehicles';
 import VehicleEditor from './vehicle-editor';
 
-import { loadOrgState, selectFleetAll, selectOrgByID } from '../appState';
+import { loadOrgState } from '../appState';
 
 function EnsureRouteOrgLoaded() {
   const { orgId } = useParams();
@@ -103,27 +103,24 @@ function Root(props) {
           </Route>
           <Route path="/org/:orgId/fleets">
             <Navbar />
-            <Fragment>
-              <div className="container-fluid">
-                <Fleets />
-              </div>
-            </Fragment>
+            <div className="container-fluid">
+              <Fleets />
+            </div>
           </Route>
           <Route path="/org/:orgId/reports">
-            <Fragment>
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="sidebar col-sm-2">
-                    <Sidebar />
-                  </div>
-                  <div className="col-sm-10">
-                    <div className="shadow">
-                    <Reports />
-                    </div>
-                  </div>            
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="sidebar col-sm-2">
+                  <Sidebar />
                 </div>
+                <div className="col-sm-10">
+                  <Reports />
+                  <div className="shadow">
+                  </div>
+                </div>            
               </div>
-            </Fragment>
+            </div>
           </Route>
           <Route path="/org/:orgId/vehicles">
             <Navbar />
@@ -135,42 +132,38 @@ function Root(props) {
           </Route>
           <Route path="/org/:orgId/map">
             <Navbar />
-            <Fragment>
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="sidebar col-sm-2">
-                    <Sidebar />
-                  </div>
-                  <div className="col-sm-10">
-                    <div className="shadow">
-                      <Map split={ false } />
-                    </div>
-                    <br />
-                    { renderVehicleOrOrg() }
-                  </div>            
+            <div className="container-fluid">
+              <div className="row">
+                <div className="sidebar col-sm-2">
+                  <Sidebar />
                 </div>
+                <div className="col-sm-10">
+                  <div className="shadow">
+                    <Map split={ false } />
+                  </div>
+                  <br />
+                  { renderVehicleOrOrg() }
+                </div>            
               </div>
-            </Fragment>
+            </div>
           </Route>
           <Route path="/org/:orgId">
             <EnsureRouteOrgLoaded />
             <Navbar />
-            <Fragment>
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="sidebar col-sm-2">
-                    <Sidebar />
-                  </div>
-                  <div className="col-sm-10">
-                    <div className="shadow">
-                      <Map split={ true } />
-                    </div>
-                    <br />
-                    { renderVehicleOrOrg() }
-                  </div>            
+            <div className="container-fluid">
+              <div className="row">
+                <div className="sidebar col-sm-2">
+                  <Sidebar />
                 </div>
+                <div className="col-sm-10">
+                  <div className="shadow">
+                    <Map split={ true } />
+                  </div>
+                  <br />
+                  { renderVehicleOrOrg() }
+                </div>            
               </div>
-            </Fragment>
+            </div>
           </Route>
           <Route path="/orgs">
             <EnsureRouteOrgLoaded />
