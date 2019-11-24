@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 
 import "bootstrap/less/bootstrap.less";
-import "./style.css";
+import "./css/style.css";
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './css/toasts.css';
