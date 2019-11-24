@@ -7,11 +7,13 @@ let socket;
 
 function stopListening() {
   socket.close();
+  socket = null;
 }
 
 function startListening(dispatch) {
   if (socket) {
     socket.close();
+    socket = null;
   }
 
   socket = io();

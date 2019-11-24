@@ -325,6 +325,8 @@ function login(data) {
 module.exports.login = login;
 
 module.exports.logOut = function() {
+  stopListening();
+  
   return Promise.resolve(
     fetch(
       "/api/session",
