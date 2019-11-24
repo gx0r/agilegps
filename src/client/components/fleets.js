@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
 import classnames from 'classnames';
 
-import { Formik, Field } from 'formik';
+import { SketchPicker } from 'react-color';
 import { confirmAlert } from 'react-confirm-alert';
 import { toast } from 'react-toastify';
 import { toArray, cloneDeep, union, without } from 'lodash';
@@ -81,6 +81,7 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
 
   const changeColor = color => {
     selectedFleet.color = color;
+    setSelectedFleet(selectedFleet);
   }
 
   const rightArrow = () => {
@@ -112,7 +113,7 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
     <div className="row">
       <div className="col-sm-1" />
       <div className="col-sm-10">
-        <div className="col-sm-4">
+        <div className="col-sm-3">
           <div className="business-table">
             <h4>Fleets</h4>
             <ul className="list-group">
@@ -177,7 +178,7 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
               <div className="form-group col-sm-2" />
               <div className="form-group col-sm-6">
                 <label className="col-sm-2 control-label">Fleet Color:</label>
-                <input type="color" onChange={ ev => changeColor(ev.target.value) } value={ selectedFleet.color } />
+                <SketchPicker color={ selectedFleet.color } onChangeComplete={ color => { selectedFleet.color = color.hex; } } />
               </div>
             </div>
           </div>

@@ -110,6 +110,7 @@
     "prop-types": "^15.7.2",
     "raw-loader": "^3.1.0",
     "react": "^16.12.0",
+    "react-color": "^2.17.3",
     "react-dom": "^16.12.0",
     "react-intl": "^3.6.2",
     "react-redux": "^7.1.3",
