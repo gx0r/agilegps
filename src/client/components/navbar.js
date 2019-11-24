@@ -82,7 +82,7 @@ function Navbar(props) {
   }
 
   const renderLeftNav = () => {
-    const { selectedOrg, subview } = props;
+    const { subview } = props;
 
     if (!orgId) {
       return null;
@@ -95,21 +95,21 @@ function Navbar(props) {
             active: subview === 'REPORT'
           }) }
         >
-          <Link to={ `/org/${selectedOrg.id}/reports` }><img src={ reportsSvg } /> Reports</Link>
+          <Link to={ `/org/${orgId}/reports` }><img src={ reportsSvg } /> Reports</Link>
         </li>
         <li
           className={ classnames({
             active: subview === 'MAP'
           }) }
         >
-          <Link to={ `/org/${selectedOrg.id}/map` }><img src={ mapSvg } /> Map</Link>
+          <Link to={ `/org/${orgId}/map` }><img src={ mapSvg } /> Map</Link>
         </li>
         <li
           className={ classnames({
             active: subview === 'SPLIT'
           }) }
         >
-          <Link to={ `/org/${selectedOrg.id}/split` }><img src={ globeSvg } /> Split Screen</Link>
+          <Link to={ `/org/${orgId}/split` }><img src={ globeSvg } /> Split Screen</Link>
         </li>
       </ul>
     );
@@ -118,7 +118,7 @@ function Navbar(props) {
 
   const renderInOrgNav = () => {
     // Right side, logged into an org
-    const { selectedOrg, subview } = props;
+    const { subview } = props;
 
     return (
       <>
@@ -135,21 +135,21 @@ function Navbar(props) {
                 active: subview === 'USERS',
               }) }
             >
-              <Link to={ `/org/${selectedOrg.id}/users` }>Users</Link>
+              <Link to={ `/org/${orgId}/users` }>Users</Link>
             </li>
             <li
               className={ classnames({
                 active: subview === 'FLEETS',
               }) }
             >
-              <Link to={ `/org/${selectedOrg.id}/fleets` }>Fleets</Link>
+              <Link to={ `/org/${orgId}/fleets` }>Fleets</Link>
             </li>
             <li
               className={ classnames({
                 active: subview === 'VEHICLES',
               }) }
             >
-              <Link to={ `/org/${selectedOrg.id}/vehicles` }>Vehicles</Link>
+              <Link to={ `/org/${orgId}/vehicles` }>Vehicles</Link>
             </li>
           </ul>
         </li>
@@ -224,10 +224,7 @@ function Navbar(props) {
         { isAdmin && !orgId ? renderSiteAdminNav() :
           user.username && 
           <li>
-            <Link
-              to="/orgs"
-              onClick={ () => appState.selectOrgByID(null) }
-            >Back To Organizations</Link>
+            <Link to="/orgs">Back To Organizations</Link>
           </li> }
         { orgId && renderInOrgNav() }
         { user.username && <li
@@ -258,7 +255,9 @@ function Navbar(props) {
       </ul>  
     );
 
-  }
+  } 
+
+  const { orgsByID } = props;
 
   return (
     <nav className="navbar navbar-static-top navbar-inverse">
@@ -269,7 +268,7 @@ function Navbar(props) {
           </li>
           <li className="nav navbar-right" style={{textAlign:'right'}}>
             <br />
-            {/* <span className="company-name">{ props.orgName }</span> */}
+            <span className="company-name">{ orgsByID[orgId] && orgsByID[orgId].name }</span>
             <br />
             <a>{ getWelcomeText() }</a>
             <br />
@@ -287,13 +286,9 @@ export default connect(
   state => ({
     lastUpdated: state.lastUpdated,
     metric: state.user && state.user.metric,
-    // orgName: state.selectedOrg.name,
+    orgsByID: state.orgsByID,
     realTimeUpdates: state.realTimeUpdates,
-    selectedOrg: state.selectedOrg,
-    subview: state.subview,
     user: state.user,
-    view: state.view,
-    viewID: state.viewID,
   }),
   dispatch => bindActionCreators({
     dispatch,

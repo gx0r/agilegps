@@ -99,7 +99,7 @@ function Devices(props) {
                   <tr key={ device.imei }>
                     <td>{ device.imei }</td>
                     <td>{ device.sim }</td>
-                    <td>{ appState.getOrgName(device.orgid) }</td>
+                    <td>{ orgsByID[device.orgid] && orgsByID[device.orgid].name }</td>
                     <td>{ device.active ? "✔" : "" }</td>
                     <td>{ hearbeatField(device) }</td>
                     <td>{ batteryField(device) }</td>
