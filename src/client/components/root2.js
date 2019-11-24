@@ -71,6 +71,14 @@ function Root(props) {
                 </div>
               </div>
             </Route>
+            <Route path="/vehicle/new">
+              <div className="container-fluid">
+                  <div className="row">
+                    <VehicleEditor />
+                </div>
+              </div>
+            </Route>
+
             <Route path="/vehicle/:vehicleId/edit">
               <div className="container-fluid">
                   <div className="row">
