@@ -70,7 +70,7 @@ function Users({orgsByID, usersByID}) {
         <Link
           className="btn btn-default"
           style={{marginBottom: '1em'}}
-          to={ orgId ? `/org/${orgId}/users/new` : `/users/new` }>Create User</Link>
+          to={ orgId ? `/org/${orgId}/user/new` : `/users/new` }>Create User</Link>
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
@@ -103,7 +103,7 @@ function Users({orgsByID, usersByID}) {
                     <td>{ getOrgName(user.orgid) }</td>
                     <td>
                       <Link className="btn btn-primary btn-sm"
-                        to={ orgId ? `/org/${orgId}/users/edit/${user.username}` : `/users/edit/${user.username}` }>
+                        to={ orgId ? `/org/${orgId}/user/${user.username}/edit` : `/user/${user.username}/edit` }>
                           <i className="middle glyphicon glyphicon-pencil" /> Update
                       </Link>
                       <span> </span>

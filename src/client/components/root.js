@@ -59,7 +59,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/orgs/new">
+          <Route path="/org/new">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -67,7 +67,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/orgs/edit/:orgId">
+          <Route path="/org/:orgId/edit">
             <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
@@ -76,7 +76,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/org/:orgId/users/new">
+          <Route path="/org/:orgId/user/new">
             <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
@@ -85,7 +85,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/org/:orgId/users/edit/:userId">
+          <Route path="/org/:orgId/user/:userId/edit">
             <EnsureRouteOrgLoaded />
             <Navbar />
             <div className="container-fluid">
@@ -196,7 +196,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/devices/new">
+          <Route path="/device/new">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -204,7 +204,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/devices/edit/:deviceId">
+          <Route path="/device/:deviceId/edit">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -220,7 +220,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/users/new">
+          <Route path="/user/new">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -228,7 +228,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/users/edit/:userId">
+          <Route path="/user/:userId/edit">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -244,7 +244,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/processed_messages">
+          <Route path="/messages/processed">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -252,7 +252,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/raw_messages">
+          <Route path="/messages/raw">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -260,7 +260,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/exceptions">
+          <Route path="/messages/exceptions">
             <Navbar />
             <div className="container-fluid">
               <div className="row">

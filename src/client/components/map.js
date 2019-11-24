@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -183,9 +182,11 @@ class Map extends React.Component {
 
     Object.keys(impliedSelectedVehiclesByID).forEach(key => {
       const vehicle = impliedSelectedVehiclesByID[key];
-      if (markersByVehicleID[vehicle.id]) {
+      if (vehicle && markersByVehicleID[vehicle.id]) {
         markersByVehicleID[vehicle.id].setMap(null);
         delete markersByVehicleID[vehicle.id];
+      } else {
+        console.warn(key + ' missing from impliedSelectedVehiclesByID' )
       }
     });
   }

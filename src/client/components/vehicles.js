@@ -64,7 +64,7 @@ function Vehicles({ devicesByID, vehiclesByID }) {
                     <td>{ vehicle.name }</td>
                     <td className="pointer"
                       onClick={ () => appState.viewDeviceByID(vehicle.device) }
-                    ><Link to={ `/devices/edit/${vehicle.device}` }>{ vehicle.device }</Link></td>
+                    ><Link to={ `/device/edit/${vehicle.device}` }>{ vehicle.device }</Link></td>
                     <td>{ vehicle.plate }</td>
                     <td>{ vehicle.vin }</td>
                     <td>
