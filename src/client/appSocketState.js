@@ -4,18 +4,15 @@ import io from 'socket.io-client'
 export { stopListening, startListening };
 
 let socket;
-let listening = false;
 
 function stopListening() {
   socket.close();
-  listening = false;
 }
 
 function startListening(dispatch) {
-  if (listening) {
-    throw new Error('already listening');
+  if (socket) {
+    socket.close();
   }
-  listening = true;
 
   socket = io();
   socket.on("connect", function() {
