@@ -71,7 +71,7 @@ function Devices(props) {
         <Link
           className="btn btn-default"
           style={{marginBottom: '1em'}}
-          to="/devices/new">Create Device</Link>
+          to="/device/new">Create Device</Link>
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
@@ -115,7 +115,7 @@ function Devices(props) {
                     </td>
                     <td>
                       <Link className="btn btn-primary btn-warning"
-                        to={ `/devices/edit/${device.imei}`}>
+                        to={ `/device/${device.imei}/edit`}>
                           <i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                       <span> </span>
                       <a

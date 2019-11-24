@@ -42,7 +42,7 @@ function Organizations({ orgsByIDarray }) {
         <Link
           className="btn btn-default"
           style={{marginBottom: '1em'}}
-          to="/orgs/new">Create Organization</Link>
+          to="/org/new">Create Organization</Link>
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
@@ -60,7 +60,7 @@ function Organizations({ orgsByIDarray }) {
                     <td>{ org.name }</td>
                     <td>
                     <Link className="btn btn-primary btn-sm"
-                      to={ `/orgs/edit/${org.id}` }><i className="middle glyphicon glyphicon-pencil" /> Update</Link>
+                      to={ `/org/${org.id}/edit` }><i className="middle glyphicon glyphicon-pencil" /> Update</Link>
                     </td>
                     <td>
                       <Link

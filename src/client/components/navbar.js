@@ -193,21 +193,21 @@ function Navbar(props) {
                 active: view === 'EVENTS'
               }) }
             >
-              <Link to="/processed_messages">Processed Messages</Link>
+              <Link to="/messages/processed">Processed Messages</Link>
             </li>
             <li
               className={ classnames({
                 active: view === 'RAWEVENTS'
               }) }
             >
-              <Link to="/raw_messages">Raw Messages</Link>
+              <Link to="/messages/raw">Raw Messages</Link>
             </li>
             <li
               className={ classnames({
                 active: view === 'EXCEPTIONS'
               }) }
             >
-              <Link to="/exceptions">Uncaught Exceptions</Link>
+              <Link to="/messages/exceptions">Uncaught Exceptions</Link>
             </li>
           </ul>
         </li>
@@ -235,7 +235,7 @@ function Navbar(props) {
           <Link className={ classnames({
               active: view === 'HELP'
             }) }
-            to={ `/users/edit/${user.username}` }>Profile</Link>
+            to={ `/user/${user.username}/edit` }>Profile</Link>
         </li> }
         
         { user.username && <li
