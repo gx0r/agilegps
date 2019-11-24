@@ -268,7 +268,7 @@ class Map extends React.Component {
 
     Object.keys(impliedSelectedVehiclesByID).forEach(key => {
       const vehicle = impliedSelectedVehiclesByID[key];
-      if (vehicle.id && vehicle.last) {
+      if (vehicle && vehicle.id && vehicle.last) {
         if (markersByVehicleID[vehicle.id]) {
           const oldMarker = markersByVehicleID[vehicle.id];
           if (oldMarker.la === vehicle.last.la && oldMarker.lo === vehicle.last.lo) {
