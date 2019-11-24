@@ -11,16 +11,15 @@ import * as Vehicle from "../../common/models/Vehicle";
 import { createOrgSelector } from './orgselector';
 import { createDeviceSelector } from './deviceselector';
 
-function VehicleEditor(props) {
-  const { devicesByID, orgsByID, selectedOrg, vehiclesByID } = props;
+function VehicleEditor({ devicesByID, orgsByID, vehiclesByID }) {
+  const { orgId, vehicleId } = useParams();
 
-  const { vehicleId } = useParams();
   let vehicle;
   if (vehicleId) {
     vehicle = vehiclesByID[vehicleId];
   } else {
     vehicle = new Vehicle();
-    vehicle.orgid = selectedOrg && selectedOrg.id;
+    vehicle.orgid = orgId;
   }
 
   return (
@@ -101,13 +100,13 @@ function VehicleEditor(props) {
               <div className="form-group">
                 <label className="col-md-2 control-label">Link To Device IMEI</label>
                 <div className="col-md-10">
-                  { createDeviceSelector(devicesByID, vehicle.device, selectedOrg.id ) }
+                  { createDeviceSelector(devicesByID, vehicle.device, orgId ) }
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">Organization ID</label>
                 <div className="col-md-10">
-                  { createOrgSelector(orgsByID, selectedOrg && selectedOrg.id) }
+                  { createOrgSelector(orgsByID, orgId) }
                 </div>
               </div>
               <div className="form-group">
@@ -279,7 +278,6 @@ export default connect(
   state => ({
     devicesByID: state.devicesByID,
     orgsByID: state.orgsByID,
-    selectedOrg: state.selectedOrg,
     vehiclesByID: state.vehiclesByID,
   }),
 )(VehicleEditor);
