@@ -75,6 +75,10 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
     setSelectedInFleetVehicles(newFleet.vehicles);
   };
 
+  const cancel = () => {
+    
+  }
+
   const changeColor = color => {
     selectedFleet.color = color;
   }
@@ -99,6 +103,7 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
   };
 
   const leftArrow = () => {
+    debugger;
     // console.log(selectedInFleetVehicles)
 
     // const fleet = cloneDeep(selectedFleet);
@@ -110,7 +115,7 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
       const vid = selectedInFleetVehicles.pop();
       const vehicle = vehiclesByID[vid];
 
-      selectedFleet.vehicles = without(selectedFleet.vehicles, [vehicle.id]);
+      selectedFleet.vehicles = without(selectedFleet.vehicles, vehicle.id);
       availableVehicles = union(availableVehicles, [vid]);
     }
     setAvailableVehicles(availableVehicles);
@@ -148,7 +153,7 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
             }
             </ul>
             <br />
-            <div className="buttons-right">
+            <div>
               <button
                 className="btn btn-sm btn-default"
                 disabled={ !selectedFleet.name }
