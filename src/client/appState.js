@@ -10,6 +10,8 @@ const Cookies = require("cookies-js");
 const moment = require("moment");
 const createLogger = require("redux-logger").createLogger;
 const reducer = require("./appStateReducer");
+const startListening = require("./appSocketState").startListening;
+const stopListening = require("./appSocketState").stopListening;
 
 const logger = createLogger({
   duration: true,
@@ -266,6 +268,8 @@ function login(data) {
     initial = Promise.resolve(fetch("/api/session/", { headers: headers() }));
   }
 
+  startListening(store);
+
   return initial
     .then(function(response) {
       NProgress.inc();
@@ -311,6 +315,7 @@ function login(data) {
         });
       }
 
+
       next.finally(() => {
         NProgress.done();
         // m.redraw();
@@ -332,13 +337,16 @@ module.exports.logOut = function() {
         authWithCookies()
       )
     )
-  ).then(function(response) {
+  ).then(() => {
     Cookies.expire("jwt");
     store.dispatch({
       type: "LOGOUT"
     });
     return viewLogin();
-  });
+  })
+  .finally ( () => {
+    stopListening();
+  })
 };
 
 module.exports.getState = function() {
