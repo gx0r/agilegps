@@ -1,14 +1,11 @@
 // /* Copyright (c) 2016 Grant Miner */
 "use strict";
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-
-import queryString from 'query-string';
 
 import Navbar from './navbar';
 import Map from './map';

@@ -1,6 +1,5 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-// import "setimmediate";
 import "bootstrap/less/bootstrap.less";
 // import "pikaday2/css/pikaday.css";
 import "./style.css";

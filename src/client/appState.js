@@ -29,9 +29,9 @@ const store = redux.createStore(
 module.exports.store = store;
 
 if (Cookies.get("jwt")) {
-  setImmediate(function() {
+  setTimeout(() => {
     login();
-  });
+  }), 0;
 }
 
 function auth() {
