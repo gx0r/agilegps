@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,26 +19,18 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useParams
 } from "react-router-dom";
 
-class Navbar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-    this.state = {
-      adminToolsOpen: false,
-      orgToolsOpen: false,
-    }
-  }
+function Navbar(props) {
+  const [adminToolsOpen, setAdminToolsOpen] = useState(false);
+  const [orgToolsOpen, setOrgToolsOpen] = useState(false);
+  const { orgId } = useParams();
+  console.log(orgId);
 
-  static propTypes = {
-    orgName: PropTypes.string,
-    user: PropTypes.object,
-  };
-
-  formatLastUpdated() {
-    const { lastUpdated, metric } = this.props;
+  const formatLastUpdated = () => {
+    const { lastUpdated, metric } = props;
     if (!lastUpdated) {
       return "";
     }
@@ -49,19 +41,13 @@ class Navbar extends React.Component {
     }
   }
 
-  orgPresent() {
-    const { selectedOrg } = this.props;
-    return selectedOrg && selectedOrg.id != null;
-  }
-
-  isAdmin() {
-    const { user } = this.props;
+  const isAdmin = () => {
+    const { user } = props;
     return user.isAdmin;
   }
 
-
-  getWelcomeText = () => {
-    const { user } = this.props;
+  const getWelcomeText = () => {
+    const { user } = props;
     if (user.username) {
       return `Welcome ${user.username}`;
     } else {
@@ -69,8 +55,8 @@ class Navbar extends React.Component {
     }
   }
 
-  renderConnectivity() {
-    const { dispatch, realTimeUpdates, user } = this.props;
+  const renderConnectivity = () => {
+    const { dispatch, realTimeUpdates, user } = props;
     
     if (!user.username) {
       return null;
@@ -88,17 +74,17 @@ class Navbar extends React.Component {
         }}
         style={{color: realTimeUpdates ? '' : '' }}>
       
-      { realTimeUpdates && `Last update: ${this.formatLastUpdated()} ⚡` }
+      { realTimeUpdates && `Last update: ${formatLastUpdated()} ⚡` }
       { !realTimeUpdates && 'Real-time disconnected ' }
       { !realTimeUpdates && <img src={ xcloudSvg } width="24" height="24" /> }
       </a>
     );
   }
 
-  renderLeftNav() {
-    const { selectedOrg, subview } = this.props;
+  const renderLeftNav = () => {
+    const { selectedOrg, subview } = props;
 
-    if (!this.orgPresent()) {
+    if (!orgId) {
       return null;
     }
 
@@ -129,10 +115,10 @@ class Navbar extends React.Component {
     );
   }
 
-  renderInOrgNav() {
+
+  const renderInOrgNav = () => {
     // Right side, logged into an org
-    const { selectedOrg, subview, user } = this.props;
-    const { orgToolsOpen } = this.state;
+    const { selectedOrg, subview } = props;
 
     return (
       <>
@@ -140,7 +126,7 @@ class Navbar extends React.Component {
           className={ classnames({
             open: orgToolsOpen
           }) }
-          onClick={ () => this.setState( { orgToolsOpen: !orgToolsOpen}) }
+          onClick={ () => setOrgToolsOpen(!orgToolsOpen) }
         >
           <a className="pointer dropdown-toggle">Manage<span className="caret"></span></a>
           <ul className="dropdown-menu">
@@ -171,9 +157,8 @@ class Navbar extends React.Component {
     );
   }
 
-  renderSiteAdminNav() {
-    const { user, view, viewID } = this.props;
-    const { adminToolsOpen } = this.state;
+  const renderSiteAdminNav = () => {
+    const { user, view, viewID } = props;
 
     return (
       <>
@@ -196,7 +181,7 @@ class Navbar extends React.Component {
         ><Link to="/devices">Devices</Link>
         </li>
         <li
-          onClick={ () => this.setState( { adminToolsOpen: !adminToolsOpen }) }
+          onClick={ () => setAdminToolsOpen(!adminToolsOpen) }
           className={ classnames('dropdown pointer', {
             open: adminToolsOpen
           }) }
@@ -230,13 +215,13 @@ class Navbar extends React.Component {
     );
   }
 
-  renderRightNav() {
-    const { user, view, viewID } = this.props;
+  const renderRightNav = () => {
+    const { user, view, viewID } = props;
     const { isAdmin } = user;
 
     return (
       <ul className="nav navbar-nav navbar-right">
-        { isAdmin && !this.orgPresent() ? this.renderSiteAdminNav() :
+        { isAdmin && !orgId ? renderSiteAdminNav() :
           user.username && 
           <li>
             <Link
@@ -244,7 +229,7 @@ class Navbar extends React.Component {
               onClick={ () => appState.selectOrgByID(null) }
             >Back To Organizations</Link>
           </li> }
-        { this.orgPresent() && this.renderInOrgNav() }
+        { orgId && renderInOrgNav() }
         { user.username && <li
           className={ classnames({
             active: view === 'USER' && viewID === user.username
@@ -275,36 +260,34 @@ class Navbar extends React.Component {
 
   }
 
-  render() {
-    return (
-      <nav className="navbar navbar-static-top navbar-inverse">
+  return (
+    <nav className="navbar navbar-static-top navbar-inverse">
+      <div className="container-fluid">
         <div className="container-fluid">
-          <div className="container-fluid">
-            <li style={{float:'left'}}>
-              <Link to="/"><img src="/images/logosmall.png" /></Link>
-            </li>
-            <li className="nav navbar-right" style={{textAlign:'right'}}>
-              <br />
-              <span className="company-name">{ this.props.orgName }</span>
-              <br />
-              <a>{ this.getWelcomeText() }</a>
-              <br />
-              { this.renderConnectivity() }
-            </li>            
-          </div>
-          { this.renderLeftNav() }         
-          { this.renderRightNav() }        
+          <li style={{float:'left'}}>
+            <Link to="/"><img src="/images/logosmall.png" /></Link>
+          </li>
+          <li className="nav navbar-right" style={{textAlign:'right'}}>
+            <br />
+            {/* <span className="company-name">{ props.orgName }</span> */}
+            <br />
+            <a>{ getWelcomeText() }</a>
+            <br />
+            { renderConnectivity() }
+          </li>            
         </div>
-      </nav>
-    );
-  }
+        { renderLeftNav() }         
+        { renderRightNav() }        
+      </div>
+    </nav>
+  );
 }
 
 export default connect(
   state => ({
     lastUpdated: state.lastUpdated,
     metric: state.user && state.user.metric,
-    orgName: state.selectedOrg.name,
+    // orgName: state.selectedOrg.name,
     realTimeUpdates: state.realTimeUpdates,
     selectedOrg: state.selectedOrg,
     subview: state.subview,
