@@ -85,7 +85,7 @@ let outstandingInserts = {};
 const relaySocket = dgram.createSocket("udp4");
 function maybeRelayMessage(msg) {
   relayTo.forEach(relayInfo => {
-    log.debug("Relaying to: " + relayInfo.host + ":" + relayInfo.port);
+    log.trace("Relaying to: " + relayInfo.host + ":" + relayInfo.port);
     relaySocket.send(msg, 0, msg.length, relayInfo.port, relayInfo.host);
   });
 }
@@ -199,7 +199,7 @@ socket.on("message", async function(message, remote) {
     isDeviceUpdateOnly = true;
   }
 
-  log.info({
+  log.debug({
     imei: parsed.imei,
     deviceUpdate: deviceUpdate,
   });
@@ -361,7 +361,7 @@ socket.on("message", async function(message, remote) {
     replacerObj[key] = true;
   });
 
-  log.info({
+  log.trace({
     imei: parsed.imei,
     historyUpdate: toInsert,
   });
