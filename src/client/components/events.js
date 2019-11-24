@@ -109,10 +109,10 @@ export default class Events extends React.Component {
   }
 
   renderPagination() {
-    const { count, pageSize } = this.state;
+    const { count, page, pageSize } = this.state;
     const pages = Math.ceil(count / pageSize);
     const elements = [];
-    for (let i = 1; i < pages + 1; i++) {
+    for (let i = 1; i < pages + 1 && i <= 10; i++) {
       elements.push(
         <li key={ i }
         >
@@ -127,7 +127,10 @@ export default class Events extends React.Component {
       );
     }
     elements.push(<li key={ 'nextPage' }>
-      <a className="pointer" onClick={ this.nextPage }>»</a>
+      <a className="pointer" onClick={ () => {
+        this.setState({ page: page + 1 });
+        this.updateEvents();
+      } }>»</a>
     </li>)
 
     return <ul className="pagination">{ elements }</ul>;
@@ -191,7 +194,7 @@ export default class Events extends React.Component {
               >Refresh</button>
             </label>
             <div>
-            { `${count} ${type}` }
+            { `${count} ${type} (${pages} pages)` }
             </div>
             { this.renderPagination() }
           </div>
