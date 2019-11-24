@@ -49,8 +49,14 @@ function Fleets(props) {
   const [selectedAvailableVehicles, setSelectedAvailableVehicles] = useState([]);
   const [selectedInFleetVehicles, setSelectedInFleetVehicles] = useState(selectedFleet ? selectedFleet.vehicles : []);
 
-  const save = () => {
-    appState.saveFleet(selectedFleet);
+  const save = (fleet) => {
+    appState.saveFleet(fleet)
+    .then(() => {
+      toast.success(`${fleet.name} saved.`);
+    })
+    .catch(err => {
+      toast.error(`Failed to save ${fleet.name}: ${err.message}`);
+    });
   }
 
   const resetAvailableVehicles = () => {
@@ -218,7 +224,7 @@ function Fleets(props) {
             <span> </span>
             <button
               disabled={ !selectedFleet.name || selectedFleet.name.trim() === "" }
-              className="btn btn-sm btn-success" onClick={ () => save() }>Save
+              className="btn btn-sm btn-success" onClick={ () => save(selectedFleet) }>Save
             </button>
           </div>
         </div>
