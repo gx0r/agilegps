@@ -44,14 +44,20 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
       return (
-        <div>
-          <h3>Something went wrong.</h3>
-          <pre>
-            { this.state.error + "" }
-            { this.state.error.stack }
-          </pre>
+        <div style={{ margin: '2em' }}>
+          <div>
+            <a href="/">
+              <img src="/images/logosmall.png" />
+            </a>
+          </div>
+          <div>
+            <h4>TODO, handle the following condition:</h4>
+            <pre>
+              { this.state.error + "" }
+              { this.state.error.stack }
+            </pre>
+          </div>
         </div>
       )
     }
