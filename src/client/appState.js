@@ -268,7 +268,7 @@ function login(data) {
     initial = Promise.resolve(fetch("/api/session/", { headers: headers() }));
   }
 
-  startListening(store);
+  startListening(store.dispatch);
 
   return initial
     .then(function(response) {

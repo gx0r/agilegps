@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import * as classnames from 'classnames';
 
 import * as appState from '../appState';
+import { startListening, stopListening } from "../appSocketState";
 
 import reportsSvg from '../svg/reports.svg';
 import mapSvg from '../svg/map.svg';
@@ -69,18 +70,27 @@ class Navbar extends React.Component {
   }
 
   renderConnectivity() {
-    const { realTimeUpdates, user } = this.props;
+    const { dispatch, realTimeUpdates, user } = this.props;
     
     if (!user.username) {
       return null;
     }
 
     return (
-      <a style={{color: realTimeUpdates ? '' : 'red' }}>
+      <a
+        className="pointer"
+        onClick={ () => {
+          if (realTimeUpdates) {
+            stopListening();
+          } else {
+            startListening(dispatch);
+          }
+        }}
+        style={{color: realTimeUpdates ? '' : '' }}>
       
       { realTimeUpdates && `Last update: ${this.formatLastUpdated()} ⚡` }
-      { !realTimeUpdates && 'Connection lost ' }
-      { !realTimeUpdates && <img src={ xcloudSvg } /> }
+      { !realTimeUpdates && 'Real-time disconnected ' }
+      { !realTimeUpdates && <img src={ xcloudSvg } width="24" height="24" /> }
       </a>
     );
   }
@@ -303,5 +313,6 @@ export default connect(
     viewID: state.viewID,
   }),
   dispatch => bindActionCreators({
+    dispatch,
   }, dispatch),
 )(Navbar);
