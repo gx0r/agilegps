@@ -33,6 +33,10 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function getRandomNegative() {
+  return getRandomIntInclusive(0, 1) === 0 ? -1 : 1;
+}
+
 let lat = 44.952833;
 let long = -93.091971;
 let mileage = 1;
@@ -60,9 +64,9 @@ async function startHistory(imei) {
     let gpsAccuracy = getRandomIntInclusive(0, 20);
     let powervcc = 14055;
     let randomLocation = lucidlocation.getRandomLocation();
-    let longitude = long += 0.0001;
-    let latitude = lat;
-    let batteryPercent = getRandomIntInclusive(0, 100);
+    let longitude = long += Math.random() * getRandomNegative() / 300;
+    let latitude = lat += Math.random() * getRandomNegative() / 300;
+    let batteryPercent = getRandomIntInclusive(80, 100);
     let status = "220100";
     let countH = decimalToHex(count, 4);
 
