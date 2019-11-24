@@ -12,7 +12,7 @@ import * as Device from "../../common/models/Device";
 import { createOrgSelector } from './orgselector';
 
 function DeviceEditor(props) {
-  const { orgsByID, devicesByID } = props;
+  const { devicesByID, orgsByID, user } = props;
 
   const { deviceId } = useParams();
   let device;
@@ -20,6 +20,7 @@ function DeviceEditor(props) {
     device = devicesByID[deviceId];
   } else {
     device = new Device();
+    device.orgid = user && user.orgid;
   }
 
   return (
@@ -147,5 +148,6 @@ export default connect(
   state => ({
     devicesByID: state.devicesByID,
     orgsByID: state.orgsByID,
+    user: state.user,
   })
 )(DeviceEditor);
