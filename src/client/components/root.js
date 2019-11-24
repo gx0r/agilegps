@@ -85,7 +85,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/vehicle/new">
+          <Route path="/org/:orgId/vehicle/new">
             <Navbar />
             <div className="container-fluid">
                 <div className="row">
@@ -93,7 +93,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/vehicle/:vehicleId/edit">
+          <Route path="/org/:orgId/vehicle/:vehicleId/edit">
             <Navbar />
             <div className="container-fluid">
                 <div className="row">
