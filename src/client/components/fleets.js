@@ -84,12 +84,6 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
   }
 
   const rightArrow = () => {
-    // console.log(availableVehicles)
-    // const fleet = cloneDeep(selectedFleet);
-    // fleet.vechicles = cloneDeep(selectedAvailableVehicles);
-    // selectFleet(fleet);
-    // setSlectedInFleetVehicles(fleet.vehicles);
-    
     let availableVehicles = toArray(Object.keys(vehiclesByID));
     while (selectedAvailableVehicles.length) {
       const vid = selectedAvailableVehicles.pop();
@@ -99,17 +93,9 @@ function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
       availableVehicles = without(availableVehicles, vid);
     }
     setAvailableVehicles(availableVehicles);
-    // setSelectedAvailableVehicles(selectedAvailableVehicles);
   };
 
   const leftArrow = () => {
-    debugger;
-    // console.log(selectedInFleetVehicles)
-
-    // const fleet = cloneDeep(selectedFleet);
-    // fleet.vechicles = cloneDeep(selectedInFleetVehicles);
-    // selectFleet(fleet);
-    // setSlectedInFleetVehicles(fleet.vehicles);
     let availableVehicles = toArray(Object.keys(vehiclesByID));
     while (selectedInFleetVehicles.length) {
       const vid = selectedInFleetVehicles.pop();
