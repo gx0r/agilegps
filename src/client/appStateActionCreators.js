@@ -56,3 +56,16 @@ export function setAnimationSpeed(value) {
     value,
   };
 };
+
+export function selectFleetAll() {
+  return {
+    type: "SELECT_FLEET_ALL"
+  }
+}
+
+export function selectFleet(fleet) {
+  return {
+    type: "SELECT_FLEET",
+    fleet: fleet
+  }
+}

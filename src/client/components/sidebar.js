@@ -2,9 +2,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { toArray } from 'lodash';
+
+import { selectFleet, selectFleetAll } from '../appStateActionCreators';
 import appState from '../appState';
 
 import TruckFacing from './truckfacing';
@@ -74,9 +75,6 @@ class Sidebar extends React.Component {
     user: PropTypes.object,
   };
 
-  componentDidMount() {
-  }
-  
   handleSearchChange = (event) => {
     this.setState({searchInput: event.target.value});
   }
@@ -85,16 +83,8 @@ class Sidebar extends React.Component {
     this.setState({searchInput: ''});
   }
 
-  selectFleetAll = () => {
-    appState.selectFleetAll();
-  }
-
-  selectFleet = fleet => {
-    appState.selectFleet(fleet);
-  };
-
   renderFleet = fleet => {
-    const { selectedFleets, selectedVehicle, vehiclesByID } = this.props;
+    const { selectedFleets, selectFleet, selectedVehicle, vehiclesByID } = this.props;
     const { searchInput } = this.state;
 
     let selectedFleet = null;
@@ -128,7 +118,7 @@ class Sidebar extends React.Component {
     return (
       <Fragment key={ fleet.id }>
         <li
-          onClick={ () => this.selectFleet(fleet) }
+          onClick={ () => selectFleet(fleet) }
           className={ classnames('list-group-item pointer', {
             active: selectedFleet && selectedFleet.id === fleet.id
           }) }>
@@ -140,7 +130,7 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const { fleets, selectedAllFleets } = this.props;
+    const { fleets, selectedAllFleets, selectFleetAll } = this.props;
     const { searchInput } = this.state;
 
     return (
@@ -165,7 +155,7 @@ class Sidebar extends React.Component {
         <ul className="list-group">
           <li
             key="Fleets/All"
-            onClick={ this.selectFleetAll }
+            onClick={ selectFleetAll }
             className={ classnames('list-group-item pointer', {
             'active': selectedAllFleets,
           }) }><TruckFacing fill="black" /> Fleets/All
@@ -187,6 +177,8 @@ export default connect(
     selectedVehicle: state.selectedVehicle,
     vehiclesByID: state.vehiclesByID,
   }),
-  dispatch => bindActionCreators({
-  }, dispatch),
+  {
+    selectFleet,
+    selectFleetAll,
+  },
 )(Sidebar);
