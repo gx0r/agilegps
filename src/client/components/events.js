@@ -190,12 +190,14 @@ export default class Events extends React.Component {
                 }}
               >Refresh</button>
             </label>
+            <div>
+            { `${count} ${type}` }
+            </div>
             { this.renderPagination() }
           </div>
         </div>
         <div className="row">
           { type === 'events' && <div>Legend: a = azimuth, b = buffered, bp = battery percentage, d = date sent by the unit, faketow = maybe about to be towing, g = gps accuracy (1=most accurate/20=least/0=unknown or not reported), gss = gpsSignalStatus report (1 seeing, 0 not seeing), satelliteNumber = number of GPS satellites seeing, h = engine hours, ig = ignition, igd = ignition duration, m = distance (kilometers), mo = motion, p = powervcc, rid = report id, rty = report type, s = speed (kph)</div> }
-          { `${count} ${type}` }
           <table className="table table-bordered table-striped business-table">
             <thead>
               <tr>
