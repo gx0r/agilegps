@@ -1,32 +1,30 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import "bootstrap/less/bootstrap.less";
-// import "pikaday2/css/pikaday.css";
-import "./style.css";
-require("isomorphic-fetch");
-// require('nprogress/nprogress.css');
-
 import React from "react";
 import ReactDOM from "react-dom";
 
-window.Promise = require("bluebird");
-window.Promise.config({
-  cancellation: true, // animation relies on promise cancellation.
-  longStackTraces: true,
-  warnings: false
-});
+// window.Promise = require("bluebird");
+// window.Promise.config({
+//   cancellation: true, // animation relies on promise cancellation.
+//   longStackTraces: true,
+//   warnings: false
+// });
 
-import appState, { store } from "./appState";
+import { store } from "./appState";
 
-import Root from "./components/root2";
+import Root from "./components/root";
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { toast } from 'react-toastify';
-
 import { ToastContainer } from 'react-toastify';
+
+import "bootstrap/less/bootstrap.less";
+import "./style.css";
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './css/toasts.css';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
