@@ -53,6 +53,10 @@ function Fleets(props) {
     appState.saveFleet(selectedFleet);
   }
 
+  const resetAvailableVehicles = () => {
+    setAvailableVehicles(toArray(Object.keys(vehiclesByID)));
+  }
+
   const createFleet = () => {
     const newFleet = {
       color: 'black',
@@ -61,7 +65,7 @@ function Fleets(props) {
       vehicles: [],
     };
     selectFleet(newFleet);
-    setAvailableVehicles(toArray(Object.keys(vehiclesByID)));
+    resetAvailableVehicles();
     setSelectedInFleetVehicles(newFleet.vehicles);
   };
 
@@ -75,6 +79,8 @@ function Fleets(props) {
     // fleet.vechicles = cloneDeep(selectedAvailableVehicles);
     // selectFleet(fleet);
     // setSlectedInFleetVehicles(fleet.vehicles);
+    
+    let availableVehicles = toArray(Object.keys(vehiclesByID));
     while (selectedAvailableVehicles.length) {
       const vid = selectedAvailableVehicles.pop();
       const vehicle = vehiclesByID[vid];
@@ -83,7 +89,7 @@ function Fleets(props) {
       availableVehicles = without(availableVehicles, vid);
     }
     setAvailableVehicles(availableVehicles);
-    setSelectedAvailableVehicles(selectedAvailableVehicles);
+    // setSelectedAvailableVehicles(selectedAvailableVehicles);
   };
 
   const leftArrow = () => {
@@ -93,14 +99,16 @@ function Fleets(props) {
     // fleet.vechicles = cloneDeep(selectedInFleetVehicles);
     // selectFleet(fleet);
     // setSlectedInFleetVehicles(fleet.vehicles);
+    let availableVehicles = toArray(Object.keys(vehiclesByID));
     while (selectedInFleetVehicles.length) {
       const vid = selectedInFleetVehicles.pop();
       const vehicle = vehiclesByID[vid];
 
-      selectedFleet.vehicles = without(selectedFleet.vehicles, vid);
+      selectedFleet.vehicles = without(selectedFleet.vehicles, [vehicle.id]);
       availableVehicles = union(availableVehicles, [vid]);
     }
     setAvailableVehicles(availableVehicles);
+    setSelectedInFleetVehicles(selectedFleet.vehicles);
   };
 
   return (
@@ -121,7 +129,10 @@ function Fleets(props) {
                     className={ classnames('pointer', 'list-group-item', {
                       active: fleet.name === selectedFleet.name
                     }) }
-                    onClick={ () => selectFleet(fleet) }
+                    onClick={ () => {
+                      selectFleet(fleet);
+                      resetAvailableVehicles();
+                    } }
                   >
                      <CarImage fill={fleet.color} /> { fleet.name }
                   </li>
@@ -177,7 +188,7 @@ function Fleets(props) {
             <div className="col-sm-5">
               <div>Available Vehicles</div>
               <select className="fullwidth form-control" multiple size="20"
-                onBlur={ ev => setSelectedAvailableVehicles(getselectvalues(ev.target)) }
+                onChange={ ev => setSelectedAvailableVehicles(getselectvalues(ev.target)) }
               >
                 {
                   availableVehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
@@ -194,7 +205,7 @@ function Fleets(props) {
             <div className="col-sm-5">
               <div>Vehicles in Fleet</div>
               <select className="fullwidth form-control" multiple size="20"
-                  onBlur={ ev => setSelectedInFleetVehicles(getselectvalues(ev.target)) }
+                  onChange={ ev => setSelectedInFleetVehicles(getselectvalues(ev.target)) }
               >
                 {
                   selectedFleet.vehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
