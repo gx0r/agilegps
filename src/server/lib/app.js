@@ -5,7 +5,7 @@ const Koa = require("koa");
 const app = (module.exports = new Koa());
 const config = require("../../../config/web.js");
 // const session = require("koa-session");
-const Compress = require("koa-compress");
+const Compress = require("kompression");
 const helmet = require("koa-helmet");
 // const Morgan = require("koa-morgan");
 const Conditional = require("koa-conditional-get");
