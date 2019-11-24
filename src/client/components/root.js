@@ -76,6 +76,24 @@ function Root(props) {
               </div>
             </div>
           </Route>
+          <Route path="/org/:orgId/users/new">
+            <EnsureRouteOrgLoaded />
+            <Navbar />
+            <div className="container-fluid">
+                <div className="row">
+                  <UserEditor />
+              </div>
+            </div>
+          </Route>
+          <Route path="/org/:orgId/users/edit/:userId">
+            <EnsureRouteOrgLoaded />
+            <Navbar />
+            <div className="container-fluid">
+                <div className="row">
+                  <UserEditor />
+              </div>
+            </div>
+          </Route>
           <Route path="/org/:orgId/users">
             <EnsureRouteOrgLoaded />
             <Navbar />
