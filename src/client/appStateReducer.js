@@ -28,14 +28,6 @@ module.exports = function reducer(state, action) {
       orgsByID[action.org.id] = action.org;
       return Object.assign({}, state, { orgsByID: orgsByID });
 
-    case "SELECT_ORG":
-      return Object.assign({}, state, {
-        selectedOrg: action.org,
-        selectedItem: null,
-        vehiclesByID: {},
-        selectedVehicleHistory: []
-      });
-
     case "SELECT_FLEET":
       newState.impliedSelectedVehiclesByID = {};
       newState.selectedFleets = [action.fleet];
