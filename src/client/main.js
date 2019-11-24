@@ -81,9 +81,6 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// require("./markers/OrgMarkers");
-require("./appSocketState");
-
 // if ('scrollRestoration' in history) {
 // 	// Back off, browser, I got this...
 // 	history.scrollRestoration = 'manual';

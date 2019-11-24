@@ -1,19 +1,12 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-/**
-Uses Redux ( https://github.com/reactjs/redux ) to handle and keep all application state in one place.
-*/
-const _ = require("lodash");
-const io = require("socket.io-client");
-const Cookies = require("cookies-js");
-const appState = require("./appState");
+import { cloneDeep } from 'lodash';
+import io from 'socket.io-client'
+export { stopListening, startListening };
 
-/*
-Socket.io
-*/
-let lastJwt;
 let socket;
-function handleChange(msg) {
+
+function handleChange(store, msg) {
   msg = JSON.parse(msg);
 
   if (msg.new_val) {
@@ -39,9 +32,8 @@ function handleChange(msg) {
         v: "14055"
         vid: "agen1"
         */
-    const state = appState.getState();
 
-    const event = _.cloneDeep(state.vehiclesByID[msg.new_val.vid]);
+    const event = cloneDeep(store.getState().vehiclesByID[msg.new_val.vid]);
 
     if (event != null) {
       event.last = msg.new_val;
@@ -50,7 +42,7 @@ function handleChange(msg) {
       // 'event' is really the vehicle object with .last property containing the last status.
       // Ideally get rid of the .last and just make it the status itself.
 
-      appState.getStore().dispatch({
+      store.dispatch({
         type: "CHANGED_VEHICLE_HISTORY",
         event: event
       });
@@ -58,154 +50,146 @@ function handleChange(msg) {
   }
 }
 
-appState.getStore().subscribe(function() {
-  const state = appState.getState();
-  const jwt = Cookies.get("jwt");
+function stopListening() {
+  socket.close();
+}
 
-  if (lastJwt !== jwt) {
-    lastJwt = jwt;
-    if (socket) {
-      console.log("Disconnecting socket.");
-      socket.disconnect();
+function startListening(store) {
+  socket = io();
+  socket.on("connect", function() {
+    console.log("Socket connected.");
+    store.dispatch({
+      type: "SOCKET_CONNECT"
+    });
+  });
+  socket.on("disconnect", function(e) {
+    console.error(e);
+    store.dispatch({
+      type: "SOCKET_DISCONNECT"
+    });
+  });
+  socket.on("error", function(e) {
+    console.error(e);
+    store.dispatch({
+      type: "SOCKET_DISCONNECT"
+    });
+  });
+  socket.on("reconnect", function() {
+    console.log("Socket reconnect.");
+    store.dispatch({
+      type: "SOCKET_CONNECT"
+    });
+  });
+
+  // Not needed now as vehicles update their location.
+  // socket.on("vehiclehistory", msg => {
+  //   if (!store.getState().autoUpdate) {
+  //     // Don't auto update map TODO improve this
+  //     return;
+  //   }
+  //   handleChange(store, msg);
+  // });
+
+  const tables = ["users", "devices", "vehicles", "errors"];
+  tables.forEach(function(table) {
+    socket.on(table, ev => {
+      // TODO uncomment for live updates
+      // console.log(ev);
+    });
+  });
+
+  socket.on("organizations", function(ev) {
+    ev = JSON.parse(ev);
+
+    if (ev.new_val == null) {
+      store.dispatch({
+        type: "DELETE_ORG",
+        org: ev.old_val
+      });
+    } else {
+      store.dispatch({
+        type: "SAVE_ORG",
+        org: ev.new_val
+      });
     }
+  });
 
-    if (!state.user.username) {
-      return;
+  socket.on("users", function(ev) {
+    ev = JSON.parse(ev);
+
+    if (ev.new_val == null) {
+      store.dispatch({
+        type: "DELETE_USER",
+        user: ev.old_val
+      });
+    } else {
+      store.dispatch({
+        type: "SAVE_USER",
+        user: ev.new_val
+      });
     }
+  });
 
-    socket = io();
-    socket.on("connect", function() {
-      console.log("Socket connected.");
-      appState.getStore().dispatch({
-        type: "SOCKET_CONNECT"
+  socket.on("devices", function(ev) {
+    ev = JSON.parse(ev);
+
+    if (ev.new_val == null) {
+      store.dispatch({
+        type: "DELETE_DEVICE",
+        device: ev.old_val
       });
-    });
-    socket.on("disconnect", function(e) {
-      console.error(e);
-      appState.getStore().dispatch({
-        type: "SOCKET_DISCONNECT"
+    } else {
+      store.dispatch({
+        type: "SAVE_DEVICE",
+        device: ev.new_val
       });
-    });
-    socket.on("error", function(e) {
-      console.error(e);
-      appState.getStore().dispatch({
-        type: "SOCKET_DISCONNECT"
+    }
+  });
+
+  socket.on("vehicles", function(ev) {
+    ev = JSON.parse(ev);
+
+    if (ev.new_val == null) {
+      store.dispatch({
+        type: "DELETE_VEHICLE",
+        vehicle: ev.old_val
       });
-    });
-    socket.on("reconnect", function() {
-      console.log("Socket reconnect.");
-      appState.getStore().dispatch({
-        type: "SOCKET_CONNECT"
+    } else {
+      store.dispatch({
+        type: "SAVE_VEHICLE",
+        vehicle: ev.new_val
       });
-    });
+    }
+  });
 
-    socket.on("vehiclehistory", msg => {
-      if (!appState.getState().autoUpdate) {
-        // Don't auto update map TODO improve this
-        return;
-      }
-      handleChange(msg);
-    });
-    let tables = ["users", "devices", "vehicles", "errors"];
-    tables.forEach(function(table) {
-      socket.on(table, function(ev) {
-        // TODO uncomment for live updates
-        // console.log(ev);
-      });
-    });
+  socket.on("fleets", function(ev) {
+    let state = store.getState();
+    ev = JSON.parse(ev);
 
-    socket.on("organizations", function(ev) {
-      ev = JSON.parse(ev);
-
-      if (ev.new_val == null) {
-        appState.getStore().dispatch({
-          type: "DELETE_ORG",
-          org: ev.old_val
-        });
-      } else {
-        appState.getStore().dispatch({
-          type: "SAVE_ORG",
-          org: ev.new_val
+    if (ev.new_val == null) {
+      if (ev.old_val.orgid === state.selectedOrg.id) {
+        store.dispatch({
+          type: "DELETE_FLEET",
+          fleet: ev.old_val
         });
       }
-    });
-
-    socket.on("users", function(ev) {
-      ev = JSON.parse(ev);
-
-      if (ev.new_val == null) {
-        appState.getStore().dispatch({
-          type: "DELETE_USER",
-          user: ev.old_val
-        });
-      } else {
-        appState.getStore().dispatch({
-          type: "SAVE_USER",
-          user: ev.new_val
+    } else {
+      if (ev.new_val.orgid === state.selectedOrg.id) {
+        store.dispatch({
+          type: "SAVE_FLEET",
+          fleet: ev.new_val
         });
       }
-    });
+    }
+  });
 
-    socket.on("devices", function(ev) {
-      ev = JSON.parse(ev);
+  socket.on("errors", function(ev) {
+    ev = JSON.parse(ev);
 
-      if (ev.new_val == null) {
-        appState.getStore().dispatch({
-          type: "DELETE_DEVICE",
-          device: ev.old_val
-        });
-      } else {
-        appState.getStore().dispatch({
-          type: "SAVE_DEVICE",
-          device: ev.new_val
-        });
-      }
-    });
+    if (ev.old_val == null) {
+      // window.alert(JSON.stringify(ev.new_val));
+      console.error(JSON.stringify(ev.new_val));
+    }
+  });
+}
 
-    socket.on("vehicles", function(ev) {
-      ev = JSON.parse(ev);
-
-      if (ev.new_val == null) {
-        appState.getStore().dispatch({
-          type: "DELETE_VEHICLE",
-          vehicle: ev.old_val
-        });
-      } else {
-        appState.getStore().dispatch({
-          type: "SAVE_VEHICLE",
-          vehicle: ev.new_val
-        });
-      }
-    });
-
-    socket.on("fleets", function(ev) {
-      let state = appState.getStore().getState();
-      ev = JSON.parse(ev);
-
-      if (ev.new_val == null) {
-        if (ev.old_val.orgid === state.selectedOrg.id) {
-          appState.getStore().dispatch({
-            type: "DELETE_FLEET",
-            fleet: ev.old_val
-          });
-        }
-      } else {
-        if (ev.new_val.orgid === state.selectedOrg.id) {
-          appState.getStore().dispatch({
-            type: "SAVE_FLEET",
-            fleet: ev.new_val
-          });
-        }
-      }
-    });
-
-    socket.on("errors", function(ev) {
-      ev = JSON.parse(ev);
-
-      if (ev.old_val == null) {
-        // window.alert(JSON.stringify(ev.new_val));
-        console.error(JSON.stringify(ev.new_val));
-      }
-    });
-  }
-});
