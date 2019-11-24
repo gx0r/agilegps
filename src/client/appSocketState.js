@@ -22,19 +22,19 @@ function startListening(dispatch) {
     });
   });
   socket.on("disconnect", function(e) {
-    console.error(e);
+    console.warn(e);
     dispatch({
       type: "SOCKET_DISCONNECT"
     });
   });
   socket.on("error", function(e) {
-    console.error(e);
+    console.warn(e);
     dispatch({
       type: "SOCKET_DISCONNECT"
     });
   });
   socket.on("reconnect", function() {
-    console.log("Socket reconnect.");
+    console.warn("Socket reconnect.");
     dispatch({
       type: "SOCKET_CONNECT"
     });
