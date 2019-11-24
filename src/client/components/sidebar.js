@@ -1,12 +1,11 @@
 
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { toArray } from 'lodash';
 
 import { selectFleet, selectFleetAll } from '../appStateActionCreators';
-import appState from '../appState';
+import { Link, useParams } from 'react-router-dom';
 
 import TruckFacing from './truckfacing';
 import CarImage from './car';
@@ -61,32 +60,13 @@ function formatVehicle(vehicle) {
   return str;
 }
 
-class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-    this.state = {
-      searchInput: '',
-    }
-  }
+function Sidebar({ fleets, selectedAllFleets, selectedFleets, selectedVehicle, vehiclesByID, selectFleet, selectFleeetAll }) {
+  const [searchInput, setSearchInput] = useState('');
+  const handleSearchChange = event => setSearchInput(event.target.value);
+  const clearSearch = () => setSearchInput('');
+  const { orgId } = useParams();
 
-  static propTypes = {
-    orgName: PropTypes.string,
-    user: PropTypes.object,
-  };
-
-  handleSearchChange = (event) => {
-    this.setState({searchInput: event.target.value});
-  }
-
-  clearSearch = () => {
-    this.setState({searchInput: ''});
-  }
-
-  renderFleet = fleet => {
-    const { selectedFleets, selectFleet, selectedVehicle, vehiclesByID } = this.props;
-    const { searchInput } = this.state;
-
+  const renderFleet = fleet => {
     let selectedFleet = null;
     if (selectedFleets.length === 1) { // TODO move to reducer/selector
       selectedFleet = selectedFleets[0];
@@ -106,11 +86,12 @@ class Sidebar extends React.Component {
           className={ classnames('list-group-item pointer', {
             active: selectedVehicle === vehicle
           }) }
-          onClick={ () => appState.selectVehicleByID(vehicle.id) }
+          // onClick={ () => appState.selectVehicleByID(vehicle.id) }
           data-key={ vid }
           key={ vid }
-        >
+        ><Link to={ `/org/${orgId}/split/vehicle/${vehicle.id}`}>
           { formatVehicle(vehicle) }
+          </Link>
         </li>
       )
     });
@@ -129,44 +110,39 @@ class Sidebar extends React.Component {
     );
   }
 
-  render() {
-    const { fleets, selectedAllFleets, selectFleetAll } = this.props;
-    const { searchInput } = this.state;
-
-    return (
-      <div className="business-table fullwidth">
-        <form className="form-search">
-          <input
-          className="input-search fullwidth"
-          onChange={ this.handleSearchChange }
-          value={ searchInput }
-          >
-          </input>
-          <span
-           className="middle glyphicon glyphicon-search"
-           style={{
-             position: 'absolute',
-             right: '45px',
-             top: '24px',
-           }}
-           onClick={ this.clearSearch }
-          />
-        </form>
-        <ul className="list-group">
-          <li
-            key="Fleets/All"
-            onClick={ selectFleetAll }
-            className={ classnames('list-group-item pointer', {
-            'active': selectedAllFleets,
-          }) }><TruckFacing fill="black" /> Fleets/All
-          </li>
-          {
-            fleets.map(this.renderFleet)
-          }
-        </ul>
-      </div>
-    );
-  }
+  return (
+    <div className="business-table fullwidth">
+      <form className="form-search">
+        <input
+        className="input-search fullwidth"
+        onChange={ handleSearchChange }
+        value={ searchInput }
+        >
+        </input>
+        <span
+          className="middle glyphicon glyphicon-search"
+          style={{
+            position: 'absolute',
+            right: '45px',
+            top: '24px',
+          }}
+          onClick={ clearSearch }
+        />
+      </form>
+      <ul className="list-group">
+        <li
+          key="Fleets/All"
+          onClick={ selectFleetAll }
+          className={ classnames('list-group-item pointer', {
+          'active': selectedAllFleets,
+        }) }><TruckFacing fill="black" /> Fleets/All
+        </li>
+        {
+          fleets.map(renderFleet)
+        }
+      </ul>
+    </div>
+  );
 }
 
 export default connect(

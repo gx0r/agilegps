@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
@@ -62,8 +62,13 @@ function Vehicle({ animationPlay,
   const [raw, setRaw] = useState(false);
   const [rollup, setRollup] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [adjustedVehicleHistory, setAdjustedVehicleHistory] = useState([]);
 
   const { orgId, vehicleId } = useParams();
+
+  useEffect(() => {
+    setAdjustedVehicleHistory(recalculateHistory());
+  });
 
   const clickItem = historyItem => {
     selectHistoryItemID(historyItem.id);
@@ -106,12 +111,7 @@ function Vehicle({ animationPlay,
     return res;
   }
 
-
-  const adjustedVehicleHistory = recalculateHistory(hist);
-
   const excelHref = `/api/organizations/${orgId}/vehiclehistory/${selectedVehicle}/?format=excel&latlong=${showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&tzOffset=${encodeURIComponent(tzOffset())}`;
-
-  appState.updateSelectedVehicleHistory(orgId, vehicleId);
 
   return (
     <div className="business-table">
