@@ -8,7 +8,6 @@ export function createDeviceSelector(devicesByID, selectedDeviceId, orgId = null
       {
         Object.keys(devicesByID).map(key => {
           const device = devicesByID[key];
-          console.log(key);
           if (device.orgid === orgId) {
             return <option key={ device.imei } value={ device.imei }>{ device.imei }</option>
           }

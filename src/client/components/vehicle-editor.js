@@ -113,13 +113,13 @@ function VehicleEditor(props) {
               <div className="form-group">
                 <label className="col-md-2 control-label">Odometer</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="odometer" />
+                  <Field className="form-control" type="number" name="odometer" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">Engine Hours</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="engineHours" />
+                  <Field className="form-control" type="number" name="engineHours" />
                 </div>
               </div>
               <hr />
@@ -156,97 +156,97 @@ function VehicleEditor(props) {
               <div className="form-group">
                 <label className="col-md-2 control-label">Length</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="length" />
+                  <Field className="form-control" type="number" name="length" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">Width</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="width" />
+                  <Field className="form-control" type="number" name="width" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">Height</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="height" />
+                  <Field className="form-control" type="number" name="height" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">GV Weight</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="gvWeight" />
+                  <Field className="form-control" type="number" name="gvWeight" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">GC Weight</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="gcWeight" />
+                  <Field className="form-control" type="number" name="gcWeight" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">axies</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="axies" />
+                  <Field className="form-control" type="number" name="axies" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">hazardLevel</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="hazardLevel" />
+                  <Field className="form-control" type="checkbox" name="hazardLevel" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">navigationKey</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="navigationKey" />
+                  <Field className="form-control" type="checkbox" name="navigationKey" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">navigationNumber</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="navigationNumber" />
+                  <Field className="form-control" type="checkbox" name="navigationNumber" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">disableHos</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="disableHos" />
+                  <Field className="form-control" type="checkbox" name="disableHos" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">forceMessageReadStatus</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="forceMessageReadStatus" />
+                  <Field className="form-control" type="checkbox" name="forceMessageReadStatus" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">enableAssignedDriverIgnition</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="enableAssignedDriverIgnition" />
+                  <Field className="form-control" type="checkbox" name="enableAssignedDriverIgnition" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">enableTollFuelTab</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="enableTollFuelTab" />
+                  <Field className="form-control" type="checkbox" name="enableTollFuelTab" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">allowCoDriving</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="allowCoDriving" />
+                  <Field className="form-control" type="checkbox" name="allowCoDriving" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">driverLoginEnforced</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="driverLoginEnforced" />
+                  <Field className="form-control" type="checkbox" name="driverLoginEnforced" />
                 </div>
               </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">enableFuelSensor</label>
                 <div className="col-md-10">
-                  <Field className="form-control" name="enableFuelSensor" />
+                  <Field className="form-control" type="checkbox" name="enableFuelSensor" />
                 </div>
               </div>
               <div className="buttons-right">
