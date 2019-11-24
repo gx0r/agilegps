@@ -37,8 +37,8 @@ function deleteFleet(fleet) {
   });
 };
 
-function Fleets(props) {
-  const { fleetsByID, selectedOrg, vehiclesByID } = props;
+function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
+  const { orgId } = useParams();
   const [selectedFleet, selectFleet] = useState({
     id: null,
     name: '',
@@ -67,7 +67,7 @@ function Fleets(props) {
     const newFleet = {
       color: 'black',
       name: 'New Fleet',
-      orgid: selectedOrg.id,
+      orgid: orgId,
       vehicles: [],
     };
     selectFleet(newFleet);
@@ -197,7 +197,7 @@ function Fleets(props) {
                 onChange={ ev => setSelectedAvailableVehicles(getselectvalues(ev.target)) }
               >
                 {
-                  availableVehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
+                  availableVehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid] && vehiclesByID[vid].name }</option>)
                 }
               </select>
             </div>
@@ -214,7 +214,7 @@ function Fleets(props) {
                   onChange={ ev => setSelectedInFleetVehicles(getselectvalues(ev.target)) }
               >
                 {
-                  selectedFleet.vehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid].name }</option>)
+                  selectedFleet.vehicles.map(vid => <option key={ vid } value={vid} >{ vehiclesByID[vid] && vehiclesByID[vid].name }</option>)
                 }
               </select>
             </div>
@@ -236,7 +236,6 @@ function Fleets(props) {
 
 export default connect(
   state => ({
-    selectedOrg: state.selectedOrg,
     fleetsByID: state.fleetsByID,
     vehiclesByID: state.vehiclesByID,
   })
