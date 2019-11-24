@@ -6,8 +6,12 @@ export { stopListening, startListening };
 let socket;
 
 function stopListening() {
-  socket.close();
-  socket = null;
+  if (socket) {
+    socket.close();
+    socket = null;
+  } else {
+    console.warn('Socket already stopped');
+  }
 }
 
 function startListening(dispatch) {
