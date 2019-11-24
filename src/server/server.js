@@ -33,6 +33,8 @@ process.on("exit", function() {
   );
 });
 
+process.title = 'agilegps-server';
+
 let credentials;
 
 if (config.spdy || config.https) {
