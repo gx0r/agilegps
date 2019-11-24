@@ -1,14 +1,13 @@
 // /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  useParams
 } from "react-router-dom";
 
 import Navbar from './navbar';
@@ -30,6 +29,20 @@ import Vehicle from './vehicle';
 import Vehicles from './vehicles';
 import VehicleEditor from './vehicle-editor';
 
+import { loadOrgState, selectFleetAll, selectOrgByID } from '../appState';
+
+function EnsureRouteOrgLoaded() {
+  const { orgId } = useParams();
+
+  useEffect(() => {
+    // selectFleetAll()
+    loadOrgState(orgId)
+    // .then(selectFleetAll);
+  });
+
+  return null;
+}
+
 function Root(props) {
 
   const { selectedVehicle } = props;
@@ -39,195 +52,216 @@ function Root(props) {
   return (
     <Router>
       <div>
-        <Navbar />
-          <Switch>
-            <Route path="/help">
-              <div className="container-fluid">
-                <div className="row">
-                  <Help />
-                </div>
+        <Switch>
+          <Route path="/help">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Help />
               </div>
-            </Route>
-            <Route path="/orgs/new">
-              <div className="container-fluid">
-                <div className="row">
-                  <OrganizationEditor />
-               </div>
+            </div>
+          </Route>
+          <Route path="/orgs/new">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <OrganizationEditor />
               </div>
-            </Route>
-            <Route path="/orgs/edit/:orgId">
-              <div className="container-fluid">
-                <div className="row">
-                  <OrganizationEditor />
-               </div>
+            </div>
+          </Route>
+          <Route path="/orgs/edit/:orgId">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <OrganizationEditor />
               </div>
-            </Route>
-            <Route path="/org/:orgId/users">
-              <div className="container-fluid">
-                  <div className="row">
-                    <Users />
-                </div>
-              </div>
-            </Route>
-            <Route path="/vehicle/new">
-              <div className="container-fluid">
-                  <div className="row">
-                    <VehicleEditor />
-                </div>
-              </div>
-            </Route>
-
-            <Route path="/vehicle/:vehicleId/edit">
-              <div className="container-fluid">
-                  <div className="row">
-                    <VehicleEditor />
-                </div>
-              </div>
-            </Route>
-            <Route path="/org/:orgId/fleets">
-              <Fragment>
-                <div className="container-fluid">
-                  <Fleets />
-]               </div>
-              </Fragment>
-            </Route>
-            <Route path="/org/:orgId/reports">
-              <Fragment>
-                <div className="container-fluid">
-                  <div className="row">
-                    <div className="sidebar col-sm-2">
-                      <Sidebar />
-                    </div>
-                    <div className="col-sm-10">
-                      <div className="shadow">
-                      <Reports />
-                      </div>
-                    </div>            
-                  </div>
-                </div>
-              </Fragment>
-            </Route>
-            <Route path="/org/:orgId/vehicles">
-              <div className="container-fluid">
-                  <div className="row">
-                    <Vehicles />
-                </div>
-              </div>
-            </Route>
-            <Route path="/org/:orgId/map">
-              <Fragment>
-                <div className="container-fluid">
-                  <div className="row">
-                    <div className="sidebar col-sm-2">
-                      <Sidebar />
-                    </div>
-                    <div className="col-sm-10">
-                      <div className="shadow">
-                        <Map split={ false } />
-                      </div>
-                      <br />
-                      { renderVehicleOrOrg() }
-                    </div>            
-                  </div>
-                </div>
-              </Fragment>
-            </Route>
-            <Route path="/org/:orgId">
-              <Fragment>
-                <div className="container-fluid">
-                  <div className="row">
-                    <div className="sidebar col-sm-2">
-                      <Sidebar />
-                    </div>
-                    <div className="col-sm-10">
-                      <div className="shadow">
-                        <Map split={ true } />
-                      </div>
-                      <br />
-                      { renderVehicleOrOrg() }
-                    </div>            
-                  </div>
-                </div>
-              </Fragment>
-            </Route>
-            <Route path="/orgs">
-              <div className="container-fluid">
-                <div className="row">
-                  <Organizations />
-                </div>
-              </div>
-            </Route>
-            <Route path="/devices/new">
-              <div className="container-fluid">
-                <div className="row">
-                  <DeviceEditor />
-                </div>
-              </div>
-            </Route>
-            <Route path="/devices/edit/:deviceId">
-              <div className="container-fluid">
-                <div className="row">
-                  <DeviceEditor />
-                </div>
-              </div>
-            </Route>
-            <Route path="/devices">
-              <div className="container-fluid">
-                <div className="row">
-                  <Devices />
-                </div>
-              </div>
-            </Route>
-            <Route path="/users/new">
-              <div className="container-fluid">
-                <div className="row">
-                  <UserEditor />
-                </div>
-              </div>
-            </Route>
-            <Route path="/users/edit/:userId">
-              <div className="container-fluid">
-                <div className="row">
-                  <UserEditor />
-                </div>
-              </div>
-            </Route>
-            <Route path="/users">
-              <div className="container-fluid">
+            </div>
+          </Route>
+          <Route path="/org/:orgId/users">
+            <Navbar />
+            <div className="container-fluid">
                 <div className="row">
                   <Users />
-                </div>
               </div>
-            </Route>
-            <Route path="/processed_messages">
+            </div>
+          </Route>
+          <Route path="/vehicle/new">
+            <Navbar />
+            <div className="container-fluid">
+                <div className="row">
+                  <VehicleEditor />
+              </div>
+            </div>
+          </Route>
+          <Route path="/vehicle/:vehicleId/edit">
+            <Navbar />
+            <div className="container-fluid">
+                <div className="row">
+                  <VehicleEditor />
+              </div>
+            </div>
+          </Route>
+          <Route path="/org/:orgId/fleets">
+            <Navbar />
+            <Fragment>
+              <div className="container-fluid">
+                <Fleets />
+              </div>
+            </Fragment>
+          </Route>
+          <Route path="/org/:orgId/reports">
+            <Fragment>
               <div className="container-fluid">
                 <div className="row">
-                  <Events type="events" />
+                  <div className="sidebar col-sm-2">
+                    <Sidebar />
+                  </div>
+                  <div className="col-sm-10">
+                    <div className="shadow">
+                    <Reports />
+                    </div>
+                  </div>            
                 </div>
               </div>
-            </Route>
-            <Route path="/raw_messages">
+            </Fragment>
+          </Route>
+          <Route path="/org/:orgId/vehicles">
+            <Navbar />
+            <div className="container-fluid">
+                <div className="row">
+                  <Vehicles />
+              </div>
+            </div>
+          </Route>
+          <Route path="/org/:orgId/map">
+            <Navbar />
+            <Fragment>
               <div className="container-fluid">
                 <div className="row">
-                  <Events type="rawevents" />
+                  <div className="sidebar col-sm-2">
+                    <Sidebar />
+                  </div>
+                  <div className="col-sm-10">
+                    <div className="shadow">
+                      <Map split={ false } />
+                    </div>
+                    <br />
+                    { renderVehicleOrOrg() }
+                  </div>            
                 </div>
               </div>
-            </Route>
-            <Route path="/exceptions">
+            </Fragment>
+          </Route>
+          <Route path="/org/:orgId">
+            <EnsureRouteOrgLoaded />
+            <Navbar />
+            <Fragment>
               <div className="container-fluid">
                 <div className="row">
-                  <Events type="exceptions" />
+                  <div className="sidebar col-sm-2">
+                    <Sidebar />
+                  </div>
+                  <div className="col-sm-10">
+                    <div className="shadow">
+                      <Map split={ true } />
+                    </div>
+                    <br />
+                    { renderVehicleOrOrg() }
+                  </div>            
                 </div>
               </div>
-            </Route>
-            <Route path="/">
-              <div className="container-fluid">
-                <div className="row">
-                  <Session />
-                </div>
+            </Fragment>
+          </Route>
+          <Route path="/orgs">
+            <EnsureRouteOrgLoaded />
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Organizations />
               </div>
-            </Route>
-          </Switch>
+            </div>
+          </Route>
+          <Route path="/devices/new">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <DeviceEditor />
+              </div>
+            </div>
+          </Route>
+          <Route path="/devices/edit/:deviceId">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <DeviceEditor />
+              </div>
+            </div>
+          </Route>
+          <Route path="/devices">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Devices />
+              </div>
+            </div>
+          </Route>
+          <Route path="/users/new">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <UserEditor />
+              </div>
+            </div>
+          </Route>
+          <Route path="/users/edit/:userId">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <UserEditor />
+              </div>
+            </div>
+          </Route>
+          <Route path="/users">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Users />
+              </div>
+            </div>
+          </Route>
+          <Route path="/processed_messages">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Events type="events" />
+              </div>
+            </div>
+          </Route>
+          <Route path="/raw_messages">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Events type="rawevents" />
+              </div>
+            </div>
+          </Route>
+          <Route path="/exceptions">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Events type="exceptions" />
+              </div>
+            </div>
+          </Route>
+          <Route path="/">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Session />
+              </div>
+            </div>
+          </Route>
+        </Switch>
       </div>
     </Router>
   );

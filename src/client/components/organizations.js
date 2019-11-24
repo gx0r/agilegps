@@ -81,7 +81,6 @@ class Organizations extends React.Component {
                         <Link
                           className="btn btn-primary btn-sm"
                           to={ `/org/${org.id}`}
-                          onClick={ () => appState.selectOrgByID(org.id) }
                         ><i className="middle glyphicon glyphicon-searcb" /> Log In</Link>
                       </td>
                       <td>

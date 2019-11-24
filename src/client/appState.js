@@ -106,11 +106,9 @@ module.exports.validateResponse = validateResponse;
 function loadOrgState(orgid) {
   NProgress.inc();
 
-  return Promise.resolve(fetch("/api/organizations/" + orgid, auth()))
-    .then(function(response) {
-      return validateResponse(response);
-    })
-    .then(function(org) {
+  return fetch("/api/organizations/" + orgid, auth())
+    .then(validateResponse)
+    .then(org => {
       NProgress.inc();
 
       store.dispatch({
@@ -120,12 +118,8 @@ function loadOrgState(orgid) {
 
       NProgress.inc();
 
-      let fleetp = Promise.resolve(
-        fetch("/api/organizations/" + orgid + "/fleets", auth())
-      )
-        .then(function(response) {
-          return validateResponse(response);
-        })
+      const fleetp = fetch("/api/organizations/" + orgid + "/fleets", auth())
+        .then(validateResponse)
         .then(function(fleets) {
           NProgress.inc();
 
@@ -136,16 +130,12 @@ function loadOrgState(orgid) {
         });
 
       // LOAD vehicle status
-      let statusp = loadVehicles(orgid);
+      const statusp = loadVehicles(orgid);
 
       // org users
-      let usersp = Promise.resolve(
-        fetch("/api/organizations/" + orgid + "/users", auth())
-      )
-        .then(function(response) {
-          return validateResponse(response);
-        })
-        .then(function(users) {
+      const usersp = fetch("/api/organizations/" + orgid + "/users", auth())
+        .then(validateResponse)
+        .then(users => {
           NProgress.inc();
 
           store.dispatch({
@@ -157,6 +147,7 @@ function loadOrgState(orgid) {
       return Promise.all([fleetp, statusp, usersp]);
     });
 }
+module.exports.loadOrgState = loadOrgState;
 
 function loadVehicles(orgid) {
   NProgress.start();
