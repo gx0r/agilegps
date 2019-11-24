@@ -18,7 +18,7 @@ export default class Events extends React.Component {
       events: [],
       loading: false,
       page: 1,
-      pageSize: 300,
+      pageSize: 30,
       parseDates: true,
       search: '',
     }
