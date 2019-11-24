@@ -2,7 +2,7 @@
 const hasLang = require("./i18n").hasLang;
 const moment = require('moment');
 
-module.exports = {
+module.exports = Object.freeze({
   animationPlaying: false,
   animationSpeed: 15,
 
@@ -40,7 +40,7 @@ module.exports = {
   realTimeUpdates: false, // is the socket.io connection is working
   showLatLong: false,
   verbose: false
-};
+});
 
 // if (navigator.languages) {
 //   for (let lang of navigator.languages) {

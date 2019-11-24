@@ -10,7 +10,6 @@ const Cookies = require("cookies-js");
 const moment = require("moment");
 const createLogger = require("redux-logger").createLogger;
 const reducer = require("./appStateReducer");
-const startListening = require("./appSocketState").startListening;
 const stopListening = require("./appSocketState").stopListening;
 
 const logger = createLogger({
@@ -18,22 +17,24 @@ const logger = createLogger({
   timestamp: true
 });
 
-const composedEnhancers = compose(
-  redux.applyMiddleware(logger),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-)
+const enhancers = [];
+enhancers.push(redux.applyMiddleware(logger));
+
+if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+  enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__());
+}
 
 const store = redux.createStore(
   reducer,
   undefined,
-  composedEnhancers
+  compose(...enhancers)
 );
 module.exports.store = store;
 
 if (Cookies.get("jwt")) {
   setTimeout(() => {
     login();
-  }), 0;
+  }, 0);
 }
 
 function auth() {
@@ -853,238 +854,6 @@ function updateEvents() {
     });
 }
 module.exports.updateEvents = updateEvents;
-
-module.exports.changePage = function(pageNum) {
-  store.dispatch({
-    type: "CHANGE_EVENTS_PAGE",
-    page: pageNum
-  });
-  return updateEvents();
-};
-
-module.exports.changePageSize = function(size) {
-  store.dispatch({
-    type: "CHANGE_EVENTS_PAGE_SIZE",
-    size: size
-  });
-  return updateEvents();
-};
-
-module.exports.changePageSearch = function(search) {
-  store.dispatch({
-    type: "CHANGE_EVENTS_PAGE_SEARCH",
-    search: search
-  });
-  return updateEvents();
-};
-
-module.exports.viewEvents = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "EVENTS",
-    subview: "ALL",
-    viewID: ""
-  });
-  return updateEvents();
-};
-
-module.exports.viewRawEvents = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "RAWEVENTS",
-    subview: "ALL",
-    viewID: ""
-  });
-  return updateEvents();
-};
-
-module.exports.viewExceptions = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "EXCEPTIONS",
-    subview: "ALL",
-    viewID: ""
-  });
-  return updateEvents();
-};
-
-module.exports.viewHelp = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "HELP",
-    subview: "ALL",
-    viewID: ""
-  });
-};
-
-module.exports.viewOrgByID = function(id) {
-  store.dispatch({
-    type: "VIEW",
-    view: "ORG",
-    viewID: id,
-    subview: "SPLIT"
-  });
-};
-
-function viewOrganizations() {
-  store.dispatch({
-    type: "VIEW",
-    view: "ORG",
-    subview: "ALL",
-    viewID: ""
-  });
-}
-module.exports.viewOrganizations = viewOrganizations;
-
-const viewUsers = module.exports.viewUsers = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "USER",
-    subview: "ALL",
-    viewID: ""
-  });
-};
-
-module.exports.viewOrgUsers = function() {
-  let state = store.getState();
-
-  store.dispatch({
-    type: "VIEW",
-    view: "USER",
-    subview: "ORG",
-    viewID: state.selectedOrg.id
-  });
-};
-
-module.exports.viewOrgFleets = function() {
-  let state = store.getState();
-
-  store.dispatch({
-    type: "VIEW",
-    view: "FLEET",
-    subview: "ORG",
-    viewID: state.selectedOrg.id
-  });
-};
-
-module.exports.viewOrgVehicles = function() {
-  let state = store.getState();
-
-  store.dispatch({
-    type: "VIEW",
-    view: "VEHICLE",
-    subview: "ORG",
-    viewID: state.selectedOrg.id
-  });
-};
-
-module.exports.viewDevices = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "DEVICE",
-    subview: "ALL",
-    viewID: ""
-  });
-};
-
-module.exports.viewNewOrganization = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "ORG",
-    subview: "NEW",
-    viewID: ""
-  });
-};
-
-module.exports.viewNewDevice = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "DEVICE",
-    subview: "NEW",
-    viewID: ""
-  });
-};
-
-module.exports.viewNewUser = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "USER",
-    subview: "NEW",
-    viewID: ""
-  });
-};
-
-module.exports.viewNewVehicle = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "VEHICLE",
-    subview: "NEW",
-    viewID: ""
-  });
-};
-
-module.exports.viewVehicleByID = function(id) {
-  store.dispatch({
-    type: "VIEW",
-    view: "VEHICLE",
-    subview: "EDIT",
-    viewID: id
-  });
-};
-
-module.exports.viewDevices = function() {
-  store.dispatch({
-    type: "VIEW",
-    view: "DEVICE",
-    subview: "ALL",
-    viewID: ""
-  });
-};
-
-module.exports.viewDeviceByID = function(id) {
-  store.dispatch({
-    type: "VIEW",
-    view: "DEVICE",
-    subview: "EDIT",
-    viewID: id
-  });
-};
-
-module.exports.viewUserByID = function(id) {
-  store.dispatch({
-    type: "VIEW",
-    view: "USER",
-    subview: "EDIT",
-    viewID: id
-  });
-};
-
-module.exports.viewReports = function() {
-  store.dispatch({
-    type: "VIEW_REPORTS"
-  });
-};
-
-module.exports.viewMap = function() {
-  store.dispatch({
-    type: "VIEW_MAP"
-  });
-};
-
-module.exports.viewSplitScreen = function() {
-  store.dispatch({
-    type: "VIEW_SPLIT_SCREEN"
-  });
-};
-
-module.exports.editOrganization = function(id) {
-  store.dispatch({
-    type: "VIEW",
-    view: "ORG",
-    subview: "EDIT",
-    viewID: id
-  });
-};
 
 module.exports.setAutoUpdate = function(bool) {
   store.dispatch({

@@ -1,18 +1,14 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
 // Reducer for Redux
-let defaultState = require("./appDefaultState");
-
-if (history.state) {
-  defaultState = Object.freeze(Object.assign({}, defaultState, history.state));
-}
+const defaultState = require("./appDefaultState");
 
 module.exports = function reducer(state, action) {
   if (!state) {
     return defaultState;
   }
 
-  var newState = {};
+  const newState = {};
 
   switch (action.type) {
     case "SOCKET_CONNECT":
@@ -41,7 +37,6 @@ module.exports = function reducer(state, action) {
       });
 
     case "SELECT_FLEET":
-      newState = {};
       newState.impliedSelectedVehiclesByID = {};
       newState.selectedFleets = [action.fleet];
       newState.selectedAllFleets = false;
@@ -56,7 +51,6 @@ module.exports = function reducer(state, action) {
       return Object.assign({}, state, newState);
 
     case "SELECT_FLEET_ALL":
-      newState = {};
       newState.selectedFleets = _.cloneDeep(_.toArray(state.fleetsByID));
       newState.impliedSelectedVehiclesByID = {};
       newState.selectedAllFleets = true;
@@ -202,47 +196,6 @@ module.exports = function reducer(state, action) {
       fleetsByID[action.fleet.id] = action.fleet;
       return Object.assign({}, state, { fleetsByID: fleetsByID });
 
-    case "VIEW":
-      var isAllSiteLevel =
-        action.subview === "ALL" &&
-        (action.view === "ORG" ||
-          action.view === "USER" ||
-          action.view === "DEVICE");
-      var isAllOrgs = action.view === "ORG" && action.subview === "ALL";
-
-      return Object.assign({}, state, {
-        view: action.view,
-        subview: action.subview,
-        viewID: action.viewID,
-        selectedOrg: isAllSiteLevel ? {} : state.selectedOrg,
-        selectedAllFleets: isAllOrgs ? false : state.selectedAllFleets,
-        selectedFleets: isAllOrgs ? [] : state.selectedFleets,
-        selectedItem: isAllOrgs ? null : state.selectedItem,
-        selectedVehicle: isAllOrgs ? null : state.selectedVehicle,
-        selectedVehicles: isAllOrgs ? null : state.selectedVehicles,
-        impliedSelectedVehiclesByID: isAllOrgs ? {} : state.impliedSelectedVehiclesByID,
-        selectedVehicleHistory: isAllOrgs ? [] : state.selectedVehicleHistory,
-        vehiclesByID: isAllOrgs ? {} : state.vehiclesByID
-      });
-
-    case "VIEW_SPLIT_SCREEN":
-      return Object.assign({}, state, {
-        view: "ORG",
-        subview: "SPLIT"
-      });
-
-    case "VIEW_MAP":
-      return Object.assign({}, state, {
-        view: "ORG",
-        subview: "MAP"
-      });
-
-    case "VIEW_REPORTS":
-      return Object.assign({}, state, {
-        view: "ORG",
-        subview: "REPORT"
-      });
-
     case "SELECT_ITEM":
       return Object.assign({}, state, {
         selectedItem: action.item
@@ -263,46 +216,6 @@ module.exports = function reducer(state, action) {
       return Object.assign({}, state, {
         selectedVehicleHistory: action.history,
         lastUpdated: new Date()
-      });
-
-    case "CHANGED_VEHICLE_HISTORY":
-      var vehiclesByID = _.cloneDeep(state.vehiclesByID);
-      vehiclesByID[action.event.id] = action.event;
-      let newState = Object.assign({}, state, {
-        vehiclesByID: vehiclesByID,
-        lastUpdated: new Date()
-      });
-      newState.impliedSelectedVehiclesByID = {};
-
-      Object.keys(state.impliedSelectedVehiclesByID).forEach(key => {
-        newState.impliedSelectedVehiclesByID[key] = state.impliedSelectedVehiclesByID[key];
-      });
-
-      return newState;
-
-    case "EVENTS":
-      return Object.assign({}, state, {
-        events: action.events
-      });
-
-    case "CHANGE_EVENTS_PAGE":
-      return Object.assign({}, state, {
-        page: action.page
-      });
-
-    case "CHANGE_EVENTS_PAGE_SIZE":
-      return Object.assign({}, state, {
-        pagesize: action.size
-      });
-
-    case "CHANGE_EVENTS_PAGE_SEARCH":
-      return Object.assign({}, state, {
-        search: action.search
-      });
-
-    case "EVENT_COUNT":
-      return Object.assign({}, state, {
-        eventCount: action.count
       });
 
     case "AUTOUPDATE":
