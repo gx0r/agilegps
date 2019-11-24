@@ -26,7 +26,18 @@ import {
 } from '../appStateActionCreators';
 
 
-function Organization(props) {
+function Organization({ 
+  autoUpdate,
+  impliedSelectedVehiclesByID,
+  selectedMapVehicleID,
+  selectedOrg,
+  setShowLatLong,
+  setShowVerbose,
+  showLatLong,
+  version,
+  verbose,
+  }) {
+  const { orgId } = useParams();
 
   const wasRecentlyUpdated = date => {
     date = new Date(date);
@@ -41,8 +52,6 @@ function Organization(props) {
   }
 
   const clickItem = vehicle => {
-    const { selectedMapVehicleID } = props;
-
     if (vehicle.id === selectedMapVehicleID) {
       appState.selectMapVehicleID(null);
       // ClickListenerFactory.closeInfoWindow();
@@ -58,21 +67,12 @@ function Organization(props) {
       }
     }
   }
-  const { 
-    autoUpdate,
-    impliedSelectedVehiclesByID,
-    selectedMapVehicleID,
-    selectedOrg,
-    setShowLatLong,
-    setShowVerbose,
-    showLatLong,
-    version,
-    verbose,
-    } = props;
 
-    const { orgId } = useParams();
+  const getLastStatus = vehicle => {
+    if (!vehicle) {
+      return null;
+    }
 
-    const getLastStatus = (vehicle) => {
     if (verbose) {
       if (vehicle.lastVerbose && vehicle.last) {
         if (
@@ -90,7 +90,7 @@ function Organization(props) {
     } else if (vehicle.last) {
       return helpers.cleanItem(vehicle.last);
     }
-    }
+  }
 
   const excelHref = `/api/organizations/${orgId}/vehiclestatus?format=excel&latlong=${showLatLong}&verbose=${verbose}&tzOffset=${encodeURIComponent(tzOffset())}`;
 
@@ -153,6 +153,10 @@ function Organization(props) {
           Object.keys(impliedSelectedVehiclesByID).map(id => {
             const vehicle = impliedSelectedVehiclesByID[id];
             const lastStatus = getLastStatus(vehicle);
+            
+            if (!vehicle) {
+              return null;
+            }
             
             if (!lastStatus) {
               return (
