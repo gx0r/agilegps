@@ -20,6 +20,7 @@ function VehicleEditor(props) {
     vehicle = vehiclesByID[vehicleId];
   } else {
     vehicle = new Vehicle();
+    vehicle.orgid = selectedOrg && selectedOrg.id;
   }
 
   return (

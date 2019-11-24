@@ -8,7 +8,6 @@ import { confirmAlert } from 'react-confirm-alert';
 
 import { translate as t } from "../i18n";
 import * as appState from '../appState';
-import { viewNewVehicle } from "../appStateActionCreators";
 
 function deleteVehicle(vehicle) {
   confirmAlert({
@@ -45,18 +44,16 @@ class Vehicles extends React.Component {
     const {
       devicesByID,
       vehiclesByID,
-      viewNewVehicle,
     } = this.props;
 
     return (
       <div>
         <div className="col-md-1" />
         <div className="col-md-10 business-table">
-          <button
+          <Link to="/vehicle/new"
             className="btn btn-default"
             style={{marginBottom: '1em'}}
-            onClick={ viewNewVehicle }
-          >New Vehicle</button>
+          >New Vehicle</Link>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>
@@ -108,7 +105,4 @@ export default connect(
     devicesByID: state.devicesByID,
     vehiclesByID: state.vehiclesByID,
   }),
-  {
-    viewNewVehicle,
-  },
 )(Vehicles);
