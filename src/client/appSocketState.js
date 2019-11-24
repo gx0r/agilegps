@@ -1,16 +1,22 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
-import { cloneDeep } from 'lodash';
 import io from 'socket.io-client'
 export { stopListening, startListening };
 
 let socket;
+let listening = false;
 
 function stopListening() {
   socket.close();
+  listening = false;
 }
 
 function startListening(dispatch) {
+  if (listening) {
+    throw new Error('already listening');
+  }
+  listening = true;
+
   socket = io();
   socket.on("connect", function() {
     console.log("Socket connected.");

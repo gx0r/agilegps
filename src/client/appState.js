@@ -268,8 +268,6 @@ function login(data) {
     initial = Promise.resolve(fetch("/api/session/", { headers: headers() }));
   }
 
-  startListening(store.dispatch);
-
   return initial
     .then(function(response) {
       NProgress.inc();
@@ -345,7 +343,6 @@ module.exports.logOut = function() {
     return viewLogin();
   })
   .finally ( () => {
-    stopListening();
   })
 };
 
