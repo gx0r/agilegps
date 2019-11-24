@@ -35,9 +35,7 @@ function EnsureRouteOrgLoaded() {
   const { orgId } = useParams();
 
   useEffect(() => {
-    // selectFleetAll()
-    loadOrgState(orgId)
-    // .then(selectFleetAll);
+    loadOrgState(orgId);
   });
 
   return null;

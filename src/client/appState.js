@@ -283,15 +283,6 @@ module.exports.getStore = function() {
   return store;
 };
 
-function selectFleetAll() {
-  store.dispatch({
-    type: "SELECT_FLEET_ALL"
-  });
-
-  return Promise.resolve();
-}
-module.exports.selectFleetAll = selectFleetAll;
-
 module.exports.deleteOrg = function(org) {
   return Promise.resolve(
     fetch(
@@ -381,9 +372,7 @@ module.exports.deleteVehicle = function(vehicle) {
       )
     )
   )
-    .then(function(response) {
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function() {
       store.dispatch({
         type: "DELETE_VEHICLE",
@@ -396,16 +385,11 @@ module.exports.saveFleet = function(fleet) {
   NProgress.start();
 
   if (fleet.id) {
-    return Promise.resolve(
-      fetch(
+    return fetch(
         "/api/organizations/" + fleet.orgid + "/fleets/" + fleet.id,
         put(fleet)
       )
-    )
-      .then(function(response) {
-        NProgress.inc();
-        return validateResponse(response);
-      })
+      .then(validateResponse)
       .then(function(fleet) {
         store.dispatch({
           type: "SAVE_FLEET",
@@ -421,19 +405,14 @@ module.exports.saveFleet = function(fleet) {
     return Promise.resolve(
       fetch("/api/organizations/" + fleet.orgid + "/fleets/", post(fleet))
     )
-      .then(function(response) {
-        NProgress.inc();
-        return validateResponse(response);
-      })
+      .then(validateResponse)
       .then(function(fleet) {
         store.dispatch({
           type: "SAVE_FLEET",
           fleet: fleet
         });
       })
-      .finally(function() {
-        NProgress.done();
-      });
+      .finally(NProgress.done);
   }
 };
 
@@ -473,13 +452,6 @@ module.exports.deleteFleet = function(fleet) {
     });
 };
 
-module.exports.selectFleet = function(fleet) {
-  store.dispatch({
-    type: "SELECT_FLEET",
-    fleet: fleet
-  });
-};
-
 function updateSelectedVehicleHistory() {
   NProgress.start();
   let state = store.getState();
@@ -512,17 +484,6 @@ function updateSelectedVehicleHistory() {
     });
 }
 module.exports.updateSelectedVehicleHistory = updateSelectedVehicleHistory;
-
-function update() {
-  let state = store.getState();
-
-  if (state.selectedVehicle) {
-    return updateSelectedVehicleHistory();
-  } else {
-    return loadVehicles(state.selectedOrg.id);
-  }
-}
-module.exports.update = update;
 
 module.exports.selectVehicleByID = function(id) {
   store.dispatch({
