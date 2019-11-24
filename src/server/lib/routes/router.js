@@ -172,11 +172,11 @@ router.get("/api/rawevents", jwtrequired, mustBeAdmin, async function(
 ) {
   let search = ctx.query.search;
   let events = getRawEvents(search);
-  if (ctx.query.page && ctx.query.pagesize) {
+  if (ctx.query.page && ctx.query.pageSize) {
     let page = parseInt(ctx.query.page, 10);
     page = page - 1;
-    let pagesize = parseInt(ctx.query.pagesize, 10);
-    events = events.slice(page * pagesize, page * pagesize + pagesize, {
+    let pageSize = parseInt(ctx.query.pageSize, 10);
+    events = events.slice(page * pageSize, page * pageSize + pageSize, {
       right_bound: "open"
     });
   }
