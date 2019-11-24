@@ -152,16 +152,16 @@ router.get("/api/count/events", jwtrequired, mustBeAdmin, async function(
   };
 });
 
-const MAX_RAW_EVENTS = 20000;
+// const MAX_RAW_EVENTS = 20000;
 function getRawEvents(search) {
   let events = r.table("rawevents");
   if (search) {
     events = events.getAll(search, { index: "imei" });
     events = events.orderBy(r.desc("date"));
-    events = events.limit(MAX_RAW_EVENTS);
+    // events = events.limit(MAX_RAW_EVENTS);
   } else {
     events = events.orderBy({ index: r.desc("date") });
-    events = events.limit(MAX_RAW_EVENTS);
+    // events = events.limit(MAX_RAW_EVENTS);
   }
   return events;
 }
