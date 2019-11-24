@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import * as classnames from 'classnames';
 import { Link } from "react-router-dom";
 
 import * as appState from '../appState';
@@ -10,7 +9,6 @@ import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 
 import { getRelevantUsers } from '../selectors/getUsers.js';
-import { viewNewUser } from "../appStateActionCreators";
 import { translate as t } from "../i18n";
 import { useParams } from "react-router-dom";
 
@@ -54,9 +52,8 @@ function deleteUser(user) {
   });
 };
 
-function Users(props) {
+function Users({orgsByID, usersByID}) {
   const getOrgName = id => {
-    const { orgsByID } = props;
     if (orgsByID[id]) {
       return orgsByID[id].name;
     } else {
@@ -67,11 +64,6 @@ function Users(props) {
   let { orgId } = useParams();
   orgId = orgId && orgId.trim();
   console.log(orgId);
-
-  const {
-    usersByID,
-    viewNewUser,
-  } = props;
 
   return (
     <div>
@@ -140,7 +132,4 @@ export default connect(
     orgsByID: state.orgsByID,
     usersByID: getRelevantUsers(state),
   }),
-  {
-    viewNewUser,
-  },
 )(Users);
