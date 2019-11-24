@@ -151,6 +151,60 @@ function Root(props) {
               </div>
             </div>
           </Route>
+          <Route path="/org/:orgId/split/vehicle/:vehicleId">
+            <EnsureRouteOrgLoaded />
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="sidebar col-sm-2">
+                  <Sidebar />
+                </div>
+                <div className="col-sm-10">
+                  <div className="shadow">
+                    <Map split={ true } />
+                  </div>
+                  <br />
+                  <Vehicle />
+                </div>            
+              </div>
+            </div>
+          </Route>
+          <Route path="/org/:orgId/split/fleet/:fleetName">
+            <EnsureRouteOrgLoaded />
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="sidebar col-sm-2">
+                  <Sidebar />
+                </div>
+                <div className="col-sm-10">
+                  <div className="shadow">
+                    <Map split={ true } />
+                  </div>
+                  <br />
+                  { renderVehicleOrOrg() }
+                </div>            
+              </div>
+            </div>
+          </Route>
+          <Route path="/org/:orgId/split">
+            <EnsureRouteOrgLoaded />
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="sidebar col-sm-2">
+                  <Sidebar />
+                </div>
+                <div className="col-sm-10">
+                  <div className="shadow">
+                    <Map split={ true } />
+                  </div>
+                  <br />
+                  { renderVehicleOrOrg() }
+                </div>            
+              </div>
+            </div>
+          </Route>
           <Route path="/org/:orgId">
             <EnsureRouteOrgLoaded />
             <Navbar />

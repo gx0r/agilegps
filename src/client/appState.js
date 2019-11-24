@@ -432,16 +432,15 @@ module.exports.deleteFleet = function(fleet) {
     });
 };
 
-function updateSelectedVehicleHistory() {
+function updateSelectedVehicleHistory(orgid, vid) {
   NProgress.start();
   let state = store.getState();
-  let vehicle = state.selectedVehicle;
 
   let url =
     "/api/organizations/" +
-    vehicle.orgid +
+    orgid +
     "/vehiclehistory/" +
-    vehicle.id +
+    vid +
     "?startDate=" +
     encodeURIComponent(state.startDate.toISOString(true)) +
     "&endDate=" +
@@ -452,7 +451,7 @@ function updateSelectedVehicleHistory() {
     .then(function(history) {
       store.dispatch({
         type: "VEHICLE_HISTORY",
-        vehicle: vehicle,
+        // vehicle: vehicle,
         history: history
       });
     })
