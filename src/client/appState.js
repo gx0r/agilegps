@@ -166,7 +166,7 @@ function loadVehicles(orgid) {
 
 function fetchOrganizations() {
   NProgress.inc();
-  return Promise.resolve(fetch("/api/organizations/", auth()))
+  return fetch("/api/organizations/", auth())
     .then(validateResponse)
     .then(orgs => {
       store.dispatch({
@@ -182,7 +182,7 @@ function loadSiteAdminData() {
   let orgsp = fetchOrganizations();
 
   // LOAD USERS
-  let usersp = Promise.resolve(fetch("/api/users/", auth()))
+  let usersp = fetch("/api/users/", auth())
     .then(validateResponse)
     .then(function(users) {
       NProgress.inc();
@@ -204,7 +204,7 @@ function loadSiteAdminData() {
     });
 
   // LOAD all vehicles (needed for device <-> vehicle association)
-  let vehiclesp = Promise.resolve(fetch("/api/vehicles/", auth()))
+  let vehiclesp = fetch("/api/vehicles/", auth())
     .then(validateResponse)
     .then(function(vehicles) {
       NProgress.inc();
@@ -224,9 +224,9 @@ function login(data) {
 
   let initial;
   if (data) {
-    initial = Promise.resolve(fetch("/api/session/", postWithCookies(data)));
+    initial = fetch("/api/session/", postWithCookies(data));
   } else {
-    initial = Promise.resolve(fetch("/api/session/", { headers: headers() }));
+    initial = fetch("/api/session/", { headers: headers() });
   }
 
   return initial
@@ -284,17 +284,13 @@ module.exports.getStore = function() {
 };
 
 module.exports.deleteOrg = function(org) {
-  return Promise.resolve(
-    fetch(
+  return fetch(
       "/api/organizations/" + org.id,
       Object.assign(auth(), {
         method: "DELETE"
       })
     )
-  )
-    .then(function(response) {
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function() {
       store.dispatch({
         type: "DELETE_ORG",
@@ -311,17 +307,13 @@ module.exports.deleteUser = function(user) {
     url = "/api/users/" + user.username;
   }
 
-  return Promise.resolve(
-    fetch(
+  return fetch(
       url,
       Object.assign(auth(), {
         method: "DELETE"
       })
     )
-  )
-    .then(function(response) {
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function() {
       store.dispatch({
         type: "DELETE_USER",
@@ -331,8 +323,7 @@ module.exports.deleteUser = function(user) {
 };
 
 module.exports.deleteDevice = function(device) {
-  return Promise.resolve(
-    fetch(
+  return fetch(
       "/api/devices/" + device.imei,
       Object.assign(
         {
@@ -341,10 +332,7 @@ module.exports.deleteDevice = function(device) {
         auth()
       )
     )
-  )
-    .then(function(response) {
-      return validateResponse(response);
-    })
+    .then(validateResponse)
     .then(function() {
       store.dispatch({
         type: "DELETE_DEVICE",
@@ -361,8 +349,7 @@ module.exports.deleteVehicle = function(vehicle) {
     url = "/api/vehicles/" + vehicle.id;
   }
 
-  return Promise.resolve(
-    fetch(
+  return fetch(
       url,
       Object.assign(
         {
@@ -371,7 +358,6 @@ module.exports.deleteVehicle = function(vehicle) {
         auth()
       )
     )
-  )
     .then(validateResponse)
     .then(function() {
       store.dispatch({
@@ -396,15 +382,11 @@ module.exports.saveFleet = function(fleet) {
           fleet: fleet
         });
       })
-      .finally(function() {
-        NProgress.done();
-      });
+      .finally(NProgress.done);
   } else {
     delete fleet.id;
 
-    return Promise.resolve(
-      fetch("/api/organizations/" + fleet.orgid + "/fleets/", post(fleet))
-    )
+    return fetch("/api/organizations/" + fleet.orgid + "/fleets/", post(fleet))
       .then(validateResponse)
       .then(function(fleet) {
         store.dispatch({
@@ -426,8 +408,7 @@ module.exports.deleteFleet = function(fleet) {
     url = "/api/fleet/" + fleet.id;
   }
 
-  return Promise.resolve(
-    fetch(
+  return fetch(
       url,
       Object.assign(
         {
@@ -436,7 +417,6 @@ module.exports.deleteFleet = function(fleet) {
         auth()
       )
     )
-  )
     .then(function(response) {
       if (response.ok) {
         store.dispatch({
@@ -467,11 +447,8 @@ function updateSelectedVehicleHistory() {
     "&endDate=" +
     encodeURIComponent(state.endDate.toISOString(true));
 
-  return Promise.resolve(fetch(url, auth()))
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
+  return fetch(url, auth())
+    .then(validateResponse)
     .then(function(history) {
       store.dispatch({
         type: "VEHICLE_HISTORY",
@@ -479,9 +456,7 @@ function updateSelectedVehicleHistory() {
         history: history
       });
     })
-    .finally(function() {
-      NProgress.done();
-    });
+    .finally(NProgress.done);
 }
 module.exports.updateSelectedVehicleHistory = updateSelectedVehicleHistory;
 
@@ -512,7 +487,7 @@ module.exports.saveOrg = function(org) {
   NProgress.start();
 
   if (org.id) {
-    return Promise.resolve(fetch("/api/organizations/" + org.id, put(org)))
+    return fetch("/api/organizations/" + org.id, put(org))
       .then(function(response) {
         NProgress.inc();
         return validateResponse(response);
@@ -523,13 +498,11 @@ module.exports.saveOrg = function(org) {
           org: org
         });
       })
-      .finally(function() {
-        NProgress.done();
-      });
+      .finally(NProgress.done);
   } else {
     delete org.id;
 
-    return Promise.resolve(fetch("/api/organizations/", post(org)))
+    return fetch("/api/organizations/", post(org))
       .then(function(response) {
         NProgress.inc();
         return validateResponse(response);
@@ -540,14 +513,12 @@ module.exports.saveOrg = function(org) {
           org: org
         });
       })
-      .finally(function() {
-        NProgress.done();
-      });
+      .finally(NProgress.done);
   }
 };
 module.exports.saveUser = function(user) {
   NProgress.start();
-  return Promise.resolve(fetch("/api/users/" + user.username, put(user)))
+  return fetch("/api/users/" + user.username, put(user))
     .then(function(response) {
       NProgress.inc();
       return validateResponse(response);
@@ -558,72 +529,51 @@ module.exports.saveUser = function(user) {
         user: user
       });
     })
-    .finally(function() {
-      NProgress.done();
-    });
+    .finally(NProgress.done);
 };
 
 module.exports.putVehicle = function(vehicle) {
   NProgress.start();
-  return Promise.resolve(
-    fetch(
+  return fetch(
       "/api/organizations/" + vehicle.orgid + "/vehicles/" + vehicle.id,
       put(vehicle)
     )
-  )
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
-    .then(function(vehicle) {
+    .then(validateResponse)
+    .then(vehicle => {
       store.dispatch({
         type: "SAVE_VEHICLE",
         vehicle: vehicle
       });
     })
-    .finally(function() {
-      NProgress.done();
-    });
+    .finally(NProgress.done);
 };
 
 module.exports.postVehicle = function(vehicle) {
   NProgress.start();
   delete vehicle.id;
 
-  return Promise.resolve(
-    fetch("/api/organizations/" + vehicle.orgid + "/vehicles/", post(vehicle))
-  )
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
-    .then(function(vehicle) {
+  return fetch("/api/organizations/" + vehicle.orgid + "/vehicles/", post(vehicle))
+    .then(validateResponse)
+    .then(vehicle => {
       store.dispatch({
         type: "SAVE_VEHICLE",
         vehicle: vehicle
       });
     })
-    .finally(function() {
-      NProgress.done();
-    });
+    .finally(NProgress.done);
 };
 
 module.exports.saveDevice = function(device) {
   NProgress.start();
-  return Promise.resolve(fetch("/api/devices/" + device.imei, put(device)))
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
-    .then(function(device) {
+  return fetch("/api/devices/" + device.imei, put(device))
+    .then(validateResponse)
+    .then(device => {
       store.dispatch({
         type: "SAVE_DEVICE",
         device: device
       });
     })
-    .finally(function() {
-      NProgress.done();
-    });
+    .finally(NProgress.done);
 };
 
 module.exports.clickItem = function(item) {
@@ -656,62 +606,6 @@ function selectDay(startDate) {
   return updateSelectedVehicleHistory();
 }
 module.exports.selectDay = selectDay;
-
-function updateEvents() {
-  NProgress.start();
-
-  let state = store.getState();
-  let type = _.lowerCase(state.view);
-  NProgress.start();
-
-  return Promise.resolve(
-    fetch(
-      "/api/count/" +
-        type +
-        (type === "rawevents"
-          ? "?search=" + encodeURIComponent(state.search)
-          : ""),
-      auth()
-    )
-  )
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
-    .then(function(result) {
-      NProgress.inc();
-      store.dispatch({
-        type: "EVENT_COUNT",
-        count: result.count
-      });
-    })
-    .then(function() {
-      let url =
-        "/api/" +
-        type +
-        "/?page=" +
-        state.page +
-        "&pagesize=" +
-        state.pagesize +
-        "&search=" +
-        encodeURIComponent(state.search);
-      return Promise.resolve(fetch(url, auth()));
-    })
-    .then(function(response) {
-      NProgress.inc();
-      return validateResponse(response);
-    })
-    .then(function(events) {
-      store.dispatch({
-        type: "EVENTS",
-        events: events
-      });
-    })
-    .finally(function() {
-      NProgress.done();
-    });
-}
-module.exports.updateEvents = updateEvents;
 
 module.exports.setAutoUpdate = function(bool) {
   store.dispatch({
