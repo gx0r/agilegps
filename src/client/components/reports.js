@@ -9,10 +9,8 @@ import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
 
 import * as appState from '../appState';
-
-import {
-  selectDays,
-} from '../appStateActionCreators';
+import * as tzOffset from "../tzoffset";
+import { auth } from '../appState';
 
 const reports = {
   idle: null,
@@ -20,19 +18,21 @@ const reports = {
 };
 
 
-function Reports({ endDate, impliedSelectedVehicles, orgsByID, selectDays, startDate, vehiclesByID }) {
+function Reports({ impliedSelectedVehicles, orgsByID, vehiclesByID }) {
   const { orgId } = useParams();
   const [focusedInput, setFocusedInput] = useState(null);
   const [executing, setExecuting] = useState(false);
   const [reportType, setReportType] = useState('idle');
   const [results, setResults] = useState({});
+  const [startDate, setStartDate] = useState(moment());
+  const [endDate, setEndDate] = useState(moment());
 
   const execute = () => {
     setExecuting(true);
     const ids = impliedSelectedVehicles.map(vehicle => vehicle.id);
     
-    fetch(`/api/organizations/${orgId}/reports/${encodeURIComponent(ctrl.reportName())}?vehicles=${encodeURIComponent(JSON.stringify(IDs))}&startDate=${encodeURIComponent(ctrl.startDate().toISOString())}&endDate=${encodeURIComponent(
-          moment(ctrl.endDate()).add(1, "day").toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
+    fetch(`/api/organizations/${orgId}/reports/${encodeURIComponent(reportType)}?vehicles=${encodeURIComponent(JSON.stringify(ids))}&startDate=${encodeURIComponent(startDate.toISOString())}&endDate=${encodeURIComponent(
+          moment(endDate).add(1, "day").toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
       .then(results => {
         setResults(results);
         setExecuting(false);
@@ -67,7 +67,10 @@ function Reports({ endDate, impliedSelectedVehicles, orgsByID, selectDays, start
               startDateId="reports_start_date_id" // PropTypes.string.isRequired,
               endDate={ moment(endDate) } // momentPropTypes.momentObj or null,
               endDateId="reports_end_date_id" // PropTypes.string.isRequired,
-              onDatesChange={ ({ startDate, endDate }) => selectDays(startDate, endDate) } // PropTypes.func.isRequired,
+              onDatesChange={ ({ startDate, endDate }) => {
+                setStartDate(startDate);
+                setEndDate(endDate);
+              } } // PropTypes.func.isRequired,
               focusedInput={ focusedInput } // PropTypes.oneOf([START_DATE, END_DATE]) or null,
               onFocusChange={ focusedInput => setFocusedInput(focusedInput) } // PropTypes.func.isRequired,
               isOutsideRange={ () => false }
@@ -95,7 +98,4 @@ export default connect(
     orgsByID: state.orgsByID,
     vehiclesByID: state.vehiclesByID,
   }),
-  {
-    selectDays,
-  }
 )(Reports);
