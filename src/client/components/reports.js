@@ -14,11 +14,35 @@ import {
   selectDays,
 } from '../appStateActionCreators';
 
-function Reports(props) {
-  const { orgId } = useParams();
-  const { endDate, orgsByID, selectDays, startDate, vehiclesByID } = props;
+const reports = {
+  idle: null,
+  obd: null,
+};
 
+
+function Reports({ endDate, impliedSelectedVehicles, orgsByID, selectDays, startDate, vehiclesByID }) {
+  const { orgId } = useParams();
   const [focusedInput, setFocusedInput] = useState(null);
+  const [executing, setExecuting] = useState(false);
+  const [reportType, setReportType] = useState('idle');
+  const [results, setResults] = useState({});
+
+  const execute = () => {
+    setExecuting(true);
+    const ids = impliedSelectedVehicles.map(vehicle => vehicle.id);
+    
+    fetch(`/api/organizations/${orgId}/reports/${encodeURIComponent(ctrl.reportName())}?vehicles=${encodeURIComponent(JSON.stringify(IDs))}&startDate=${encodeURIComponent(ctrl.startDate().toISOString())}&endDate=${encodeURIComponent(
+          moment(ctrl.endDate()).add(1, "day").toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
+      .then(results => {
+        setResults(results);
+        setExecuting(false);
+      })
+      .catch(function(err) {
+        setExecuting(false);
+        ctrl.error = err;
+        throw err;
+      });
+  }
 
   return (
     <div className="business-table">
@@ -50,6 +74,14 @@ function Reports(props) {
             />
           </div>
           <div className="col-md-3">
+            <select size={ Object.keys(reports).length } className="form-control" onChange={ key => setReportType(key) }>
+            { Object.keys(reports).map(key => <option selected={ key === reportType} value={ key }>{key}</option>) }
+            </select>
+            <button className="btn btn-default btn-success" style={{marginTop:'1em',marginBottom: '1em'}}
+              disabled={ executing } onClick={ () => execute(reportType) }
+            >
+              { executing ? 'Executing...' : 'Run!' }
+            </button>
           </div>
       </div>
       <div className="col-sm-3" />
@@ -59,6 +91,7 @@ function Reports(props) {
 
 export default connect(
   state => ({
+    impliedSelectedVehicles: state.impliedSelectedVehicles,
     orgsByID: state.orgsByID,
     vehiclesByID: state.vehiclesByID,
   }),
