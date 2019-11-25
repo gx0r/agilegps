@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 import * as appState from '../appState';
 import * as tzOffset from "../tzoffset";
-import { auth } from '../appState';
+import { auth, validateResponse } from '../appState';
 
 const reports = {
   idle: null,
@@ -18,7 +18,7 @@ const reports = {
 };
 
 
-function Reports({ impliedSelectedVehicles, orgsByID, vehiclesByID }) {
+function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const { orgId } = useParams();
   const [focusedInput, setFocusedInput] = useState(null);
   const [executing, setExecuting] = useState(false);
@@ -29,17 +29,18 @@ function Reports({ impliedSelectedVehicles, orgsByID, vehiclesByID }) {
 
   const execute = () => {
     setExecuting(true);
-    const ids = impliedSelectedVehicles.map(vehicle => vehicle.id);
+    const ids = Object.keys(impliedSelectedVehiclesByID);
     
     fetch(`/api/organizations/${orgId}/reports/${encodeURIComponent(reportType)}?vehicles=${encodeURIComponent(JSON.stringify(ids))}&startDate=${encodeURIComponent(startDate.toISOString())}&endDate=${encodeURIComponent(
           moment(endDate).add(1, "day").toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
+      .then(validateResponse)
       .then(results => {
         setResults(results);
         setExecuting(false);
       })
       .catch(function(err) {
+        toast.error(err.message);
         setExecuting(false);
-        ctrl.error = err;
         throw err;
       });
   }
@@ -94,7 +95,7 @@ function Reports({ impliedSelectedVehicles, orgsByID, vehiclesByID }) {
 
 export default connect(
   state => ({
-    impliedSelectedVehicles: state.impliedSelectedVehicles,
+    impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
     orgsByID: state.orgsByID,
     vehiclesByID: state.vehiclesByID,
   }),
