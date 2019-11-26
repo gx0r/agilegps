@@ -113,7 +113,7 @@ if (tlsServer) {
   });
 }
 
-if (process.getuid() === 0) {
+if (process.setegid && process.getuid() === 0) {
   // if we are root
   // we have opened the sockets, now drop our root privileges
   process.setgid("nobody");
