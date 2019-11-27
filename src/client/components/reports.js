@@ -8,7 +8,7 @@ import moment from 'moment';
 import { DateRangePicker } from 'react-dates';
 import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
-import { isFinite, merge } from 'lodash';
+import { get, isFinite, merge } from 'lodash';
 
 import * as tzOffset from "../tzoffset";
 import { auth, validateResponse } from '../appState';
@@ -490,34 +490,44 @@ function Jes({results, vehicles}) {
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
           <tr>
-            <td>Ign On</td>
-            <td>Ign Off</td>
-            <td>Ignition On Time</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-            <td>Parked @</td>
-            <td>Parked Until</td>
-            <td>Parked Time</td>
-            <td>Idle Time</td>
+            <td>Date</td>
+            <td>Location</td>
+            <td>City</td>
+            <td>State</td>
+            <td>RPM Max</td>
+            <td>RPM avg</td>
+            <td>Throttle max</td>
+            <td>Throttle avg</td>
+            <td>Engine Load max</td>
+            <td>Engine Load avg</td>
           </tr>
         </thead>
         <tbody>
           {
             Object.keys(vehicles).map(vid =>
             <tr key={ key++ }>
-              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              <td colspan="18" className="group">{ vehicles[vid].name }</td>
               {
-                results[vid].map(item =>
-                  <tr key={ key++ }>
-                    <td>{ item.startTime && formatDate(item.startTime) }</td>
-                    <td>{ formatDate(item.d) }</td>
-                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
-                    <td>{ tomiles(item.startStopMileage) }</td>
-                    <td>{ full(item) }</td>
-                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
-                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
-                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+                results[vid].map(result => {
+                  if (!result.obd) {
+                    result.obd = {};
+                  }
+                  if (!result.obd.diagnosticTroubleCodes) {
+                    result.obd.diagnosticTroubleCodes = [];
+                  }
+                  return <tr key={ key++ }>
+                    <td>{ formatDate(result.d) }</td>
+                    <td>{ street(result) }</td>
+                    <td>{ city(result) }</td>
+                    <td>{ state(result) }</td>
+                    <td>{ get(result, 'jes.maxRPM') }</td>
+                    <td>{ get(result, 'jes.averageRPM') }</td>
+                    <td>{ get(result, 'jes.maxThrottlePosition') }</td>
+                    <td>{ get(result, 'jes.averageThrottlePosition') }</td>
+                    <td>{ get(result, 'jes.maxEngineLoad') }</td>
+                    <td>{ get(result, 'jes.averageEngineLoad') }</td>
                 </tr>
-                )
+                })
               }
             </tr>)
           }
@@ -526,7 +536,6 @@ function Jes({results, vehicles}) {
     </div>
   )
 }
-
 
 function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const { orgId } = useParams();
