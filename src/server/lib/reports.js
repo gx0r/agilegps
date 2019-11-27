@@ -75,11 +75,13 @@ module.exports.getReport = async function(
       const vehicle = await r.table("vehicles").get(vid);
       if (vehicle.orgid !== orgid) {
         // security check each vehicle so end user can't insert any vehicle ID into the request
-        throw new Error(
-          vid + " does not exist or you do not have access to it"
-        );
+        // logger.warn
+        // throw new Error(
+        //   vid + " does not exist or you do not have access to it"
+        // );
+      } else {
+        result.vehicles[vid] = vehicle;
       }
-      result.vehicles[vid] = vehicle;
     },
     {
       concurrency: 1

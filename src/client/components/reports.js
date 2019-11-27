@@ -1,12 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
 
+import bluebird from 'bluebird';
 import moment from 'moment';
 import { DateRangePicker } from 'react-dates';
 import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
+import { merge } from 'lodash';
 
 import * as appState from '../appState';
 import * as tzOffset from "../tzoffset";
@@ -19,6 +21,14 @@ const reports = {
   idle: null,
   obd: null,
 };
+
+//create your forceUpdate hook
+function useForceUpdate(){
+  const [value, setValue] = useState(0); // integer state
+  return () => setValue(value => ++value); // update the state to force render
+}
+
+let count = 0;
 
 function Mileage({results, vehicles}) {
   return (
@@ -33,21 +43,21 @@ function Mileage({results, vehicles}) {
         <tbody>
           {
             Object.keys(vehicles).map(vid => {
-              return <>
-                <tr key={vid}>
+              return <Fragment key={`${vid}${count++}`}>
+                <tr key={`header${vid}${count++}`}>
                   <td colSpan="7" className="group">
                     { vehicles[vid].name }
                   </td>
                 </tr>
                 {
-                  Object.keys(results[vid]).map(key => {
-                    return <tr>
+                  results[vid] && Object.keys(results[vid]).map(key => {
+                    return <tr key={`result${vid}${key}${count++}`}>
                       <td>{key}</td>
                       <td>{tomiles(results[vid][key])}</td>
                     </tr>
                   })
                 }
-              </>
+              </Fragment>
             })
           }
         </tbody>
@@ -67,26 +77,68 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const [resultVehicles, setResultVehicles] = useState({});
   const [startDate, setStartDate] = useState(moment().subtract(1, 'day'));
   const [endDate, setEndDate] = useState(moment());
+  const forceUpdate = useForceUpdate();
 
   const execute = () => {
     setExecuting(true);
     const ids = Object.keys(impliedSelectedVehiclesByID);
-    
-    fetch(`/api/organizations/${orgId}/reports/${encodeURIComponent(reportType)}?vehicles=${encodeURIComponent(JSON.stringify(ids))}&startDate=${encodeURIComponent(startDate.toISOString())}&endDate=${encodeURIComponent(
-          moment(endDate).add(1, "day").toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
-      .then(validateResponse)
-      .then(response => {
-        setResultVehicles(response.vehicles);
-        setResults(response.results);
-        // setResultsTotals(response.totals);
-        setExecuting(false);
-        setExecuted(true);
-      })
-      .catch(function(err) {
-        toast.error(err.message);
-        setExecuting(false);
-        throw err;
-      });
+
+    setResultVehicles({});
+    setResults({});
+
+    let runningResults = {};
+    let runningVehicles = {};
+
+    bluebird.map(ids, id => {
+        setExecuting(id);
+        return fetch(`/api/organizations/${orgId}/reports/${encodeURIComponent(reportType)}?vehicles=${encodeURIComponent(JSON.stringify([id]))}&startDate=${encodeURIComponent(startDate.toISOString())}&endDate=${encodeURIComponent(
+            moment(endDate).add(1, "day").toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
+        .then(validateResponse)
+        .then(response => {
+
+          runningResults = merge(runningResults, response.results);
+          runningVehicles = merge(runningVehicles, response.vehicles);
+
+          setResults(runningResults);
+          setResultVehicles(runningVehicles);
+
+          forceUpdate();
+         
+          // response.forEach()
+          // debugger;
+          // return [response.vehicles, response.results];
+        })
+      }
+    , {concurrency:1})
+    .then(response => {
+      // debugger;
+      // setResultVehicles(currentResultVehicles);
+      // setResults(currentResults);
+      toast('Report complete.', { autoClose: false, position: toast.POSITION.TOP_RIGHT })
+    })
+    .catch(function(err) {
+      toast.error(err.message);
+      setExecuting(false);
+      throw err;
+    })
+    .finally(() => {
+      // setResultsTotals(response.totals);
+      setExecuting(false);
+      setExecuted(true);
+    });
+  }
+
+  const renderExecution = () => {
+    if (!executing) {
+      return 'Run!'
+    }
+    if (vehiclesByID[executing]) {
+      const vehicle = vehiclesByID[executing];
+      return `Processing vehicle ${vehicle.name}...`
+    } else {
+      return 'Processing...'
+    }
+
   }
 
   return (
@@ -128,7 +180,7 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
             <button className="btn btn-default btn-success" style={{marginTop:'1em',marginBottom: '1em'}}
               disabled={ executing } onClick={ () => execute(reportType) }
             >
-              { executing ? 'Executing...' : 'Run!' }
+              { renderExecution() }
             </button>
           </div>
       </div>
