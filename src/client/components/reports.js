@@ -15,12 +15,20 @@ import * as tzOffset from "../tzoffset";
 import { auth, validateResponse } from '../appState';
 import * as isUserMetric from "../isUserMetric";
 import tomiles from '../tomiles';
+import tohms from './tohms';
 
-const reports = {
-  mileage: null,
-  idle: null,
-  obd: null,
-};
+const reports = [
+  'idle',
+  'daily',
+  'mileage',
+  'odometer',
+  'speed',
+  'ignition',
+  'start',
+  'summary',
+  'obd',
+  'jes',
+]
 
 //create your forceUpdate hook
 function useForceUpdate(){
@@ -29,6 +37,63 @@ function useForceUpdate(){
 }
 
 let count = 0;
+
+function Idle({results, vehicles, totals = []}) {
+  return (
+    <div>
+      <div>
+        <table className="table table-condensed table-bordered table-striped dataTable">
+          <thead>
+            <tr>
+              <td>Vehicle</td>
+              <td>Idling Total</td>
+            </tr>
+          </thead>
+          <tbody>
+            { Object.keys(vehicles).map(vid => { <tr>
+              <td>{ vehicles[vid].name }</td>
+              <td>{ totals[vid] && tohms(totals[vid] / 1000) }</td>
+            </tr>
+            })}
+          </tbody>
+        </table>
+      </div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Location</td>
+            <td>City</td>
+            <td>State</td>
+            <td>Idle Start</td>
+            <td>Idle End</td>
+            <td>Duration</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid => {
+              return <Fragment key={`${vid}${count++}`}>
+                <tr key={`header${vid}${count++}`}>
+                  <td colSpan="7" className="group">
+                    { vehicles[vid].name }
+                  </td>
+                </tr>
+                {
+                  results[vid] && Object.keys(results[vid]).map(key => {
+                    return <tr key={`result${vid}${key}${count++}`}>
+                      <td>{key}</td>
+                      <td>{tomiles(results[vid][key])}</td>
+                    </tr>
+                  })
+                }
+              </Fragment>
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 function Mileage({results, vehicles}) {
   return (
@@ -72,7 +137,7 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const [focusedInput, setFocusedInput] = useState(null);
   const [executing, setExecuting] = useState(false);
   const [executed, setExecuted] = useState(false);
-  const [reportType, setReportType] = useState('mileage');
+  const [reportType, setReportType] = useState('idle');
   const [results, setResults] = useState({});
   const [resultVehicles, setResultVehicles] = useState({});
   const [startDate, setStartDate] = useState(moment().subtract(1, 'day'));
@@ -141,11 +206,20 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
 
   }
 
+  const renderResults = () => {
+    if (!executed) {
+      return null;
+    }
+    switch (reportType) {
+      case 'idle':
+        return <Idle results={results} vehicles={resultVehicles} />
+      case 'mileage':
+        return <Mileage results={results} vehicles={resultVehicles} />
+    }
+  }
+
   return (
     <div className="business-table">
-      <div>
-        Reports TODO orgId { orgId }         
-      </div>
       <div className="row">
         <div className="col-md-12" style={{ marginTop: '1em', marginBottom: '1em' }}>
           <span>Quick select </span>
@@ -174,8 +248,8 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
             />
           </div>
           <div className="col-md-3">
-            <select size={ Object.keys(reports).length } className="form-control" onChange={ key => setReportType(key) }>
-            { Object.keys(reports).map(key => <option selected={ key === reportType} value={ key }>{key}</option>) }
+            <select size={ reports.length } className="form-control" onChange={ ev => setReportType(ev.target.value) }>
+            { reports.map(key => <option selected={ key === reportType} value={ key }>{key}</option>) }
             </select>
             <button className="btn btn-default btn-success" style={{marginTop:'1em',marginBottom: '1em'}}
               disabled={ executing } onClick={ () => execute(reportType) }
@@ -186,7 +260,7 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
       </div>
       <div className="col-sm-3" />
       <div className="row col-md-12">
-        { executed && <Mileage results={results} vehicles={resultVehicles} />}
+        { renderResults() }
       </div>
     </div>
   );
