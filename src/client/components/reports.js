@@ -283,7 +283,7 @@ function Speed({results, vehicles, totals = {}}) {
   )
 }
 
-function Ignition({results, vehicles, totals = {}}) {
+function Ignition({results, vehicles}) {
   let key = 0;
   return (
     <div>
@@ -303,11 +303,99 @@ function Ignition({results, vehicles, totals = {}}) {
         <tbody>
           {
             Object.keys(vehicles).map(vid =>
-            <tr>
+            <tr key={ key++ }>
               <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
               {
                 results[vid].map(item =>
-                  <tr>
+                  <tr key={ key++ }>
+                    <td>{ item.startTime && formatDate(item.startTime) }</td>
+                    <td>{ formatDate(item.d) }</td>
+                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
+                    <td>{ tomiles(item.startStopMileage) }</td>
+                    <td>{ full(item) }</td>
+                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
+                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
+                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+                </tr>
+                )
+              }
+            </tr>)
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function Ignition({results, vehicles}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Ign On</td>
+            <td>Ign Off</td>
+            <td>Ignition On Time</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+            <td>Parked @</td>
+            <td>Parked Until</td>
+            <td>Parked Time</td>
+            <td>Idle Time</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid =>
+            <tr key={ key++ }>
+              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              {
+                results[vid].map(item =>
+                  <tr key={ key++ }>
+                    <td>{ item.startTime && formatDate(item.startTime) }</td>
+                    <td>{ formatDate(item.d) }</td>
+                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
+                    <td>{ tomiles(item.startStopMileage) }</td>
+                    <td>{ full(item) }</td>
+                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
+                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
+                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+                </tr>
+                )
+              }
+            </tr>)
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function Start({results, vehicles}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Started Moving</td>
+            <td>Stopped Moving</td>
+            <td>Transit Time</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+            <td>Parked @</td>
+            <td>Parked Until</td>
+            <td>Parked Time</td>
+            <td>Idle Time</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid =>
+            <tr key={ key++ }>
+              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              {
+                results[vid].map(item =>
+                  <tr key={ key++ }>
                     <td>{ item.startTime && formatDate(item.startTime) }</td>
                     <td>{ formatDate(item.d) }</td>
                     <td>{ item.transitTime && tohms(item.transitTime)  }</td>
@@ -418,6 +506,8 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         return <Speed results={results} vehicles={resultVehicles} />
       case 'ignition':
         return <Ignition results={results} vehicles={resultVehicles} />
+      case 'start':
+        return <Start results={results} vehicles={resultVehicles} />
     }
   }
 
