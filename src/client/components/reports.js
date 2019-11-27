@@ -18,6 +18,7 @@ import tomiles from '../tomiles';
 import tohms from './tohms';
 import * as formatDate from '../formatDate';
 import * as toir from '../../common/todir'; 
+import { full } from "../../common/addressdisplay";
 
 const reports = [
   'idle',
@@ -282,6 +283,50 @@ function Speed({results, vehicles, totals = {}}) {
   )
 }
 
+function Ignition({results, vehicles, totals = {}}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Ign On</td>
+            <td>Ign Off</td>
+            <td>Ignition On Time</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+            <td>Parked @</td>
+            <td>Parked Until</td>
+            <td>Parked Time</td>
+            <td>Idle Time</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid =>
+            <tr>
+              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              {
+                results[vid].map(item =>
+                  <tr>
+                    <td>{ item.startTime && formatDate(item.startTime) }</td>
+                    <td>{ formatDate(item.d) }</td>
+                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
+                    <td>{ tomiles(item.startStopMileage) }</td>
+                    <td>{ full(item) }</td>
+                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
+                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
+                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+                </tr>
+                )
+              }
+            </tr>)
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const { orgId } = useParams();
   const [focusedInput, setFocusedInput] = useState(null);
@@ -371,6 +416,8 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         return <Odometer results={results} vehicles={resultVehicles} />
       case 'speed':
         return <Speed results={results} vehicles={resultVehicles} />
+      case 'ignition':
+        return <Ignition results={results} vehicles={resultVehicles} />
     }
   }
 
