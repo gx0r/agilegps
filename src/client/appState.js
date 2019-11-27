@@ -3,6 +3,7 @@
 /**
 Uses Redux ( https://github.com/reactjs/redux ) to handle and keep all application state in one place.
 */
+const toast = require('react-toastify').toast;
 const redux = require("redux");
 const compose = redux.compose;
 const _ = require("lodash");
@@ -11,6 +12,9 @@ const moment = require("moment");
 const createLogger = require("redux-logger").createLogger;
 const reducer = require("./appStateReducer");
 const stopListening = require("./appSocketState").stopListening;
+
+const setDatabaseConnected = require('./appStateActionCreators').setDatabaseConnected;
+const setDatabaseDisconnected = require('./appStateActionCreators').setDatabaseDisconnected;
 
 const logger = createLogger({
   duration: true,
@@ -95,6 +99,14 @@ function validateResponse(response) {
     return response.json().then(function(json) {
       let error = new Error();
       error.message = json.message;
+
+      if (error.message === 'ReqlDriverError: None of the pools have an opened connection and failed to open a new one.') {
+        toast.error('Unable to connect to database. Contact system administrator.', { autoClose: false, draggable: false });
+        store.dispatch(setDatabaseDisconnected());
+      } else {
+        toast.error(error.message);
+      }
+
       throw error;
     });
   }

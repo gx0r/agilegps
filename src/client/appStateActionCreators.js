@@ -69,3 +69,15 @@ export function selectFleet(fleet) {
     fleet: fleet
   }
 }
+
+export function setDatabaseConnected() {
+  return {
+    type: "database/connected"
+  }
+}
+
+export function setDatabaseDisconnected() {
+  return {
+    type: "database/disconnected"
+  }
+}

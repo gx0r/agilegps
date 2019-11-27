@@ -260,6 +260,16 @@ module.exports = function reducer(state, action) {
           animationSpeed: action.value,
         });
 
+    case "database/connected":
+      return Object.assign({}, state, {
+        databaseConnected: true,
+      });
+
+    case "database/disconnected":
+        return Object.assign({}, state, {
+          databaseConnected: false,
+        });
+    
     default:
       return state;
   }
