@@ -8,7 +8,7 @@ import moment from 'moment';
 import { DateRangePicker } from 'react-dates';
 import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
-import { merge } from 'lodash';
+import { isFinite, merge } from 'lodash';
 
 import * as appState from '../appState';
 import * as tzOffset from "../tzoffset";
@@ -207,6 +207,64 @@ function Odometer({results, vehicles}) {
   )
 }
 
+function Speed({results, vehicles, totals = {}}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Vehicle</td>
+            <td>Highest { isUserMetric() ? "km/h" : "mph" }</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid => {
+              if (isFinite(tomiles(totals[vid]))) {
+                return (
+                  <tr>
+                    <td>{ vehicles[vid].name }</td>
+                    <td>{ tomiles(totals[vid]) }</td>
+                  </tr>
+                );
+              }
+            })
+          }
+        </tbody>
+      </table>
+      <br />
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Location</td>
+            <td>Date</td>
+            <td>Heading</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid =>
+            <tr>
+              <td colspan="7" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              {
+                results[vid].map(item =>
+                  <tr>
+                    <td>{ renderLocation(item) }</td>
+                    <td>{ formatDate(item.d) }</td>
+                    <td>{ todir(item) }</td>
+                    <td>{ tomiles(item.s) }</td>
+                </tr>
+                )
+              }
+            </tr>)
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const { orgId } = useParams();
   const [focusedInput, setFocusedInput] = useState(null);
@@ -294,6 +352,8 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         return <Daily results={results} vehicles={resultVehicles} />
       case 'odometer':
         return <Odometer results={results} vehicles={resultVehicles} />
+      case 'speed':
+        return <Speed results={results} vehicles={resultVehicles} />
     }
   }
 
