@@ -3,6 +3,9 @@ const hasLang = require("./i18n").hasLang;
 const moment = require('moment');
 
 module.exports = Object.freeze({
+
+  databaseConnected: true,
+  
   animationPlaying: false,
   animationSpeed: 15,
 

@@ -21,12 +21,6 @@ class Session extends React.Component {
     }
   }
 
-  static propTypes = {
-  };
-
-  componentDidMount() {
-  }
-
   changeUsername = username => {
     this.setState({ username: username.trim() });
   }
@@ -85,6 +79,15 @@ class Session extends React.Component {
       ]
     });
   };
+
+  renderNoDatabase() {
+    <div style={{
+      textAlign: 'right',
+      marginTop: '2px'
+    }}>  
+      Unable to connect to database. Contact system administrator.    
+    </div>
+  }
 
   renderNoUser() {
     return (
@@ -156,7 +159,7 @@ class Session extends React.Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { databaseConnected, user } = this.props;
 
     return (
       <div>
@@ -169,13 +172,8 @@ class Session extends React.Component {
             padding: "2em"
           }}
         >
-        { user.username ? this.renderUser() : this.renderNoUser() }
+        { !databaseConnected ? this.renderNoDatabase() : (user.username ? this.renderUser() : this.renderNoUser()) }
         <br />
-        { this.error &&
-          <div className="text-danger">
-            Error: { this.error }
-          </div>
-        }
         </div>
         <div className="row">
           <div className="center-block" style={{
@@ -192,8 +190,7 @@ class Session extends React.Component {
 
 export default connect(
   state => ({
+    databaseConnected: state.databaseConnected,
     user: state.user,
   }),
-  dispatch => bindActionCreators({
-  }, dispatch),
 )(Session);
