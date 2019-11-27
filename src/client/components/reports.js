@@ -95,6 +95,41 @@ function Idle({results, vehicles, totals = []}) {
   )
 }
 
+function Daily({results, vehicles}) {
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Date</td>
+            <td>First Ign On</td>
+            <td>Last Ign Off</td>
+            <td>Duration</td>
+            <td>Begin Odometer</td>
+            <td>End Odometer</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+          </tr>
+        </thead>
+        <tbody>
+          { Object.keys(vehicles).map(vid => <tr>
+            <td colspan="7" className="group">{ vehicles[vid].name }</td>
+            { results[vid].map( result => <tr>
+              <td>{ formatDate(result.d) }</td>
+              <td>{ result.firstIgnOn && formatDate(result.firstIgnOn) }</td>
+              <td>{ result.lastIgnOff && formatDate(result.lastIgnOff) }</td>
+              <td>{ tohms(result.duration) }</td>
+              <td>{ tomiles(result.beginOdometer) }</td>
+              <td>{ tomiles(result.endOdometer) }</td>
+              <td>{ tomiles(result.distance) }</td>
+            </tr>)}
+          </tr> )}
+        </tbody>
+      </table>
+    </div>
+
+  );
+}
+
 function Mileage({results, vehicles}) {
   return (
     <div>
@@ -215,6 +250,8 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         return <Idle results={results} vehicles={resultVehicles} />
       case 'mileage':
         return <Mileage results={results} vehicles={resultVehicles} />
+      case 'daily':
+        return <Daily results={results} vehicles={resultVehicles} />
     }
   }
 
