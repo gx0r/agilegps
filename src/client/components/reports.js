@@ -166,6 +166,46 @@ function Mileage({results, vehicles}) {
   )
 }
 
+function Odometer({results, vehicles}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>State</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+            <td>Start Odometer</td>
+            <td>End Odometer</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid => {
+              return <Fragment key={`${vid}${key++}`}>
+                <tr key={`header${vid}${key++}`}>
+                  <td colSpan="7" className="group">
+                    { vehicles[vid].name }
+                  </td>
+                </tr>
+                {
+                  results[vid].map(item => {
+                    return <tr key={`${key++}`}>
+                      <td>{item.state}</td>
+                      <td>{tomiles(item.odometerEnd - item.odometerStart)}</td>
+                      <td>{tomiles(item.odometerStart)}</td>
+                      <td>{tomiles(item.odometerEnd)}</td>
+                    </tr>
+                  })
+                }
+              </Fragment>
+            })
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const { orgId } = useParams();
@@ -192,7 +232,7 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
     bluebird.map(ids, id => {
         setExecuting(id);
         return fetch(`/api/organizations/${orgId}/reports/${encodeURIComponent(reportType)}?vehicles=${encodeURIComponent(JSON.stringify([id]))}&startDate=${encodeURIComponent(startDate.toISOString())}&endDate=${encodeURIComponent(
-            moment(endDate).add(1, "day").toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
+            moment(endDate).toISOString())}&tzOffset=${encodeURIComponent(tzOffset())}`, auth())
         .then(validateResponse)
         .then(response => {
 
@@ -252,6 +292,8 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         return <Mileage results={results} vehicles={resultVehicles} />
       case 'daily':
         return <Daily results={results} vehicles={resultVehicles} />
+      case 'odometer':
+        return <Odometer results={results} vehicles={resultVehicles} />
     }
   }
 
