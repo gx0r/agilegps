@@ -10,14 +10,13 @@ import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
 import { isFinite, merge } from 'lodash';
 
-import * as appState from '../appState';
 import * as tzOffset from "../tzoffset";
 import { auth, validateResponse } from '../appState';
 import * as isUserMetric from "../isUserMetric";
 import tomiles from '../tomiles';
 import tohms from './tohms';
 import * as formatDate from '../formatDate';
-import * as toir from '../../common/todir'; 
+import * as todir from '../../common/todir'; 
 import { full } from "../../common/addressdisplay";
 
 const reports = [
@@ -327,50 +326,6 @@ function Ignition({results, vehicles}) {
   )
 }
 
-function Ignition({results, vehicles}) {
-  let key = 0;
-  return (
-    <div>
-      <table className="table-condensed table-bordered table-striped dataTable">
-        <thead>
-          <tr>
-            <td>Ign On</td>
-            <td>Ign Off</td>
-            <td>Ignition On Time</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-            <td>Parked @</td>
-            <td>Parked Until</td>
-            <td>Parked Time</td>
-            <td>Idle Time</td>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            Object.keys(vehicles).map(vid =>
-            <tr key={ key++ }>
-              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
-              {
-                results[vid].map(item =>
-                  <tr key={ key++ }>
-                    <td>{ item.startTime && formatDate(item.startTime) }</td>
-                    <td>{ formatDate(item.d) }</td>
-                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
-                    <td>{ tomiles(item.startStopMileage) }</td>
-                    <td>{ full(item) }</td>
-                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
-                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
-                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
-                </tr>
-                )
-              }
-            </tr>)
-          }
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 function Start({results, vehicles}) {
   let key = 0;
   return (
@@ -414,6 +369,136 @@ function Start({results, vehicles}) {
     </div>
   )
 }
+
+function Summary({results, vehicles}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Vehicle</td>
+            <td>Transit Time</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+            <td>Parked Time</td>
+            <td>Parked</td>
+            <td>Avg Park</td>
+            <td>Total Idling</td>
+            <td>Idle</td>
+            <td>Avg Idle Time</td>
+            <td>Begin Odometer</td>
+            <td>End Odometer</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid => <tr key={ key++ }>
+              <td>{ results[vid].name }</td>
+              <td>{ tohms(results[vid].totalTarnsit) }</td>
+              <td>{ tomiles(results[vid].distance) }</td>
+              <td>{ tohms(results[vid].totalPark) }</td>
+              <td>{ tohms(results[vid].avgPark) }</td>
+              <td>{ tohms(results[vid].totalIdle) }</td>
+              <td>{ results[vid].idles }</td>
+              <td>{ results[vid].avgIdle }</td>
+              <td>{ tomiles(results[vid].beginOdometer) }</td>
+              <td>{ tomiles(results[vid].endOdometer) }</td>
+            </tr>)
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function Obd({results, vehicles}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Ign On</td>
+            <td>Ign Off</td>
+            <td>Ignition On Time</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+            <td>Parked @</td>
+            <td>Parked Until</td>
+            <td>Parked Time</td>
+            <td>Idle Time</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid =>
+            <tr key={ key++ }>
+              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              {
+                results[vid].map(item =>
+                  <tr key={ key++ }>
+                    <td>{ item.startTime && formatDate(item.startTime) }</td>
+                    <td>{ formatDate(item.d) }</td>
+                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
+                    <td>{ tomiles(item.startStopMileage) }</td>
+                    <td>{ full(item) }</td>
+                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
+                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
+                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+                </tr>
+                )
+              }
+            </tr>)
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function Jes({results, vehicles}) {
+  let key = 0;
+  return (
+    <div>
+      <table className="table-condensed table-bordered table-striped dataTable">
+        <thead>
+          <tr>
+            <td>Ign On</td>
+            <td>Ign Off</td>
+            <td>Ignition On Time</td>
+            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+            <td>Parked @</td>
+            <td>Parked Until</td>
+            <td>Parked Time</td>
+            <td>Idle Time</td>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            Object.keys(vehicles).map(vid =>
+            <tr key={ key++ }>
+              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              {
+                results[vid].map(item =>
+                  <tr key={ key++ }>
+                    <td>{ item.startTime && formatDate(item.startTime) }</td>
+                    <td>{ formatDate(item.d) }</td>
+                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
+                    <td>{ tomiles(item.startStopMileage) }</td>
+                    <td>{ full(item) }</td>
+                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
+                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
+                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+                </tr>
+                )
+              }
+            </tr>)
+          }
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 
 function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const { orgId } = useParams();
@@ -508,7 +593,13 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         return <Ignition results={results} vehicles={resultVehicles} />
       case 'start':
         return <Start results={results} vehicles={resultVehicles} />
-    }
+      case 'summary':
+        return <Summary results={results} vehicles={resultVehicles} />
+      case 'obd':
+        return <Obd results={results} vehicles={resultVehicles} />
+      case 'jes':
+        return <Jes results={results} vehicles={resultVehicles} />   
+      }
   }
 
   return (
