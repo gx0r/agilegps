@@ -129,7 +129,7 @@ function Daily({results, vehicles}) {
         </thead>
         <tbody>
           { Object.keys(vehicles).map(vid => <tr>
-            <td colspan="7" className="group">{ vehicles[vid].name }</td>
+            <td colSpan="7" className="group">{ vehicles[vid].name }</td>
             { results[vid].map( result => <tr>
               <td>{ formatDate(result.d) }</td>
               <td>{ result.firstIgnOn && formatDate(result.firstIgnOn) }</td>
@@ -263,7 +263,7 @@ function Speed({results, vehicles, totals = {}}) {
           {
             Object.keys(vehicles).map(vid =>
             <tr>
-              <td colspan="7" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              <td colSpan="7" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
               {
                 results[vid].map(item =>
                   <tr>
@@ -303,7 +303,7 @@ function Ignition({results, vehicles}) {
           {
             Object.keys(vehicles).map(vid =>
             <tr key={ key++ }>
-              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              <td colSpan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
               {
                 results[vid].map(item =>
                   <tr key={ key++ }>
@@ -347,7 +347,7 @@ function Start({results, vehicles}) {
           {
             Object.keys(vehicles).map(vid =>
             <tr key={ key++ }>
-              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              <td colSpan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
               {
                 results[vid].map(item =>
                   <tr key={ key++ }>
@@ -393,10 +393,11 @@ function Summary({results, vehicles}) {
         <tbody>
           {
             Object.keys(vehicles).map(vid => <tr key={ key++ }>
-              <td>{ results[vid].name }</td>
-              <td>{ tohms(results[vid].totalTarnsit) }</td>
+              <td>{ vehicles[vid].name }</td>
+              <td>{ tohms(results[vid].totalTransit) }</td>
               <td>{ tomiles(results[vid].distance) }</td>
               <td>{ tohms(results[vid].totalPark) }</td>
+              <td>{ results[vid].parks }</td>
               <td>{ tohms(results[vid].avgPark) }</td>
               <td>{ tohms(results[vid].totalIdle) }</td>
               <td>{ results[vid].idles }</td>
@@ -443,7 +444,7 @@ function Obd({results, vehicles}) {
           {
             Object.keys(vehicles).map(vid =>
             <tr key={ key++ }>
-              <td colspan="19" className="group">{ vehicles[vid].name }</td>
+              <td colSpan="19" className="group">{ vehicles[vid].name }</td>
               {
                 results[vid].map(result => {
                   if (!result.obd) {
@@ -506,7 +507,7 @@ function Jes({results, vehicles}) {
           {
             Object.keys(vehicles).map(vid =>
             <tr key={ key++ }>
-              <td colspan="18" className="group">{ vehicles[vid].name }</td>
+              <td colSpan="18" className="group">{ vehicles[vid].name }</td>
               {
                 results[vid].map(result => {
                   if (!result.obd) {
