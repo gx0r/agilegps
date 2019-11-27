@@ -418,34 +418,62 @@ function Obd({results, vehicles}) {
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
           <tr>
-            <td>Ign On</td>
-            <td>Ign Off</td>
-            <td>Ignition On Time</td>
+            <td>Date</td>
+            <td>Location</td>
+            <td>City</td>
+            <td>State</td>
+            <td>Conn</td>
+            <td>⚠</td>
+            <td>Codes</td>
+            <td>Temp</td>
+            <td>Fuel</td>
+            <td>Load</td>
+            <td>ThrtlPos</td>
+            <td>RPMs</td>
+            <td>Fuel Cnsmp</td>
+            <td>PIDs</td>
+            <td>Speed</td>
+            <td>Power</td>
+            <td>VIN</td>
+            <td>{ isUserMetric() ? 'OBD Kilometers' : 'OBD Mileage' }</td>
             <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-            <td>Parked @</td>
-            <td>Parked Until</td>
-            <td>Parked Time</td>
-            <td>Idle Time</td>
           </tr>
         </thead>
         <tbody>
           {
             Object.keys(vehicles).map(vid =>
             <tr key={ key++ }>
-              <td colspan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+              <td colspan="19" className="group">{ vehicles[vid].name }</td>
               {
-                results[vid].map(item =>
-                  <tr key={ key++ }>
-                    <td>{ item.startTime && formatDate(item.startTime) }</td>
-                    <td>{ formatDate(item.d) }</td>
-                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
-                    <td>{ tomiles(item.startStopMileage) }</td>
-                    <td>{ full(item) }</td>
-                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
-                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
-                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+                results[vid].map(result => {
+                  if (!result.obd) {
+                    result.obd = {};
+                  }
+                  if (!result.obd.diagnosticTroubleCodes) {
+                    result.obd.diagnosticTroubleCodes = [];
+                  }
+                  return <tr key={ key++ }>
+                      <td>{ formatDate(result.d) }</td>
+                    <td>{ street(result) }</td>
+                    <td>{ city(result) }</td>
+                    <td>{ state(result) }</td>
+                    <td>{ result.obd.connect && "✓" }</td>
+                    <td>{ result.obd.malfunction && result.obd.diagnosticTroubleCodes.length + "⚠" }</td>
+                    <td>{ result.obd.diagnosticTroubleCodes.map(code => <a href={ `http://www.obd-codes.com/p${code}` } target="_new">{ code }</a>) }</td>
+                    <td>{ result.obd.temp && result.obd.temp }</td>
+                    <td>{ result.obd.fuelLevelInput && result.obd.fuelLevelInput + "%" }</td>
+                    <td>{ result.obd.engineLoad }</td>
+                    <td>{ result.obd.throttlePosition }</td>
+                    <td>{ result.obd.RPMs }</td>
+                    <td>{ result.obd.fuelConsumption }</td>
+                    <td>{ result.obd.supportPIDs }</td>
+                    <td>{ toMiles(result.obd.speed) }</td>
+                    <td>{ result.obd.powermv && result.obd.powermV / 1000 + "V" }</td>
+                    <td>{ result.obd.vin }</td>
+                    <td>{ toMiles(result.obd.mileage) }</td>
+                    <td>{ toMiles(result.m) }</td>
                 </tr>
-                )
+                })
               }
             </tr>)
           }
