@@ -1,6 +1,6 @@
 
 import React, { Fragment, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux';  
 import { useParams } from "react-router-dom";
 
 import bluebird from 'bluebird';
@@ -16,6 +16,8 @@ import { auth, validateResponse } from '../appState';
 import * as isUserMetric from "../isUserMetric";
 import tomiles from '../tomiles';
 import tohms from './tohms';
+import * as formatDate from '../formatDate';
+import * as toir from '../../common/todir'; 
 
 const reports = [
   'idle',
@@ -29,6 +31,21 @@ const reports = [
   'obd',
   'jes',
 ]
+
+
+function renderLocation(item) {
+  let res = "";
+  if (street(item) !== "") {
+    res = res + street(item);
+  }
+  if (city(item) !== "") {
+    res = res + ", " + city(item);
+  }
+  if (state(item) !== "") {
+    res = res + ", " + state(item);
+  }
+  return res;
+}
 
 //create your forceUpdate hook
 function useForceUpdate(){
