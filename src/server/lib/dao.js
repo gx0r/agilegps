@@ -4,6 +4,8 @@ const Promise = require("bluebird");
 const _ = require("lodash");
 const path = require("path");
 const r = require("../../common/db");
+const systemdb = require("../../common/systemdb").db;
+
 const isHashed = require("./password").isHashed;
 const hash = require("./password").hash;
 
@@ -501,3 +503,11 @@ r.db('agilegps').table('vehicles').orderBy('name').filter({orgid: 'default'}).li
 // 	// 	}
 // 	// })
 // }
+
+
+async function getDatabaseJobs() {
+  // const jobs = await systemdb.table("jobs").orderBy(r.desc('duration_sec'));
+  const jobs = await systemdb.table("jobs").orderBy('duration_sec');
+  return jobs;
+}
+module.exports.getDatabaseJobs = getDatabaseJobs;

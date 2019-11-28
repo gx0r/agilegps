@@ -238,6 +238,10 @@ function Navbar(props) {
             to={ `/user/${user.username}/edit` }>Profile</Link>
         </li> }
         
+        { isAdmin && <li>
+            <Link to="/system">System</Link>
+          </li> }
+
         { user.username && <li
          className={ classnames({
              active: view === 'HELP'
