@@ -28,7 +28,7 @@ import Devices from './devices';
 import Vehicle from './vehicle';
 import Vehicles from './vehicles';
 import VehicleEditor from './vehicle-editor';
-import System from './system';
+import Jobs from './jobs';
 
 import { loadOrgState } from '../appState';
 
@@ -52,14 +52,6 @@ function Root(props) {
     <Router>
       <div>
         <Switch>
-          <Route path="/system">
-            <Navbar />
-            <div className="container-fluid">
-              <div className="row">
-                <System />
-              </div>
-            </div>
-          </Route>
           <Route path="/help">
             <Navbar />
             <div className="container-fluid">
@@ -253,7 +245,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/messages/processed">
+          <Route path="/system/messages/processed">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -261,7 +253,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/messages/raw">
+          <Route path="/system/messages/raw">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
@@ -269,11 +261,19 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/messages/exceptions">
+          <Route path="/system/messages/exceptions">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
                 <Events type="exceptions" />
+              </div>
+            </div>
+          </Route>
+          <Route path="/system/jobs">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <Jobs />
               </div>
             </div>
           </Route>

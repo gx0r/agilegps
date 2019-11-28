@@ -15,6 +15,8 @@ import mapSvg from '../svg/map.svg';
 import globeSvg from '../svg/globe.svg';
 import xcloudSvg from '../svg/xcloud.svg';
 
+import onClickOutside from 'react-onclickoutside';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -22,13 +24,20 @@ import {
   Link,
   useParams
 } from "react-router-dom";
+ 
+const clickOutsideConfig = {
+  handleClickOutside: () => Navbar.handleClickOutside
+};
 
 function Navbar(props) {
   const [adminToolsOpen, setAdminToolsOpen] = useState(false);
+  const toggleAdminToolsOpen = () => setAdminToolsOpen(!adminToolsOpen);
   const [orgToolsOpen, setOrgToolsOpen] = useState(false);
   const { orgId } = useParams();
   console.log(orgId);
 
+  Navbar.handleClickOutside = () => { setAdminToolsOpen(false) }
+ 
   const formatLastUpdated = () => {
     const { lastUpdated, metric } = props;
     if (!lastUpdated) {
@@ -186,21 +195,21 @@ function Navbar(props) {
             open: adminToolsOpen
           }) }
         >
-          <a className="dropdown-toggle">Messages<span className="caret"></span></a>
+          <a className="dropdown-toggle">System<span className="caret"></span></a>
           <ul className="dropdown-menu">
             <li
               className={ classnames({
                 active: view === 'EVENTS'
               }) }
             >
-              <Link to="/messages/processed">Processed Messages</Link>
+              <Link to="/system/messages/processed">Processed Messages</Link>
             </li>
             <li
               className={ classnames({
                 active: view === 'RAWEVENTS'
               }) }
             >
-              <Link to="/messages/raw">Raw Messages</Link>
+              <Link to="/system/messages/raw">Raw Messages</Link>
             </li>
             <li
               className={ classnames({
@@ -208,6 +217,9 @@ function Navbar(props) {
               }) }
             >
               <Link to="/messages/exceptions">Uncaught Exceptions</Link>
+            </li>
+            <li>
+              <Link to="/system/jobs">Database Jobs</Link>
             </li>
           </ul>
         </li>
@@ -237,11 +249,6 @@ function Navbar(props) {
             }) }
             to={ `/user/${user.username}/edit` }>Profile</Link>
         </li> }
-        
-        { isAdmin && <li>
-            <Link to="/system">System</Link>
-          </li> }
-
         { user.username && <li
          className={ classnames({
              active: view === 'HELP'
@@ -297,4 +304,4 @@ export default connect(
   dispatch => bindActionCreators({
     dispatch,
   }, dispatch),
-)(Navbar);
+)(onClickOutside(Navbar, clickOutsideConfig));
