@@ -27,11 +27,28 @@ const verror = require("verror");
 
 process.name = 'agilegps-listener';
 
+async function logError(err) {
+  await r.table('errors').insert({
+    host: os.hostname(),
+    pid: process.pid,
+    date: new Date(),
+    stack: err.stack,
+    argv: process.argv,
+    cwd: process.cwd(),
+    memory: process.memoryUsage(),
+    uptime: process.uptime(),
+    promise: false,
+    uid: process.getuid(),
+    groups: process.getgroups(),
+    load: os.loadavg()
+  });
+};
+
 const socket = dgram.createSocket("udp4");
 const vehicleCache = new LRU();
 const log = bunyan.createLogger({
   name: "listen",
-  // level: 'debug'
+  level: require("../../config/listener.js").loglevel || 'info'
 });
 
 let inserts = 0;
@@ -47,7 +64,7 @@ let outstandingInserts = {};
     .run();
   cursor.each(function(nothing, changes) {
     if (changes) {
-      log.debug(changes);
+      log.trace(changes);
       let oldVal = changes.old_val;
       let newVal = changes.new_val;
 
@@ -60,18 +77,20 @@ let outstandingInserts = {};
         } else if (newVal.device != null) {
           vehicleCache.set(newVal.device, newVal);
         } else {
-          log.debug("No IMEI for vehicle " + newVal.name + " " + newVal.id);
+          const msg = `No IMEI for vehicle ${newVal.name} ${newVal.id}`;
+          // logError(new Error(msg));
+          log.trace(msg);
         }
       }
     }
+    log.debug(`${vehicleCache.itemCount} vehicles cached`);
   });
 
-  await reversegeo(45, 45); // Warm up the reverse geocoder
-
-  log.info("Binding to " + port + " on host " + host);
+  // log.debug("Warming up the reverse geocoder...");
+  // await reversegeo(45, 45); // Warm up the reverse geocoder
   socket.bind(port, host);
 
-  if (process.getuid() === 0) {
+  if (process.setegid && process.getuid() === 0) {
     // if we are root
     // we have opened the sockets, now drop our root privileges
     process.setgid("nobody");
@@ -117,15 +136,7 @@ function deleteNonFiniteValues(obj) {
 
 socket.on("listening", function() {
   let address = socket.address();
-  log.info(
-    "UDP Server listening on " +
-      address.address +
-      ":" +
-      address.port +
-      " " +
-      vehicleCache.itemCount +
-      " vehicles loaded"
-  );
+  log.info(`UDP server listening on ${address.address}:${address.port}`);
 });
 
 socket.on("message", async function(message, remote) {
@@ -137,19 +148,14 @@ socket.on("message", async function(message, remote) {
   try {
     parsed = parse(message);
   } catch (err) {
-    let wrapped = new verror.WError(
-      err,
-      "Error parsing from: " +
-        remote.address +
-        ":" +
-        remote.port +
-        " , message: " +
-        message
-    );
+    const msg = `Error parsing from: ${remote.address}:${remote.port}, message: ${message}`;
+    log.warn(msg);
+    const wrapped = new verror.WError(err, msg);
+    logError(wrapped);
     throw wrapped;
   }
 
-  log.debug(parsed);
+  log.trace(parsed);
   maybeRelayMessage(message);
 
   if (insertrawevents) {
@@ -234,7 +240,9 @@ socket.on("message", async function(message, remote) {
   const vehicle = vehicleCache.get(parsed.imei);
 
   if (vehicle == null) {
-    throw new Error("Null or undefined vehicle for IMEI " + parsed.imei);
+    const err = new Error(`Null or undefined vehicle for IMEI ${parsed.imei}`);
+    logError(err);
+    throw err;
   }
 
   let toInsert = Object.create(null);
