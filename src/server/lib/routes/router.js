@@ -638,3 +638,21 @@ router.get(
     ctx.body = await dao.getDatabaseJobs();
   }
 );
+
+router.delete(
+  "/api/dbjob/:jobid",
+  jwtrequired,
+  mustBeAdmin,
+  async ctx => {
+    ctx.body = await dao.killDatabaseJob(JSON.parse(ctx.params.jobid));
+  }
+);
+
+router.get(
+  "/api/dbstats",
+  jwtrequired,
+  mustBeAdmin,
+  async ctx => {
+    ctx.body = await dao.getDatabaseStats();
+  }
+);
