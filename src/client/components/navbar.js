@@ -221,6 +221,9 @@ function Navbar(props) {
             <li>
               <Link to="/system/jobs">Database Jobs</Link>
             </li>
+            <li>
+              <Link to="/system/stats">Database Stats</Link>
+            </li>
           </ul>
         </li>
       </>

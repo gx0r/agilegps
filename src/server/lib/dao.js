@@ -519,7 +519,7 @@ async function killDatabaseJob(id) {
 module.exports.killDatabaseJob = killDatabaseJob;
 
 async function getDatabaseStats() {
-  const job = await systemdb.table("stats");
-  return job;
+  const stats = await systemdb.table("stats");
+  return stats;
 }
-module.exports.killDatabaseJob = killDatabaseJob;
+module.exports.getDatabaseStats = getDatabaseStats;
