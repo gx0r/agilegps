@@ -587,11 +587,6 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
       // setResults(currentResults);
       toast('Report complete.', { autoClose: false, position: toast.POSITION.TOP_RIGHT })
     })
-    .catch(function(err) {
-      toast.error(err.message);
-      setExecuting(false);
-      throw err;
-    })
     .finally(() => {
       // setResultsTotals(response.totals);
       setExecuting(false);
