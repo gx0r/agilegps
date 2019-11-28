@@ -28,6 +28,7 @@ import Devices from './devices';
 import Vehicle from './vehicle';
 import Vehicles from './vehicles';
 import VehicleEditor from './vehicle-editor';
+import System from './system';
 
 import { loadOrgState } from '../appState';
 
@@ -51,6 +52,14 @@ function Root(props) {
     <Router>
       <div>
         <Switch>
+          <Route path="/system">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="row">
+                <System />
+              </div>
+            </div>
+          </Route>
           <Route path="/help">
             <Navbar />
             <div className="container-fluid">

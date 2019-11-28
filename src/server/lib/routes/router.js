@@ -629,3 +629,12 @@ router.get(
   mustBeAdminOrOrgMember,
   vehiclestatus
 );
+
+router.get(
+  "/api/dbjobs",
+  jwtrequired,
+  mustBeAdmin,
+  async ctx => {
+    ctx.body = await dao.getDatabaseJobs();
+  }
+);
