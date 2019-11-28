@@ -42,18 +42,18 @@ module.exports.getReport = async function(
   startDate = new Date(startDate);
   endDate = new Date(endDate);
 
-  log.debug(
-    "Report Start: " +
-      moment(startDate)
-        .utc()
-        .format()
-  );
-  log.debug(
-    "Report End: " +
-      moment(endDate)
-        .utc()
-        .format()
-  );
+  // log.debug(
+  //   "Report Start: " +
+  //     moment(startDate)
+  //       .utc()
+  //       .format()
+  // );
+  // log.debug(
+  //   "Report End: " +
+  //     moment(endDate)
+  //       .utc()
+  //       .format()
+  // );
 
   const result = {
     query: {

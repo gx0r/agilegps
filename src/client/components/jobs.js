@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, validateResponse, } from "../appState.js";
 import { toast } from 'react-toastify';
 
-export default function System() {
+export default function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [autoReload, setAutoReload] = useState(true);
 
