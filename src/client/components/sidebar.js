@@ -1,5 +1,6 @@
+selectFleetAll();
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -61,32 +62,17 @@ function formatVehicle(vehicle) {
   return str;
 }
 
-class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-    this.state = {
-      searchInput: '',
-    }
+function Sidebar({ selectedAllFleets, selectedFleets, fleets, selectFleet, selectFleetAll, selectedVehicle, vehiclesByID }) {
+  const [searchInput, setSearchInput] = useState('');
+
+  if (!selectedVehicle && !selectedFleets.length && !selectedAllFleets) {
+    setTimeout(() => {
+      // TODO fix this
+      selectFleetAll();
+    }, 1000);
   }
 
-  static propTypes = {
-    orgName: PropTypes.string,
-    user: PropTypes.object,
-  };
-
-  handleSearchChange = (event) => {
-    this.setState({searchInput: event.target.value});
-  }
-
-  clearSearch = () => {
-    this.setState({searchInput: ''});
-  }
-
-  renderFleet = fleet => {
-    const { selectedFleets, selectFleet, selectedVehicle, vehiclesByID } = this.props;
-    const { searchInput } = this.state;
-
+  const renderFleet = fleet => {
     let selectedFleet = null;
     if (selectedFleets.length === 1) { // TODO move to reducer/selector
       selectedFleet = selectedFleets[0];
@@ -128,50 +114,45 @@ class Sidebar extends React.Component {
       </Fragment>
     );
   }
-
-  render() {
-    const { fleets, selectedAllFleets, selectFleetAll } = this.props;
-    const { searchInput } = this.state;
-
-    return (
-      <div className="business-table fullwidth">
-        <form className="form-search">
-          <input
-          className="input-search fullwidth"
-          onChange={ this.handleSearchChange }
-          value={ searchInput }
-          >
-          </input>
-          <span
-           className="middle glyphicon glyphicon-search"
-           style={{
-             position: 'absolute',
-             right: '45px',
-             top: '24px',
-           }}
-           onClick={ this.clearSearch }
-          />
-        </form>
-        <ul className="list-group">
-          <li
-            key="Fleets/All"
-            onClick={ selectFleetAll }
-            className={ classnames('list-group-item pointer', {
-            'active': selectedAllFleets,
-          }) }><TruckFacing fill="black" /> Fleets/All
-          </li>
-          {
-            fleets.map(this.renderFleet)
-          }
-        </ul>
-      </div>
-    );
-  }
+  return (
+    <div className="business-table fullwidth">
+      <form className="form-search">
+        <input
+        className="input-search fullwidth"
+        onChange={ ev => setSearchInput(ev.target.value) }
+        value={ searchInput }
+        >
+        </input>
+        <span
+          className="middle glyphicon glyphicon-search"
+          style={{
+            position: 'absolute',
+            right: '45px',
+            top: '24px',
+          }}
+          onClick={ () => setSearchInput('') }
+        />
+      </form>
+      <ul className="list-group">
+        <li
+          key="Fleets/All"
+          onClick={ selectFleetAll }
+          className={ classnames('list-group-item pointer', {
+          'active': selectedAllFleets,
+        }) }><TruckFacing fill="black" /> Fleets/All
+        </li>
+        {
+          fleets.map(renderFleet)
+        }
+      </ul>
+    </div>
+  );
 }
 
 export default connect(
   state => ({
     fleets: toArray(state.fleetsByID),
+    impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
     selectedAllFleets: state.selectedAllFleets,
     selectedFleets: state.selectedFleets,
     selectedVehicle: state.selectedVehicle,
