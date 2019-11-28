@@ -93,7 +93,7 @@ function Devices(props) {
               Object.keys(devicesByID).map(key => {
                 const device = devicesByID[key];
                 const toVehicleLink = vehiclesByDeviceID[device.imei] ?
-                  `/vehicle/${vehiclesByDeviceID[device.imei].id}/edit` : null;
+                  `/org/${vehiclesByDeviceID[device.imei].orgid}/vehicle/${vehiclesByDeviceID[device.imei].id}/edit` : null;
                 const toVehicleName = vehiclesByDeviceID[device.imei] && vehiclesByDeviceID[device.imei].name;
                 return (
                   <tr key={ device.imei }>

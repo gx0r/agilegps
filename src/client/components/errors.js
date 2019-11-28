@@ -7,7 +7,7 @@ import * as formatDate from "../formatDate";
 
 export default function Errors(){
   const [count, setCount] = useState(null);
-  const [events, setEvents]= useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
