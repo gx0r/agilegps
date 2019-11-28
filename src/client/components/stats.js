@@ -12,7 +12,6 @@ export default function Stats() {
         fetch("/api/dbstats", auth())
         .then(validateResponse)
         .then(stats => {
-          debugger;
           setStats(stats)
         })
       }

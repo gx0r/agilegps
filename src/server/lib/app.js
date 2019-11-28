@@ -1,6 +1,9 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
 // https://github.com/koajs/koa/blob/v2.x/docs/api/index.md
+const os = require('os');
+const process = require('process');
+const r = require("../../common/db")
 const Koa = require("koa");
 const app = (module.exports = new Koa());
 const config = require("../../../config/web.js");
@@ -77,3 +80,33 @@ const router = require("./routes/router").router;
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(KoaSinglePage('../../public/app'));
+
+function getStack(errOrPromise) {
+  if (errOrPromise == null) {
+    return null;
+  } else if (errOrPromise.stack != null) {
+    return errOrPromise.stack;
+  } else {
+    return errOrPromise;
+  }
+}
+
+async function logError(err) {
+  console.error((new Date).toUTCString() + ' error:', getStack(err))
+  await r.table('errors').insert({
+    host: os.hostname(),
+    pid: process.pid,
+    date: new Date(),
+    stack: getStack(err),
+    argv: process.argv,
+    cwd: process.cwd(),
+    memory: process.memoryUsage(),
+    uptime: process.uptime(),
+    promise: false,
+    uid: process.getuid(),
+    groups: process.getgroups(),
+    load: os.loadavg()
+  });
+};
+
+app.on('error', logError);

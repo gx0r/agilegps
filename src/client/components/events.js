@@ -135,6 +135,77 @@ export default class Events extends React.Component {
 
     return <ul className="pagination">{ elements }</ul>;
   }
+
+  renderErrors() {
+    const { events } = this.state;
+    return null;
+    return events.map(event => {
+      return (
+        <tr key={ event.id }>
+          <pre>{JSON.stringify(event, null, 4)}</pre>
+        </tr>
+      )
+    });
+  }
+
+  renderMessages() {
+    const { type } = this.props;
+    const keys = this.getEventKeys();
+    const { events, parseDates } = this.state;
+    return events.map(event => {
+      return (
+        <tr key={ event.id }>
+          {
+            keys.map(key => {
+              if (type === 'rawevents' && key === 'message') {
+                const rawMessage = event[key];
+                return <td><button onClick={ () => {
+                  const parsed = eventreportparser(rawMessage);
+                  delete parsed.args;
+                  confirmAlert({
+                    title: 'Parsed',
+                    buttons: [
+                      { label: 'Close' }
+                    ],
+                    message: <pre>{ JSON.stringify(parsed, null, 4) }</pre>,
+                  });
+                }}>Parse</button> { rawMessage }</td>
+              } else if (key === 'ad') {
+                const ad = event[key];
+                return <td><button onClick={ () => {
+                  confirmAlert({
+                    title: 'Address',
+                    buttons: [
+                      { label: 'Close' }
+                    ],
+                    message: <pre>{ JSON.stringify(ad, null, 4) }</pre>,
+                  });
+                }}>Show</button> { ad.name && ad.name }</td>
+                // return <td><pre>...</pre></td>
+              } else if (
+                  parseDates
+                  && (key === 'd' && type === 'events'
+                  || (key === 'date' || key === 'serverDate' && type === 'rawevents'))
+                ) {
+                return (
+                  <td>{ formatDate(event[key]) }</td>
+                )
+              } else if (key==='stack') {
+                  return <td><pre>{event[key]}</pre></td>
+              } else if (typeof event[key] === 'object') {
+                return <td><pre>{JSON.stringify(event[key],null,4)}</pre></td>
+              }
+              else {
+                return (
+                  <td>{ typeof event[key] === 'string' && event[key] }</td>
+                )
+              }
+            })
+          }
+        </tr>
+      );
+    })
+  }
   
   render() { 
     const { type } = this.props;
@@ -204,60 +275,11 @@ export default class Events extends React.Component {
           <table className="table table-bordered table-striped business-table">
             <thead>
               <tr>
-              { keys.map(key => <td>{ key }</td>) }
+              { keys && keys.map(key => <td>{ key }</td>) }
               </tr>
             </thead>
             <tbody>
-            {
-              events.map(event => {
-                return (
-                  <tr key={ event.id }>
-                    {
-                      keys.map(key => {
-                        if (type === 'rawevents' && key === 'message') {
-                          const rawMessage = event[key];
-                          return <td><button onClick={ () => {
-                            const parsed = eventreportparser(rawMessage);
-                            delete parsed.args;
-                            confirmAlert({
-                              title: 'Parsed',
-                              buttons: [
-                                { label: 'Close' }
-                              ],
-                              message: <pre>{ JSON.stringify(parsed, null, 4) }</pre>,
-                            });
-                          }}>Parse</button> { rawMessage }</td>
-                        } else if (key === 'ad') {
-                          const ad = event[key];
-                          return <td><button onClick={ () => {
-                            confirmAlert({
-                              title: 'Address',
-                              buttons: [
-                                { label: 'Close' }
-                              ],
-                              message: <pre>{ JSON.stringify(ad, null, 4) }</pre>,
-                            });
-                          }}>Show</button> { ad.name && ad.name }</td>
-                          // return <td><pre>...</pre></td>
-                        } else if (
-                            parseDates
-                            && (key === 'd' && type === 'events'
-                            || (key === 'date' || key === 'serverDate' && type === 'rawevents'))
-                          ) {
-                          return (
-                            <td>{ formatDate(event[key]) }</td>
-                          )  
-                        } else {
-                          return (
-                            <td>{ event[key] }</td>
-                          )
-                        }
-                      })
-                    }
-                  </tr>
-                );
-              })
-            }
+                { type === 'errors' ? this.renderErrors() : this.renderMessages() }
             </tbody>
           </table>
         </div>
