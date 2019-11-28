@@ -37,7 +37,7 @@ function deleteFleet(fleet) {
   });
 };
 
-function Fleets({ fleetsByID, selectedOrg, vehiclesByID }) {
+function Fleets({ fleetsByID, vehiclesByID }) {
   const { orgId } = useParams();
   const [selectedFleet, selectFleet] = useState({
     id: null,

@@ -30,7 +30,6 @@ function Organization({
   autoUpdate,
   impliedSelectedVehiclesByID,
   selectedMapVehicleID,
-  selectedOrg,
   setShowLatLong,
   setShowVerbose,
   showLatLong,
@@ -220,7 +219,6 @@ export default connect(
   state => ({
     autoUpdate: state.autoUpdate,
     impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
-    selectedOrg: state.selectedOrg,
     selectedMapVehicleID: state.selectedMapVehicleID,
     showLatLong: state.showLatLong,
     user: state.user,

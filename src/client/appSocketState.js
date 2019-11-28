@@ -123,19 +123,15 @@ function startListening(dispatch) {
     ev = JSON.parse(ev);
 
     if (ev.new_val == null) {
-      if (ev.old_val.orgid === state.selectedOrg.id) {
-        dispatch({
-          type: "DELETE_FLEET",
-          fleet: ev.old_val
-        });
-      }
+      dispatch({
+        type: "DELETE_FLEET",
+        fleet: ev.old_val
+      });
     } else {
-      if (ev.new_val.orgid === state.selectedOrg.id) {
-        dispatch({
-          type: "SAVE_FLEET",
-          fleet: ev.new_val
-        });
-      }
+      dispatch({
+        type: "SAVE_FLEET",
+        fleet: ev.new_val
+      });
     }
   });
 
