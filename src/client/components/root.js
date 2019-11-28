@@ -262,7 +262,7 @@ function Root(props) {
               </div>
             </div>
           </Route>
-          <Route path="/system/messages/exceptions">
+          <Route path="/system/messages/errors">
             <Navbar />
             <div className="container-fluid">
               <div className="row">
