@@ -81,23 +81,12 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(KoaSinglePage('../../public/app'));
 
-function getStack(errOrPromise) {
-  if (errOrPromise == null) {
-    return null;
-  } else if (errOrPromise.stack != null) {
-    return errOrPromise.stack;
-  } else {
-    return errOrPromise;
-  }
-}
-
 async function logError(err) {
-  console.error((new Date).toUTCString() + ' error:', getStack(err))
   await r.table('errors').insert({
     host: os.hostname(),
     pid: process.pid,
     date: new Date(),
-    stack: getStack(err),
+    stack: err.stack,
     argv: process.argv,
     cwd: process.cwd(),
     memory: process.memoryUsage(),

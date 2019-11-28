@@ -216,7 +216,7 @@ function Navbar(props) {
                 active: view === 'EXCEPTIONS'
               }) }
             >
-              <Link to="/system/messages/exceptions">Uncaught Exceptions</Link>
+              <Link to="/system/messages/errors">Server Errors</Link>
             </li>
             <li>
               <Link to="/system/jobs">Database Jobs</Link>
