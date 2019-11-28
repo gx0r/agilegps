@@ -19,6 +19,7 @@ import Organizations from './organizations';
 import OrganizationEditor from './organization-editor';
 import Reports from './reports';
 import Session from './session';
+import Errors from './errors';
 import Events from './events';
 import Fleets from './fleets';
 import Help from './help';
@@ -266,7 +267,7 @@ function Root(props) {
             <Navbar />
             <div className="container-fluid">
               <div className="row">
-                <Events type="exceptions" />
+                <Errors />
               </div>
             </div>
           </Route>
