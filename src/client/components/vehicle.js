@@ -1,6 +1,5 @@
 
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
@@ -21,7 +20,7 @@ import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
 import tzOffset from "../tzoffset";
 
-import { updateSelectedVehicleHistory } from '../appState';
+import { auth, validateResponse, updateSelectedVehicleHistory } from '../appState';
 
 import {
   animationPlay,
@@ -63,6 +62,8 @@ function Vehicle({
   const [raw, setRaw] = useState(false);
   const [rollup, setRollup] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
+  
+  const [localHistory, setLocalHistory] = useState([]);
   const { orgId } = useParams();
 
 
@@ -70,49 +71,65 @@ function Vehicle({
     selectHistoryItemID(historyItem.id);
   };
 
-  const recalculateHistory = () => {
-    let res = _.cloneDeep(hist);
-
-    if (raw) {
-      if (rollup) {
-        res = helpers.rollup(res);
-      }
-      if (!reverseOrder) {
-        res.reverse();
-      }
-    } else {
-      if (!verbose) {
-        res = res.filter(helpers.isNotVerbose);
-      }
-
-      res = helpers.cleanData(res);
-      res = helpers.mileageChange(res);
-
-      if (rollup) {
-        res = helpers.rollup(res);
-      }
-      res = helpers.addStartStop(res);
-
-      if (calculateDistanceBetween === 'start') {
-        res = helpers.startStopMileage(res);
-      } else {
-        res = helpers.ignitionMileage(res);
-      }
-
-      if (!reverseOrder) {
-        res.reverse();
-      }
+  useEffect(() => {
+    if (!startDate || !endDate) {
+      return;
     }
 
-    return res;
-  }
+    const url =
+      "/api/organizations/" +
+      selectedVehicle.orgid +
+      "/vehiclehistory/" +
+      selectedVehicle.id +
+      "?startDate=" +
+      encodeURIComponent(startDate.toISOString(true)) +
+      "&endDate=" +
+      encodeURIComponent(endDate.toISOString(true));
+
+    NProgress.start();
+    fetch(url, auth())
+      .then(validateResponse)
+      .then(res => {
+        if (raw) {
+          if (rollup) {
+            res = helpers.rollup(res);
+          }
+          if (!reverseOrder) {
+            res.reverse();
+          }
+        } else {
+          if (!verbose) {
+            res = res.filter(helpers.isNotVerbose);
+          }
+
+          res = helpers.cleanData(res);
+          res = helpers.mileageChange(res);
+
+          if (rollup) {
+            res = helpers.rollup(res);
+          }
+          res = helpers.addStartStop(res);
+
+          if (calculateDistanceBetween === 'start') {
+            res = helpers.startStopMileage(res);
+          } else {
+            res = helpers.ignitionMileage(res);
+          }
+
+          if (!reverseOrder) {
+            res.reverse();
+          }
+        }
+        setLocalHistory(res);
+
+      })
+      .finally(NProgress.done);
+  }, [calculateDistanceBetween, startDate, endDate, reverseOrder, rollup, verbose, raw]);
 
   const mySelectDays = (startDate, endDate) => {
     selectDays(startDate, endDate);
-    updateSelectedVehicleHistory();
+    // updateSelectedVehicleHistory();
   }
-
-  const adjustedVehicleHistory = recalculateHistory(hist);
 
   const excelHref = `/api/organizations/${orgId}/vehiclehistory/${selectedVehicle}/?format=excel&latlong=${showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&tzOffset=${encodeURIComponent(tzOffset())}`;
 
@@ -244,9 +261,9 @@ function Vehicle({
           </tr>
         </thead>
         <tbody>
-          { adjustedVehicleHistory.length < 1 && <tr><td>No vehicle history for this day</td></tr> }
+          { localHistory.length < 1 && <tr><td>No vehicle history for this day</td></tr> }
           { 
-            adjustedVehicleHistory.map(item => {
+            localHistory.map(item => {
               return (
                 <tr
                   className={ classnames('pointer', {
