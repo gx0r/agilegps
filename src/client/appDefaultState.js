@@ -22,7 +22,6 @@ module.exports = Object.freeze({
   selectedMapVehicleID: null,
   selectedHistoryItemID: null,
   selectedVehicleHistory: [],
-  selectedOrg: {},
 
   impliedSelectedVehiclesByID: {},
 
