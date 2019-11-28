@@ -81,3 +81,10 @@ export function setDatabaseDisconnected() {
     type: "database/disconnected"
   }
 }
+
+export function setSelectedVehicleHistory(history) {
+  return {
+    type: "selected/vehicle/history",
+    payload: history,
+  }
+}

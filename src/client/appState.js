@@ -444,34 +444,6 @@ module.exports.deleteFleet = function(fleet) {
     });
 };
 
-function updateSelectedVehicleHistory() {
-  NProgress.start();
-  let state = store.getState();
-  let vehicle = state.selectedVehicle;
-
-  let url =
-    "/api/organizations/" +
-    vehicle.orgid +
-    "/vehiclehistory/" +
-    vehicle.id +
-    "?startDate=" +
-    encodeURIComponent(state.startDate.toISOString(true)) +
-    "&endDate=" +
-    encodeURIComponent(state.endDate.toISOString(true));
-
-  return fetch(url, auth())
-    .then(validateResponse)
-    .then(function(history) {
-      store.dispatch({
-        type: "VEHICLE_HISTORY",
-        vehicle: vehicle,
-        history: history
-      });
-    })
-    .finally(NProgress.done);
-}
-module.exports.updateSelectedVehicleHistory = updateSelectedVehicleHistory;
-
 module.exports.selectVehicleByID = function(id) {
   store.dispatch({
     type: "SELECT_VEHICLE",
@@ -601,8 +573,6 @@ module.exports.selectDays = function(startDate, endDate) {
     startDate: startDate,
     endDate: endDate
   });
-
-  return updateSelectedVehicleHistory();
 };
 
 function selectDay(startDate) {
@@ -614,8 +584,6 @@ function selectDay(startDate) {
       .add(1, "days")
       .toDate()
   });
-
-  return updateSelectedVehicleHistory();
 }
 module.exports.selectDay = selectDay;
 
