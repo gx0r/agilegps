@@ -104,7 +104,7 @@ function validateResponse(response) {
         toast.error('Unable to connect to database. Contact system administrator.', { autoClose: false, draggable: false });
         store.dispatch(setDatabaseDisconnected());
       } else {
-        toast.error(error.message);
+        toast.error(error.message, {autoClose:false});
       }
 
       throw error;

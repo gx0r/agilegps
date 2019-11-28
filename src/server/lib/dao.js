@@ -511,3 +511,9 @@ async function getDatabaseJobs() {
   return jobs;
 }
 module.exports.getDatabaseJobs = getDatabaseJobs;
+
+async function killDatabaseJob(id) {
+  const job = await systemdb.table("jobs").get(id).delete();
+  return job;
+}
+module.exports.killDatabaseJob = killDatabaseJob;
