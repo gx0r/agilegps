@@ -90,7 +90,7 @@ function Sidebar({ selectedAllFleets, selectedFleets, fleets, selectFleet, selec
             margin: '0 0 0 15px',
           }}
           className={ classnames('list-group-item pointer', {
-            active: selectedVehicle === vehicle
+            active: selectedVehicle && selectedVehicle.id === vid
           }) }
           onClick={ () => appState.selectVehicleByID(vehicle.id) }
           data-key={ vid }
