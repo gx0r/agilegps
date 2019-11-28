@@ -1,13 +1,9 @@
 
 import React, { useState, useEffect} from 'react';
-import { connect } from 'react-redux';
-import * as classnames from 'classnames';
 
 import moment from 'moment';
-import { union } from 'lodash';
 import { auth, validateResponse, } from "../appState.js";
 import * as formatDate from "../formatDate";
-import { confirmAlert } from 'react-confirm-alert';
 
 export default function Errors(){
   const [count, setCount] = useState(null);
@@ -24,33 +20,21 @@ export default function Errors(){
     setCount(null);
 
     fetch('/api/count/exceptions/', auth())
-      .then(response => {
-        NProgress.inc();
-        return validateResponse(response);
-      })
+      .then(validateResponse)
       .then(result => {
         NProgress.inc();
         setCount(result.count);
       })
       .then(() => {
-        const url =
-          "/api/exceptions" +
-          "/?page=" +
-          page +
-          "&pageSize=" +
-          pageSize
-        return fetch(url, auth());
+        return fetch(`/api/exceptions/?page=${page}&pageSize=${pageSize}`, auth());
       })
-      .then(response => {
-        NProgress.inc();
-        return validateResponse(response);
-      })
+      .then(validateResponse)
       .then(events => setEvents(events))
       .finally(()=> {
         NProgress.done();
         setLoading(false);
       });
-  }, [pageSize]);
+  }, [page, pageSize]);
 
   useEffect(() => {
     setPages(Math.ceil(count / pageSize));
@@ -74,7 +58,6 @@ export default function Errors(){
     elements.push(<li key={ 'nextPage' }>
       <a className="pointer" onClick={ () => {
         setPage(page + 1);
-        // this.updateEvents();
       } }>»</a>
     </li>)
 
