@@ -20,7 +20,7 @@ import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
 import tzOffset from "../tzoffset";
 
-import { auth, validateResponse, updateSelectedVehicleHistory } from '../appState';
+import { auth, validateResponse } from '../appState';
 
 import {
   animationPlay,
@@ -28,6 +28,7 @@ import {
   animationStop,
   selectDays,
   selectHistoryItemID,
+  setSelectedVehicleHistory,
   setShowVerbose,
   setShowLatLong,
   setAnimationSpeed,
@@ -47,6 +48,7 @@ function Vehicle({
   selectedMapVehicleID,
   selectedVehicle,
   setAnimationSpeed,
+  setSelectedVehicleHistory,
   setShowVerbose,
   setShowLatLong,
   showLatLong,
@@ -94,42 +96,30 @@ function Vehicle({
           if (rollup) {
             res = helpers.rollup(res);
           }
-          if (!reverseOrder) {
-            res.reverse();
-          }
         } else {
           if (!verbose) {
             res = res.filter(helpers.isNotVerbose);
           }
-
           res = helpers.cleanData(res);
           res = helpers.mileageChange(res);
-
           if (rollup) {
             res = helpers.rollup(res);
           }
           res = helpers.addStartStop(res);
-
           if (calculateDistanceBetween === 'start') {
             res = helpers.startStopMileage(res);
           } else {
             res = helpers.ignitionMileage(res);
           }
-
-          if (!reverseOrder) {
-            res.reverse();
-          }
+        }
+        setSelectedVehicleHistory(res);
+        if (!reverseOrder) {
+          res.reverse();
         }
         setLocalHistory(res);
-
       })
       .finally(NProgress.done);
   }, [calculateDistanceBetween, startDate, endDate, reverseOrder, rollup, verbose, raw]);
-
-  const mySelectDays = (startDate, endDate) => {
-    selectDays(startDate, endDate);
-    // updateSelectedVehicleHistory();
-  }
 
   const excelHref = `/api/organizations/${orgId}/vehiclehistory/${selectedVehicle}/?format=excel&latlong=${showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&tzOffset=${encodeURIComponent(tzOffset())}`;
 
@@ -180,7 +170,7 @@ function Vehicle({
           startDateId="verhicles_start_date_id" // PropTypes.string.isRequired,
           endDate={ moment(endDate) } // momentPropTypes.momentObj or null,
           endDateId="vehicles_end_date_id" // PropTypes.string.isRequired,
-          onDatesChange={ ({ startDate, endDate }) => mySelectDays(startDate, endDate) } // PropTypes.func.isRequired,
+          onDatesChange={ ({ startDate, endDate }) => { selectDays(startDate, endDate) } } // PropTypes.func.isRequired,
           focusedInput={ focusedInput } // PropTypes.oneOf([START_DATE, END_DATE]) or null,
           onFocusChange={ focusedInput => setFocusedInput(focusedInput) } // PropTypes.func.isRequired,
           isOutsideRange={ () => false }
@@ -329,14 +319,15 @@ export default connect(
     user: state.user,
     verbose: state.verbose,
   }),
-  dispatch => bindActionCreators({
+  {
     animationPlay,
     animationPause,
     animationStop,
     selectHistoryItemID,
     selectDays,
+    setSelectedVehicleHistory,
     setShowVerbose,
     setShowLatLong,
     setAnimationSpeed,
-  }, dispatch),
+  }
 )(Vehicle);

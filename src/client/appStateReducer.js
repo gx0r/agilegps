@@ -269,6 +269,12 @@ module.exports = function reducer(state, action) {
         return Object.assign({}, state, {
           databaseConnected: false,
         });
+
+    case 'selected/vehicle/history':
+      return {
+        ...state,
+        selectedVehicleHistory: action.payload,
+      }
     
     default:
       return state;
