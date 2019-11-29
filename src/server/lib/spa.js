@@ -35,39 +35,43 @@ function acceptsHtml(headers) {
 
 async function spa(ctx, next) {
 
+  ctx.redirect('back', RULES.root);
+  await next();
+  return;
+
   if (isStaticFile(ctx) && !isIndexPath(ctx)) {
     await next();
     return;
   }
 
   if (isInvalidVerb(ctx)) {
-    debug.log(ctx, 'spa : invalid verb');
+    // debug.log(ctx, 'spa : invalid verb');
     ctx.set('Allow', 'GET,OPTIONS');
-    ctx.setError(new Error('Method not allowed'));
+    throw new Error('Method not allowed');
     return;
   }
 
-  if (hasBody(ctx)) {
-    debug.log(ctx, 'spa : has body');
-    ctx.setError(new Error('Request had body'));
-    return;
-  }
+  // if (hasBody(ctx)) {
+  //   // debug.log(ctx, 'spa : has body');
+  //   throw new Error('Request had body');
+  //   return;
+  // }
 
   if (!acceptsHtml(ctx.headers)) {
-    debug.log(ctx, 'spa : does not accept html');
+    // debug.log(ctx, 'spa : does not accept html');
     await next();
     return;
   }
 
   if (shouldRedirectWithoutSlash(ctx)) {
-    debug.log(ctx, 'spa : has trailing slash');
+    // debug.log(ctx, 'spa : has trailing slash');
     ctx.status = 301;
     ctx.redirect('back', ctx.path.slice(0, -1));
     return;
   }
 
   if (isIndexPath(ctx)) {
-    debug.log(ctx, 'spa : direct index.html reference');
+    // debug.log(ctx, 'spa : direct index.html reference');
     ctx.status = 301;
     ctx.redirect('back', RULES.root);
     return;

@@ -1,73 +1,24 @@
+<!doctype html>
 <html>
-
-<head>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-  <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
-  </script>
-</head>
-
-<script>
-  document.title = window.location.hostname;
-
-</script>
-
-<body style="background-color:#FFFFFF;font-family:Verdana, Geneva, Tahoma, sans-serif">
-
-  <div class="container">
-
-    <div class="row" style="margin-top:2em">
-      <div class="col-md-2"></div>
-      <div class="col-md-8" style="font-family: verdana; text-align:center;">
-      </div>
-      <div class="col-md-2">
-        <button onclick="window.location = '/app/'"
-          style="background-color:#36618F;color:white;font-size:1.0em;padding:1em;border-radius:10px">User Login
-          Here!</button>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-5">
-        <p class="list-group-item-heading"><b><i>Get Started!</i></b></p>
-        <ol class="list-group">
-          <li class="list-group-item">Compatible with Queclink <a href="http://www.queclink.com/GV300Series">GV300</a>,
-            <a href="http://www.queclink.com/GV500">GV500</a> or similar GPS tracker.</li>
-        </ol>
-      </div>
-      <div class="col-md-5">
-        <p class="list-group-item-heading"><b><i>Features</i></b></p>
-        <ul class="list-group">
-          <li class="list-group-item">Real-time positional updates </li>
-          <li class="list-group-item">Unlimited organizations, fleets, users, and vehicles</li>
-          <li class="list-group-item">Receive data over UDP for lowest possible cellular data usage</li>
-          <li class="list-group-item">Responsive design supports desktop and mobile browsers</li>
-          <li class="list-group-item">Reports: start/stop, ignition, idling, mileage by state, odometer by state, speed,
-            daily report, vehicle summary, and OBD-II</li>
-          <li class="list-group-item">OBD support for GV500 or similar: malfunction codes, fuel levels, engine coolant
-            temperature, RPMs (vehicle-dependent for what information is reported)</li>
-          <li class="list-group-item">Metric and imperial units</li>
-          </ol>
-      </div>
-      <div class="col-md-1"></div>
-    </div>
-
-    <div class="row" style="text-align: center">
-      <img src="images/screen1.png" style="box-shadow: 10px 10px 5px #888888"></img>
-    </div>
-
-    <footer class="footer" style="margin-top:2em"></footer>
-
-  </div>
-</body>
-
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/datatables.css">
+    <title>AgileGPS Pro</title>
+  </head>
+  <body>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58873095-4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'UA-58873095-4');
+    </script>
+    <div id="root"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA08yYHnZVg5lxAVxlBjB7h7_EgijU6XMg"></script>
+    <noscript>Your browser must have JavaScript enabled in order to use this site.</noscript>
+  <script type="text/javascript" src="vendors.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
 </html>
