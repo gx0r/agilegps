@@ -11,11 +11,17 @@ module.exports = function reducer(state, action) {
   const newState = {};
 
   switch (action.type) {
-    case "SOCKET_CONNECT":
-      return Object.assign({}, state, { realTimeUpdates: true });
+    case "socket/connect":
+      return {
+        ...state,
+        realTimeUpdates: true,
+      }
 
-    case "SOCKET_DISCONNECT":
-      return Object.assign({}, state, { realTimeUpdates: false });
+    case "socket/disconnect":
+      return {
+        ...state,
+        realTimeUpdates: false,
+      }
 
     case "LOGOUT":
       return Object.assign({}, defaultState);
@@ -197,17 +203,6 @@ module.exports = function reducer(state, action) {
       return Object.assign({}, state, {
         startDate: action.startDate,
         endDate: action.endDate
-      });
-
-    case "VEHICLE_HISTORY":
-      // var vehicleHistoryByID = _.cloneDeep(state.vehicleHistoryByID);
-      // vehicleHistoryByID[action.vehicle.id] = action.history;
-      // return Object.assign({}, state, {
-      //     vehicleHistoryByID: vehicleHistoryByID
-      // });
-      return Object.assign({}, state, {
-        selectedVehicleHistory: action.history,
-        lastUpdated: new Date()
       });
 
     case "AUTOUPDATE":

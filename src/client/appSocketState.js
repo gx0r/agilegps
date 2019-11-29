@@ -1,6 +1,7 @@
 /* Copyright (c) 2016 Grant Miner */
 "use strict";
 import io from 'socket.io-client'
+import { setSocketConnected, setSocketDisconnected } from './appStateActionCreators';
 export { stopListening, startListening };
 
 let socket;
@@ -22,28 +23,18 @@ function startListening(dispatch) {
 
   socket = io();
   socket.on("connect", function() {
-    console.log("Socket connected.");
-    dispatch({
-      type: "SOCKET_CONNECT"
-    });
+    dispatch(setSocketConnected());
   });
   socket.on("disconnect", function(e) {
-    console.warn(e);
-    dispatch({
-      type: "SOCKET_DISCONNECT"
-    });
+    dispatch(setSocketDisconnected());
   });
   socket.on("error", function(e) {
     console.warn(e);
-    dispatch({
-      type: "SOCKET_DISCONNECT"
-    });
+    dispatch(setSocketDisconnected());
   });
   socket.on("reconnect", function() {
     console.warn("Socket reconnect.");
-    dispatch({
-      type: "SOCKET_CONNECT"
-    });
+    dispatch(setSocketConnected());
   });
 
   const tables = ["users", "devices", "vehicles", "errors"];

@@ -88,3 +88,15 @@ export function setSelectedVehicleHistory(history) {
     payload: history,
   }
 }
+
+export function setSocketConnected() {
+  return {
+    type: "socket/connect"
+  }
+}
+
+export function setSocketDisconnected() {
+  return {
+    type: "socket/disconnect"
+  }
+}

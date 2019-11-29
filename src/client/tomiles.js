@@ -3,7 +3,6 @@
 const KilometersToMiles = require("kilometers-to-miles");
 const ktm = new KilometersToMiles();
 const _ = require("lodash");
-const appState = require("../client/appState");
 const isUserMetric = require("./isUserMetric");
 
 module.exports = function(value) {
