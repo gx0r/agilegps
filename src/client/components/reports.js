@@ -32,6 +32,31 @@ const reports = [
   'jes',
 ]
 
+function getReportName(report) {
+  switch (report) {
+    case 'idle':
+      return 'Idle Report';
+    case 'daily':
+      return 'Begin Day End Day Report';
+    case 'mileage':
+      return 'Mileage by State Summary Report';
+    case 'odometer':
+      return 'Odometer by State Summary Report';
+    case 'speed':
+      return 'Speed Report';
+    case 'ignition':
+      return 'Ignition Detail Report';
+    case 'start':
+      return 'Start/Stop Detail Report';
+    case 'summary':
+      return 'Vehicle Summary Report';
+    case 'obd':
+      return 'OBD-II Status Report';
+    case 'jes':
+      return 'OBD-II Engine Report';
+  }
+}
+
 
 function renderLocation(item) {
   let res = "";
@@ -240,7 +265,7 @@ function Speed({results, vehicles, totals = {}}) {
             Object.keys(vehicles).map(vid => {
               if (isFinite(tomiles(totals[vid]))) {
                 return (
-                  <tr>
+                  <tr key={key++}>
                     <td>{ vehicles[vid].name }</td>
                     <td>{ tomiles(totals[vid]) }</td>
                   </tr>
@@ -262,11 +287,11 @@ function Speed({results, vehicles, totals = {}}) {
         <tbody>
           {
             Object.keys(vehicles).map(vid =>
-            <tr>
+            <tr key={vid}>
               <td colSpan="7" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
               {
                 results[vid].map(item =>
-                  <tr>
+                  <tr key={key++}>
                     <td>{ renderLocation(item) }</td>
                     <td>{ formatDate(item.d) }</td>
                     <td>{ todir(item) }</td>
@@ -665,8 +690,12 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
             />
           </div>
           <div className="col-md-3">
-            <select size={ reports.length } className="form-control" onChange={ ev => setReportType(ev.target.value) }>
-            { reports.map(key => <option selected={ key === reportType} value={ key }>{key}</option>) }
+            <select size={ reports.length } className="form-control" onChange={ ev => {
+              setResults({});
+              setResultVehicles({});
+              setReportType(ev.target.value);
+            } }>
+            { reports.map(key => <option selected={ key === reportType} value={ key }>{getReportName(key)}</option>) }
             </select>
             <button className="btn btn-default btn-success" style={{marginTop:'1em',marginBottom: '1em'}}
               disabled={ executing } onClick={ () => execute(reportType) }
