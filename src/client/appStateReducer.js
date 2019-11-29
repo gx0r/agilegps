@@ -3,25 +3,10 @@
 // Reducer for Redux
 const defaultState = require("./appDefaultState");
 
-module.exports = function reducer(state, action) {
-  if (!state) {
-    return defaultState;
-  }
-
+module.exports = function reducer(state = defaultState, action) {
   const newState = {};
 
   switch (action.type) {
-    case "socket/connect":
-      return {
-        ...state,
-        realTimeUpdates: true,
-      }
-
-    case "socket/disconnect":
-      return {
-        ...state,
-        realTimeUpdates: false,
-      }
 
     case "LOGOUT":
       return Object.assign({}, defaultState);
@@ -256,15 +241,29 @@ module.exports = function reducer(state, action) {
         });
 
     case "database/connected":
-      return Object.assign({}, state, {
+      return {
+        ...state,
         databaseConnected: true,
-      });
+      }
 
     case "database/disconnected":
-        return Object.assign({}, state, {
-          databaseConnected: false,
-        });
+      return {
+        ...state,
+        databaseConnected: false,
+      }
 
+    case "socket/connect":
+      return {
+        ...state,
+        realTimeUpdates: true,
+      }
+  
+    case "socket/disconnect":
+      return {
+        ...state,
+        realTimeUpdates: false,
+      }
+    
     case 'selected/vehicle/history':
       return {
         ...state,

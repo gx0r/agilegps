@@ -44,10 +44,7 @@ function EnsureRouteOrgLoaded() {
   return null;
 }
 
-function Root(props) {
-
-  const { selectedVehicle } = props;
-
+function Root({selectedVehicle}) {
   const renderVehicleOrOrg = () => selectedVehicle ? <Vehicle /> : <Organization />;
 
   return (
