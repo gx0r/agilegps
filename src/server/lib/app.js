@@ -16,6 +16,7 @@ const Etag = require("koa-etag");
 const ResponseTime = require("koa-response-time");
 const BodyParser = require("koa-bodyparser");
 const KoaSinglePage = require('koa-single-page');
+const ServeStatic = require("koa-static");
 
 app.use(ResponseTime());
 app.use(Conditional());
@@ -79,7 +80,10 @@ const router = require("./routes/router").router;
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+app.use(ServeStatic("../../public"));
 app.use(KoaSinglePage('../../public/app'));
+// app.use(require('./spa'));
 
 async function logError(err) {
   await r.table('errors').insert({
