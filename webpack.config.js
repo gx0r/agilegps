@@ -12,7 +12,7 @@ module.exports = (env = {}) => {
   return {
     entry: './src/client/main.js',
     output: {
-      path: path.join(__dirname, '/public/app'),
+      path: path.join(__dirname, '/public'),
       filename: '[name].bundle.js',
     },
     plugins: [

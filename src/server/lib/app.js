@@ -80,10 +80,11 @@ const router = require("./routes/router").router;
 
 app.use(router.routes());
 app.use(router.allowedMethods());
-
-app.use(ServeStatic("../../public"));
-app.use(KoaSinglePage('../../public/app'));
-// app.use(require('./spa'));
+app.use(ServeStatic("../../public"), {
+  'index': ['index.html', 'index.htm']
+});
+app.use(require('./spa')());
+// app.use(KoaSinglePage('../../public'));
 
 async function logError(err) {
   await r.table('errors').insert({
