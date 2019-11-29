@@ -4,6 +4,7 @@ import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
 
+import NProgress from 'nprogress';
 import { union } from 'lodash';
 import { auth, validateResponse, } from "../appState.js";
 import * as formatDate from "../formatDate";

@@ -3,6 +3,7 @@
 /**
 Uses Redux ( https://github.com/reactjs/redux ) to handle and keep all application state in one place.
 */
+const NProgress = require('nprogress');
 const toast = require('react-toastify').toast;
 const redux = require("redux");
 const compose = redux.compose;

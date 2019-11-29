@@ -1,13 +1,13 @@
 
 import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { useParams } from "react-router-dom";
 
 import moment from 'moment';
 import { DateRangePicker } from 'react-dates';
 
+import NProgress from 'nprogress';
 import helpers from '../../common/helpers';
 import { city, street } from "../../common/addressdisplay";
 import { state as stateFormat } from "../../common/addressdisplay";
