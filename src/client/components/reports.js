@@ -575,6 +575,110 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
   const [endDate, setEndDate] = useState(moment());
   const forceUpdate = useForceUpdate();
 
+
+  const dateRangeChange = ev => {
+    if (ev === "Today") {
+      setStartDate(
+        moment()
+          .startOf("day")
+          .add(1, "days")
+      );
+      setEndDate(
+        moment()
+          .startOf("day")
+          .add(1, "days")
+      );
+    }
+    if (ev === "Yesterday") {
+      setStartDate(
+        moment()
+          .startOf("day")
+      );
+      setEndDate(
+        moment()
+          .startOf("day")
+          .add(0, "days")
+      );
+    }
+    if (ev === "Last 2 Days") {
+      setStartDate(
+        moment()
+          .startOf("day")
+          .subtract(0, "days")
+      );
+      setEndDate(
+        moment()
+          .startOf("day")
+          .add(1, "days")
+      );
+    }
+    if (ev === "Last 3 Days") {
+      setStartDate(
+        moment()
+          .startOf("day")
+          .subtract(1, "days")
+      );
+      setEndDate(
+        moment()
+          .startOf("day")
+          .add(1, "days")
+      );
+    }
+    if (ev === "This week to date") {
+      setStartDate(
+        moment()
+          .startOf("day")
+          .subtract(7, "days")
+          .format("YYYY-MM-DD")
+      );
+      setEndDate(
+        moment()
+          .startOf("day")
+          .add(1, "days")
+          .format("YYYY-MM-DD")
+      );
+    }
+    if (ev === "Last week") {
+      setStartDate(
+        moment()
+          .startOf("day")
+          .subtract(1, "week")
+          .format("YYYY-MM-DD")
+      );
+      setEndDate(
+        moment()
+          .startOf("day")
+          .format("YYYY-MM-DD")
+      );
+    }
+    if (ev === "This month") {
+      setStartDate(
+        moment()
+          .startOf("month")
+          .add(1, "days")
+      );
+      setEndDate(
+        moment()
+          .startOf("month")
+          .add(1, "month")
+          .add(0, "days")
+      );
+    }
+    if (ev === "Last month") {
+      setStartDate(
+        moment()
+          .startOf("month")
+          .subtract(1, "month")
+          .add(1, "days")
+      );
+      setEndDate(
+        moment()
+          .startOf("month")
+          .add(0, "days")
+      );
+    }
+  };
+
   const execute = () => {
     setExecuting(true);
     const ids = Object.keys(impliedSelectedVehiclesByID);
@@ -666,12 +770,12 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         <div className="col-md-12" style={{ marginTop: '1em', marginBottom: '1em' }}>
           <span>Quick select </span>
           <span className="button-group">
-              <button className="btn btn-default">Today</button>
-              <button className="btn btn-default">Yesterday</button>
-              <button className="btn btn-default">Last 2 Days</button>
-              <button className="btn btn-default">Last 3 Days</button>
-              <button className="btn btn-default">Last week</button>
-              <button className="btn btn-default">Last month</button>
+              <button className="btn btn-default" onClick={ () => dateRangeChange("Today") }>Today</button>
+              <button className="btn btn-default" onClick={ () => dateRangeChange("Yesterday") }>Yesterday</button>
+              <button className="btn btn-default" onClick={ () => dateRangeChange("Last 2 Days") }>Last 2 Days</button>
+              <button className="btn btn-default" onClick={ () => dateRangeChange("Last 3 Days") }>Last 3 Days</button>
+              <button className="btn btn-default" onClick={ () => dateRangeChange("Last week") }>Last week</button>
+              <button className="btn btn-default" onClick={ () => dateRangeChange("Last month") }>Last month</button>
             </span>
           </div>
           <div className="col-md-12" style={{ marginTop: '1em', marginBottom: '1em' }}>
