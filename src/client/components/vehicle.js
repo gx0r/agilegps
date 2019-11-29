@@ -78,18 +78,9 @@ function Vehicle({
       return;
     }
 
-    const url =
-      "/api/organizations/" +
-      selectedVehicle.orgid +
-      "/vehiclehistory/" +
-      selectedVehicle.id +
-      "?startDate=" +
-      encodeURIComponent(startDate.toISOString(true)) +
-      "&endDate=" +
-      encodeURIComponent(endDate.toISOString(true));
-
     NProgress.start();
-    fetch(url, auth())
+    fetch(`/api/organizations/${selectedVehicle.orgid}/vehiclehistory/${selectedVehicle.id}?startDate=${encodeURIComponent(startDate.toISOString(true))}&endDate=${encodeURIComponent(endDate.toISOString(true))}`
+    , auth())
       .then(validateResponse)
       .then(res => {
         if (raw) {
@@ -121,7 +112,7 @@ function Vehicle({
       .finally(NProgress.done);
   }, [calculateDistanceBetween, startDate, endDate, reverseOrder, rollup, verbose, raw]);
 
-  const excelHref = `/api/organizations/${orgId}/vehiclehistory/${selectedVehicle}/?format=excel&latlong=${showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&tzOffset=${encodeURIComponent(tzOffset())}`;
+  const excelHref = `/api/organizations/${orgId}/vehiclehistory/${selectedVehicle.id}/?format=excel&latlong=${showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&startDate=${encodeURIComponent(startDate.toISOString(true))}&endDate=${encodeURIComponent(endDate.toISOString(true))}&tzOffset=${encodeURIComponent(tzOffset())}`;
 
   return (
     <div className="business-table">
