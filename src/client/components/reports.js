@@ -703,11 +703,11 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
               { renderExecution() }
             </button>
           </div>
+          <div className="row col-md-12">
+            { renderResults() }
+          </div>
       </div>
       <div className="col-sm-3" />
-      <div className="row col-md-12">
-        { renderResults() }
-      </div>
     </div>
   );
 }
