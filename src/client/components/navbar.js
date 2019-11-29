@@ -34,7 +34,6 @@ function Navbar(props) {
   const toggleAdminToolsOpen = () => setAdminToolsOpen(!adminToolsOpen);
   const [orgToolsOpen, setOrgToolsOpen] = useState(false);
   const { orgId } = useParams();
-  console.log(orgId);
 
   Navbar.handleClickOutside = () => { setAdminToolsOpen(false) }
  
