@@ -192,18 +192,20 @@ class Map extends React.Component {
   }
 
   nextAnimation = (currentAnimationFrame = 0) => {
-    const { animationPromise, map } = this;
-    const { animationSpeed, autoUpdate, hist, historyMarkersByID } = this.props;
+    const { animationPromise, map, historyMarkersByID } = this;
+    const { animationSpeed, autoUpdate, hist } = this.props;
+
     const bounds = new google.maps.LatLngBounds();
     console.log(currentAnimationFrame);
     console.log(hist.length);
     if (currentAnimationFrame < hist.length) {
       return delay(500).then(() => {
         const item = hist[currentAnimationFrame];
-        const marker = this.createHistoryMarker(item);
-        historyMarkersByID[item.id] = marker;
-        if (marker && autoUpdate) {
-          map.fitBounds(marker.position);
+        const { marker, line } = this.createHistoryMarkerAndLine(item);
+        if (marker) {
+          historyMarkersByID[item.id] = marker;
+          bounds.extend(marker.position);
+          this.maybeRepositionMap(bounds);
         }
         const animationPlaying = appState.getState().animationPlaying;
         if (!animationPlaying || currentAnimationFrame >= history.length - 1) {
@@ -336,6 +338,7 @@ class Map extends React.Component {
 
 export default connect(
   state => ({
+    animationSpeed: state.animationSpeed,
     animationPlaying: state.animationPlaying,
     autoUpdate: state.autoUpdate,
     hist: state.selectedVehicleHistory,

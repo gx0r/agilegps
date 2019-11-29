@@ -64,7 +64,6 @@
     "node-fetch": "^2.6.0",
     "node-geocoder": "^3.25.0",
     "nprogress": "^0.2.0",
-    "pikaday2": "^2.0.1",
     "pony": "^1.0.0",
     "querystring": "^0.2.0",
     "react-confirm-alert": "^2.4.1",
