@@ -629,13 +629,11 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         moment()
           .startOf("day")
           .subtract(7, "days")
-          .format("YYYY-MM-DD")
       );
       setEndDate(
         moment()
           .startOf("day")
           .add(1, "days")
-          .format("YYYY-MM-DD")
       );
     }
     if (ev === "Last week") {
@@ -643,12 +641,10 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
         moment()
           .startOf("day")
           .subtract(1, "week")
-          .format("YYYY-MM-DD")
       );
       setEndDate(
         moment()
           .startOf("day")
-          .format("YYYY-MM-DD")
       );
     }
     if (ev === "This month") {
