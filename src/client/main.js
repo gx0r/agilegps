@@ -18,6 +18,7 @@ import { IntlProvider } from 'react-intl';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 
+import 'nprogress/nprogress.css';
 import "bootstrap/less/bootstrap.less";
 import "./css/style.css";
 import 'react-toastify/dist/ReactToastify.css';

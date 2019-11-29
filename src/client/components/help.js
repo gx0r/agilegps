@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { version } from '../../../package.json';
 
 export default class Help extends React.Component {
 
@@ -9,6 +10,8 @@ export default class Help extends React.Component {
           <div>
             <div className="col-sm-2"></div>
             <div className="business-table col-sm-8">
+              <h4>Version</h4>
+              <div>{version}</div>
               <h4>Why don't I see fuel level for my vehicle?</h4>
               <div>It depends on the vehicle. Not all vehicles report their fuel level.</div>
               <h4>What does the battery level indicate?</h4>

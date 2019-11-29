@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="/datatables.css">
-    <title>AgileGPS Pro</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58873095-4"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.googleAnalyticsKey %>"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag() {
@@ -18,7 +18,7 @@
       gtag('config', 'UA-58873095-4');
     </script>
     <div id="root"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA08yYHnZVg5lxAVxlBjB7h7_EgijU6XMg"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= htmlWebpackPlugin.options.googleAPIkey %>"></script>
     <noscript>Your browser must have JavaScript enabled in order to use this site.</noscript>
-  <script type="text/javascript" src="vendors.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
+  </body>
 </html>

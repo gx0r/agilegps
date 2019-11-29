@@ -4,6 +4,7 @@ import React, { useState, useEffect} from 'react';
 import moment from 'moment';
 import { auth, validateResponse, } from "../appState.js";
 import * as formatDate from "../formatDate";
+import NProgress from 'nprogress';
 
 export default function Errors(){
   const [count, setCount] = useState(null);
