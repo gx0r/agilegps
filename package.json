@@ -52,6 +52,7 @@
     "koa-router": "^7.4.0",
     "koa-session": "^5.12.3",
     "koa-single-page": "^19.0.0",
+    "koa-static": "^5.0.0",
     "koa-unless": "^1.0.7",
     "kompression": "^1.0.1",
     "local-reverse-geocoder": "^0.7.0",
