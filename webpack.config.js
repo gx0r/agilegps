@@ -2,6 +2,7 @@
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = (env = {}) => {
 
@@ -16,6 +17,7 @@ module.exports = (env = {}) => {
       filename: '[name].bundle.js',
     },
     plugins: [
+      // new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: 'index-template.html',
         title: 'AgileGPS Pro',
@@ -36,6 +38,10 @@ module.exports = (env = {}) => {
     },
     mode: env.production ? 'production' : 'development',
     devtool: 'eval-source-map',
+    devServer: {
+      contentBase: './public',
+      hot: true,
+    },
     module: {
       // preLoaders: [
       //     {test: /\.js$/, exclude: /node_modules/, loader: 'jshint-loader'}
