@@ -17,6 +17,7 @@ import * as todir from "../../common/todir";
 import * as isUserMetric from "../isUserMetric";
 import * as Status from "../../common/status.js";
 import * as tzOffset from "../tzoffset";
+import { useForceUpdate} from './useforceupdate.js';
 
 const RECENTLY_CHANGED = 10000;
 
@@ -37,6 +38,7 @@ function Organization({
   verbose,
   }) {
   const { orgId } = useParams();
+  const forceUpdate = useForceUpdate();
 
   const wasRecentlyUpdated = date => {
     date = new Date(date);
@@ -44,7 +46,7 @@ function Organization({
 
     if (lastUpdated) {
       delay(RECENTLY_CHANGED).then(() => {
-        this.forceUpdate();
+        forceUpdate();
       });
     }
     return lastUpdated;

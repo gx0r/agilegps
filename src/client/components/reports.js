@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import bluebird from 'bluebird';
 import moment from 'moment';
 import { DateRangePicker } from 'react-dates';
-import { Formik, Field } from 'formik';
 import { toast } from 'react-toastify';
 import { get, isFinite, merge } from 'lodash';
 
@@ -18,6 +17,7 @@ import tohms from './tohms';
 import * as formatDate from '../formatDate';
 import * as todir from '../../common/todir'; 
 import { full } from "../../common/addressdisplay";
+import { useForceUpdate } from './useforceupdate';
 
 const reports = [
   'idle',
@@ -70,12 +70,6 @@ function renderLocation(item) {
     res = res + ", " + state(item);
   }
   return res;
-}
-
-//create your forceUpdate hook
-function useForceUpdate(){
-  const [value, setValue] = useState(0); // integer state
-  return () => setValue(value => ++value); // update the state to force render
 }
 
 let count = 0;
