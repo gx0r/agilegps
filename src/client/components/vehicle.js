@@ -8,6 +8,7 @@ import moment from 'moment';
 import { DateRangePicker } from 'react-dates';
 
 import NProgress from 'nprogress';
+import { cloneDeep } from 'lodash';
 import helpers from '../../common/helpers';
 import { city, street } from "../../common/addressdisplay";
 import { state as stateFormat } from "../../common/addressdisplay";
@@ -103,6 +104,7 @@ function Vehicle({
             res = helpers.ignitionMileage(res);
           }
         }
+        
         setSelectedVehicleHistory(res);
         if (!reverseOrder) {
           res.reverse();

@@ -35,7 +35,7 @@ function Map({
   const [historyLinesByID, setHistoryLinesByID] = useState({});
   const [animationHistoryMarkersByID, setAnimationHistoryMarkersByID] = useState({});
   const [animationLinesByID, setAnimationLinesByID] = useState({});
-  const [currentAnimationFrame, setCurrentAnimationFrame] = useState(0);
+  const [currentAnimationFrame, setCurrentAnimationFrame] = useState(hist.length - 1);
   const [previousHistoryItem, setPreviousHistoryItem] = useState(null);
 
   const maybeRepositionMap = bounds => {
@@ -220,19 +220,23 @@ function Map({
       });
 
     }
-
+    
+    if (animationStopped && !animationPlaying) {
+      setCurrentAnimationFrame[hist.length - 1];
+    }
     if (animationStopped) {
       cleanup();
       return;
     }
+
     if (animationPlaying) {
       const bounds = new google.maps.LatLngBounds();
-      if (currentAnimationFrame < hist.length) {
+      if (currentAnimationFrame >= 0) {
         const item = hist[currentAnimationFrame];
         const { marker, line } = createHistoryMarkerAndLine(item);
         if (marker) {
           animationHistoryMarkersByID[item.id] = marker;
-          // setAnimationHistoryMarkersByID(animationHistoryMarkersByID);
+          setAnimationHistoryMarkersByID(animationHistoryMarkersByID);
           bounds.extend(marker.position);
           // maybeRepositionMap(bounds);
         }
@@ -242,7 +246,7 @@ function Map({
         }
 
         const timeout = setTimeout(() => {
-          setCurrentAnimationFrame(currentAnimationFrame + 1);
+          setCurrentAnimationFrame(currentAnimationFrame - 1);
         }, animationSpeed);
 
         return () => {
@@ -288,7 +292,7 @@ function Map({
   }, [animationStopped, animationPlaying, selectedVehicle, hist, previousHistoryItem]);
 
   useEffect(() => {
-    setCurrentAnimationFrame(0);
+    setCurrentAnimationFrame(hist.length - 1);
   }, [hist, selectedVehicle])
 
   const handleApiLoaded = (suppliedMap, maps) => {
