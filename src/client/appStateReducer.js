@@ -225,21 +225,6 @@ module.exports = function reducer(state = defaultState, action) {
           selectedHistoryItemID: action.value
         });
 
-    case "ANIMATION_PLAY":
-        return Object.assign({}, state, {
-          animationPlaying: true,
-        });
-
-    case "ANIMATION_STOP":
-        return Object.assign({}, state, {
-          animationPlaying: false,
-        });
-
-    case "ANIMATION_SPEED":
-        return Object.assign({}, state, {
-          animationSpeed: action.value,
-        });
-
     case "database/connected":
       return {
         ...state,
@@ -269,7 +254,33 @@ module.exports = function reducer(state = defaultState, action) {
         ...state,
         selectedVehicleHistory: action.payload,
       }
-    
+
+    case "animation/play":
+      return {
+        ...state,
+        animationPlaying: true,
+        animationStopped: false,
+      }
+
+    case "animation/pause":
+      return {
+        ...state,
+        animationPlaying: false,
+      }
+
+    case "animation/stop":
+      return {
+        ...state,
+        animationPlaying: false,
+        animationStopped: true,
+      }
+
+    case "animation/speed":
+      return {
+        ...state,
+        animationSpeed: action.payload,
+      }
+  
     default:
       return state;
   }

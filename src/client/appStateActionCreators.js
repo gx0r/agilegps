@@ -28,35 +28,6 @@ export function setShowLatLong(bool) {
   };
 };
 
-
-export function animationPlay() {
-  return {
-    type: "ANIMATION_PLAY",
-    value: true
-  };
-};
-
-export function animationPause() {
-  return {
-    type: "ANIMATION_PAUSE",
-    value: true
-  };
-};
-
-export function animationStop() {
-  return {
-    type: "ANIMATION_STOP",
-    value: true
-  };
-};
-
-export function setAnimationSpeed(value) {
-  return {
-    type: "ANIMATION_SPEED",
-    value,
-  };
-};
-
 export function selectFleetAll() {
   return {
     type: "SELECT_FLEET_ALL"
@@ -100,3 +71,28 @@ export function setSocketDisconnected() {
     type: "socket/disconnect"
   }
 }
+
+export function animationPlay() {
+  return {
+    type: "animation/play",
+  };
+};
+
+export function animationPause() {
+  return {
+    type: "animation/pause",
+  };
+};
+
+export function animationStop() {
+  return {
+    type: "animation/stop",
+  };
+};
+
+export function setAnimationSpeed(value) {
+  return {
+    type: "animation/speed",
+    payload: value,
+  };
+};

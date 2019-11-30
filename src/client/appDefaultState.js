@@ -7,7 +7,8 @@ module.exports = Object.freeze({
   databaseConnected: true,
   
   animationPlaying: false,
-  animationSpeed: 15,
+  animationStopped: true,
+  animationSpeed: 250,
 
   lang: "", // set below
 
