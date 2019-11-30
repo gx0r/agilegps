@@ -1,11 +1,7 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
 import { delay } from 'bluebird';
-
 import GoogleMapReact from 'google-map-react';
-
 import * as ClickListenerFactory from '../markers/clicklistenerfactory';
 import * as toGoogle from '../togoogle.js';
 import * as MarkerWithLabel from '../markers/markerWithLabel';
@@ -13,30 +9,33 @@ import { getMarkerIconFleetView, getMarkerIconIndividualHistory, getStatusColor 
 import * as tomiles from "../tomiles";
 import * as appState from '../appState';
 
-class Map extends React.Component {
-  constructor(props) {
-    super(props);
-    this.markersByVehicleID = {};
-    this.historyMarkersByID = {};
-    this.linesByHistoryItemID = {};
-    this.animationPromise = Promise.resolve();
-    this.currentAnimationFrame = 0;
-  }
+const defaults = {
+  center: {
+    lat: 50,
+    lng: -98.35,
+  },
+  zoom: 4
+};
 
-  static defaultProps = {
-    center: {
-      lat: 50,
-      lng: -98.35,
-    },
-    zoom: 4
-  };
+function Map({
+  animationPlaying,
+  animationSpeed,
+  autoUpdate,
+  hist,
+  impliedSelectedVehiclesByID,
+  selectedHistoryItemID,
+  selectedMapVehicleID,
+  split,
+  vehiclesByID}) {
+  const [map, setMap] = useState(null);
+  const [markersByVehicleID, setMarkersByVehicleID] = useState({});
+  const [historyMarkersByID, setHistoryMarkersByID] = useState({});
+  const [linesByHistoryItemID, setLinesByHistoryItemID] = useState({});
+  const [animationPromise, setAnimationPromise] = useState(Promise.resolve());
+  const [currentAnimationFrame, setCurrentAnimationFrame] = useState(0);
+  const [previousHistoryItem, setPreviousHistoryItem] = useState(null);
 
-  static propTypes = {
-  };
-
-  maybeRepositionMap = bounds => {
-    const { autoUpdate } = this.props;
-    const { map } = this;
+  const maybeRepositionMap = bounds => {
     if (autoUpdate) {
       delay(100).then(() => {
         map.fitBounds(bounds);
@@ -44,8 +43,7 @@ class Map extends React.Component {
     }
   };
 
-  createMarker = vehicle => {
-    const map = this.map;
+  const createMarker = vehicle => {
     const position = toGoogle(vehicle.last);
   
     const marker = new MarkerWithLabel({
@@ -72,10 +70,7 @@ class Map extends React.Component {
     return marker;
   }
 
-  createHistoryMarkerAndLine = historyItem => {
-    const { selectedHistoryItemID } = this.props;
-
-    const map = this.map;
+  const createHistoryMarkerAndLine = historyItem => {
     const position = toGoogle(historyItem);
     if (!position) {
       console.warn("Invalid vehicle position " + JSON.stringify(historyItem));
@@ -110,7 +105,6 @@ class Map extends React.Component {
     // now draw lines
     let line = null;
 
-    const { previousHistoryItem } = this;
     if (previousHistoryItem) {
       const flightPlanCoordinates = [toGoogle(previousHistoryItem), toGoogle(historyItem)];
       const speed = tomiles(historyItem.s)
@@ -140,7 +134,7 @@ class Map extends React.Component {
       }
     }
 
-    this.previousHistoryItem = historyItem;
+    setPreviousHistoryItem(historyItem);
 
     return {
       marker,
@@ -148,28 +142,21 @@ class Map extends React.Component {
     };
   }
 
-  clickMarkerByHistoryID = id => {
-    const { historyMarkersByID } = this;
+  const clickMarkerByHistoryID = id => {
     const marker = historyMarkersByID[id];
-
     if (marker) {
       new google.maps.event.trigger(marker, "click");
     }
   };
 
-  clickMarkerByVehicleID = id => {
-    const { markersByVehicleID } = this;
-    const marker = markersByVehicleID[id];
-  
+  const clickMarkerByVehicleID = id => {
+    const marker = markersByVehicleID[id];  
     if (marker) {
       new google.maps.event.trigger(marker, "click");
     }
   };
 
-  removeMapMarkers = () => {
-    const { impliedSelectedVehiclesByID } = this.props;
-    const { historyMarkersByID, linesByHistoryItemID, markersByVehicleID } = this;
-
+  const removeMapMarkers = () => {
     Object.keys(linesByHistoryItemID).forEach(key => {
       linesByHistoryItemID[key].setMap(null);
       delete linesByHistoryItemID[key];
@@ -191,36 +178,31 @@ class Map extends React.Component {
     });
   }
 
-  nextAnimation = (currentAnimationFrame = 0) => {
-    const { animationPromise, map, historyMarkersByID } = this;
-    const { animationSpeed, autoUpdate, hist } = this.props;
-
+  const nextAnimation = () => {
     const bounds = new google.maps.LatLngBounds();
     console.log(currentAnimationFrame);
     console.log(hist.length);
     if (currentAnimationFrame < hist.length) {
       return delay(500).then(() => {
         const item = hist[currentAnimationFrame];
-        const { marker, line } = this.createHistoryMarkerAndLine(item);
+        const { marker, line } = createHistoryMarkerAndLine(item);
         if (marker) {
           historyMarkersByID[item.id] = marker;
           bounds.extend(marker.position);
-          this.maybeRepositionMap(bounds);
+          maybeRepositionMap(bounds);
         }
-        const animationPlaying = appState.getState().animationPlaying;
         if (!animationPlaying || currentAnimationFrame >= history.length - 1) {
           playing = false;
           paused = false;
         } else {
-          this.nextAnimation(currentAnimationFrame + 1);
+          setCurrentAnimationFrame(currentAnimationFrame + 1);
+          nextAnimation();
         }
       });
     }
   }
 
-  repopulateVehicleHistoryMarkers = () => {
-    const { animationPlaying, hist, selectedVehicle } = this.props;
-    const { historyMarkersByID, linesByHistoryItemID } = this;
+  const repopulateVehicleHistoryMarkers = () => {
     const bounds = new google.maps.LatLngBounds();
 
     Object.keys(historyMarkersByID).forEach(key => {
@@ -237,7 +219,7 @@ class Map extends React.Component {
       // individual vehicle history
       if (!animationPlaying) {
         hist.forEach(item => {
-          const { marker, line } = this.createHistoryMarkerAndLine(item);
+          const { marker, line } = createHistoryMarkerAndLine(item);
           historyMarkersByID[item.id] = marker;
           if (line) {
             // may be null
@@ -247,18 +229,15 @@ class Map extends React.Component {
             bounds.extend(marker.position);
           }
         });  
-        this.maybeRepositionMap(bounds);
+        maybeRepositionMap(bounds);
       } else {
         // TODO fixup
-        this.nextAnimation();
+        nextAnimation();
       }
     }
   }
 
-  repopulateMapMarkers = () => {
-    const { impliedSelectedVehiclesByID, selectedMapVehicleID, vehiclesByID } = this.props;
-    const { markersByVehicleID, map } = this;
-
+  const repopulateMapMarkers = () => {
     const bounds = new google.maps.LatLngBounds();
 
     // Delete markers for vehicles not shown anymore
@@ -286,7 +265,7 @@ class Map extends React.Component {
           }
         }
 
-        const marker = this.createMarker(vehicle);
+        const marker = createMarker(vehicle);
         if (marker) {
           bounds.extend(marker.position);
           markersByVehicleID[vehicle.id] = marker;
@@ -298,42 +277,48 @@ class Map extends React.Component {
     });
 
     appState.setMarkersByVehicleID(markersByVehicleID);
-
-    this.maybeRepositionMap(bounds);
+    maybeRepositionMap(bounds);
   }
 
-  handleApiLoaded = (map, maps) => {
-    this.map = map.map;
-    appState.setMap(this.map);
+  useEffect(() =>  {
+    repopulateMapMarkers();
+    repopulateVehicleHistoryMarkers();
+
+    return () => {
+      removeMapMarkers();
+    }
+  }, [impliedSelectedVehiclesByID])
+
+  const handleApiLoaded = (suppliedMap, maps) => {
+    setMap(suppliedMap.map);
+    appState.setMap(suppliedMap.map);
   };
 
-  componentWillUnmount() {
-    this.removeMapMarkers();
-  }
+  // componentWillUnmount() {
+  //   this.removeMapMarkers();
+  // }
 
-  componentDidUpdate() {
-    this.repopulateVehicleHistoryMarkers();
-    this.repopulateMapMarkers();
-  }
+  // componentDidUpdate() {
+  //   this.repopulateVehicleHistoryMarkers();
+  //   this.repopulateMapMarkers();
+  // }
 
-  render() {
-    const { split } = this.props;
-    const height = split ? '50vh' : '75vh';
-
-    return (
-      // Important! Always set the container height explicitly
-      <div style={{ height, width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: '1234' }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-          onGoogleApiLoaded={ this.handleApiLoaded } 
-          yesIWantToUseGoogleMapApiInternals
-        >          
-        </GoogleMapReact>
-      </div>
-    );
-  }
+  return (
+    // Important! Always set the container height explicitly
+    <div style={{
+        height: split ? '50vh' : '75vh',
+        width: '100%'
+      }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: '1234' }}
+        defaultCenter={defaults.center}
+        defaultZoom={defaults.zoom}
+        onGoogleApiLoaded={ handleApiLoaded } 
+        yesIWantToUseGoogleMapApiInternals
+      >          
+      </GoogleMapReact>
+    </div>
+  )
 }
 
 export default connect(
@@ -350,6 +335,7 @@ export default connect(
     selectedVehicle: state.selectedVehicle,
     vehiclesByID: state.vehiclesByID,
   }),
-  dispatch => bindActionCreators({
-  }, dispatch),
+  {
+
+  }
 )(Map);
