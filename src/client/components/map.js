@@ -232,7 +232,7 @@ function Map({
         const { marker, line } = createHistoryMarkerAndLine(item);
         if (marker) {
           animationHistoryMarkersByID[item.id] = marker;
-          setAnimationHistoryMarkersByID(animationHistoryMarkersByID);
+          // setAnimationHistoryMarkersByID(animationHistoryMarkersByID);
           bounds.extend(marker.position);
           // maybeRepositionMap(bounds);
         }
@@ -282,13 +282,10 @@ function Map({
           // setHistoryLinesByID(historyLinesByID);
         }
       });
+
+      return cleanup;
     }
-
-    return cleanup;
-
-    // return cleanup;
-  }, [animationStopped, animationPlaying, selectedVehicle, hist]);
-
+  }, [animationStopped, animationPlaying, selectedVehicle, hist, previousHistoryItem]);
 
   useEffect(() => {
     setCurrentAnimationFrame(0);
