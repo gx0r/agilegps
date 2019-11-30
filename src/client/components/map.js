@@ -39,7 +39,7 @@ function Map({
   const [previousHistoryItem, setPreviousHistoryItem] = useState(null);
 
   const maybeRepositionMap = bounds => {
-    if (autoUpdate) {
+    if (autoUpdate && map) {
       delay(100).then(() => {
         map.fitBounds(bounds);
       });
@@ -262,7 +262,7 @@ function Map({
         historyMarkersByID[key].setMap(null);
         delete historyMarkersByID[key];
       });
-      Object.keys(animationLinesByID).forEach(key => {
+      Object.keys(historyLinesByID).forEach(key => {
         historyLinesByID[key].setMap(null);
         delete historyLinesByID[key];
       });
