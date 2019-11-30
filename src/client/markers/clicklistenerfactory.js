@@ -13,7 +13,12 @@ const isUserMetric = require("../isUserMetric");
 const appState = require("../appState");
 const _ = require("lodash");
 
-const infoWindowsByVehicleID = {};
+let infoWindowsByVehicleID = {};
+
+module.exports.closeInfoWindows = function() {
+  Object.keys(infoWindowsByVehicleID).forEach(key => infoWindowsByVehicleID[key].close());
+  infoWindowsByVehicleID = {};
+}
 
 module.exports.create = function(marker, item, position, map) {
   return function() {
