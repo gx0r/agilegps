@@ -56,8 +56,8 @@ export default function Jobs() {
         <div>
           <div className="col-sm-2"></div>
           <div className="business-table col-sm-8">
-            Auto Update: <input type="checkbox" checked={autoReload} onChange={ev => setAutoReload(ev.target.checked)} />
-            <span> </span>Show Application Critical: <input type="checkbox" checked={showAll} onChange={ev => setShowAll(ev.target.checked)} />
+            <span className="pointer" onClick={() => setAutoReload(!autoReload)}>Auto Update: </span><input type="checkbox" checked={autoReload} onChange={ev => setAutoReload(ev.target.checked)} />
+            <span style={{marginLeft:'1em'}} className="pointer" onClick={() => setShowAll(!showAll)} >Show Application Critical: </span><input type="checkbox" checked={showAll} onChange={ev => setShowAll(ev.target.checked)} />
             <h4>Database Jobs</h4>
             <table className="table-condensed table-bordered table-striped dataTable">
               <thead>
