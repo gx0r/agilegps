@@ -110,3 +110,10 @@ export function selectMapVehicleId(id) {
     value: id
   }
 }
+
+export function setHistoryMarkersById(markers) {
+  return {
+    type: "markers/history/set",
+    payload: markers
+  };
+}

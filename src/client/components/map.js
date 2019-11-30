@@ -13,6 +13,8 @@ import { getMarkerIconFleetView, getMarkerIconIndividualHistory, getStatusColor 
 import * as tomiles from "../tomiles";
 import * as appState from '../appState';
 
+import { setHistoryMarkersById } from '../appStateActionCreators';
+
 class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -29,9 +31,6 @@ class Map extends React.Component {
       lng: -98.35,
     },
     zoom: 4
-  };
-
-  static propTypes = {
   };
 
   maybeRepositionMap = bounds => {
@@ -253,6 +252,8 @@ class Map extends React.Component {
         this.nextAnimation();
       }
     }
+
+    this.props.setHistoryMarkersById(historyMarkersByID);
   }
 
   repopulateMapMarkers = () => {
@@ -297,15 +298,12 @@ class Map extends React.Component {
       }
     });
 
-    appState.setMarkersByVehicleID(markersByVehicleID);
-
     this.maybeRepositionMap(bounds);
   }
 
   handleApiLoaded = (map, maps) => {
     this.map = map.map;
-    appState.setMap(this.map);
-  };
+  }
 
   componentWillUnmount() {
     this.removeMapMarkers();
@@ -317,6 +315,7 @@ class Map extends React.Component {
   }
 
   render() {
+    const self = this;
     const { split } = this.props;
     const height = split ? '50vh' : '75vh';
 
@@ -350,6 +349,7 @@ export default connect(
     selectedVehicle: state.selectedVehicle,
     vehiclesByID: state.vehiclesByID,
   }),
-  dispatch => bindActionCreators({
-  }, dispatch),
+  {
+    setHistoryMarkersById,
+  },
 )(Map);

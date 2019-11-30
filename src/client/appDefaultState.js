@@ -23,6 +23,8 @@ module.exports = Object.freeze({
   selectedHistoryItemID: null,
   selectedVehicleHistory: [],
 
+  historyMarkersById: {},
+
   impliedSelectedVehiclesByID: {},
 
   usersByID: {}, // username is the ID

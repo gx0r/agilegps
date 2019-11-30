@@ -210,11 +210,6 @@ module.exports = function reducer(state = defaultState, action) {
           map: action.value
         });
 
-    case "SET_MARKERS_BY_VEHICLE_ID":
-      return Object.assign({}, state, {
-        markersByVehicleID: action.value
-      });    
-
     case "SET_MAP_VEHICLE":
         return Object.assign({}, state, {
           selectedMapVehicleID: action.value
@@ -270,6 +265,12 @@ module.exports = function reducer(state = defaultState, action) {
         selectedVehicleHistory: action.payload,
       }
     
+    case 'markers/history/set':
+      return {
+        ...state,
+        historyMarkersById: action.payload,
+      }
+
     default:
       return state;
   }
