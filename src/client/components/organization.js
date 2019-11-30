@@ -1,8 +1,6 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as classnames from 'classnames';
-import * as appState from '../appState';
 
 import { delay } from 'bluebird';
 import { useParams } from "react-router-dom";
@@ -22,6 +20,8 @@ import { useForceUpdate} from './useforceupdate.js';
 const RECENTLY_CHANGED = 10000;
 
 import {
+  setAutoUpdate,
+  selectMapVehicleId,
   setShowVerbose,
   setShowLatLong,
 } from '../appStateActionCreators';
@@ -30,7 +30,10 @@ import {
 function Organization({ 
   autoUpdate,
   impliedSelectedVehiclesByID,
+  markersByVehicleID,
+  selectMapVehicleId,
   selectedMapVehicleID,
+  setAutoUpdate,
   setShowLatLong,
   setShowVerbose,
   showLatLong,
@@ -54,13 +57,11 @@ function Organization({
 
   const clickItem = vehicle => {
     if (vehicle.id === selectedMapVehicleID) {
-      appState.selectMapVehicleID(null);
+      selectMapVehicleId(null);
       // ClickListenerFactory.closeInfoWindow();
     } else {
-      appState.selectMapVehicleID(vehicle.id);
-      const state = appState.getState();
-      const marker = state.markersByVehicleID[vehicle.id];
-      const map = state.map;
+      selectMapVehicleId(vehicle.id);
+      const marker = markersByVehicleID[vehicle.id];
 
       if (marker) {
         new google.maps.event.trigger(marker, 'click');
@@ -101,7 +102,7 @@ function Organization({
         <input
           checked={ autoUpdate }
           type="checkbox"
-          onChange={ ev => appState.setAutoUpdate(ev.target.checked) }
+          onChange={ ev => setAutoUpdate(ev.target.checked) }
         />
         Auto-Zoom Map            
       </label>
@@ -221,12 +222,16 @@ export default connect(
   state => ({
     autoUpdate: state.autoUpdate,
     impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
+    map: state.map,
+    markersByVehicleID: state.markersByVehicleID,
     selectedMapVehicleID: state.selectedMapVehicleID,
     showLatLong: state.showLatLong,
     user: state.user,
     verbose: state.verbose,
   }),
   {
+    setAutoUpdate,
+    selectMapVehicleId,
     setShowLatLong,
     setShowVerbose,
   },

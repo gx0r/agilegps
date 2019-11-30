@@ -21,7 +21,6 @@ import Status from "../../common/status.js";
 import tzOffset from "../tzoffset";
 
 import { auth, validateResponse } from '../appState';
-
 import {
   animationPlay,
   animationPause,
@@ -32,6 +31,7 @@ import {
   setShowVerbose,
   setShowLatLong,
   setAnimationSpeed,
+  setAutoUpdate,
 } from '../appStateActionCreators';
 
 function Vehicle({ 
@@ -48,6 +48,7 @@ function Vehicle({
   selectedMapVehicleID,
   selectedVehicle,
   setAnimationSpeed,
+  setAutoUpdate,
   setSelectedVehicleHistory,
   setShowVerbose,
   setShowLatLong,
@@ -166,6 +167,14 @@ function Vehicle({
           onFocusChange={ focusedInput => setFocusedInput(focusedInput) } // PropTypes.func.isRequired,
           isOutsideRange={ () => false }
         />
+        <label style={{marginRight: "0.5em"}} >
+          <input
+            checked={ autoUpdate }
+            type="checkbox"
+            onChange={ ev => setAutoUpdate(ev.target.checked) }
+          />
+          Auto-Zoom Map            
+        </label>
         <label className="padrt">
           <input
             checked={ highlightStarts }
@@ -320,5 +329,6 @@ export default connect(
     setShowVerbose,
     setShowLatLong,
     setAnimationSpeed,
+    setAutoUpdate,
   }
 )(Vehicle);
