@@ -19,6 +19,7 @@ import todir from "../../common/todir";
 import isUserMetric from "../isUserMetric";
 import Status from "../../common/status.js";
 import tzOffset from "../tzoffset";
+import * as ClickListenerFactory from '../markers/clicklistenerfactory';
 
 import { auth, validateResponse } from '../appState';
 import {
@@ -27,6 +28,7 @@ import {
   animationStop,
   selectDays,
   selectHistoryItemID,
+  selectMapVehicleId,
   setSelectedVehicleHistory,
   setShowVerbose,
   setShowLatLong,
@@ -42,10 +44,10 @@ function Vehicle({
   advancedUI,
   autoUpdate,
   endDate,
-  hist,
+  historyMarkersById,
   selectDays,
+  selectHistoryItemID,
   selectedHistoryItemID,
-  selectedMapVehicleID,
   selectedVehicle,
   setAnimationSpeed,
   setAutoUpdate,
@@ -72,6 +74,13 @@ function Vehicle({
 
   const clickItem = historyItem => {
     selectHistoryItemID(historyItem.id);
+    ClickListenerFactory.closeInfoWindows();
+    const marker = historyMarkersById[historyItem.id];
+
+    if (marker) {
+      new google.maps.event.trigger(marker, 'click');
+      // map.panTo(marker.position);
+    }
   };
 
   useEffect(() => {
@@ -310,7 +319,7 @@ export default connect(
     animationSpeed: state.animationSpeed,
     autoUpdate: state.autoUpdate,
     endDate: state.endDate,
-    hist: state.selectedVehicleHistory,
+    historyMarkersById: state.historyMarkersById,
     impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
     selectedHistoryItemID: state.selectedHistoryItemID,
     selectedVehicle: state.selectedVehicle,
@@ -325,6 +334,7 @@ export default connect(
     animationStop,
     selectHistoryItemID,
     selectDays,
+    selectMapVehicleId,
     setSelectedVehicleHistory,
     setShowVerbose,
     setShowLatLong,

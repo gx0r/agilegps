@@ -609,10 +609,3 @@ module.exports.setMap = function(map) {
     value: map
   });
 }
-
-module.exports.setMarkersByVehicleID = function(markers) {
-  store.dispatch({
-    type: "SET_MARKERS_BY_VEHICLE_ID",
-    value: markers
-  });
-}
