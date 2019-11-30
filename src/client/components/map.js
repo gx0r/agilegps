@@ -238,7 +238,7 @@ function Map({
           animationHistoryMarkersByID[item.id] = marker;
           setAnimationHistoryMarkersByID(animationHistoryMarkersByID);
           bounds.extend(marker.position);
-          // maybeRepositionMap(bounds);
+          maybeRepositionMap(bounds);
         }
         if (line) {
           animationLinesByID[item.id] = line;

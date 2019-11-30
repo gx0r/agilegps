@@ -588,12 +588,6 @@ function selectDay(startDate) {
 }
 module.exports.selectDay = selectDay;
 
-module.exports.setAutoUpdate = function(bool) {
-  store.dispatch({
-    type: "AUTOUPDATE",
-    value: bool
-  });
-};
 
 // module.exports.setShowVerbose = function(bool) {
 //   store.dispatch({
@@ -620,20 +614,5 @@ module.exports.setMarkersByVehicleID = function(markers) {
   store.dispatch({
     type: "SET_MARKERS_BY_VEHICLE_ID",
     value: markers
-  });
-}
-
-module.exports.selectMapVehicleID = function(id) {
-  store.dispatch({
-    type: "SET_MAP_VEHICLE",
-    value: id
-  });
-}
-
-// vehicle page history item row
-module.exports.selectHistoryItemID = function(id) {
-  store.dispatch({
-    type: "SET_HISTORY_ITEM_ID",
-    value: id
   });
 }

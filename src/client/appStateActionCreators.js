@@ -96,3 +96,17 @@ export function setAnimationSpeed(value) {
     payload: value,
   };
 };
+
+export function setAutoUpdate(enabled) {
+  return {
+    type: "AUTOUPDATE",
+    value: enabled
+  };
+}
+
+export function selectMapVehicleId(id) {
+  return {
+    type: "SET_MAP_VEHICLE",
+    value: id
+  }
+}
