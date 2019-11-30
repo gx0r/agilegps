@@ -65,10 +65,10 @@ function Vehicle({
   const [raw, setRaw] = useState(false);
   const [rollup, setRollup] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
+  const [refresh, setRefresh] = useState(0);
   
   const [localHistory, setLocalHistory] = useState([]);
   const { orgId } = useParams();
-
 
   const clickItem = historyItem => {
     selectHistoryItemID(historyItem.id);
@@ -112,7 +112,7 @@ function Vehicle({
         setLocalHistory(res);
       })
       .finally(NProgress.done);
-  }, [calculateDistanceBetween, startDate, endDate, reverseOrder, rollup, verbose, raw]);
+  }, [calculateDistanceBetween, startDate, endDate, refresh, reverseOrder, rollup, verbose, raw]);
 
   const excelHref = `/api/organizations/${orgId}/vehiclehistory/${selectedVehicle.id}/?format=excel&latlong=${showLatLong}&rollupStationaryEvents=${rollup}&verbose=${verbose}&calculateDistanceBetween=${calculateDistanceBetween}&startDate=${encodeURIComponent(startDate.toISOString(true))}&endDate=${encodeURIComponent(endDate.toISOString(true))}&tzOffset=${encodeURIComponent(tzOffset())}`;
 
@@ -120,7 +120,10 @@ function Vehicle({
     <div className="business-table">
       <button
         className="btn btn-xs btn-primary btn-pad"
-        onClick={ () => setFirstRowClicked(false) }
+        onClick={ () => {
+          setFirstRowClicked(false);
+          setRefresh(refresh + 1);
+        } }
       >Refresh</button>
       <a href={ excelHref } style={{
         cursor: 'pointer',
