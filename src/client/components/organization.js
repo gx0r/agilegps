@@ -16,6 +16,7 @@ import * as isUserMetric from "../isUserMetric";
 import * as Status from "../../common/status.js";
 import * as tzOffset from "../tzoffset";
 import { useForceUpdate} from './useforceupdate.js';
+import * as ClickListenerFactory from '../markers/clicklistenerfactory';
 
 const RECENTLY_CHANGED = 10000;
 
@@ -56,9 +57,10 @@ function Organization({
   }
 
   const clickItem = vehicle => {
+    ClickListenerFactory.closeInfoWindows();
+    
     if (vehicle.id === selectedMapVehicleID) {
       selectMapVehicleId(null);
-      // ClickListenerFactory.closeInfoWindow();
     } else {
       selectMapVehicleId(vehicle.id);
       const marker = markersByVehicleID[vehicle.id];
