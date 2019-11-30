@@ -3,3 +3,5 @@ node_modules
 npm-debug.log
 public/app/vendors.bundle.js
 public/app/index.html
+public/*.woff2
+public/*.bundle.js
