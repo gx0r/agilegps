@@ -154,7 +154,9 @@ function Vehicle({
           type="range"
           min="0"
           max="2000"
-          onChange={ () => window.alert('todo') }
+          onChange={ ev => {
+            setAnimationSpeed(ev.target.value);
+          }}
           step="1"
           value={ animationSpeed }
         />
