@@ -581,19 +581,19 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
     }
     if (ev === "Last 2 Days") {
       setStartDate(moment().startOf("day").add(-2, 'days'));
-      setEndDate(moment().startOf("day"));
+      setEndDate(moment().startOf("day").add(1, "days"));
     }
     if (ev === "Last 3 Days") {
       setStartDate(moment().startOf("day").add(-3, 'days'));
-      setEndDate(moment().startOf("day"));
+      setEndDate(moment().startOf("day").add(1, "days"));
     }
     if (ev === "This week to date") {
       setStartDate(moment().startOf("day").subtract(7, "days"));
-      setEndDate(moment());
+      setEndDate(moment().startOf("day").add(1, "days"));
     }
     if (ev === "Last week") {
       setStartDate(moment().startOf("day").subtract(1, "week"));
-      setEndDate(moment().startOf("day"));
+      setEndDate(moment().startOf("day").add(1, "days"));
     }
     if (ev === "This month") {
       setStartDate(moment().startOf("month"));
@@ -602,10 +602,6 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
     if (ev === "Last month") {
       setStartDate(moment().startOf("month").subtract(1, "month"));
       setEndDate(moment().startOf("month").add(0, "days"));
-    }
-    if (ev === "This month to date") {
-      setStartDate(moment().startOf("month"));
-      setEndDate(moment());
     }
   };
 
@@ -707,8 +703,6 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
               <button className="btn btn-default" onClick={ () => dateRangeChange("Last week") }>Last week</button>
               <button className="btn btn-default" onClick={ () => dateRangeChange("This month") }>This month</button>
               <button className="btn btn-default" onClick={ () => dateRangeChange("Last month") }>Last month</button>
-              <button className="btn btn-default" onClick={ () => dateRangeChange("This month to date") }>This month to date</button>
-
             </span>
           </div>
           <div className="col-md-12" style={{ marginTop: '1em', marginBottom: '1em' }}>
