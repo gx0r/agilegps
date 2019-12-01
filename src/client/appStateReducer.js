@@ -51,7 +51,6 @@ module.exports = function reducer(state = defaultState, action) {
         impliedSelectedVehiclesByID: {
           [action.id]: state.vehiclesByID[action.id],
         },
-        view: "ORG",
         selectedAllFleets: false,
         selectedFleets: [],
         selectedVehicleHistory: []
@@ -204,11 +203,6 @@ module.exports = function reducer(state = defaultState, action) {
       return Object.assign({}, state, {
         showLatLong: !!action.value
       });
-    
-    case "SET_MAP":
-        return Object.assign({}, state, {
-          map: action.value
-        });
 
     case "SET_MAP_VEHICLE":
         return Object.assign({}, state, {
