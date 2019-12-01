@@ -51,10 +51,12 @@ nav {
     padding-bottom: 9px;
 }
 
-.active > a {
-    /*background-color: #337ab7 !important;*/
-    /*border-radius: 0px;*/
-    /*color: white !important;*/
+.active-nav {
+  background-color: #000000 !important;
+}
+
+.active-nav-dropdown {
+  background-color:lightgrey !important;
 }
 
 .business-table {
