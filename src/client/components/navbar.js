@@ -187,7 +187,7 @@ function Navbar(props) {
            <NavLink to="/help" activeClassName="active-nav">Help</NavLink>
           </li> }
         <li>
-          <NavLink to="/" activeClassName="active-nav">☰</NavLink>
+          <NavLink exact to="/" activeClassName="active-nav">☰</NavLink>
         </li>
       </ul>  
     );
