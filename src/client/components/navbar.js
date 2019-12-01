@@ -1,8 +1,6 @@
 
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
 import * as moment from 'moment';
 import * as classnames from 'classnames';
 
@@ -16,10 +14,8 @@ import xcloudSvg from '../svg/xcloud.svg';
 import onClickOutside from 'react-onclickoutside';
 
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
+  NavLink,
   useParams
 } from "react-router-dom";
  
@@ -84,34 +80,20 @@ function Navbar(props) {
   }
 
   const renderLeftNav = () => {
-    const { subview } = props;
-
     if (!orgId) {
       return null;
     }
 
     return (
       <ul className="nav navbar-nav">
-        <li
-          className={ classnames({
-            active: subview === 'REPORT'
-          }) }
-        >
-          <Link to={ `/org/${orgId}/reports` }><img src={ reportsSvg } /> Reports</Link>
+        <li>
+          <NavLink to={`/org/${orgId}/reports`} activeClassName="active-nav"><img src={ reportsSvg } /> Reports</NavLink>
         </li>
-        <li
-          className={ classnames({
-            active: subview === 'MAP'
-          }) }
-        >
-          <Link to={ `/org/${orgId}/map` }><img src={ mapSvg } /> Map</Link>
+        <li>
+          <NavLink to={`/org/${orgId}/map`} activeClassName="active-nav"><img src={ mapSvg } /> Map</NavLink>
         </li>
-        <li
-          className={ classnames({
-            active: subview === 'SPLIT'
-          }) }
-        >
-          <Link to={ `/org/${orgId}/split` }><img src={ globeSvg } /> Split Screen</Link>
+        <li>
+          <NavLink to={`/org/${orgId}/split`} activeClassName="active-nav"><img src={ globeSvg } /> Split Screen</NavLink>
         </li>
       </ul>
     );
@@ -124,34 +106,17 @@ function Navbar(props) {
 
     return (
       <>
-        <li
-          className={ classnames({
-            open: orgToolsOpen
-          }) }
-          onClick={ () => setOrgToolsOpen(!orgToolsOpen) }
-        >
+        <li className={ classnames({ open: orgToolsOpen }) } onClick={ () => setOrgToolsOpen(!orgToolsOpen) }>
           <a className="pointer dropdown-toggle">Manage<span className="caret"></span></a>
           <ul className="dropdown-menu">
-            <li
-              className={ classnames({
-                active: subview === 'USERS',
-              }) }
-            >
-              <Link to={ `/org/${orgId}/users` }>Users</Link>
+            <li>
+              <NavLink to={`/org/${orgId}/users`} activeClassName="active-nav-dropdown">Users</NavLink>
             </li>
-            <li
-              className={ classnames({
-                active: subview === 'FLEETS',
-              }) }
-            >
-              <Link to={ `/org/${orgId}/fleets` }>Fleets</Link>
+            <li>
+              <NavLink to={`/org/${orgId}/fleets`} activeClassName="active-nav-dropdown">Fleets</NavLink>
             </li>
-            <li
-              className={ classnames({
-                active: subview === 'VEHICLES',
-              }) }
-            >
-              <Link to={ `/org/${orgId}/vehicles` }>Vehicles</Link>
+            <li>
+              <NavLink to={`/org/${orgId}/vehicles`} activeClassName="active-nav-dropdown">Vehicles</NavLink>
             </li>
           </ul>
         </li>
@@ -164,23 +129,11 @@ function Navbar(props) {
 
     return (
       <>
-        <li
-          className={ classnames({
-            active: view === 'ORG'
-          }) }
-        ><Link to="/orgs">Organizations</Link>
+        <li><NavLink to="/orgs" activeClassName="active-nav">Organizations</NavLink>
         </li>
-        <li
-          className={ classnames({
-            active: view === 'USER' && viewID !== user.username
-          }) }
-        ><Link to="/users">Users</Link>
+        <li><NavLink to="/users" activeClassName="active-nav">Users</NavLink>
         </li>
-        <li
-          className={ classnames({
-            active: view === 'DEVICE'
-          }) }
-        ><Link to="/devices">Devices</Link>
+        <li><NavLink to="/devices" activeClassName="active-nav">Devices</NavLink>
         </li>
         <li
           onClick={ () => setAdminToolsOpen(!adminToolsOpen) }
@@ -190,32 +143,20 @@ function Navbar(props) {
         >
           <a className="dropdown-toggle">System<span className="caret"></span></a>
           <ul className="dropdown-menu">
-            <li
-              className={ classnames({
-                active: view === 'EVENTS'
-              }) }
-            >
-              <Link to="/system/messages/processed">Processed Messages</Link>
-            </li>
-            <li
-              className={ classnames({
-                active: view === 'RAWEVENTS'
-              }) }
-            >
-              <Link to="/system/messages/raw">Raw Messages</Link>
-            </li>
-            <li
-              className={ classnames({
-                active: view === 'EXCEPTIONS'
-              }) }
-            >
-              <Link to="/system/messages/errors">Server Errors</Link>
+            <li>
+              <NavLink to="/system/messages/processed" activeClassName="active-nav-dropdown">Processed Messages</NavLink>
             </li>
             <li>
-              <Link to="/system/jobs">Database Jobs</Link>
+              <NavLink to="/system/messages/raw" activeClassName="active-nav-dropdown">Raw Messages</NavLink>
             </li>
             <li>
-              <Link to="/system/stats">Database Stats</Link>
+              <NavLink to="/system/messages/errors" activeClassName="active-nav-dropdown">Server Errors</NavLink>
+            </li>
+            <li>
+              <NavLink to="/system/jobs" activeClassName="active-nav-dropdown">Database Jobs</NavLink>
+            </li>
+            <li>
+              <NavLink to="/system/stats" activeClassName="active-nav-dropdown">Database Stats</NavLink>
             </li>
           </ul>
         </li>
@@ -232,7 +173,7 @@ function Navbar(props) {
         { isAdmin && !orgId ? renderSiteAdminNav() :
           user.username && 
           <li>
-            <Link to="/orgs">Back To Organizations</Link>
+            <NavLink to="/orgs" activeClassName="active-nav">Back To Organizations</NavLink>
           </li> }
         { orgId && renderInOrgNav() }
         { user.username && <li
@@ -240,24 +181,13 @@ function Navbar(props) {
             active: view === 'USER' && viewID === user.username
           }) }
         >
-          <Link className={ classnames({
-              active: view === 'HELP'
-            }) }
-            to={ `/user/${user.username}/edit` }>Profile</Link>
+          <NavLink to={`/user/${user.username}/edit`} activeClassName="active-nav">Profile</NavLink>
         </li> }
-        { user.username && <li
-         className={ classnames({
-             active: view === 'HELP'
-           }) }
-         >
-           <Link to="/help">Help</Link>
+        { user.username && <li>
+           <NavLink to="/help" activeClassName="active-nav">Help</NavLink>
           </li> }
-        <li
-          className={ classnames({
-            active: view === 'SESSION'
-          }) }
-        >
-          <Link to="/">☰</Link>
+        <li>
+          <NavLink to="/" activeClassName="active-nav">☰</NavLink>
         </li>
       </ul>  
     );
