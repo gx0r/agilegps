@@ -265,12 +265,18 @@ module.exports = function reducer(state = defaultState, action) {
         selectedVehicleHistory: action.payload,
       }
     
-    case 'markers/history/set':
+    case 'markers/history/changed':
       return {
         ...state,
         historyMarkersById: action.payload,
       }
 
+    case 'markers/fleet/changed':
+      return {
+        ...state,
+        markersByVehicleID: action.payload,
+      }
+      
     default:
       return state;
   }

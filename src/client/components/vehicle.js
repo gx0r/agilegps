@@ -73,13 +73,17 @@ function Vehicle({
 
 
   const clickItem = historyItem => {
-    selectHistoryItemID(historyItem.id);
-    ClickListenerFactory.closeInfoWindows();
-    const marker = historyMarkersById[historyItem.id];
 
-    if (marker) {
-      new google.maps.event.trigger(marker, 'click');
-      // map.panTo(marker.position);
+    if (historyItem.id === selectedHistoryItemID) {
+      selectHistoryItemID(null);
+    } else {
+      selectHistoryItemID(historyItem.id);
+      const marker = historyMarkersById[historyItem.id];
+  
+      if (marker) {
+        new google.maps.event.trigger(marker, 'click');
+        // map.panTo(marker.position);
+      }  
     }
   };
 
