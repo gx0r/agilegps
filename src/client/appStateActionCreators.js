@@ -111,9 +111,16 @@ export function selectMapVehicleId(id) {
   }
 }
 
-export function setHistoryMarkersById(markers) {
+export function changedHistoryMarkers(markers) {
   return {
-    type: "markers/history/set",
+    type: "markers/history/changed",
+    payload: markers
+  };
+}
+
+export function changedFleetMarkers(markers) {
+  return {
+    type: "markers/fleet/changed",
     payload: markers
   };
 }

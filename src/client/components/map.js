@@ -13,7 +13,7 @@ import { getMarkerIconFleetView, getMarkerIconIndividualHistory, getStatusColor 
 import * as tomiles from "../tomiles";
 import * as appState from '../appState';
 
-import { setHistoryMarkersById } from '../appStateActionCreators';
+import { changedFleetMarkers, changedHistoryMarkers } from '../appStateActionCreators';
 
 class Map extends React.Component {
   constructor(props) {
@@ -253,11 +253,11 @@ class Map extends React.Component {
       }
     }
 
-    this.props.setHistoryMarkersById(historyMarkersByID);
+    this.props.changedHistoryMarkers(historyMarkersByID);
   }
 
   repopulateMapMarkers = () => {
-    const { impliedSelectedVehiclesByID, selectedMapVehicleID, vehiclesByID } = this.props;
+    const { changedFleetMarkers, impliedSelectedVehiclesByID, selectedMapVehicleID } = this.props;
     const { markersByVehicleID, map } = this;
 
     const bounds = new google.maps.LatLngBounds();
@@ -299,6 +299,7 @@ class Map extends React.Component {
     });
 
     this.maybeRepositionMap(bounds);
+    changedFleetMarkers(markersByVehicleID);
   }
 
   handleApiLoaded = (map, maps) => {
@@ -350,6 +351,7 @@ export default connect(
     vehiclesByID: state.vehiclesByID,
   }),
   {
-    setHistoryMarkersById,
+    changedFleetMarkers,
+    changedHistoryMarkers,
   },
 )(Map);
