@@ -34,8 +34,7 @@ class Map extends React.Component {
   };
 
   maybeRepositionMap = bounds => {
-    const { autoUpdate } = this.props;
-    const { map } = this;
+    const { autoUpdate, map } = this.props;
     if (autoUpdate) {
       delay(100).then(() => {
         map.fitBounds(bounds);
@@ -44,7 +43,7 @@ class Map extends React.Component {
   };
 
   createMarker = vehicle => {
-    const map = this.map;
+    const { map } = this.props;
     const position = toGoogle(vehicle.last);
   
     const marker = new MarkerWithLabel({
@@ -72,9 +71,8 @@ class Map extends React.Component {
   }
 
   createHistoryMarkerAndLine = historyItem => {
-    const { selectedHistoryItemID } = this.props;
+    const { map, selectedHistoryItemID } = this.props;
 
-    const map = this.map;
     const position = toGoogle(historyItem);
     if (!position) {
       console.warn("Invalid vehicle position " + JSON.stringify(historyItem));
@@ -303,7 +301,6 @@ class Map extends React.Component {
   }
 
   handleApiLoaded = (map, maps) => {
-    this.map = map.map;
     this.props.changeGoogleMap(map.map);
   }
 
@@ -317,7 +314,6 @@ class Map extends React.Component {
   }
 
   render() {
-    const self = this;
     const { split } = this.props;
     const height = split ? '50vh' : '75vh';
 
@@ -344,6 +340,7 @@ export default connect(
     autoUpdate: state.autoUpdate,
     hist: state.selectedVehicleHistory,
     impliedSelectedVehiclesByID: state.impliedSelectedVehiclesByID,
+    map: state.map,
     selectedFleets: state.selectedFleets,
     selectedFleetsAll: state.selectedFleetsAll,
     selectedHistoryItemID: state.selectedHistoryItemID,
