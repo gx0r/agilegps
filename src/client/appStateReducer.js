@@ -270,6 +270,13 @@ module.exports = function reducer(state = defaultState, action) {
         ...state,
         markersByVehicleID: action.payload,
       }
+
+    case 'map/google/changed':
+      return {
+        ...state,
+        map: action.payload,
+      }
+  
       
     default:
       return state;

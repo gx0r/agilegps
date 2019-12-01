@@ -124,3 +124,10 @@ export function changedFleetMarkers(markers) {
     payload: markers
   };
 }
+
+export function changeGoogleMap(map) {
+  return {
+    type: "map/google/changed",
+    payload: map
+  };
+}

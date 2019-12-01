@@ -20,18 +20,19 @@ module.exports.closeInfoWindows = function() {
   infoWindowsByVehicleID = {};
 }
 
-module.exports.create = function(marker, item, position, map) {
+module.exports.create = function(marker, item, position) {
+  
   return function() {
+    const map = appState.getState().map;
+
     if (!item.last) {
       item.last = _.cloneDeep(item);
     }
 
-    const state = appState.getState();
     if (infoWindowsByVehicleID[item.id]) {
       infoWindowsByVehicleID[item.id].setMap(null);
       infoWindowsByVehicleID[item.id] = null;
     }
-    const map = state.map;
     // map.setCenter(position);
     const ref = React.createRef();
   
