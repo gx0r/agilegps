@@ -13,7 +13,7 @@ import { getMarkerIconFleetView, getMarkerIconIndividualHistory, getStatusColor 
 import * as tomiles from "../tomiles";
 import * as appState from '../appState';
 
-import { changedFleetMarkers, changedHistoryMarkers } from '../appStateActionCreators';
+import { changedFleetMarkers, changedHistoryMarkers, changeGoogleMap } from '../appStateActionCreators';
 
 class Map extends React.Component {
   constructor(props) {
@@ -304,6 +304,7 @@ class Map extends React.Component {
 
   handleApiLoaded = (map, maps) => {
     this.map = map.map;
+    this.props.changeGoogleMap(map.map);
   }
 
   componentWillUnmount() {
@@ -353,5 +354,6 @@ export default connect(
   {
     changedFleetMarkers,
     changedHistoryMarkers,
+    changeGoogleMap,
   },
 )(Map);

@@ -39,6 +39,8 @@ module.exports = Object.freeze({
   startDate: moment(),
   endDate: moment(),
 
+  map: null, // google map object
+
   // view state
   autoUpdate: true,
   realTimeUpdates: false, // is the socket.io connection is working
