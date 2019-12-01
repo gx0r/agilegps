@@ -65,7 +65,7 @@ function Organizations({ orgsByIDarray }) {
                     <td>
                       <Link
                         className="btn btn-primary btn-sm"
-                        to={ `/org/${org.id}`}
+                        to={ `/org/${org.id}/split`}
                       ><i className="middle glyphicon glyphicon-searcb" /> Log In</Link>
                     </td>
                     <td>
