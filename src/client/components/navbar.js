@@ -1,13 +1,11 @@
 
 import React, { useState } from 'react';
-import * as PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as moment from 'moment';
 import * as classnames from 'classnames';
 
-import * as appState from '../appState';
 import { startListening, stopListening } from "../appSocketState";
 
 import reportsSvg from '../svg/reports.svg';
@@ -33,6 +31,7 @@ function Navbar(props) {
   const [adminToolsOpen, setAdminToolsOpen] = useState(false);
   const toggleAdminToolsOpen = () => setAdminToolsOpen(!adminToolsOpen);
   const [orgToolsOpen, setOrgToolsOpen] = useState(false);
+  
   const { orgId } = useParams();
 
   Navbar.handleClickOutside = () => { setAdminToolsOpen(false) }
@@ -47,11 +46,6 @@ function Navbar(props) {
     } else {
       return moment(lastUpdated).format("h:mm:ss A");
     }
-  }
-
-  const isAdmin = () => {
-    const { user } = props;
-    return user.isAdmin;
   }
 
   const getWelcomeText = () => {
@@ -302,8 +296,5 @@ export default connect(
     orgsByID: state.orgsByID,
     realTimeUpdates: state.realTimeUpdates,
     user: state.user,
-  }),
-  dispatch => bindActionCreators({
-    dispatch,
-  }, dispatch),
+  })
 )(onClickOutside(Navbar, clickOutsideConfig));
