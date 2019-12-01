@@ -602,10 +602,3 @@ module.exports.selectDay = selectDay;
 //     value: bool
 //   });
 // };
-
-module.exports.setMap = function(map) {
-  store.dispatch({
-    type: "SET_MAP",
-    value: map
-  });
-}
