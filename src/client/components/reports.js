@@ -644,7 +644,7 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
       // debugger;
       // setResultVehicles(currentResultVehicles);
       // setResults(currentResults);
-      toast('Report complete.', { autoClose: false, position: toast.POSITION.TOP_RIGHT })
+      toast('Report complete.', { position: toast.POSITION.TOP_RIGHT })
     })
     .finally(() => {
       // setResultsTotals(response.totals);
