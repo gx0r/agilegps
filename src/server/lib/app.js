@@ -94,8 +94,8 @@ async function logError(err) {
     memory: process.memoryUsage(),
     uptime: process.uptime(),
     promise: false,
-    uid: process.getuid(),
-    groups: process.getgroups(),
+    uid: process.getuid && process.getuid(),
+    groups: process.getgroups && process.getgroups(),
     load: os.loadavg()
   });
 };
