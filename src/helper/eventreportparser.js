@@ -311,13 +311,21 @@ module.exports = function(commandString) {
     let i = loadGPSandGSMdata(6); // 6 through 17
     o.mileage = Number.parseFloat(args[18]);
     o.hourmeter = args[19];
-    o.ain1 = args[20];
-    o.ain2 = args[21];
-    o.batteryPercent = Number.parseFloat(args[22]);
-    o.status = args[23];
-    // args[24] reserved
-    // args[25] reserved
-    // args[26] reserved
+    if (protocolVersion == "FE") { // GV50
+      o.batteryPercent = Number.parseFloat(args[20]);
+      o.status = args[21];
+      // args[24] reserved
+      // args[25] reserved
+      // args[26] reserved  
+    } else {
+      o.ain1 = args[20];
+      o.ain2 = args[21];
+      o.batteryPercent = Number.parseFloat(args[22]);
+      o.status = args[23];
+      // args[24] reserved
+      // args[25] reserved
+      // args[26] reserved  
+    }
   } else if (cmd === "STT") {
     //
     loadReportIDandType(args[3]);
