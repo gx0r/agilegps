@@ -195,7 +195,7 @@ function getStatusColor(item) {
   if (isSpeeding(item) || isHarsh(item)) {
     return "#ff06df";
   }
-  return "";
+  return "black";
 }
 module.exports.getStatusColor = getStatusColor;
 

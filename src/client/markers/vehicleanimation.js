@@ -161,36 +161,39 @@ function animateFrame(i) {
   if (progressEl) {
     progressEl.value = i;
   }
-  let next = toGoogle(history[i]);
 
+  const next = toGoogle(history[i]);
   if (!next) {
-    console.warn(
-      "Vehicle animation frame " +
-        i +
-        ", invalid position " +
-        JSON.stringify(next)
-    );
     return;
   }
 
   let prev;
-  let flightPlanCoordinates;
-  if (i > 0) {
-    prev = toGoogle(history[i - 1]);
-    flightPlanCoordinates = [prev, next];
+  let j = i - 1;
+  while (j > 0) {
+    prev = toGoogle(history[j]);
+    if (!prev) {
+      j--;
+    } else {
+      break;
+    }
   }
+  if (!prev) {
+    return;
+  }
+
+  const flightPlanCoordinates = [prev, next];
 
   if (next) {
     TheMap.getMap().setCenter(next);
   } else {
     TheMap.getMap().setCenter(prev);
   }
-  let speed = tomiles(history[i].s);
-  let color = Status.getStatusColor(history[i]);
+  const speed = tomiles(history[i].s);
+  const color = Status.getStatusColor(history[i]);
 
   create(history[i], controller());
 
-  let lineSymbol = {
+  const lineSymbol = {
     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
   };
 
