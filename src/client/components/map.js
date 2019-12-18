@@ -76,7 +76,10 @@ class Map extends React.Component {
     const position = toGoogle(historyItem);
     if (!position) {
       console.warn("Invalid vehicle position " + JSON.stringify(historyItem));
-      return;
+      return {
+        marker: null,
+        line: null,
+      };
     }
 
     const icon = getMarkerIconIndividualHistory(historyItem);
@@ -235,13 +238,12 @@ class Map extends React.Component {
       if (!animationPlaying) {
         hist.forEach(item => {
           const { marker, line } = this.createHistoryMarkerAndLine(item);
-          historyMarkersByID[item.id] = marker;
-          if (line) {
-            // may be null
-            linesByHistoryItemID[item.id] = line;
-          }
           if (marker) {
+            historyMarkersByID[item.id] = marker;
             bounds.extend(marker.position);
+          }
+          if (line) {
+            linesByHistoryItemID[item.id] = line;
           }
         });  
         this.maybeRepositionMap(bounds);
