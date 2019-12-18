@@ -147,7 +147,7 @@ function Daily({results, vehicles}) {
           </tr>
         </thead>
         <tbody>
-          { Object.keys(vehicles).map(vid => <>
+          { Object.keys(vehicles).map(vid => <Fragment key={vid}>
               <tr key={count++}>
                 <td colSpan="7" className="group">{ vehicles[vid].name }</td>
               </tr>
@@ -160,7 +160,7 @@ function Daily({results, vehicles}) {
                 <td>{ tomiles(result.endOdometer) }</td>
                 <td>{ tomiles(result.distance) }</td>
               </tr>)}
-            </>
+            </Fragment>
           )}
         </tbody>
       </table>
@@ -323,24 +323,25 @@ function Ignition({results, vehicles}) {
         </thead>
         <tbody>
           {
-            Object.keys(vehicles).map(vid =>
-            <tr key={ key++ }>
+            Object.keys(vehicles).map(vid => <Fragment key={vid}>
+            <tr>
               <td colSpan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
-              {
-                results[vid].map(item =>
-                  <tr key={ key++ }>
-                    <td>{ item.startTime && formatDate(item.startTime) }</td>
-                    <td>{ formatDate(item.d) }</td>
-                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
-                    <td>{ tomiles(item.startStopMileage) }</td>
-                    <td>{ full(item) }</td>
-                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
-                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
-                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
-                </tr>
-                )
-              }
-            </tr>)
+            </tr>
+            {
+              results[vid].map(item =>
+                <tr>
+                  <td>{ item.startTime && formatDate(item.startTime) }</td>
+                  <td>{ formatDate(item.d) }</td>
+                  <td>{ item.transitTime && tohms(item.transitTime)  }</td>
+                  <td>{ tomiles(item.startStopMileage) }</td>
+                  <td>{ full(item) }</td>
+                  <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
+                  <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
+                  <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+              </tr>
+              )
+            }
+            </Fragment>)
           }
         </tbody>
       </table>
@@ -367,24 +368,25 @@ function Start({results, vehicles}) {
         </thead>
         <tbody>
           {
-            Object.keys(vehicles).map(vid =>
+            Object.keys(vehicles).map(vid => <Fragment key={vid}>
             <tr key={ key++ }>
               <td colSpan="8" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
-              {
-                results[vid].map(item =>
-                  <tr key={ key++ }>
-                    <td>{ item.startTime && formatDate(item.startTime) }</td>
-                    <td>{ formatDate(item.d) }</td>
-                    <td>{ item.transitTime && tohms(item.transitTime)  }</td>
-                    <td>{ tomiles(item.startStopMileage) }</td>
-                    <td>{ full(item) }</td>
-                    <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
-                    <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
-                    <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
-                </tr>
-                )
-              }
-            </tr>)
+            </tr>
+            {
+              results[vid].map(item =>
+                <tr key={ key++ }>
+                  <td>{ item.startTime && formatDate(item.startTime) }</td>
+                  <td>{ formatDate(item.d) }</td>
+                  <td>{ item.transitTime && tohms(item.transitTime)  }</td>
+                  <td>{ tomiles(item.startStopMileage) }</td>
+                  <td>{ full(item) }</td>
+                  <td>{ item.parkedEnd && formatDate(item.parkedEnd) }</td>
+                  <td>{ item.parkedDuration && tohms(item.parkedDuration) }</td>
+                  <td>{ item.idleDuration && tohms(item.idleDuration) }</td>
+              </tr>
+              )
+            }
+            </Fragment>)
           }
         </tbody>
       </table>
@@ -414,7 +416,7 @@ function Summary({results, vehicles}) {
         </thead>
         <tbody>
           {
-            Object.keys(vehicles).map(vid => <tr key={ key++ }>
+            Object.keys(vehicles).map(vid => <tr key={vid}>
               <td>{ vehicles[vid].name }</td>
               <td>{ tohms(results[vid].totalTransit) }</td>
               <td>{ tomiles(results[vid].distance) }</td>
@@ -464,41 +466,42 @@ function Obd({results, vehicles}) {
         </thead>
         <tbody>
           {
-            Object.keys(vehicles).map(vid =>
+            Object.keys(vehicles).map(vid => <Fragment key={vid}>
             <tr key={ key++ }>
               <td colSpan="19" className="group">{ vehicles[vid].name }</td>
-              {
-                results[vid].map(result => {
-                  if (!result.obd) {
-                    result.obd = {};
-                  }
-                  if (!result.obd.diagnosticTroubleCodes) {
-                    result.obd.diagnosticTroubleCodes = [];
-                  }
-                  return <tr key={ key++ }>
-                      <td>{ formatDate(result.d) }</td>
-                    <td>{ street(result) }</td>
-                    <td>{ city(result) }</td>
-                    <td>{ state(result) }</td>
-                    <td>{ result.obd.connect && "✓" }</td>
-                    <td>{ result.obd.malfunction && result.obd.diagnosticTroubleCodes.length + "⚠" }</td>
-                    <td>{ result.obd.diagnosticTroubleCodes.map(code => <a href={ `http://www.obd-codes.com/p${code}` } target="_new">{ code }</a>) }</td>
-                    <td>{ result.obd.temp && result.obd.temp }</td>
-                    <td>{ result.obd.fuelLevelInput && result.obd.fuelLevelInput + "%" }</td>
-                    <td>{ result.obd.engineLoad }</td>
-                    <td>{ result.obd.throttlePosition }</td>
-                    <td>{ result.obd.RPMs }</td>
-                    <td>{ result.obd.fuelConsumption }</td>
-                    <td>{ result.obd.supportPIDs }</td>
-                    <td>{ toMiles(result.obd.speed) }</td>
-                    <td>{ result.obd.powermv && result.obd.powermV / 1000 + "V" }</td>
-                    <td>{ result.obd.vin }</td>
-                    <td>{ toMiles(result.obd.mileage) }</td>
-                    <td>{ toMiles(result.m) }</td>
-                </tr>
-                })
-              }
-            </tr>)
+            </tr>
+            {
+              results[vid].map(result => {
+                if (!result.obd) {
+                  result.obd = {};
+                }
+                if (!result.obd.diagnosticTroubleCodes) {
+                  result.obd.diagnosticTroubleCodes = [];
+                }
+                return <tr key={ key++ }>
+                    <td>{ formatDate(result.d) }</td>
+                  <td>{ street(result) }</td>
+                  <td>{ city(result) }</td>
+                  <td>{ state(result) }</td>
+                  <td>{ result.obd.connect && "✓" }</td>
+                  <td>{ result.obd.malfunction && result.obd.diagnosticTroubleCodes.length + "⚠" }</td>
+                  <td>{ result.obd.diagnosticTroubleCodes.map(code => <a href={ `http://www.obd-codes.com/p${code}` } target="_new">{ code }</a>) }</td>
+                  <td>{ result.obd.temp && result.obd.temp }</td>
+                  <td>{ result.obd.fuelLevelInput && result.obd.fuelLevelInput + "%" }</td>
+                  <td>{ result.obd.engineLoad }</td>
+                  <td>{ result.obd.throttlePosition }</td>
+                  <td>{ result.obd.RPMs }</td>
+                  <td>{ result.obd.fuelConsumption }</td>
+                  <td>{ result.obd.supportPIDs }</td>
+                  <td>{ toMiles(result.obd.speed) }</td>
+                  <td>{ result.obd.powermv && result.obd.powermV / 1000 + "V" }</td>
+                  <td>{ result.obd.vin }</td>
+                  <td>{ toMiles(result.obd.mileage) }</td>
+                  <td>{ toMiles(result.m) }</td>
+              </tr>
+              })
+            }
+            </Fragment>)
           }
         </tbody>
       </table>
@@ -527,32 +530,33 @@ function Jes({results, vehicles}) {
         </thead>
         <tbody>
           {
-            Object.keys(vehicles).map(vid =>
+            Object.keys(vehicles).map(vid => <Fragment key={vid}>
             <tr key={ key++ }>
               <td colSpan="18" className="group">{ vehicles[vid].name }</td>
-              {
-                results[vid].map(result => {
-                  if (!result.obd) {
-                    result.obd = {};
-                  }
-                  if (!result.obd.diagnosticTroubleCodes) {
-                    result.obd.diagnosticTroubleCodes = [];
-                  }
-                  return <tr key={ key++ }>
-                    <td>{ formatDate(result.d) }</td>
-                    <td>{ street(result) }</td>
-                    <td>{ city(result) }</td>
-                    <td>{ state(result) }</td>
-                    <td>{ get(result, 'jes.maxRPM') }</td>
-                    <td>{ get(result, 'jes.averageRPM') }</td>
-                    <td>{ get(result, 'jes.maxThrottlePosition') }</td>
-                    <td>{ get(result, 'jes.averageThrottlePosition') }</td>
-                    <td>{ get(result, 'jes.maxEngineLoad') }</td>
-                    <td>{ get(result, 'jes.averageEngineLoad') }</td>
-                </tr>
-                })
-              }
-            </tr>)
+            </tr>
+            {
+              results[vid].map(result => {
+                if (!result.obd) {
+                  result.obd = {};
+                }
+                if (!result.obd.diagnosticTroubleCodes) {
+                  result.obd.diagnosticTroubleCodes = [];
+                }
+                return <tr key={ key++ }>
+                  <td>{ formatDate(result.d) }</td>
+                  <td>{ street(result) }</td>
+                  <td>{ city(result) }</td>
+                  <td>{ state(result) }</td>
+                  <td>{ get(result, 'jes.maxRPM') }</td>
+                  <td>{ get(result, 'jes.averageRPM') }</td>
+                  <td>{ get(result, 'jes.maxThrottlePosition') }</td>
+                  <td>{ get(result, 'jes.averageThrottlePosition') }</td>
+                  <td>{ get(result, 'jes.maxEngineLoad') }</td>
+                  <td>{ get(result, 'jes.averageEngineLoad') }</td>
+              </tr>
+              })
+            }
+            </Fragment>)
           }
         </tbody>
       </table>
