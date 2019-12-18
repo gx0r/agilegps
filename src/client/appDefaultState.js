@@ -40,7 +40,7 @@ const defaults = {
   rawevents: [],
   exceptions: [],
   page: 1,
-  pagesize: 300,
+  pagesize: 30,
   search: "",
 
   // view state
