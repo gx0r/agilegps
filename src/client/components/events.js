@@ -181,7 +181,7 @@ export default class Events extends React.Component {
                     ],
                     message: <pre>{ JSON.stringify(ad, null, 4) }</pre>,
                   });
-                }}>Show</button> { ad.name && ad.name }</td>
+                }}>Show</button> { ad && ad.name }</td>
                 // return <td><pre>...</pre></td>
               } else if (
                   parseDates
