@@ -70,7 +70,7 @@ function Users({orgsByID, usersByID}) {
         <Link
           className="btn btn-default"
           style={{marginBottom: '1em'}}
-          to={ orgId ? `/org/${orgId}/user/new` : `/users/new` }>Create User</Link>
+          to={ orgId ? `/org/${orgId}/user/new` : `/user/new` }>Create User</Link>
         <table className="table table-bordered table-striped">
           <thead>
             <tr>
