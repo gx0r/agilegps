@@ -279,19 +279,22 @@ function Speed({results, vehicles, totals = {}}) {
         <tbody>
           {
             Object.keys(vehicles).map(vid =>
-            <tr key={vid}>
-              <td colSpan="7" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
-              {
-                results[vid].map(item =>
-                  <tr key={key++}>
-                    <td>{ renderLocation(item) }</td>
-                    <td>{ formatDate(item.d) }</td>
-                    <td>{ todir(item) }</td>
-                    <td>{ tomiles(item.s) }</td>
-                </tr>
-                )
-              }
-            </tr>)
+            <Fragment key={vid}>
+              <tr>
+                <td colSpan="7" className="group">{ vehicles[vid] && vehicles[vid].name }</td>
+                {
+                  results[vid].map(item =>
+                    <tr key={key++}>
+                      <td>{ renderLocation(item) }</td>
+                      <td>{ formatDate(item.d) }</td>
+                      <td>{ todir(item) }</td>
+                      <td>{ tomiles(item.s) }</td>
+                  </tr>
+                  )
+                }
+              </tr>
+            </Fragment>
+            )
           }
         </tbody>
       </table>
