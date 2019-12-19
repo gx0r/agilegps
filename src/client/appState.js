@@ -52,7 +52,7 @@ store.subscribe(function() {
     ["EDIT", "RAWEVENTS", "EVENTS", "EXCEPTIONS"].indexOf(state.subview) < 0
   ) {
     // don't redraw certain views
-    console.log("redrawing");
+    // console.log("redrawing");
     m.redraw();
   }
 });
@@ -315,7 +315,9 @@ function login(data) {
       if (user.isAdmin) {
         next = loadSiteAdminData();
       } else {
-        next = fetchOrganizations();
+        next = fetchOrganizations().then(() => {
+          return selectOrgByID(user.orgid);
+        });
       }
 
       if (store.getState().subview === "ORG" && store.getState().viewID) {

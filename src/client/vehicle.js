@@ -206,6 +206,7 @@ module.exports.controller = function(args, extras) {
 module.exports.view = function(ctrl, args, extras) {
   const state = appState.getState();
   const advancedUI = state.user.advancedMode;
+  const orgid = state.selectedOrg ? state.selectedOrg.id : state.user.orgid;
 
   return m("div", [
     m(".business-table", [
@@ -253,7 +254,7 @@ module.exports.view = function(ctrl, args, extras) {
           {
             href:
               "/api/organizations/" +
-              state.selectedOrg.id +
+              orgid +
               "/vehiclehistory/" +
               state.selectedVehicle.id +
               "?format=excel" +

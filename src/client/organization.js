@@ -41,6 +41,7 @@ module.exports.controller = function(args, extras) {
 
 module.exports.view = function(ctrl, args, extras) {
   const state = appState.getState();
+  const orgid = state.selectedOrg ? state.selectedOrg.id : state.user.orgid;
 
   const advancedUI = state.user.advancedMode;
 
@@ -113,7 +114,7 @@ module.exports.view = function(ctrl, args, extras) {
       {
         href:
           "/api/organizations/" +
-          state.selectedOrg.id +
+          orgid +
           "/vehiclestatus?format=excel" +
           "&latlong=" +
           state.showLatLong +
