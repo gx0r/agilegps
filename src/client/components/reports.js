@@ -417,7 +417,7 @@ function Summary({results, vehicles}) {
               <td>{ tohms(results[vid].avgPark) }</td>
               <td>{ tohms(results[vid].totalIdle) }</td>
               <td>{ results[vid].idles }</td>
-              <td>{ results[vid].avgIdle }</td>
+              <td>{ tohms(results[vid].avgIdle) }</td>
               <td>{ tomiles(results[vid].beginOdometer) }</td>
               <td>{ tomiles(results[vid].endOdometer) }</td>
             </tr>)
