@@ -19,6 +19,8 @@ import * as todir from '../../common/todir';
 import { full } from "../../common/addressdisplay";
 import { useForceUpdate } from './useforceupdate';
 
+import { street, city, state } from "../../common/addressdisplay";
+
 const reports = [
   'idle',
   'daily',
@@ -78,12 +80,10 @@ function Idle({results, vehicles, totals = []}) {
   return (
     <div>
       <div>
-        <table className="table table-condensed table-bordered table-striped dataTable">
+        <table className="table-condensed table-bordered table-striped dataTable">
           <thead>
-            <tr>
-              <td>Vehicle</td>
-              <td>Idling Total</td>
-            </tr>
+            <td>Vehicle</td>
+            <td>Idling Total</td>
           </thead>
           <tbody>
             { Object.keys(vehicles).map(vid => { <tr>
@@ -94,31 +94,34 @@ function Idle({results, vehicles, totals = []}) {
           </tbody>
         </table>
       </div>
+      <br />
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Location</td>
-            <td>City</td>
-            <td>State</td>
-            <td>Idle Start</td>
-            <td>Idle End</td>
-            <td>Duration</td>
-          </tr>
+          <td>Location</td>
+          <td>City</td>
+          <td>State</td>
+          <td>Idle Start</td>
+          <td>Idle End</td>
+          <td>Duration</td>
         </thead>
         <tbody>
           {
             Object.keys(vehicles).map(vid => {
-              return <Fragment key={`${vid}${count++}`}>
+              return <Fragment key={`${vid}`}>
                 <tr key={`header${vid}${count++}`}>
                   <td colSpan="7" className="group">
                     { vehicles[vid].name }
                   </td>
                 </tr>
                 {
-                  results[vid] && Object.keys(results[vid]).map(key => {
-                    return <tr key={`result${vid}${key}${count++}`}>
-                      <td>{key}</td>
-                      <td>{tomiles(results[vid][key])}</td>
+                  results[vid] && results[vid].map(result => {
+                    return <tr key={`${count++}`}>
+                      <td>{street(result)}</td>
+                      <td>{city(result)}</td>
+                      <td>{state(result)}</td>
+                      <td>{formatDate(result.d)}</td>
+                      <td>{formatDate(moment(result.d).add(result.idleTime / 1000, "seconds"))}</td>
+                      <td>{tohms(result.idleTime / 1000)}</td>
                     </tr>
                   })
                 }
@@ -136,15 +139,13 @@ function Daily({results, vehicles}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Date</td>
-            <td>First Ign On</td>
-            <td>Last Ign Off</td>
-            <td>Duration</td>
-            <td>Begin Odometer</td>
-            <td>End Odometer</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-          </tr>
+          <td>Date</td>
+          <td>First Ign On</td>
+          <td>Last Ign Off</td>
+          <td>Duration</td>
+          <td>Begin Odometer</td>
+          <td>End Odometer</td>
+          <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
         </thead>
         <tbody>
           { Object.keys(vehicles).map(vid => <Fragment key={vid}>
@@ -174,10 +175,8 @@ function Mileage({results, vehicles}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>State</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-          </tr>
+          <td>State</td>
+          <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
         </thead>
         <tbody>
           {
@@ -252,10 +251,8 @@ function Speed({results, vehicles, totals = {}}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Vehicle</td>
-            <td>Highest { isUserMetric() ? "km/h" : "mph" }</td>
-          </tr>
+          <td>Vehicle</td>
+          <td>Highest { isUserMetric() ? "km/h" : "mph" }</td>
         </thead>
         <tbody>
           {
@@ -275,11 +272,9 @@ function Speed({results, vehicles, totals = {}}) {
       <br />
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Location</td>
-            <td>Date</td>
-            <td>Heading</td>
-          </tr>
+          <td>Location</td>
+          <td>Date</td>
+          <td>Heading</td>
         </thead>
         <tbody>
           {
@@ -310,16 +305,14 @@ function Ignition({results, vehicles}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Ign On</td>
-            <td>Ign Off</td>
-            <td>Ignition On Time</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-            <td>Parked @</td>
-            <td>Parked Until</td>
-            <td>Parked Time</td>
-            <td>Idle Time</td>
-          </tr>
+          <td>Ign On</td>
+          <td>Ign Off</td>
+          <td>Ignition On Time</td>
+          <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+          <td>Parked @</td>
+          <td>Parked Until</td>
+          <td>Parked Time</td>
+          <td>Idle Time</td>
         </thead>
         <tbody>
           {
@@ -355,16 +348,14 @@ function Start({results, vehicles}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Started Moving</td>
-            <td>Stopped Moving</td>
-            <td>Transit Time</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-            <td>Parked @</td>
-            <td>Parked Until</td>
-            <td>Parked Time</td>
-            <td>Idle Time</td>
-          </tr>
+          <td>Started Moving</td>
+          <td>Stopped Moving</td>
+          <td>Transit Time</td>
+          <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+          <td>Parked @</td>
+          <td>Parked Until</td>
+          <td>Parked Time</td>
+          <td>Idle Time</td>
         </thead>
         <tbody>
           {
@@ -400,19 +391,17 @@ function Summary({results, vehicles}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Vehicle</td>
-            <td>Transit Time</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-            <td>Parked Time</td>
-            <td>Parked</td>
-            <td>Avg Park</td>
-            <td>Total Idling</td>
-            <td>Idle</td>
-            <td>Avg Idle Time</td>
-            <td>Begin Odometer</td>
-            <td>End Odometer</td>
-          </tr>
+          <td>Vehicle</td>
+          <td>Transit Time</td>
+          <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
+          <td>Parked Time</td>
+          <td>Parked</td>
+          <td>Avg Park</td>
+          <td>Total Idling</td>
+          <td>Idle</td>
+          <td>Avg Idle Time</td>
+          <td>Begin Odometer</td>
+          <td>End Odometer</td>
         </thead>
         <tbody>
           {
@@ -442,27 +431,25 @@ function Obd({results, vehicles}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Date</td>
-            <td>Location</td>
-            <td>City</td>
-            <td>State</td>
-            <td>Conn</td>
-            <td>⚠</td>
-            <td>Codes</td>
-            <td>Temp</td>
-            <td>Fuel</td>
-            <td>Load</td>
-            <td>ThrtlPos</td>
-            <td>RPMs</td>
-            <td>Fuel Cnsmp</td>
-            <td>PIDs</td>
-            <td>Speed</td>
-            <td>Power</td>
-            <td>VIN</td>
-            <td>{ isUserMetric() ? 'OBD Kilometers' : 'OBD Mileage' }</td>
-            <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
-          </tr>
+          <td>Date</td>
+          <td>Location</td>
+          <td>City</td>
+          <td>State</td>
+          <td>Conn</td>
+          <td>⚠</td>
+          <td>Codes</td>
+          <td>Temp</td>
+          <td>Fuel</td>
+          <td>Load</td>
+          <td>ThrtlPos</td>
+          <td>RPMs</td>
+          <td>Fuel Cnsmp</td>
+          <td>PIDs</td>
+          <td>Speed</td>
+          <td>Power</td>
+          <td>VIN</td>
+          <td>{ isUserMetric() ? 'OBD Kilometers' : 'OBD Mileage' }</td>
+          <td>{ isUserMetric() ? 'Kilometers' : 'Miles' }</td>
         </thead>
         <tbody>
           {
@@ -515,18 +502,16 @@ function Jes({results, vehicles}) {
     <div>
       <table className="table-condensed table-bordered table-striped dataTable">
         <thead>
-          <tr>
-            <td>Date</td>
-            <td>Location</td>
-            <td>City</td>
-            <td>State</td>
-            <td>RPM Max</td>
-            <td>RPM avg</td>
-            <td>Throttle max</td>
-            <td>Throttle avg</td>
-            <td>Engine Load max</td>
-            <td>Engine Load avg</td>
-          </tr>
+          <td>Date</td>
+          <td>Location</td>
+          <td>City</td>
+          <td>State</td>
+          <td>RPM Max</td>
+          <td>RPM avg</td>
+          <td>Throttle max</td>
+          <td>Throttle avg</td>
+          <td>Engine Load max</td>
+          <td>Engine Load avg</td>
         </thead>
         <tbody>
           {
