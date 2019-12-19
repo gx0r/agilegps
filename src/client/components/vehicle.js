@@ -290,7 +290,7 @@ function Vehicle({
                   { verbose && <td>{ hidenan(tomiles(item.m)) }</td> }
                   { verbose && <td>{ item.h }</td> }
                   <td>{ todir(item) }</td>
-                  <td>{ hidenan(tomiles(item.m)) }</td>
+                  <td>{ hidenan(tomiles(item.s)) }</td>
                   { showLatLong && <td>{ item.la }</td> }
                   { showLatLong && <td>{ item.lo }</td> }
                   <td style={{
