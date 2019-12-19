@@ -37,7 +37,7 @@ class Map extends React.Component {
     const { autoUpdate, map } = this.props;
     if (autoUpdate) {
       delay(100).then(() => {
-        map.fitBounds(bounds);
+        map && map.fitBounds(bounds);
       });
     }
   };
