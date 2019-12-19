@@ -236,7 +236,7 @@ router.get("/api/organizations", jwtrequired, async function(ctx, next) {
   if (ctx.state.user.isAdmin) {
     ctx.body = await dao.getOrganizations();
   } else {
-    ctx.body = await [dao.getOrganization(ctx.state.user.orgid)];
+    ctx.body = [await dao.getOrganization(ctx.state.user.orgid)];
   }
 });
 
