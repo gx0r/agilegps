@@ -65,7 +65,7 @@
     "lodash": "^4.17.19",
     "lru-cache": "^5.1.1",
     "lucidlocation": "0.0.1",
-    "mithril": "0.2",
+    "mithril": "1.1",
     "mithril-modal": "0.0.1",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",

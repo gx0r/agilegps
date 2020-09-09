@@ -4144,9 +4144,9 @@ mithril-objectify@3:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/mithril-objectify/-/mithril-objectify-3.1.2.tgz#9eda474a977df8f1827025de420990d62583e1dc"
 
-mithril@0.2:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/mithril/-/mithril-0.2.5.tgz#c1a50438a93ac23f11ada91188bb784c755404c2"
+mithril@1.1:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/mithril/-/mithril-1.1.7.tgz#505d7d77fe164ff16969de8f9b6eda42e0346cbe"
 
 mixin-deep@^1.2.0:
   version "1.3.2"
