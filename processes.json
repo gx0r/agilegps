@@ -14,6 +14,6 @@
 		"args": [],
 		"watch": true,
 		"node_args": "--nouse-idle-notification --expose-gc --max-old-space-size=8192",
-		"merge_logs": true		
+		"merge_logs": true
 	}]
 }
