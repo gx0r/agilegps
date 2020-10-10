@@ -2,7 +2,7 @@
 # Installation Guide
 
 ### Environment Setup
-1. [Red Hat® Enterprise Linux® / RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux) or [CentOS](https://www.centos.org/) is recommended for your server's operating system.
+1. [Red Hat® Enterprise Linux® / RHEL](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux) or [CentOS](https://www.centos.org/) is recommended for your server's operating system, but the program also runs on Windows and Mac.
 
 1. Install [node.js](https://nodejs.org/). The latest Node.js long-term support (LTS) version is recommended. [Node Source](https://github.com/nodesource/distributions/blob/master/README.md#rpm) provides pacakges for enterprise Linux. 
 
@@ -64,4 +64,3 @@ The `processes.json` file is pre-configured for [PM2](http://pm2.keymetrics.io/)
 1. [location generator](https://github.com/llambda/agilegps/blob/master/src/tools/locgenerator.js) - generate random GPS data for an IMEI
 1. [faker](https://github.com/llambda/agilegps/blob/master/src/tools/faker.js) - Load event data from a file and send as if it came from GPS units.
 1. [Create an Admin](https://github.com/llambda/agilegps/blob/master/src/tools/createAnAdmin.js)
-1. [base64 encoder and decoder](https://decodotron.com/)
