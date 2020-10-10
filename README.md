@@ -21,7 +21,7 @@
 1. Fleet and vehicle reports: Start/stop, Ignition-based trips, Idling, Mileage by state, Odometer by state, Speed, Vehicle summary, OBD-II diagnostics (GV 500 only), OBD-II engine summaries (GV 500 only)
 1. Localization: English and Russian language translations. English and metric units (per-user preference)
 1. Free reverse geocoding (closest city) or via Google Reverse Geocoding API for obtaining addresses from latitude / longitude coordinates sent by the trackers.
-1. Fast single page web interface via Mithril (component based like React). Responsive design on desktop and mobile browsers.
+1. Fast single page web interface via React. Responsive design on desktop and mobile browsers.
 
 ## Need help?
 

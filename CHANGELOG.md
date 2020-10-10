@@ -1,15 +1,17 @@
 Changelog
 =========
 
+## v2.0.0-alpha 2020-10-10
 
-# 1.x release
+- Port from Mithril to React
 
-## v1.0.0
-
-- Initial release
-
-## v1.0.1
+## v1.0.1 2019-11-3
 
 - Package Updates
 - package-lock.json 
+
+
+## v1.0.0 2017-2-2
+
+- Initial release
 
