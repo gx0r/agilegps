@@ -20,7 +20,7 @@ module.exports = (env = {}) => {
       // new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: 'index-template.html',
-        title: 'AgileGPS Pro',
+        title: 'AgileGPS',
         googleAnalyticsKey: CONFIG.googleAnalyticsKey,
         googleAPIkey: CONFIG.googleAPIkey,
       }),
