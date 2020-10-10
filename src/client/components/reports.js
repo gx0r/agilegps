@@ -1,6 +1,5 @@
-
 import React, { Fragment, useState } from 'react';
-import { connect } from 'react-redux';  
+import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
 
 import bluebird from 'bluebird';
@@ -15,7 +14,7 @@ import * as isUserMetric from "../isUserMetric";
 import tomiles from '../tomiles';
 import tohms from './tohms';
 import * as formatDate from '../formatDate';
-import * as todir from '../../common/todir'; 
+import * as todir from '../../common/todir';
 import { full } from "../../common/addressdisplay";
 import { useForceUpdate } from './useforceupdate';
 
@@ -624,7 +623,7 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
           setResultVehicles(runningVehicles);
 
           forceUpdate();
-         
+
           // response.forEach()
           // debugger;
           // return [response.vehicles, response.results];
@@ -681,7 +680,7 @@ function Reports({ impliedSelectedVehiclesByID, orgsByID, vehiclesByID }) {
       case 'obd':
         return <Obd results={results} vehicles={resultVehicles} />
       case 'jes':
-        return <Jes results={results} vehicles={resultVehicles} />   
+        return <Jes results={results} vehicles={resultVehicles} /> 
       }
   }
 

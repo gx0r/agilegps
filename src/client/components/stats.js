@@ -17,7 +17,7 @@ export default function Stats() {
       }
       doLoad();
       const timer = setInterval(doLoad, 2000);
-      return () => clearInterval(timer);  
+      return () => clearInterval(timer);
     }
   }, [autoReload]);
 
@@ -44,9 +44,9 @@ export default function Stats() {
                   <td><pre>{stat.id && JSON.stringify(stat.id, null, 4)}</pre></td>
                   <td><pre>{stat.db && JSON.stringify(stat.db, null, 4)}</pre></td>
                   <td><pre>{stat.table && JSON.stringify(stat.table, null, 4)}</pre></td>
-                  <td><pre>{stat.server && JSON.stringify(stat.server, null, 4)}</pre></td>                  
-                  <td><pre>{stat.query_engine && JSON.stringify(stat.query_engine, null, 4)}</pre></td>                  
-                  <td><pre>{stat.storage_engine && JSON.stringify(stat.storage_engine, null, 4)}</pre></td>                  
+                  <td><pre>{stat.server && JSON.stringify(stat.server, null, 4)}</pre></td>
+                  <td><pre>{stat.query_engine && JSON.stringify(stat.query_engine, null, 4)}</pre></td>
+                  <td><pre>{stat.storage_engine && JSON.stringify(stat.storage_engine, null, 4)}</pre></td>
                   {/* <td><pre>{JSON.stringify(stat, null, 4)}</pre></td>                   */}
                 </tr> )}
               </tbody>

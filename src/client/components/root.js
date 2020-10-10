@@ -138,7 +138,7 @@ function Root({selectedVehicle}) {
                   <Reports />
                   <div className="shadow">
                   </div>
-                </div>            
+                </div>
               </div>
             </div>
           </Route>
@@ -165,7 +165,7 @@ function Root({selectedVehicle}) {
                   </div>
                   <br />
                   { renderVehicleOrOrg() }
-                </div>            
+                </div>
               </div>
             </div>
           </Route>
@@ -183,7 +183,7 @@ function Root({selectedVehicle}) {
                   </div>
                   <br />
                   { renderVehicleOrOrg() }
-                </div>            
+                </div>
               </div>
             </div>
           </Route>
@@ -283,7 +283,7 @@ function Root({selectedVehicle}) {
                 <Stats />
               </div>
             </div>
-          </Route>          
+          </Route>
           <Route path="/">
             <Navbar />
             <div className="container-fluid">

@@ -10,7 +10,6 @@ Changelog
 - Package Updates
 - package-lock.json 
 
-
 ## v1.0.0 2017-2-2
 
 - Initial release

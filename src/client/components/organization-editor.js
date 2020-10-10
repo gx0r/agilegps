@@ -30,7 +30,7 @@ function OrganizationEditor(props) {
             city: org.city,
             state: org.state,
             zip: org.zip,
-            country: org.country,            
+            country: org.country,
           }}
           validate={values => {
             const errors = {};
@@ -110,7 +110,7 @@ function OrganizationEditor(props) {
                 <div className="col-md-10">
                   <Field className="form-control" name="country" />
                 </div>
-              </div>    
+              </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">ID</label>
                 <div className="col-md-10">
@@ -123,7 +123,7 @@ function OrganizationEditor(props) {
                     value={ values.id }
                   />
                 </div>
-              </div>                                                            
+              </div>
               <div className="buttons-right">
                 <button
                   className="btn btn-default"
@@ -132,7 +132,7 @@ function OrganizationEditor(props) {
                     window.history.back();
                   } }
                 >Cancel</button>
-                <span> </span> 
+                <span> </span>
                 <button
                   className="btn btn-success"
                   disabled={ isSubmitting }
@@ -143,7 +143,7 @@ function OrganizationEditor(props) {
               </div>
             </form>
           )}
-        </Formik>          
+        </Formik>
       </div>
       <div className="col-sm-3" />
     </div>

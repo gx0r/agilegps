@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
@@ -32,7 +31,7 @@ function deleteFleet(fleet) {
             toast.error(`Failed to delete fleet ${fleet.name}: ${err.message}`);
           });
         }
-      }      
+      }
     ]
   });
 };
@@ -76,7 +75,7 @@ function Fleets({ fleetsByID, vehiclesByID }) {
   };
 
   const cancel = () => {
-    
+
   }
 
   const changeColor = color => {
@@ -169,7 +168,7 @@ function Fleets({ fleetsByID, vehiclesByID }) {
                     className="form-control"
                     value={ selectedFleet.name }
                     onChange={ ev => {
-                      // selectedFleet.name = ev.target.value; 
+                      // selectedFleet.name = ev.target.value;
                       selectFleet(Object.assign({}, selectedFleet, {name: ev.target.value}));
                     } }
                   />

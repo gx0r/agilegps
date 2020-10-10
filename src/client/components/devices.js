@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { connect } from 'react-redux';
 import * as classnames from 'classnames';
@@ -52,7 +51,7 @@ function deleteDevice(device) {
             toast.error(`Failed to delete user ${device.imei} : ${err.message}`);
           });
         }
-      }      
+      }
     ]
   });
 };

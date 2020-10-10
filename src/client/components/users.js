@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
@@ -47,7 +46,7 @@ function deleteUser(user) {
             toast.error(`Failed to delete user ${user.username}: ${err.message}`);
           });
         }
-      }      
+      }
     ]
   });
 };

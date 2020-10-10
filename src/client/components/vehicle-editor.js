@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
@@ -267,7 +266,7 @@ function VehicleEditor({ devicesByID, orgsByID, vehiclesByID }) {
               </div>
             </form>
           )}
-        </Formik>          
+        </Formik>
       </div>
       <div className="col-sm-3" />
     </div>
