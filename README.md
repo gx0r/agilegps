@@ -4,6 +4,11 @@
 
 ![screenshot](https://raw.githubusercontent.com/llambda/agilegps/master/public/images/screen1.png?token=AGc1MoMRLFILb287jsksqBY-hvOtCRakks5Ym6-uwA%3D%3D)
 
+## Documentation
+
+[Installation](INSTALL.md)
+
+[Changelog](CHANGELOG.md)
 
 ## Features
 
@@ -22,7 +27,3 @@
 1. Localization: English and Russian language translations. English and metric units (per-user preference)
 1. Free reverse geocoding (closest city) or via Google Reverse Geocoding API for obtaining addresses from latitude / longitude coordinates sent by the trackers.
 1. Fast single page web interface via React. Responsive design on desktop and mobile browsers.
-
-## Installation Guide
-
-[Installation instructions](INSTALL.md)
