@@ -23,10 +23,6 @@
 1. Free reverse geocoding (closest city) or via Google Reverse Geocoding API for obtaining addresses from latitude / longitude coordinates sent by the trackers.
 1. Fast single page web interface via Mithril (component based like React). Responsive design on desktop and mobile browsers.
 
-## Need help?
-
-Need help with setup, install, feature development, or just want to talk about GPS fleet tracking in general? Contact [Gene Michtchenko](mailto:agilegps@gmail.com) for consulting at reasonable rates!
-
 ## Installation Guide
 
 [Click here for installation instructions!](INSTALL.md)
