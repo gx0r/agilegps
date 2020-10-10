@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -28,7 +27,7 @@ import {
 } from '../appStateActionCreators';
 
 
-function Organization({ 
+function Organization({
   autoUpdate,
   impliedSelectedVehiclesByID,
   markersByVehicleID,
@@ -58,7 +57,7 @@ function Organization({
 
   const clickItem = vehicle => {
     ClickListenerFactory.closeInfoWindows();
-    
+
     if (vehicle.id === selectedMapVehicleID) {
       selectMapVehicleId(null);
     } else {
@@ -106,7 +105,7 @@ function Organization({
           type="checkbox"
           onChange={ ev => setAutoUpdate(ev.target.checked) }
         />
-        Auto-Zoom Map            
+        Auto-Zoom Map
       </label>
       <label className="padrt">
         <input
@@ -157,11 +156,11 @@ function Organization({
           Object.keys(impliedSelectedVehiclesByID).map(id => {
             const vehicle = impliedSelectedVehiclesByID[id];
             const lastStatus = getLastStatus(vehicle);
-            
+
             if (!vehicle) {
               return null;
             }
-            
+
             if (!lastStatus) {
               return (
                 <tr key={ vehicle.id }>
@@ -215,8 +214,7 @@ function Organization({
         }
         </tbody>
       </table>
-
-    </div>  
+    </div>
   );
 }
 

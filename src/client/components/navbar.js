@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import * as moment from 'moment';
@@ -18,7 +17,7 @@ import {
   NavLink,
   useParams
 } from "react-router-dom";
- 
+
 const clickOutsideConfig = {
   handleClickOutside: () => Navbar.handleClickOutside
 };
@@ -27,11 +26,10 @@ function Navbar(props) {
   const [adminToolsOpen, setAdminToolsOpen] = useState(false);
   const toggleAdminToolsOpen = () => setAdminToolsOpen(!adminToolsOpen);
   const [orgToolsOpen, setOrgToolsOpen] = useState(false);
-  
   const { orgId } = useParams();
 
   Navbar.handleClickOutside = () => { setAdminToolsOpen(false) }
- 
+
   const formatLastUpdated = () => {
     const { lastUpdated, metric } = props;
     if (!lastUpdated) {
@@ -55,7 +53,7 @@ function Navbar(props) {
 
   const renderConnectivity = () => {
     const { dispatch, realTimeUpdates, user } = props;
-    
+
     if (!user.username) {
       return null;
     }
@@ -71,7 +69,7 @@ function Navbar(props) {
           }
         }}
         style={{color: realTimeUpdates ? '' : '' }}>
-      
+
       { realTimeUpdates && `Last update: ${formatLastUpdated()} ⚡` }
       { !realTimeUpdates && 'Real-time disconnected ' }
       { !realTimeUpdates && <img src={ xcloudSvg } width="24" height="24" /> }
@@ -171,7 +169,7 @@ function Navbar(props) {
     return (
       <ul className="nav navbar-nav navbar-right">
         { isAdmin && !orgId ? renderSiteAdminNav() :
-          user.username && 
+          user.username &&
           <li>
             <NavLink to="/orgs" activeClassName="active-nav">Back To Organizations</NavLink>
           </li> }
@@ -189,10 +187,9 @@ function Navbar(props) {
         <li>
           <NavLink exact to="/" activeClassName="active-nav">☰</NavLink>
         </li>
-      </ul>  
+      </ul>
     );
-
-  } 
+  }
 
   const { orgsByID } = props;
 
@@ -210,10 +207,10 @@ function Navbar(props) {
             <a>{ getWelcomeText() }</a>
             <br />
             { renderConnectivity() }
-          </li>            
+          </li>
         </div>
-        { renderLeftNav() }         
-        { renderRightNav() }        
+        { renderLeftNav() }
+        { renderRightNav() }
       </div>
     </nav>
   );

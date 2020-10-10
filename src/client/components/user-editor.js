@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
@@ -41,7 +40,7 @@ function UserEditor({ currentUser, orgsByID, usersByID}) {
             isOrgAdmin: user.isOrgAdmin,
             orgid: user.orgid,
             advancedMode: user.advancedMode,
-            metric: user.metric,            
+            metric: user.metric,
           }}
           validate={values => {
             const errors = {};
@@ -96,7 +95,7 @@ function UserEditor({ currentUser, orgsByID, usersByID}) {
                     onChange={ handleChange }
                     onBlur={ handleBlur }
                     value={ values.firstname }
-                  />                    
+                  />
                 </div>
               </div>
               <div className="form-group">
@@ -147,7 +146,6 @@ function UserEditor({ currentUser, orgsByID, usersByID}) {
                   <Field className="form-control" type="checkbox" name="isAdmin" />
                 </div>
               </div>
-              
               <div className="form-group">
                 <label className="col-md-2 control-label">Is Org Admin</label>
                 <div className="col-md-10">
@@ -191,7 +189,7 @@ function UserEditor({ currentUser, orgsByID, usersByID}) {
               </div>
             </form>
           )}
-        </Formik>          
+        </Formik>
       </div>
       <div className="col-sm-3" />
     </div>

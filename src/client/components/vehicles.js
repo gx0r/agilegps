@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
@@ -29,7 +28,7 @@ function deleteVehicle(vehicle) {
             toast.error(`Failed to delete vehicle ${vehicle.name}: ${err.message}`);
           });
         }
-      }      
+      }
     ]
   });
 };

@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -37,7 +36,6 @@ import {
 } from '../appStateActionCreators';
 
 function Vehicle({ 
-  animationPlay,
   animationPause,
   animationStop,
   animationSpeed,
@@ -67,7 +65,6 @@ function Vehicle({
   const [raw, setRaw] = useState(false);
   const [rollup, setRollup] = useState(true);
   const [focusedInput, setFocusedInput] = useState(null);
-  
   const [localHistory, setLocalHistory] = useState([]);
   const { orgId } = useParams();
 
@@ -79,11 +76,11 @@ function Vehicle({
     } else {
       selectHistoryItemID(historyItem.id);
       const marker = historyMarkersById[historyItem.id];
-  
+
       if (marker) {
         new google.maps.event.trigger(marker, 'click');
         // map.panTo(marker.position);
-      }  
+      }
     }
   };
 
@@ -186,7 +183,7 @@ function Vehicle({
             type="checkbox"
             onChange={ ev => setAutoUpdate(ev.target.checked) }
           />
-          Auto-Zoom Map            
+          Auto-Zoom Map
         </label>
         <label className="padrt">
           <input
@@ -265,7 +262,7 @@ function Vehicle({
         </thead>
         <tbody>
           { localHistory.length < 1 && <tr><td>No vehicle history for this day</td></tr> }
-          { 
+          {
             localHistory.map(item => {
               return (
                 <tr

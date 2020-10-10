@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
@@ -99,7 +98,7 @@ function DeviceEditor(props) {
                 <div className="col-md-10">
                   <Field className="form-control" name="phone" />
                 </div>
-              </div>                  
+              </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">Network Provider (Carrier)</label>
                 <div className="col-md-10">
@@ -111,13 +110,13 @@ function DeviceEditor(props) {
                 <div className="col-md-10">
                   <Field className="form-control" name="status" />
                 </div>
-              </div>                
+              </div>
               <div className="form-group">
                 <label className="col-md-2 control-label">Organization ID</label>
                 <div className="col-md-10">
                   { createOrgSelector(orgsByID) }
                 </div>
-              </div>                
+              </div>
               <div className="buttons-right">
                 <button
                   className="btn btn-default"
@@ -137,7 +136,7 @@ function DeviceEditor(props) {
               </div>
             </form>
           )}
-        </Formik>          
+        </Formik>
       </div>
       <div className="col-sm-3" />
     </div>

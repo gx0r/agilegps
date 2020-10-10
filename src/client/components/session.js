@@ -1,4 +1,3 @@
-
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -75,7 +74,7 @@ class Session extends React.Component {
               toast.error(err.message);
             });
           }
-        }      
+        }
       ]
     });
   };
@@ -84,8 +83,8 @@ class Session extends React.Component {
     <div style={{
       textAlign: 'right',
       marginTop: '2px'
-    }}>  
-      Unable to connect to database. Contact system administrator.    
+    }}>
+      Unable to connect to database. Contact system administrator.
     </div>
   }
 
@@ -139,7 +138,7 @@ class Session extends React.Component {
 
   renderUser() {
     const { user } = this.props;
-    
+
     return (
       <div style={{
         textAlign: 'right',
@@ -180,7 +179,7 @@ class Session extends React.Component {
             marginTop: '2em',
             textAlign: 'center'
           }}>
-            <img src="/images/logo2.png" />  
+            <img src="/images/logo2.png" />
           </div>
         </div>
       </div>

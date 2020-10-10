@@ -46,7 +46,7 @@ export default function Jobs() {
       }
       doLoad();
       const timer = setInterval(doLoad, 250);
-      return () => clearInterval(timer);  
+      return () => clearInterval(timer);
     }
   }, [autoReload]);
 
