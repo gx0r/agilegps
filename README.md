@@ -7,7 +7,7 @@
 
 ## Features
 
-1. Compatible with [Queclink GV500](https://www.amazon.com/Professional-Quality-GV500-Vehicle-Tracker/dp/B00XLSDNDO/ref=as_sl_pc_qf_sp_asin_til?tag=agilegps-20&linkCode=w00&linkId=2a0bd062af220b70c28683c305f01385&creativeASIN=B00XLSDNDO) and GV300 trackers.
+1. Compatible with [Queclink GV500](https://www.amazon.com/Professional-Quality-GV500-Vehicle-Tracker/dp/B00XLSDNDO/ref=as_sl_pc_qf_sp_asin_til?tag=agilegps-20&linkCode=w00&linkId=2a0bd062af220b70c28683c305f01385&creativeASIN=B00XLSDNDO), GV300 and GV50 trackers.
 1. UDP data transmission from trackers with server acknowledgement (lower cellular data usage than TCP)
 1. Customers, fleets, devices, and users
 1. Site admins and org admins
@@ -23,10 +23,6 @@
 1. Free reverse geocoding (closest city) or via Google Reverse Geocoding API for obtaining addresses from latitude / longitude coordinates sent by the trackers.
 1. Fast single page web interface via React. Responsive design on desktop and mobile browsers.
 
-## Need help?
-
-Need help with setup, install, feature development, or just want to talk about GPS fleet tracking in general? Contact [Gene Michtchenko](mailto:agilegps@gmail.com) for consulting at reasonable rates!
-
 ## Installation Guide
 
-[Click here for installation instructions!](INSTALL.md)
+[Installation instructions](INSTALL.md)
