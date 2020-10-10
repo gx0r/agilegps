@@ -6,6 +6,7 @@ Changelog
 - Port from Mithril to React
 - Users can toggle real-time updates for upper-right corner (real-time updates are off by default until enabled)
 - Admins can view and kill database jobs and see database stats
+- [UDP Message relaying](https://github.com/llambda/agilegps/commit/39b904feb38fc2848bd2949adc646e18a4b30bf3)
 
 ## v1.0.1 2019-11-3
 
