@@ -79,7 +79,7 @@
     "spdy": "^4.0.2",
     "timezones.json": "^1.5.2",
     "translate.js": "^1.3.2",
-    "validator": "4.8",
+    "validator": "13.7",
     "velocity-animate": "^1.5.2",
     "verror": "^1.10.0",
     "windrose": "^2.1.0"
