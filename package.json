@@ -60,7 +60,7 @@
     "lru-cache": "^6.0.0",
     "lucidlocation": "0.0.1",
     "moment": "^2.29.1",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "node-geocoder": "^3.27.0",
     "nprogress": "^0.2.0",
     "pony": "^1.0.0",
