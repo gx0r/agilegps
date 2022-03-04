@@ -23,7 +23,7 @@ const bcrypt = Promise.promisifyAll(require("bcryptjs"));
 const dao = require("../dao");
 
 const router = (module.exports.router = new Router());
-const adapt = require("koa-adapter-bluebird"); // uses bluebird-co for performance
+const adapt = require("koa-adapter");
 
 const INVALID_USERNAME_OR_PASSWORD = "Invalid username or password.";
 
